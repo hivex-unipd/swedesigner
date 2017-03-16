@@ -6,6 +6,7 @@ _SWEDesigner_ is an open-source project developed by the [Hivex team](hivex-unip
 _SWEDesigner_ is a web app with a Java back end (it's hosted on a Tomcat server) and a JavaScript front end.
 
 Structure of this repository:
+
     .
     ├── LICENSE
     ├── README.md
