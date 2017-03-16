@@ -1,4 +1,6 @@
 # SWEDesigner
-## generate code directly from UML.
+## Generate code directly from UML.
 
-SWEDesigner is a project by the Hivex team, a team of six students from the University of Padova, Italy.
+_SWEDesigner_ is an open-source project developed by the [Hivex team](hivex-unipd.github.io). It allows you to generate a Java program by drawing diagrams: we use a UML class diagram for generating your program's architecture and a special block diagram for generating the behavior of each class method of your program.
+
+_SWEDesigner_ is a web app with a Java back end (it's hosted on a Tomcat server) and a JavaScript front end.
