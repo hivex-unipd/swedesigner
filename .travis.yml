@@ -1,17 +1,17 @@
 language: java
 notifications:
   slack: hivexteam:xoSLoB9jIPnYqMcHLIesSlDZ
-# before_install:
-#   - nvm install node
-#   - nvm use node
-#   - npm install —-save-dev mocha
-#   - npm test
+before_install:
+  - nvm install node
+  - nvm use node
+  - npm install —-save-dev mocha
+  - npm test
 deploy:
   provider: elasticbeanstalk
   skip_cleanup: true
-  access_key_id: AKIAIJQDT6MLH3RIIEAQ
-  secret_access_key:
-    secure: J1Gx30gL85iBMgHWmTuQX+aggBG00VJH4ehi9qqilVUMv766OPtjafrVfMYOZszZkouoz7nLIwGyR8er0ehvV9J/aoRzAFhWqWe7cbw7/4AwX6AKOQu8edhVPbIH2MAg8wsQMb9ina+5cKbxwkNux9eYGEPuHHVEjVPy4xOs9lFuGU6BK0/UHl3EjtohFWn58tOzg75eejnTaJ9K+oT1gvvYRLuc9axp98K/vkk8Iq5maNdLtTHvZfNRAVAS6Ld+HnckS9gzzoN6uz4WnvPj2VBVT9ocohPx6PaATw4YRlvm9C+eeEUolspDI+ZRbxKAaFKk0aV5R4fdcvs0AxbuHybDOKbCVUTA8XMDQXUCOnXsIaKYwFYtSVG3KzD5RTewENju8ILlYUQ93WEii6O0vzKyXVsSqDGdetGa6bYXoTE5EJeCpaR/urnj88RnktGZB5pmRiPLyN0J9tYo1Eyg5W5Xk8AoldDyzJUEFuvzcwV7X9FDNlllTD+EXvDewiuEjCeL5ftOwOPQxI0eN33AFlqRlN0DmKcgevky5SkmiahaEqQCIzysteKq5ya8J+r6YXW5JfOAYwzlfdv3MGxIIrXeYSSfnOLxa4q9COqJHFdlgyMdnCH9tGlucslGBVcrJTTN9kGjeUOM6WxsccvE8ajzpBxGjeh9X5D78GyZsog=
   app: SWEDesigner
   env: LowCost-env
   region: eu-central-1
+  access_key_id: AKIAIJQDT6MLH3RIIEAQ
+  secret_access_key:
+    secure: "gF8TPMXNak2kDoBY3dfJm+jsoMCK/rxD//FGSNgF7n11O4X7ra/rE/cON6v9r+1pk41Anc7JKefxiKaEJlgS+DsAV8H60F9OhP5ar48mm8Lt9c+hZ9SzxSH8m4vM7wNKb+5t8NWw/Ex9fejkos8Oivu7YUq7VXuX9eglxyKFI9lWUlTa892W5xXHpCyvBomjzJOikuY3u8yNNmBLlFyM5Ra38LVqotn4pkv9CcdO7PcEtrY9+arZCxnpxFBiIV1Yo53Fo1voO5w+8dWadsxul2DUCq3ZoNgqgIAGFnZtOatwvlcEvjQYgvYbWK2dnnRO7G3QMBvNYGV04Ut3Z9+mzD+h/yMh51i6LTFMdJt6t4f7ILlTF+CsGk64Ht/ehKbgU22NuXegwl3RxYq1Y6xwO5qBAdNdybXmyPI4wAlktjjaTsIaspJXHAvdDmByGsyZT9CBl0pctj3HkP2vUQ7Wk6egf5+wp2CVFhd2iXrwuQN/M2FGbdyjjWhqYoEz6xu/LnaCaM40q3YfO9L4oN9/VQYgsKBXYaEVzVnWmhUYD11BuMqZat9bVMzLsg2LqLmsQNN6x6KUrt9dh99geIenwwcWMPxyBgm+xaa3u51q3tasbTahmF3PNR6cdmyzpIo98oNd96DuUifqrVJP6l1v4J3rwMVF2OVTs8JcPVT6mPg="
