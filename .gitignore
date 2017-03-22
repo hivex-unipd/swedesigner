@@ -1,4 +1,4 @@
-### classi Java
+### Java classes
 *.class
 
 ### Apple
@@ -8,6 +8,7 @@
 *.sublime-project
 *.sublime-workspace
 
+### Maven
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -18,5 +19,5 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 
-# Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
+### Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
