@@ -1,0 +1,25 @@
+{
+	"name": "SWEDesigner-client",
+	"version": "0.0.1",
+	"description": "The front end of SWEDesigner.",
+	"author": "the Hivex team <hivex.team@gmail.com>",
+	"scripts": {
+		"test": "mocha"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/hivex-unipd/swedesigner"
+	},
+	"bugs": {
+		"url": "https://github.com/hivex-unipd/swedesigner/issues"
+	},
+	"keywords": [
+		"SWEDesigner",
+		"code",
+		"generation",
+		"UML",
+		"Java"
+	],
+	"private": true,
+	"license": "MPL"
+}
