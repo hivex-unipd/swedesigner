@@ -1,0 +1,19 @@
+#newcell{
+    width:15%;
+    overflow-y: scroll;
+    float: left;
+    border: #655f64;
+}
+#paper{
+    width: 60%;
+    max-height: 400px;
+    margin: auto;
+    overflow: scroll;
+    border: #655f64;
+}
+#details{
+    width:15%;
+    overflow-y: scroll;
+    float: right;
+    border: #655f64;
+}
