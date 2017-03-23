@@ -1,6 +1,9 @@
 ### Java classes
 *.class
 
+### Node.js modules
+node_modules
+
 ### Apple
 .DS_store
 
