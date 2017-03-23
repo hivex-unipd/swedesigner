@@ -7,7 +7,7 @@ define([
     'backbone',
     'joint',
     'collection/DiagramsCollection',
-    'libs/jointjs/joint.shapes.uml'
+    'models/celltypes/celltypes'
 ],function ($, _, Backbone, joint, DiagramsCollection) {
 
     var ProjectModel = Backbone.Model.extend({
@@ -89,10 +89,10 @@ define([
         initialize: function(){
 
             this.graph = new joint.dia.Graph();
-            var a = new joint.shapes.uml.Class();
-            console.log("--------");
-            console.log(a);
-            console.log("--------");
+            //var a = new joint.shapes.uml.Class();
+            //console.log("--------");
+            //console.log(a);
+            //console.log("--------");
             //this.options.graphs= new DiagramsCollection();
             //this.options.graphs.add(new joint.dia.Graph());
             //this.options.graphs.add(new joint.dia.Graph());
@@ -120,6 +120,44 @@ define([
             this.options.currentgraph.push(link);*/
             //this.options.currentgraph = this.options.graphs[0];
             this.graph.fromJSON(this.options.graphs[this.options.currentindex]);
+
+	        var class2 = new joint.shapes.uml.ClassDiagramElement({
+            position: {x: 120, y: 190},
+            size: {width: 100, height: 100},
+            name: 'MyClass2',
+            attributes: ['- fruit: int', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog'],
+            methods: ['+ HasBanana(): bool', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void'],
+
+            });
+
+            /*var class3 = new uml.ClassDiagramElement({
+                position: {x: 120, y: 190},
+                size: {width: 100, height: 100},
+                name: 'MyClass3rda',
+                attributes: ['- fruit: int', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog'],
+                methods: ['+ HasBanana(): bool', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void'],
+
+            });*/
+            /*var class2 = new joint.shapes.uml.Class({
+                position: { x:200  , y: 500 },
+                size: { width: 180, height: 50 },
+                name: 'Man',
+                attrs: {
+                    '.uml-class-name-rect': {
+                        fill: '#ff8450',
+                        stroke: '#fff',
+                        'stroke-width': 0.5
+                    },
+                    '.uml-class-attrs-rect, .uml-class-methods-rect': {
+                        fill: '#fe976a',
+                        stroke: '#fff',
+                        'stroke-width': 0.5
+                    }
+                }
+            });*/
+            this.graph.addCell(class2);
+	        //this.graph.addCell(class2);
+            //this.graph.addCell(class3);
             //this.graph.resetCells(this.options.currentgraph.cells);
         },
         switchToGraph: function(index){
@@ -132,10 +170,7 @@ define([
         },
         saveDiagram: function () {
             this.options.graphs[this.options.currentindex] = this.graph.toJSON();
-            var blob = new Blob([JSON.stringify(this.options.graphs)], {type: "application/octet-stream"});
-            var url  = window.URL.createObjectURL(blob);
-            window.open(url);
-            //console.log(JSON.stringify(this.options.graphs));
+            return JSON.stringify(this.options.graphs);
         },
         loadDiagram:function (diag){
             console.log("switch");

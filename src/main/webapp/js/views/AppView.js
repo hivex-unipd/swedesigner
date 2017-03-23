@@ -7,21 +7,24 @@ define([
     'backbone',
     'joint',
     'views/ProjectView',
-    'models/Command'
-],function ($, _, Backbone, joint, ProjectView,Command) {
+    'models/Command',
+    'views/detailsview'
+],function ($, _, Backbone, joint, ProjectView,Command, DetailsView) {
     var AppView = Backbone.View.extend({
-        el:$('#content'),
+        el:$('#navbar'),
         op: {
                 pv:{},
+                dv:{},
                 ind:0
         },
         initialize: function () {
-            this.op.pv= new ProjectView;
+            this.op.pv = ProjectView;
+            this.op.dv = new DetailsView;
 
         },
         events: {
             'click #switch':	'switchgraph',
-            'click #add':   'save',
+            'click #savefile':   'save',
             'change #files': 'load'
         },
         switchgraph:function () {
@@ -39,7 +42,7 @@ define([
             Command.execute("saveDiagram");
         },
         load:function (event) {
-            Command.execute("loadDiagram");
+            Command.execute("loadDiagram",event);
         }
 });
     return AppView;
