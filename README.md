@@ -1,4 +1,4 @@
-# SWEDesigner
+# SWEDesigner [![Build Status](https://travis-ci.org/hivex-unipd/swedesigner.svg?branch=master)](https://travis-ci.org/hivex-unipd/swedesigner)
 ## Generate code directly from UML.
 
 _SWEDesigner_ is an open-source project developed by the [Hivex team](hivex-unipd.github.io). It allows you to generate a Java program by drawing diagrams: we use a UML class diagram for generating your program's architecture and a special block diagram for generating the behavior of each class method of your program.
