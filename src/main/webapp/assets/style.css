@@ -6,14 +6,48 @@
 }
 #paper{
     width: 60%;
-    max-height: 400px;
-    margin: auto;
+    margin-left: auto;
+    max-height: 800px;
+    /* margin: auto; */
     overflow: scroll;
     border: #655f64;
+    position: relative;
+    display: inline-block;
 }
-#details{
-    width:15%;
-    overflow-y: scroll;
+/*#details{
+    width:10%;
     float: right;
     border: #655f64;
+}*/
+.components{
+    position: relative;
+    display: inline-block;
+    width: 20%;
+    float: left;
+    border: #655f64;
+    height: 100%;
+}
+
+
+.main{
+    height: 800px;
+}
+.demo-cards{
+    height: 100%;
+    width: 20%;
+    position: relative;
+    display: inline-block;
+    float: right;
+}
+.prop{
+    height: 100%;
+    margin-left: 0.2em;
+    padding-left: 0.5em;
+}
+.demo-content{
+    height: 100%;
+    width: 100%;
+}
+.comp{
+    height: 100%;
 }
