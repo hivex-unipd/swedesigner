@@ -106,6 +106,19 @@ define([
             this.options.graphs[this.options.currentindex].push(cell);
             this.graph.addCell(cell);
         },
+        addCellFromType:function (type) {
+            var class2 = new joint.shapes.uml.ClassDiagramElement({
+                position: {x: 200, y: 200},
+                size: {width: 100, height: 100},
+                name: 'MyClass2',
+                attributes: ['- attr: type'],
+                methods: ['+ setAttr(): bool']
+
+            });
+            this.graph.addCell(class2);
+
+
+        },
         addInitialsCells: function(){
             /*var link = new joint.dia.Link({
                 source: { x: 10, y: 20 },
