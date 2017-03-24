@@ -4,7 +4,12 @@
 
 <web-app>
 	<display-name>SWEDesigner</display-name>
+	<description>Generate code directly from UML.</description>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
+	<error-page> 
+		<error-code>404</error-code> 
+		<location>/404.html</location> 
+	</error-page>s
 </web-app>
