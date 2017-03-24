@@ -11,6 +11,9 @@ node_modules
 *.sublime-project
 *.sublime-workspace
 
+### Webstorm
+.idea/
+
 ### Maven
 target/
 pom.xml.tag
