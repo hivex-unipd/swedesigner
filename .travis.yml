@@ -9,17 +9,18 @@ before_install:
   - cd src/main/webapp/js/
   - npm test
   - cd ../../../..
-before_deploy:
-  - cd target
-  - jar -xvf swedesigner.war
-  - cd ..
+# before_deploy:
+#   - cd target
+#   - jar -xvf swedesigner.war
+#   - cd ..
 deploy:
   provider: elasticbeanstalk
   access_key_id: AKIAIJQDT6MLH3RIIEAQ
   secret_access_key:
-    secure: "E4XnRRC/ayQcLJOKGO+K82tqvQyBQc/YQHkj9h76rWi8LuP7IrtPPnplOSutPdP9Rg86UgRFIH9Nya9JRHupp6C2u1MMSj3c4SIsb9ZYA7uj+YzcFtW7OqO+PqDlTgLMNLM7pfqYAso9lwlx9moBwEaGRsYdQcTDoOo9NZQBmbjm0Jooqc33P0v3Na0AgcQFRD6MdO+ZbsNnjsy3CzYAZHOrTF0fSsmy60xBcg0ydfMN/DNW1fTll4UxbVTe8TJxsxmNnIKo1JbPyqmnfQ8oyR4/AmNK82G55aiOY3V6ZKAlxgiPPcn+PWQhwtP07ZBlmorgMSPZ1XmERk1dRnmbAOGNWtW8X7YbqTuVzvmoW3n0wvjnZ1dEKVyFAYahgM3FSUcr5hhjry7e7IcOX/hSiFSWkks0bYc/BkAVKoFIa3300/8xsqaRLfMeJwOXDFqQsnhfrZrZrJZR1mWC4vJBmVL3CiHtPLYX5g5cF7DU9WVd8q/SEd1/OSaAT0YoqsR7hBXQLHvivp3Q6koGnjZgnEY2zOgviQfRc93frbIdbduxl31MK8s1pxHBoNTaKio5GU2KNTPhAHMRz2WPMm9NYVrYDzNRRWmnvvu6jcreRmrdf+cCBAG5UmC3DGBIhI4GQLPSax2XpWG0i9fz7qhJvdePBgfOVBmjZc5B2dh0YoA="
+    secure: "jYvrsKj6by903vCGqZKiUSls66PNeuv74zqteeW6xnQmb2iM8NtjCL0V9szsLhe3ym4RA3lXIqn1SiidTJLdgxAfVF8D1P0cRD67/IoMmpm/E//R+K8mXsc9yLLTYW6L3vQGivaSNowb89rsvzpHCzDuxr3YkIQlguofMrKXpzYUh+d+RSg/uQOjbnYaTbeZuoMSw2n24tocfBwsVxGCAqbqi0aFOeEJfOEXqNAar+1iEr6hXf5HEC3Cbx4JeaMmrH/SE4AsGupyLlCBRVkeTslH9Ijgu2iyVmQUCtPhcvlOfrt1+q2iO56b5sKJ/NmPuWWRasP6i8Rl3nSgIS+SCS11IfYBV/BClyO6fvUZGxRNEKvVG1VeoK4nc/1pNjDbFbxwqjPKnhNArsHYSmGlZJzuzEobHZlIMKZZYTQ45Dh9KmmYYov0wbXHDxyBiGQUxSCWBK78yX9tY0t/VEy3E/5Pp0z7upQt2ijK8X69qUGnicB8EJLnQ5cUYuNG8fI/ge5BkAv6weA+nzs86L8kzuvYbYXrNDyQ6MdnGaGjjxP27D7uzvsBeCoqKU3nKBJ5MIFfHrO/CKaY+TIiayqpbSov8HqPa/BCoYGGTLAKYfBf+5ijPvs8UppmtgVWxiLD0KULnqC4oRYrzTmHdXFChM7/+oBg/JM5YMEMkYsiInU="
   skip_cleanup: true
-  app: SWEDesigner
+  app: swedesigner
   env: LowCost-env
   region: eu-central-1
-  bucket_name: elasticbeanstalk-eu-central-1-538360443246
+  zip_file: target/swedesigner.war
+#   bucket_name: elasticbeanstalk-eu-central-1-538360443246
