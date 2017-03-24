@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>SWEDesigner</title>
-
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+    <meta name="description" content="Generate executable code drawing a UML diagram.">
+    <meta name="author" content="Hivex">
+    <meta name="keywords" content="SWEDesigner, UML, code, generation">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <title>Material Design Lite</title>
 
     <!-- Add to homescreen for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -25,20 +25,15 @@
 
     <!--<link rel="shortcut icon" href="static/images/favicon.png">-->
 
-    <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
-    <!--
-    <link rel="canonical" href="http://www.example.com/">
-    -->
-
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-light_blue.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/style.css">
+    <link rel="stylesheet" type="text/css" href="assets/joint.css">
 
-    <link rel="stylesheet" type="text/css" href="assets/style.css"/>
-    <link rel="stylesheet" type="text/css" href="assets/joint.css"/>
     <script data-main="js/main" src="js/libs/require/require.js"></script>
 </head>
+
 <body>
 <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
@@ -57,7 +52,7 @@
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
                 <i class="material-icons">more_vert</i>
             </button>
-            <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
+            <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right">
                 <li class="mdl-menu__item">About</li>
                 <li class="mdl-menu__item">Contact</li>
                 <li class="mdl-menu__item">Legal information</li>
@@ -67,7 +62,7 @@
 
     <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
         <header class="demo-drawer-header">
-            <img src="images/user.jpg" class="demo-avatar">
+            <img src="images/user.jpg" class="demo-avatar" alt="demo avatar icon">
             <!--<div class="demo-avatar-dropdown">
               <span>hello@example.com</span>
               <div class="mdl-layout-spacer"></div>
@@ -83,23 +78,15 @@
             </div>-->
         </header>
         <nav id="navbar" class="mdl-navigation mdl-color--blue-grey-800">
-            <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">home</i>Home</a>
-            <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">create</i>New</a>
-            <input type="file" id="files" name="files[]"/><label class=" upload mdl-navigation__link" for="files"><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">open_in_browser</i>Open</label>
-            <a id="savefile" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">save</i>Save</a>
-            <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">cloud_download</i>Download</a>
-            <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">donut_large</i>Compile</a>
-            <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">local_offer</i>Useful links</a>
+            <a class="mdl-navigation__link" href="#"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i> Home</a>
+            <a class="mdl-navigation__link" href="#"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">create</i> New</a>
+            <input type="file" id="files" name="files[]"/><label class=" upload mdl-navigation__link" for="files"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">open_in_browser</i> Open</label>
+            <a id="savefile" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">save</i> Save</a>
+            <a class="mdl-navigation__link" href="#"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">cloud_download</i> Download</a>
+            <a class="mdl-navigation__link" href="#"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">donut_large</i> Compile</a>
+            <a class="mdl-navigation__link" href="#"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">local_offer</i> Useful links</a>
             <div class="mdl-layout-spacer"></div>
-            <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">help_outline</i><span class="visuallyhidden">Help</span></a>
+            <a class="mdl-navigation__link" href="#"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i> <span class="visuallyhidden">Help</span></a>
         </nav>
     </div>
 
@@ -109,31 +96,30 @@
             <div class="components">
                 <div class="mdl-shadow--2dp comp">
                     <div class="mdl-card__title mdl-card--expand mdl-color--teal-300">
-                        <h2 class="mdl-card__title-text mdl-color-text--white">Componenti</h2>
+                        <h2 class="mdl-card__title-text mdl-color-text--white">Elements</h2>
                     </div>
                     <div id ="components" class="mdl-card__actions mdl-card--border">
                         <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect mdl-button--colored mdl-color-text--white">
-                            Nuova classe
+                            New class
                         </button>
                     </div>
                 </div>
             </div>
-            <div id="paper" class="demo-graph mdl-shadow--2dp "></div>
 
+            <div id="paper" class="demo-graph mdl-shadow--2dp "></div>
 
             <div class="demo-cards ">
                 <div class="mdl-shadow--2dp prop">
                     <div class="mdl-card__title mdl-card--expand mdl-color--teal-300">
-                        <h2 class="mdl-card__title-text mdl-color-text--white">Proprietà</h2>
+                        <h2 class="mdl-card__title-text mdl-color-text--white">Properties</h2>
                     </div>
                     <div id ="details" class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <input class="mdl-textfield__input" type="text" id="classname">
-                        <label class="mdl-textfield__label" for="classname">Nome classe</label>
+                        <label class="mdl-textfield__label" for="classname">Class name</label>
                     </div>
-
-
                 </div>
             </div>
+
         </div>
     </main>
 
