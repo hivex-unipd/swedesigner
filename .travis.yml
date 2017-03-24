@@ -9,6 +9,10 @@ before_install:
   - cd src/main/webapp/js/
   - npm test
   - cd ../../../..
+before_deploy:
+  - cd target
+  - jar -xvf swedesigner.war
+  - cd ..
 deploy:
   provider: elasticbeanstalk
   access_key_id: AKIAIJQDT6MLH3RIIEAQ
