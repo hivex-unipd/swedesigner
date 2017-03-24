@@ -23,4 +23,4 @@ deploy:
   env: LowCost-env
   region: eu-central-1
   zip_file: target/swedesigner.war
-#   bucket_name: elasticbeanstalk-eu-central-1-538360443246
+  bucket_name: elasticbeanstalk-eu-central-1-538360443246
