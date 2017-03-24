@@ -9,12 +9,12 @@ before_install:
   - cd src/main/webapp/js/
   - npm test
   - cd ../../../..
-# deploy:
-#   provider: elasticbeanstalk
-#   skip_cleanup: true
-#   app: SWEDesigner
-#   env: LowCost-env
-#   region: eu-central-1
-#   access_key_id: AKIAIJQDT6MLH3RIIEAQ
-#   secret_access_key:
-#     secure: "gF8TPMXNak2kDoBY3dfJm+jsoMCK/rxD//FGSNgF7n11O4X7ra/rE/cON6v9r+1pk41Anc7JKefxiKaEJlgS+DsAV8H60F9OhP5ar48mm8Lt9c+hZ9SzxSH8m4vM7wNKb+5t8NWw/Ex9fejkos8Oivu7YUq7VXuX9eglxyKFI9lWUlTa892W5xXHpCyvBomjzJOikuY3u8yNNmBLlFyM5Ra38LVqotn4pkv9CcdO7PcEtrY9+arZCxnpxFBiIV1Yo53Fo1voO5w+8dWadsxul2DUCq3ZoNgqgIAGFnZtOatwvlcEvjQYgvYbWK2dnnRO7G3QMBvNYGV04Ut3Z9+mzD+h/yMh51i6LTFMdJt6t4f7ILlTF+CsGk64Ht/ehKbgU22NuXegwl3RxYq1Y6xwO5qBAdNdybXmyPI4wAlktjjaTsIaspJXHAvdDmByGsyZT9CBl0pctj3HkP2vUQ7Wk6egf5+wp2CVFhd2iXrwuQN/M2FGbdyjjWhqYoEz6xu/LnaCaM40q3YfO9L4oN9/VQYgsKBXYaEVzVnWmhUYD11BuMqZat9bVMzLsg2LqLmsQNN6x6KUrt9dh99geIenwwcWMPxyBgm+xaa3u51q3tasbTahmF3PNR6cdmyzpIo98oNd96DuUifqrVJP6l1v4J3rwMVF2OVTs8JcPVT6mPg="
+deploy:
+  provider: elasticbeanstalk
+  skip_cleanup: true
+  app: SWEDesigner
+  env: LowCost-env
+  region: eu-central-1
+  access_key_id: AKIAIJQDT6MLH3RIIEAQ
+  secret_access_key:
+    secure: "E4XnRRC/ayQcLJOKGO+K82tqvQyBQc/YQHkj9h76rWi8LuP7IrtPPnplOSutPdP9Rg86UgRFIH9Nya9JRHupp6C2u1MMSj3c4SIsb9ZYA7uj+YzcFtW7OqO+PqDlTgLMNLM7pfqYAso9lwlx9moBwEaGRsYdQcTDoOo9NZQBmbjm0Jooqc33P0v3Na0AgcQFRD6MdO+ZbsNnjsy3CzYAZHOrTF0fSsmy60xBcg0ydfMN/DNW1fTll4UxbVTe8TJxsxmNnIKo1JbPyqmnfQ8oyR4/AmNK82G55aiOY3V6ZKAlxgiPPcn+PWQhwtP07ZBlmorgMSPZ1XmERk1dRnmbAOGNWtW8X7YbqTuVzvmoW3n0wvjnZ1dEKVyFAYahgM3FSUcr5hhjry7e7IcOX/hSiFSWkks0bYc/BkAVKoFIa3300/8xsqaRLfMeJwOXDFqQsnhfrZrZrJZR1mWC4vJBmVL3CiHtPLYX5g5cF7DU9WVd8q/SEd1/OSaAT0YoqsR7hBXQLHvivp3Q6koGnjZgnEY2zOgviQfRc93frbIdbduxl31MK8s1pxHBoNTaKio5GU2KNTPhAHMRz2WPMm9NYVrYDzNRRWmnvvu6jcreRmrdf+cCBAG5UmC3DGBIhI4GQLPSax2XpWG0i9fz7qhJvdePBgfOVBmjZc5B2dh0YoA="
