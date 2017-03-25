@@ -140,7 +140,16 @@ define([
             name: 'MyClass2',
             attributes: ['- fruit: int', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog'],
             methods: ['+ HasBanana(): bool', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void'],
+            keyvalues: {
+                attributes: [
+                    {name: "variabileDefault", value: "valoreDefault"},
+                    {name: "variabileDefault2", value: "valoreDefault2"}
+                ],
+                methods: [
+                    {name: "metodoDefault", visibility: "public", value: "id univoco blabla"}
+                ]
 
+            },
             });
 
             /*var class3 = new uml.ClassDiagramElement({

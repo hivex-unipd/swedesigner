@@ -68,7 +68,22 @@ define([
             attributes: [],
             methods: [],
             attributesexpanded: false,
-            methodsexpanded: false
+            methodsexpanded: false,
+
+
+            keyvalues: {
+                attributes: [
+                    {name: "variabileDefault", value: "valoreDefault"},
+                    {name: "variabileDefault2", value: "valoreDefault2"}
+                ],
+                methods: [
+                    {name: "metodoDefault", visibility: "public", value: "id univoco blabla"}
+                ]
+
+            }
+
+            // l'idea è che ogni cella abbia sto coso che contiene tutte le cose che vogliamo editare
+            // quindi attributes e methods dovrebbero stare qua dentro
 
 
         }, joint.shapes.basic.Generic.prototype.defaults),

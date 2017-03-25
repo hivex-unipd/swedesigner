@@ -127,10 +127,15 @@
                         <h2 class="mdl-card__title-text mdl-color-text--white">Proprietà</h2>
                     </div>
                     <div id ="details" class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input class="mdl-textfield__input" type="text" id="classname">
+                        <!--<input class="mdl-textfield__input" type="text" id="classname">
                         <label class="mdl-textfield__label" for="classname">Nome classe</label>
-                    </div>
+                   --> </div>
 
+
+                    <script type="text/template" id="item-template">
+                            <label><%= name %></label>
+                            <input class="edit" value="<%= value %>" id="editable-<%= name %>">
+                    </script>
 
                 </div>
             </div>
