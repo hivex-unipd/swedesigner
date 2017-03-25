@@ -216,7 +216,7 @@ define([
 
 
     // prova:
-    joint.shapes.uml.HxInterface = new joint.shapes.uml.ClassDiagramElement({
+    joint.shapes.uml.HxInterface = joint.shapes.uml.ClassDiagramElement.extend({
         markup: [
             '<g class="rotatable">',
             '<g class="">',
@@ -226,6 +226,8 @@ define([
             '</g>'
         ].join('')
     });
+
+    joint.shapes.uml.HxClass = joint.shapes.uml.ClassDiagramElement.extend({});
 
 
 
