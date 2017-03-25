@@ -157,16 +157,18 @@ define([
             rects = [
                 {type: 'name', text: this.getClassName()},
                 {
+
                     type: 'attrs',
                     text: this.get('attributesexpanded') ? this.get('attributes') : "Attributes (click to expand)"
                 },
                 {type: 'methods', text: this.get('methodsexpanded') ? this.get('methods') : "Methods (click to expand)"}
             ];
-
+            console.log(this.get('keyvalues')['attributes']);
 
             _.each(rects, function (rect) {
 
                 var lines = _.isArray(rect.text) ? rect.text : [rect.text];
+                console.log(lines);
                 var rectHeight = lines.length * 15 + 1;
 
                 attrs['.uml-class-' + rect.type + '-text'].text = lines.join('\n');

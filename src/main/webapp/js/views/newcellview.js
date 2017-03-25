@@ -16,7 +16,7 @@ define([
             this.model = new newCellModel;
 
             for (var p in this.model.str) {
-                console.log(this.model.str[p]);
+                //console.log(this.model.str[p]);
                 this.str.push('<button class="newcompbt mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect mdl-button--colored mdl-color-text--white">' + this.model.str[p] + '</button>');
             }
             this.$el.html(_.each(this.str));

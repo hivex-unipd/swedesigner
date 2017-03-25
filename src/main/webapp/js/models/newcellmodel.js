@@ -20,7 +20,7 @@ define([
 
             },
             addCell: function (event) {
-                console.log(event.target);
+                //console.log(event.target);
                 ProjectModel.addCellFromType();
             }
         }

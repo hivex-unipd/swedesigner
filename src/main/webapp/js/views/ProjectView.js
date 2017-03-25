@@ -54,12 +54,12 @@ define([
 
             this.paper.on('cell:pointerup', function (cellView, evt, x, y) {
                 this.selectedCell = cellView.model;
-                console.log(cellView.model.getClassName());
+                //console.log(cellView.model.getClassName());
                 this.trigger("changed-cell");
             });
             this.paper.on('blank:pointerdown', function (evt, x, y) {
-                console.log(evt);
-               console.log(x,y);
+                //console.log(evt);
+               //console.log(x,y);
             });
 
             this.model.addInitialsCells();

@@ -20,13 +20,12 @@ define([
 
         //templ: _.template($('#class-template').html()),
 
-
-
         events: {
-            'keypress .edit': 'confirmEdit',
+            //'blur .edit': 'confirmEdit'
         },
 
         initialize: function () {
+
             this.$el = $("#details");
             console.log(ProjectView.paper);
             //this.listenTo(paper, "cellChanged", this.changeModel);
@@ -52,7 +51,7 @@ define([
 
 
             var fn = function (element) {
-                console.log("no lazy?");
+                //console.log("no lazy?");
                 if(_.isArray(element)) {console.log(element); console.log("è array"); _.each(element, fn, this) }
                 else  {console.log(element); output += this.mytemplate(element);}
             };
@@ -73,7 +72,7 @@ define([
             // idee per il binding a due vie: salvarsi in un array inputs i vari input e in qualche modo confirmedit si prende
             // solo quello che gli serve... mi sembra comunque terribilmente inefficiente... che facciamo?
             // bb
-
+            this.delegateEvents(_.extend(this.events, {'keypress .edit': 'confirmEdit'}));
 
 
 
@@ -86,14 +85,25 @@ define([
                 this.$el.html(ProjectView.paper.selectedCell.getMethods());
         },
 
-
+         getDescendantProp: function(obj, desc) {
+        var arr = desc.split(".");
+        while(arr.length && (obj = obj[arr.shift()]));
+        return obj;
+        },
 
 
 
          confirmEdit: function (e) {
-            if (e.which === ENTER_KEY) {
+
+            if (e.which == 13) {
+
              // fai controllo di dati corretti e aggiorna il graph
              //this.model.set("",this.$('#'));
+                console.log(e.target.id);
+                console.log(e.target.value);
+                console.log(ProjectView.paper.selectedCell);
+                //ProjectView.paper.selectedCell.set();
+
             }
          }
 
