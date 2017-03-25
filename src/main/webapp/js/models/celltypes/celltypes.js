@@ -12,14 +12,12 @@ define([
     'joint'
 ], function ($, _, Backbone, joint) {
 
-
     joint.shapes.uml.ClassDiagramElement = joint.shapes.basic.Generic.extend({
 
         markup: [
-
             '<g class="rotatable">',
             '<g class="">',
-            '<rect class="uml-class-name-rect"/><rect class="uml-class-attrs-rect toggleattributes"/><rect class="uml-class-divider-rect"/><rect class="uml-class-methods-rect  togglemethods"/>',
+            '<rect class="uml-class-name-rect"/><rect class="uml-class-attrs-rect toggleattributes"/><rect class="uml-class-divider-rect"/><rect class="uml-class-methods-rect togglemethods"/>',
             '</g>',
             '<text class="uml-class-name-text"/><text class="uml-class-attrs-text toggleattributes"/><text class="uml-class-methods-text togglemethods"/>',
             '</g>'
@@ -179,7 +177,6 @@ define([
 
             });
 
-
         }
 
     });
@@ -218,7 +215,23 @@ define([
 
     });
 
+
+
+    // prova:
+    joint.shapes.uml.HxInterface = joint.shapes.uml.ClassDiagramElement.extend({
+        markup: [
+            '<g class="rotatable">',
+            '<g class="">',
+            '<rect class="uml-class-name-rect"/><rect class="uml-class-divider-rect"/><rect class="uml-class-methods-rect togglemethods"/>',
+            '</g>',
+            '<text class="uml-class-name-text"/><text class="uml-class-methods-text togglemethods"/>',
+            '</g>'
+        ].join('')
+    });
+
+    joint.shapes.uml.HxClass = joint.shapes.uml.ClassDiagramElement.extend({});
+
+
+
     return joint.shapes.uml;
 });
-
-
