@@ -9,7 +9,8 @@ define([
         tagname: "div",
         className: "details-view",
         el: {},
-
+        mytemplate: _.template($('#item-template').html()),
+        inputs: {},
         /*events: {
          "click .adda":   "addAttribute",
          "click .addm":  "addMethod",
@@ -19,6 +20,11 @@ define([
 
         //templ: _.template($('#class-template').html()),
 
+
+
+        events: {
+            'keypress .edit': 'confirmEdit',
+        },
 
         initialize: function () {
             this.$el = $("#details");
@@ -33,6 +39,44 @@ define([
             console.log("i'm detailsview and i saw your change");
             //this.$el.html(ProjectView.paper.selectedCell.getClassName());
 
+            //this.$el.html(this.mytemplate({title: "titolo molto divino", val:"valore molto animale"}));
+
+            console.log(ProjectView.paper.selectedCell);
+            console.log(ProjectView.paper.selectedCell.attributes.keyvalues);
+            var c = ProjectView.paper.selectedCell;
+
+
+            var output = "";
+
+
+
+
+            var fn = function (element) {
+                console.log("no lazy?");
+                if(_.isArray(element)) {console.log(element); console.log("è array"); _.each(element, fn, this) }
+                else  {console.log(element); output += this.mytemplate(element);}
+            };
+
+            console.log("ripperoni");
+            //c.attributes.keyvalues.forEach(fn);
+            _.each(c.attributes.keyvalues, fn, this);
+
+            console.log("finironi");
+
+
+
+            // this.$el.html(this.mytemplate({title: "titolo molto divino", val:"valore molto animale"}));
+            this.$el.html(output);
+
+
+
+            // idee per il binding a due vie: salvarsi in un array inputs i vari input e in qualche modo confirmedit si prende
+            // solo quello che gli serve... mi sembra comunque terribilmente inefficiente... che facciamo?
+            // bb
+
+
+
+
             return this;
 
 
@@ -40,15 +84,19 @@ define([
         visib: function () {
             if (ProjectView.paper.selectedCell)
                 this.$el.html(ProjectView.paper.selectedCell.getMethods());
-        }
+        },
 
-        /*
-         confirm: function (e) {
-         if (e.which === ENTER_KEY) {
-         // fai controllo di dati corretti e aggiorna il graph
+
+
+
+
+         confirmEdit: function (e) {
+            if (e.which === ENTER_KEY) {
+             // fai controllo di dati corretti e aggiorna il graph
+             //this.model.set("",this.$('#'));
+            }
          }
-         }
-         */
+
 
 
     });

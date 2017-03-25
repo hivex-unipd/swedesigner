@@ -48,7 +48,11 @@ define([
 
 
             });
-            this.paper.on('cell:pointerclick', function (cellView, evt, x, y) {
+
+            // per qualche satanica ragione cell:pointerclick non funziona
+            /// e pointerup funziona. FML.
+
+            this.paper.on('cell:pointerup', function (cellView, evt, x, y) {
                 this.selectedCell = cellView.model;
                 console.log(cellView.model.getClassName());
                 this.trigger("changed-cell");
