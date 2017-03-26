@@ -9,6 +9,7 @@ before_install:
   - npm install mocha
   - npm install requirejs
   - npm test
+  - rm -rf node_modules
   - cd ../../../..
 deploy:
   provider: elasticbeanstalk

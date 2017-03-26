@@ -106,18 +106,30 @@ define([
             this.options.graphs[this.options.currentindex].push(cell);
             this.graph.addCell(cell);
         },
-        addCellFromType:function (type) {
-            var class2 = new joint.shapes.uml.ClassDiagramElement({
-                position: {x: 200, y: 200},
-                size: {width: 100, height: 100},
-                name: 'MyClass2',
-                attributes: ['- attr: type'],
-                methods: ['+ setAttr(): bool']
+        addCellFromType: function(type) {
+            var newClass;
+            var newPosition = {x: 200, y: 200};
+            var newSize = {width: 100, height: 100};
 
-            });
-            this.graph.addCell(class2);
+            // stub!
+            if (type == 'HxInterface') {
+                newClass = new joint.shapes.uml.HxInterface({
+                    position: newPosition,
+                    size: newSize,
+                    name: 'MyInterface3',
+                    methods: ['+ setAttr(): bool']
+                });
+            } else {
+                newClass = new joint.shapes.uml.ClassDiagramElement({
+                    position: newPosition,
+                    size: newSize,
+                    name: 'MyClass3',
+                    attributes: ['- attr: type'],
+                    methods: ['+ setAttr(): bool']
+                });
+            }
 
-
+            this.graph.addCell(newClass);
         },
         addInitialsCells: function(){
             /*var link = new joint.dia.Link({
