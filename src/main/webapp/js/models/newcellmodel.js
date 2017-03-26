@@ -19,9 +19,9 @@ define([
                 }
 
             },
-            addCell: function (event) {
-                //console.log(event.target);
-                ProjectModel.addCellFromType();
+            addCell: function (type) {
+                //console.log(type);
+                ProjectModel.addCellFromType(type);
             }
         }
     );
