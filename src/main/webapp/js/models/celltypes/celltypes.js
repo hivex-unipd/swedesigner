@@ -12,6 +12,90 @@ define([
     'joint'
 ], function ($, _, Backbone, joint) {
 
+    joint.shapes.uml.ActivityDiagramElement = joint.shapes.basic.Generic.extend({
+
+        markup: [
+            '<g class="rotatable">',
+
+            '<rect class="activity-element-name-rect"/>',
+
+            '<text class="activity-element-name-text"/>',
+            '</g>'
+        ].join(''),
+
+        defaults: _.defaultsDeep({
+
+            type: 'uml.ActivityDiagramElement',
+
+            attrs: {
+                rect: {'width': 200},
+
+                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
+
+                '.activity-element-name-text': {
+                    'ref': '.activity-element-name-rect',
+                    'ref-y': .5,
+                    'ref-x': .5,
+                    'text-anchor': 'middle',
+                    'y-alignment': 'middle',
+                    'fill': 'white',
+                    'font-size': 16,
+                    'font-family': 'Roboto'
+                },
+
+            },
+
+
+
+            expanded: true,
+            keyvalues: {
+                xtype: '[block type]',
+                comment: '[new block]',
+                body : [],
+
+
+            }
+
+
+        }, joint.shapes.basic.Generic.prototype.defaults),
+
+        initialize: function () {
+
+            joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
+            this.updateRectangles();
+
+        },
+
+        getKeyvalues: function () {
+            return this.get('keyvalues');
+        },
+
+
+        updateRectangles: function () {
+
+
+            var offsetY = 0;
+            var attrs = this.get('attrs');
+
+            // this.set('size.height', (this.get('attributes') + this.get('methods')) * 20);
+
+
+
+            var text = this.getKeyvalues().xtype + this.getKeyvalues().comment;
+
+            attrs['.activity-element-name-text'].text = text;
+            attrs['.activity-element-name-rect'].height = 15;
+            attrs['.activity-element-name-rect'].transform = 'translate(0,' + offsetY + ')';
+
+        },
+
+
+
+
+    });
+
+
+
     joint.shapes.uml.ClassDiagramElement = joint.shapes.basic.Generic.extend({
 
         markup: [
@@ -230,6 +314,10 @@ define([
     });
 
     joint.shapes.uml.HxClass = joint.shapes.uml.ClassDiagramElement.extend({});
+
+
+
+
 
 
 

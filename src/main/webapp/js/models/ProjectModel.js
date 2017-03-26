@@ -21,6 +21,7 @@ define([
             graphs:[
                 {
                     type:"class",
+                    id:'9999',
                     "cells":[
                         {
                             "type":"link",
@@ -54,6 +55,7 @@ define([
                 {
                     type:"method",
                     method:"nomeclasse.nomemetodo",
+                    id:"1234",
                     "cells":[
                         {
                             "type":"link",
@@ -181,6 +183,28 @@ define([
 	        //this.graph.addCell(class2);
             //this.graph.addCell(class3);
             //this.graph.resetCells(this.options.currentgraph.cells);
+
+
+            console.log(class2);
+            class2.attributes.keyvalues.methods[0].diagram = '1234';
+
+
+            console.log(this.options);
+
+            var x = _.find(this.options.graphs, function (obj) { console.log(obj); return obj.id =='1234'; });
+
+
+
+            x.cells.push(
+                new joint.shapes.uml.ActivityDiagramElement({
+                })
+            );
+
+            //this.switchToGraph(1);
+            //x.cells[1].updateRectangles();
+
+
+
         },
         switchToGraph: function(index){
 
