@@ -18,10 +18,10 @@ public class JavaGenerator implements Generator {
 	private Template template;
 	public String renderAllTemplates(Template t){return null;};
 	public void generate(String IdReq, ParsedProgram p){
-		//String program = "";
+		String program = "";
 		for(int i=0; i<p.nClasses(); i++){
-			//program += p.getType(i).renderTemplate(template, "java");
-			String type = p.getType(i).renderTemplate(template, "java");
+			program += p.getType(i).renderTemplate(template, "java");
+			/*String type = p.getType(i).renderTemplate(template, "java");
 			try{
 				String path = "C:/Users/alber/Desktop/SOURCES/prova.java";
 				File tipo = new File(path);
@@ -30,8 +30,8 @@ public class JavaGenerator implements Generator {
 			    writer.close();
 			} catch (IOException e) {
 			   // do something
-			}
+			}*/
 		}
-		//System.out.println(program);
+		System.out.println(program);
 	};
 }
