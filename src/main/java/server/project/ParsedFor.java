@@ -28,7 +28,7 @@ public class ParsedFor extends ParsedInstruction {
 		}
 		
 		template.add("for", this);
-		template.add("body", (body_string==""?null:body_string);
+		template.add("body", (body_string==""?null:body_string));
 		return template.render();
 		}
 
