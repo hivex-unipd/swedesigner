@@ -1,0 +1,1 @@
+returnjavatemplate(return)::="return <return.value>;"

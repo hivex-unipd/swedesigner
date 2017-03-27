@@ -1,0 +1,1 @@
+assignmentjavatemplate(assignment)::="<assignment.name> = <assignment.value>;"

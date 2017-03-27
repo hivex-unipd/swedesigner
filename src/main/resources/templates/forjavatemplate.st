@@ -1,0 +1,1 @@
+forjavatemplate(for, body)::="for(<for.init:initializationjavatemplate()><for.condition>;<for.step:assignmentjavatemplate()>){<body>}"

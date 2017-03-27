@@ -1,0 +1,1 @@
+attributejavatemplate(att) ::= "<initVis(att.visibility)><att.type> <att.name><initVal(att.value)>;"
