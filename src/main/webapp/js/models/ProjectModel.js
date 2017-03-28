@@ -91,6 +91,8 @@ define([
         initialize: function(){
 
             this.graph = new joint.dia.Graph();
+
+            console.log(this.graph);
             //var a = new joint.shapes.uml.Class();
             //console.log("--------");
             //console.log(a);
@@ -197,6 +199,8 @@ define([
             //this.graph.resetCells(this.options.currentgraph.cells);
 
 
+
+            // OLD
             console.log(class2);
             class2.attributes.keyvalues.methods[0].diagram = '1234';
 
@@ -205,16 +209,71 @@ define([
 
             var x = _.find(this.options.graphs, function (obj) { console.log(obj); return obj.id =='1234'; });
 
+            console.log(x);
+
+            var a = new joint.shapes.uml.ActivityDiagramElement({keyvalues: {
+                    xtype: 'FOR',
+                    comment: 'Qua faccio un ciclo',
+                    body : [],
+
+            }, index: 1});
+
+            var b = new joint.shapes.uml.ActivityDiagramElement({keyvalues: {
+                xtype: 'ASSEGNAZIONE',
+                comment: 'Qua faccio una cosa interessante',
+                body : [],
+
+            },  index: 2});
 
 
-            x.cells.push(
-                new joint.shapes.uml.ActivityDiagramElement({
-                })
-            );
+            x.cells.push(a);
+            x.cells.push(b);
 
-            //this.switchToGraph(1);
-            //x.cells[1].updateRectangles();
+            console.log(x);
 
+
+            this.switchToGraph(1);
+
+            //console.log(x.cells[1]);
+
+            //x.cells[1]
+            // x.cells[1].updateRectangles();
+
+
+
+            //a.updateRectangles();
+
+
+
+
+
+
+
+/*
+            this.graph.on('change:position', function(cell) {
+
+                var parentId = cell.get('parent');
+                if (!parentId) return;
+
+                var parent = graph.getCell(parentId);
+                var parentBbox = parent.getBBox();
+                var cellBbox = cell.getBBox();
+
+                if (parentBbox.containsPoint(cellBbox.origin()) &&
+                    parentBbox.containsPoint(cellBbox.topRight()) &&
+                    parentBbox.containsPoint(cellBbox.corner()) &&
+                    parentBbox.containsPoint(cellBbox.bottomLeft())) {
+
+                    // All the four corners of the child are inside
+                    // the parent area.
+                    return;
+                }
+
+                // Revert the child position.
+                cell.set('position', cell.previous('position'));
+            });
+
+*/
 
 
         },
@@ -236,7 +295,13 @@ define([
             
             this.options.currentindex =0;
             this.graph.resetCells(this.options.graphs[this.options.currentindex].cells);
-        }
+        },
+
+        getCurrentGraph: function () {
+            return this.get("graph");
+        },
+
+
     });
     return  new ProjectModel;
 });

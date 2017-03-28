@@ -29,7 +29,10 @@ define([
             this.$el = $("#details");
             console.log(ProjectView.paper);
             //this.listenTo(paper, "cellChanged", this.changeModel);
-            this.listenTo(ProjectView.paper, "changed-cell", this.render);
+
+
+            // occhio
+            // this.listenTo(ProjectView.paper, "changed-cell", this.render);
             this.listenTo(ProjectView, "Switchgraph", this.visib);
             // si riesce a passare paper come parametro?
         },
