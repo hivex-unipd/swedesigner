@@ -19,19 +19,23 @@ Structure of this repository:
     │   │   │           └── swedesigner
     │   │   │               └── [.java source files...]
     │   │   ├── resources
-    │   │   │   └── [program resources...]
+    │   │   │   └── templates
+    │   │   │       └── [StringTemplate templates...]
     │   │   └── webapp
-    │   │       └── WEB-INF
-    │   │           ├── web.xml
-    │   │           └── [Java applets...]
+    │   │       ├── WEB-INF
+    │   │       │   ├── web.xml
+    │   │       │   └── [Java applets...]
+    │   │       ├── assets
+    │   │       │   ├── joint.css
+    │   │       │   └── style.css
+    │   │       ├── images
+    │   │       │   ├── [client images...]
+    │   │       ├── index.html
+    │   │       └── js
+    │   │           └── [.js source files...]
     │   └── test
     │       └── java
     │           └── [.java test files...]
     └── target
-        ├── classes
-        │   └── [.class files...]
-        └── maven-status
-            └── maven-compiler-plugin
-                └── compile
-                    └── default-compile
-                        └── inputFiles.lst
+        └── classes
+            └── [.class files...]

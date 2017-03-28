@@ -1,0 +1,1 @@
+attributejavatemplate(att) ::= "<att.type> <att.name>"
