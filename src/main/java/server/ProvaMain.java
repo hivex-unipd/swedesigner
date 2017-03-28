@@ -55,7 +55,7 @@ public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 		String condition = "a>2";
 		ParsedIf pif = new ParsedIf(condition, ifbody, elsebody);
 		ParsedInstruction[] body = new ParsedInstruction[]{pi, pa, pi2, pa2, pa3, pif};
-		ParsedMethod pm = new ParsedMethod("public", false, "void", "stampa", null, body);
+		ParsedMethod pm = new ParsedMethod("public", true, "void", "stampa", null, body);
 		ParsedMethod[] methods = new ParsedMethod[]{pm};
 		String[] extended = new String[]{"Object"};
 		String[] implemented = new String[]{"Interface"};

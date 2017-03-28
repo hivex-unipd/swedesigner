@@ -24,9 +24,7 @@ public class ParsedMethod implements ParsedElement {
 	
 	public String renderTemplate(Template t, String lang){
 		ST template = t.getMethodTemplate();
-		template.add("method", this);
-		String args_string = "";
-		template.add("args", args_string);
+		template.add("method", this); 
 		String body_string = "";
 		for(int i=0; i<body.length; i++){
 			body_string += body[i].renderTemplate(t, lang);
