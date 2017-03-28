@@ -88,6 +88,15 @@ define([
             return this.attributes.offsetY;
         },
 
+        getOffsetX: function () {
+            return this.getAncestors().length * 50;
+
+        },
+
+        getHeight: function () {
+            return 35;
+        },
+
 
         updateRectangles: function () {
 
@@ -96,7 +105,7 @@ define([
 
             // this.set('size.height', (this.get('attributes') + this.get('methods')) * 20);
 
-            this.attributes.position = {x: 10, y: this.getOffsetY()};
+            this.attributes.position = {x: this.getOffsetX(), y: this.getOffsetY()};
 
 
             if (this.get("keyvalues").comment.length > 20) {
@@ -109,7 +118,7 @@ define([
             }
 
             attrs['.activity-element-name-text'].text = text;
-            attrs['.activity-element-name-rect'].height = 35;
+            attrs['.activity-element-name-rect'].height = this.getHeight();
             attrs['.activity-element-name-rect'].transform = 'translate(0,0)';
             console.log("valore offset: ");
             console.log(this.getOffsetY());

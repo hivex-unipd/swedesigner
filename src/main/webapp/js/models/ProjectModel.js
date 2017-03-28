@@ -211,19 +211,28 @@ define([
 
             console.log(x);
 
-            var a = new joint.shapes.uml.ActivityDiagramElement({keyvalues: {
+            var a = new joint.shapes.uml.ActivityDiagramElement({
+                offsetY: 150,
+                keyvalues: {
                     xtype: 'FOR',
                     comment: 'Qua faccio un ciclo',
                     body : [],
 
-            }, index: 1});
+                },
+                index: 1
+            });
 
-            var b = new joint.shapes.uml.ActivityDiagramElement({keyvalues: {
-                xtype: 'ASSEGNAZIONE',
-                comment: 'Qua faccio una cosa interessante',
-                body : [],
+            var b = new joint.shapes.uml.ActivityDiagramElement({
 
-            },  index: 2});
+                offsetY: 300,
+                keyvalues: {
+                    xtype: 'ASSEGNAZIONE',
+                    comment: 'Qua faccio una cosa interessante',
+                    body : [],
+
+                },
+                index: 2
+            });
 
 
             x.cells.push(a);

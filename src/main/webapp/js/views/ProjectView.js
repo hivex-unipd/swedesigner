@@ -84,7 +84,7 @@ define([
 
 
             });*/
-/*
+
             this.paper.on('cell:pointerdown', function(cellView, evt, x, y) {
 
                 var cell = cellView.model;
@@ -96,9 +96,9 @@ define([
                 }
 
                 if (cell.get('parent')) {
-                    model.getCell(cell.get('parent')).unembed(cell);
+                    this.model.getCell(cell.get('parent')).unembed(cell);
                 }
-            });*/
+            });
 
 
 
@@ -109,7 +109,7 @@ define([
             this.paper.on('cell:pointerup', function (cellView, evt, x, y) {
 
 
-/*
+
                 var cell = cellView.model;
                 var cellViewsBelow = this.findViewsFromPoint(cell.getBBox().center());
 
@@ -124,7 +124,7 @@ define([
                 }
 
 
-*/
+
                 if(this.selectedCell != cellView.model)
                 {
                     this.selectedCell = cellView.model;
@@ -172,20 +172,20 @@ define([
 
 
 
-                var index = curr.get("index"); // è necessario cercare a che indice vorrebbe mettere la cosa
+                var index = g.indexOf(curr);//curr.get("index"); // è necessario cercare a che indice vorrebbe mettere la cosa
 
                 if(index+1<=g.length-1 && curr.get("position").y > g[index+1].get("position").y)
                 {
-                    curr.set("index", index+1);
-                    g[index+1].set("index", index); // -1+1 mi raccomando
+                    //curr.set("index", index+1);
+                    // g[index+1].set("index", index); // -1+1 mi raccomando
                     g.move(index,index+1);
                 }
 
                 // sarebbe >=1 ma c'è ancora il link in mezzo (senza sarebbe 0)
                 if(index-1>=1 && curr.get("position").y < g[index-1].get("position").y )
                 {
-                    curr.set("index", index-1);
-                    g[index-1].set("index", index); // -1+1 mi raccomando
+                    ///curr.set("index", index-1);
+                    // g[index-1].set("index", index); // -1+1 mi raccomando
                     g.move(index,index-1);
                 }
 
