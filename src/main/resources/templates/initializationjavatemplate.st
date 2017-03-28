@@ -1,1 +1,0 @@
-initializationjavatemplate(initialization)::="<initialization.type> <initialization.name> <initVal(initialization.value)>;"

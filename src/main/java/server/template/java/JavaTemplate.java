@@ -25,7 +25,7 @@ public class JavaTemplate implements Template {
 	@Override
 	public ST getInitializationTemplate() {
 		STGroup group = new STGroupDir("src/main/resources/templates");
-		ST st = group.getInstanceOf("initializationjavatemplate");
+		ST st = group.getInstanceOf("initjavatemplate");
 		return st;
 	}
 

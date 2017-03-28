@@ -30,16 +30,16 @@ public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 		//Tutta roba che farà il parser
 		ParsedAttribute[] arrayAttr;
 		arrayAttr = new ParsedAttribute[3];
-		arrayAttr[0] = new ParsedAttribute("public", "int", "x", "1");
-		arrayAttr[1] = new ParsedAttribute("private", "int", "y", null);
-		arrayAttr[2] = new ParsedAttribute(null, "int", "z", "2");
-		
+		arrayAttr[0] = new ParsedAttribute(true, "public", "int", "x", "1");
+		arrayAttr[1] = new ParsedAttribute(false, "private", "int", "y", null);
+		arrayAttr[2] = new ParsedAttribute(true, null, "int", "z", "2");
+		/*
 		STGroup group = new STGroupDir("src/main/resources");
 		ST st = group.getInstanceOf("attributejavatemplate");
 		
 		for(int i = 0; i<arrayAttr.length; i++)
 			System.out.println(arrayAttr[i].renderTemplate(t, "java"));
-		
+		*/
 		ParsedInitialization pi = new ParsedInitialization("int", "a", null);
 		ParsedAssignment pa = new ParsedAssignment("a", "4");
 		
@@ -55,7 +55,7 @@ public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 		String condition = "a>2";
 		ParsedIf pif = new ParsedIf(condition, ifbody, elsebody);
 		ParsedInstruction[] body = new ParsedInstruction[]{pi, pa, pi2, pa2, pa3, pif};
-		ParsedMethod pm = new ParsedMethod("public", true, "void", "stampa", null, body);
+		ParsedMethod pm = new ParsedMethod("public", true, "void", "stampa", arrayAttr, body);
 		ParsedMethod[] methods = new ParsedMethod[]{pm};
 		String[] extended = new String[]{"Object"};
 		String[] implemented = new String[]{"Interface"};
