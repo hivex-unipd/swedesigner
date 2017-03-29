@@ -12,13 +12,13 @@ define([
     'joint'
 ], function ($, _, Backbone, joint) {
 
+
+
     joint.shapes.uml.ActivityDiagramElement = joint.shapes.basic.Generic.extend({
 
         markup: [
-            '<g class="rotatable">',
-
+            '<g class="activity">',
             '<rect class="activity-element-name-rect"/>',
-
             '<text class="activity-element-name-text"/>',
             '</g>'
         ].join(''),
@@ -30,7 +30,11 @@ define([
             attrs: {
                 rect: {'width': 200},
 
+
+
                 '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
+
+                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
 
                 '.activity-element-name-text': {
                     'ref': '.activity-element-name-rect',
@@ -48,11 +52,12 @@ define([
 
 
             expanded: true,
+            offsetY: 0,
+
             keyvalues: {
                 xtype: '[block type]',
                 comment: '[new block]',
                 body : [],
-
 
             }
 
@@ -62,7 +67,11 @@ define([
         initialize: function () {
 
             joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
+
+            //_.bindAll(this.setOffsetY,'setOffsetY');
             this.updateRectangles();
+            //_.bindAll(this, 'getOffsetY');
+
 
         },
 
@@ -71,23 +80,59 @@ define([
         },
 
 
+        setOffsetY: function (a) {
+            this.offsetY = a;
+        },
+
+        getOffsetY: function () {
+            return this.attributes.offsetY;
+        },
+
+        getOffsetX: function () {
+            return this.getAncestors().length * 50;
+
+        },
+
+        getHeight: function () {
+            return 35;
+        },
+
+
         updateRectangles: function () {
 
 
-            var offsetY = 0;
             var attrs = this.get('attrs');
 
             // this.set('size.height', (this.get('attributes') + this.get('methods')) * 20);
 
+            this.attributes.position = {x: this.getOffsetX(), y: this.getOffsetY()};
 
 
-            var text = this.getKeyvalues().xtype + this.getKeyvalues().comment;
+            if (this.get("keyvalues").comment.length > 20) {
+                var text = this.getKeyvalues().xtype + "\n" + this.getKeyvalues().comment.slice(0, 20) + "...";
+
+            }
+            else
+            {
+                var text = this.getKeyvalues().xtype + "\n" + this.getKeyvalues().comment;
+            }
 
             attrs['.activity-element-name-text'].text = text;
-            attrs['.activity-element-name-rect'].height = 15;
-            attrs['.activity-element-name-rect'].transform = 'translate(0,' + offsetY + ')';
+            attrs['.activity-element-name-rect'].height = this.getHeight();
+            attrs['.activity-element-name-rect'].transform = 'translate(0,0)';
+            console.log("valore offset: ");
+            console.log(this.getOffsetY());
+
+
+
+            //attrs['.activity'].transform = 'translate(0,' + this.getOffsetY()+ ')';
+            //console.log(this.getOffsetY());
+
 
         },
+
+
+
 
 
 
@@ -156,7 +201,7 @@ define([
             keyvalues: {
                 attributes: [
                     {name: "variabileDefault", value: "valoreDefault"},
-                    {name: "variabileDefault2", value: "valoreDefault2"}
+
                 ],
                 methods: [
                     {name: "metodoDefault", visibility: "public", value: "id univoco blabla"}
@@ -176,6 +221,8 @@ define([
                 this.updateRectangles();
                 this.trigger('uml-update');
             }, this);
+            //this.on('cell:pointerup', function (cellView, evt, x, y) {        this.updateRectangles(); });
+
 
             this.updateRectangles();
 
@@ -263,6 +310,9 @@ define([
 
         }
 
+
+
+
     });
 
     joint.shapes.uml.ClassDiagramElementView = joint.dia.ElementView.extend({
@@ -271,6 +321,7 @@ define([
             joint.dia.ElementView.prototype.initialize.apply(this, arguments);
 
             this.listenTo(this.model, 'uml-update', function () {
+                console.log("update interfaccia");
                 this.update();
                 this.resize();
             });
@@ -279,9 +330,11 @@ define([
         },
         events: {
             'click .togglemethods': 'togglemethods',
-            'click .toggleattributes': 'toggleattributes'
-        },
+            'click .toggleattributes': 'toggleattributes',
 
+
+
+        },
         toggleattributes: function () {
 
             this.model.set("attributesexpanded", !this.model.get("attributesexpanded"));
@@ -295,7 +348,9 @@ define([
             this.model.updateRectangles();
             this.update(); // ecco cosa dovevi fare, le cose funzionavano già
 
-        }
+        },
+
+
 
     });
 
