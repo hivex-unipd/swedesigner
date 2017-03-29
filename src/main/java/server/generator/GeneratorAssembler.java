@@ -15,7 +15,6 @@ public class GeneratorAssembler {
 		return new JavaGenerator();
 	}
 	
-	/*DA TOGLIERE!!!*/
 	@Bean("javatemplate")
 	public Template javatemplate(){
 		return new JavaTemplate();

@@ -1,5 +1,8 @@
 package server;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.stringtemplate.v4.ST;
@@ -24,7 +27,7 @@ import server.template.java.JavaTemplate;
 public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 	RequestHandlerController controller;
 	
-	public static void main(String[] args){
+	public static void main(String[] args)throws Exception{
 		Template t = new JavaTemplate();
 		
 		//Tutta roba che farà il parser
@@ -72,6 +75,8 @@ public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 		rhc.prova(pp);
 		
 		//System.out.println(pclass.renderTemplate(new JavaTemplate(), "java"));
+		
+		String testo = new String(Files.readAllBytes(Paths.get("src/main/resources/prova.json")));
 		
 		
 	}
