@@ -21,7 +21,8 @@ define([
     /**
      * @classdesc `ProjectView` represents the drawing area.
      * It can be the main class diagram or a specific method diagram.
-     * 
+     *
+     * @module client.view
      * @name ProjectView
      * @class ProjectView
      * @extends {Backbone.View}

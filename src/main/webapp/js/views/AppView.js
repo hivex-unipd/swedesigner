@@ -7,7 +7,6 @@ define([
     'models/Command',
     'views/detailsview',
     'views/newcellview'
-
 ], function ($, _, Backbone, joint, ProjectView, Command, DetailsView, NewCellView) {
 
     /**
@@ -15,7 +14,8 @@ define([
      * It manages the main graphical interface, calling the other
      * sub-views (`ProjectView`, `DetailsView`, `NewCellView`)
      * and setting up the calls to the `Command` object.
-     * 
+     *
+     * @module client.view
      * @name AppView
      * @class AppView
      * @extends {Backbone.View}

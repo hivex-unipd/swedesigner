@@ -12,7 +12,8 @@ define([
      * current diagram (class or method diagram).
      * It extracts the available elements by creating and querying
      * a `NewCellModel` object.
-     * 
+     *
+     * @module client.view
      * @name NewCellView
      * @class NewCellView
      * @extends {Backbone.View}

@@ -13,7 +13,8 @@ define([
      * so `DetailsView` shows the class name, its attributes and methods, etcetera.
      * In the second case the elements are instruction blocks, so `DetailsView`
      * shows the operands, parameters, or conditions of a block.
-     * 
+     *
+     * @module client.view
      * @name DetailsView
      * @class DetailsView
      * @extends {Backbone.View}
