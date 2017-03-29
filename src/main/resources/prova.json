@@ -4,6 +4,7 @@
 	  "cells":[
       
          {
+           "type": "uml.Class",
             "id":"26ff1d7e-671d-4add-a74f-a0172e5270c9", 
             "values":{
                "name":"NomeClasseA",
