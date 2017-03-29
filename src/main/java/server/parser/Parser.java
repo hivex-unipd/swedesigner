@@ -20,7 +20,7 @@ import server.project.ParsedReturn;
 import server.project.ParsedWhile;
 
 public class Parser {/*abstract???anche i metodi sono abstract*/
-	public static ParsedProgram createParsedProgram(String jsonstring) throws JSONException{
+	public static ParsedProgram createParsedProgram(String jsonstring) throws Exception{
 		
 		ParsedProgram pp = new ParsedProgram();
 		
@@ -102,68 +102,73 @@ public class Parser {/*abstract???anche i metodi sono abstract*/
 		
 		
 	//String = instruction.getString("");	
-	private static ParsedInstruction recursiveBuilder(JSONObject instruction, JSONArray jblocks, int i) throws JSONException{
+	private static ParsedInstruction recursiveBuilder(JSONObject instruction, JSONArray jblocks, int i) throws Exception{
 		String type = instruction.getString("type");
-		ParsedInstruction currentinst;
+		ParsedInstruction currentinst = null;
+		JSONObject values = instruction.getJSONObject("values");
 		switch(type){
 			case "uml.assignment" : {
-				currentinst = new ParsedAssignment(instruction.getString("name"), instruction.getString("value"));
+				currentinst = new ParsedAssignment(values.getString("name"), values.getString("value"));
+				break;
 			}
 			case "uml.custom" : {
-				currentinst = new ParsedCustom(instruction.getString("instruction"));
+				currentinst = new ParsedCustom(values.getString("instruction"));
+				break;
 			}
 			case "uml.for" : {
-				String init = (instruction.has("init")?instruction.getString("init"):null);
-				String condition = (instruction.has("condition")?instruction.getString("condition"):null);
-				String step = (instruction.has("step")?instruction.getString("step"):null);
+				String init = (values.has("init")?values.getString("init"):null);
+				String condition = (values.has("condition")?values.getString("condition"):null);
+				String step = (values.has("step")?values.getString("step"):null);
 				//da vedere se init e step sono stringhe oppure ParsedInit/ParsedAssign
 				currentinst = new ParsedFor(null, condition, null, null);	
+				break;
 			}
 			case "uml.if" : {
-				String condition = (instruction.has("condition")?instruction.getString("condition"):null);
+				String condition = (values.has("condition")?values.getString("condition"):null);
 				currentinst = new ParsedIf(condition, null, null);
+				break;
 			}
 			case "uml.initialization" : {
-				String value = (instruction.has("value")?instruction.getString("value"):null);
-				currentinst = new ParsedInitialization(instruction.getString("type"), instruction.getString("name"), value);
+				String value = (values.has("value")?values.getString("value"):null);
+				currentinst = new ParsedInitialization(values.getString("type"), values.getString("name"), value);
+				break;
 			}
 			case "uml.return" : {
-				String value = (instruction.has("value")?instruction.getString("value"):null);
+				String value = (values.has("value")?values.getString("value"):null);
 				currentinst = new ParsedReturn(value);
+				break;
 			}
 			case "uml.while" : {
-				String condition = (instruction.has("condition")?instruction.getString("condition"):null);
+				String condition = (values.has("condition")?values.getString("condition"):null);
 				currentinst = new ParsedWhile(condition, null);
+				break;
 			}
-			break;
-			deafult : throw new Exception();
+			default : throw new Exception();
 		}
-			
-			if(!instruction.has("embeds")){
-				return currentinst;
-			}
-			
-			JSONArray embeds = instruction.getJSONArray("embeds");
-			int embedslength = embeds.length();
-			ParsedInstruction[] pi = new ParsedInstruction[embedslength];
-			for(int y = 0; y<embedslength; y++){
-				String id = embeds.getString(y);
-				JSONObject otherinstruction;
-				boolean found = false;
-				int found_at = 0;
-				for(int f=i; f<jblocks.length()&&!found; f++){
-					if(jblocks.getJSONObject(f).getString("id")==id){
-						otherinstruction = jblocks.getJSONObject(f);
-						found = true;
-						found_at = f;
-					}
-					pi[y] = Parser.recursiveBuilder(otherinstruction, jblocks, found_at);
-					
-				}
-				
-			}
 		
+		if(!instruction.has("embeds")){
 			return currentinst;
+		}
+		
+		JSONArray embeds = instruction.getJSONArray("embeds");
+		int embedslength = embeds.length();
+		ParsedInstruction[] pi = new ParsedInstruction[embedslength];
+		for(int y = 0; y<embedslength; y++){
+			String id = embeds.getString(y);
+			JSONObject otherinstruction = null;
+			boolean found = false;
+			int found_at = 0;
+			for(int f=i; f<jblocks.length()&&!found; f++){
+				if(jblocks.getJSONObject(f).getString("id")==id){
+					otherinstruction = jblocks.getJSONObject(f);
+					found = true;
+					found_at = f;
+				}
+				pi[y] = Parser.recursiveBuilder(otherinstruction, jblocks, found_at);
+			}
+		}
+		
+		return currentinst;
 	}
 	public void saveToDisk(String IdReq){};
 }
