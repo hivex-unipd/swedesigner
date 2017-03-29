@@ -4,6 +4,7 @@ package server;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.json.JSONException;
 import org.springframework.context.ApplicationContext;
@@ -60,7 +61,7 @@ public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 		ParsedInstruction[] elsebody = null; //new ParsedInstruction[]{pc2};
 		String condition = "a>2";
 		ParsedIf pif = new ParsedIf(condition, ifbody, elsebody);
-		ParsedInstruction[] body = new ParsedInstruction[]{pi, pa, pi2, pa2, pa3, pif};
+		List<ParsedInstruction> body = new List<ParsedInstruction>{pi, pa, pi2, pa2, pa3, pif};
 		ParsedMethod pm = new ParsedMethod("public", true, "void", "stampa", arrayAttr, body);
 		ParsedMethod[] methods = new ParsedMethod[]{pm};
 		String[] extended = new String[]{"Object"};

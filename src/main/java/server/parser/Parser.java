@@ -29,25 +29,30 @@ public class Parser {/*abstract???anche i metodi sono abstract*/
 		
 		HashMap<String, List<ParsedInstruction>> meth = new HashMap<String, List<ParsedInstruction>>();
 		
-		for(int i = 0; i<meths.length(); i++){
+		for(int i = 0; i<meths.length(); i++){ //ciclo diagrammi delle attività (metodo)
 			JSONObject jmeth = meths.getJSONObject(i);
 			String id = jmeth.getString("id");
 			JSONArray jblocks = jmeth.getJSONArray("cells");
 			List<ParsedInstruction> value = new ArrayList<ParsedInstruction>();
-			for(int j = 0; j < jblocks.length(); j++){
+			for(int j = 0; j < jblocks.length(); j++){ //ciclo blocchi esterni del particolare diagramma (metodo)
 				JSONObject external = jblocks.getJSONObject(j);
 				if(!external.has("parent")){
 					//inizio ricorsione
-					ParsedInstruction k = Parser.recursiveBuilder(external, jblocks, 0);
+					ParsedInstruction k = Parser.recursiveBuilder(external, jblocks, j+1);
 					value.add(k);
 				}
 			}
-			
-			//
+			meth.put(id, value);
 		}
 		
+		for(int i = 0; i < meth.size(); i++){
+			System.out.println("Stampa metodo "+i);
+			List<ParsedInstruction> l = meth.get("1234abc");
+			for(int y=0; y<l.size(); y++){
+				System.out.println(l.get(0).toString());
+			}
+		}	
 		
-		List<JSONObject> methods = new ArrayList<JSONObject>();
 		List<JSONObject> classes = new ArrayList<JSONObject>();
 		int i=0;
 		boolean isclass = true;
@@ -149,25 +154,25 @@ public class Parser {/*abstract???anche i metodi sono abstract*/
 		if(!instruction.has("embeds")){
 			return currentinst;
 		}
-		
+		//se ha figli
 		JSONArray embeds = instruction.getJSONArray("embeds");
 		int embedslength = embeds.length();
 		ParsedInstruction[] pi = new ParsedInstruction[embedslength];
-		for(int y = 0; y<embedslength; y++){
+		for(int y = 0; y<embedslength; y++){ //ciclo i figli
 			String id = embeds.getString(y);
 			JSONObject otherinstruction = null;
 			boolean found = false;
 			int found_at = 0;
-			for(int f=i; f<jblocks.length()&&!found; f++){
+			for(int f = i; f<jblocks.length()&&!found; f++){
 				if(jblocks.getJSONObject(f).getString("id")==id){
 					otherinstruction = jblocks.getJSONObject(f);
 					found = true;
 					found_at = f;
+					pi[y] = Parser.recursiveBuilder(otherinstruction, jblocks, found_at+1);
 				}
-				pi[y] = Parser.recursiveBuilder(otherinstruction, jblocks, found_at);
 			}
 		}
-		
+		currentinst.setBody(pi); //chiamata polimorfa
 		return currentinst;
 	}
 	public void saveToDisk(String IdReq){};
