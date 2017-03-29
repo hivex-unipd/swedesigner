@@ -65,7 +65,7 @@
 		   
 		   
 		   
-	"methods":{
+	"methods":[{
       "type":"activity",
       "id":"1234abc", 
       "cells":[
@@ -85,5 +85,5 @@
             }
          }
       ]
-   }
+   }]
    }
