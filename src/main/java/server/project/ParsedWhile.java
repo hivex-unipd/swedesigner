@@ -34,5 +34,9 @@ public class ParsedWhile extends ParsedInstruction {
 	public ParsedInstruction[] getBody() {
 		return body;
 	}
+	
+	public void setBody(ParsedInstruction[] pi){
+		this.body = pi;
+	} 
 
 }

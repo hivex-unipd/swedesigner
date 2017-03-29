@@ -47,5 +47,9 @@ public class ParsedIf extends ParsedInstruction {
 	public ParsedInstruction[] getElsebody() {
 		return elsebody;
 	}
+	
+	public void setBody(ParsedInstruction[] pi){
+		this.ifbody = pi;
+	} 
 
 }

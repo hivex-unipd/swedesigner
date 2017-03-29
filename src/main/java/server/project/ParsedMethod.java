@@ -1,5 +1,7 @@
 package server.project;
 
+import java.util.List;
+
 import org.stringtemplate.v4.ST;
 
 import server.template.Template;
@@ -10,10 +12,10 @@ public class ParsedMethod implements ParsedElement {
 	private String return_type;
 	private String name;
 	private ParsedAttribute[] args;
-	private ParsedInstruction[] body;
+	private List<ParsedInstruction> body;
 	
 	//costruttore
-	public ParsedMethod(String visibility, boolean is_static, String return_type, String name, ParsedAttribute[] args, ParsedInstruction[] body){
+	public ParsedMethod(String visibility, boolean is_static, String return_type, String name, ParsedAttribute[] args, List<ParsedInstruction> body){
 		this.visibility = visibility;
 		this.is_static = is_static;
 		this.return_type = return_type;
@@ -26,8 +28,8 @@ public class ParsedMethod implements ParsedElement {
 		ST template = t.getMethodTemplate();
 		template.add("method", this); 
 		String body_string = "";
-		for(int i=0; i<body.length; i++){
-			body_string += body[i].renderTemplate(t, lang);
+		for(int i=0; i<body.size(); i++){
+			body_string += body.get(i).renderTemplate(t, lang);
 		}
 		template.add("body", body_string);
 		return template.render();
@@ -52,7 +54,7 @@ public class ParsedMethod implements ParsedElement {
 		return args;
 	}
 	
-	public ParsedInstruction[] getBody() {
+	public List<ParsedInstruction> getBody() {
 		return body;
 	}
 }
