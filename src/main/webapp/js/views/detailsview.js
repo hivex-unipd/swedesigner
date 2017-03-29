@@ -5,6 +5,13 @@ define([
     'joint',
     'views/ProjectView'
 ], function ($, _, Backbone, joint, ProjectView) {
+    /**
+     * DetailsView class<br/>
+     * Description of the <em>DetailsView</em> class...
+     * @name DetailsView
+     * @class DetailsView
+     */
+
     var DetailsView = Backbone.View.extend({
         tagname: "div",
         className: "details-view",

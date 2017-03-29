@@ -10,6 +10,8 @@ before_install:
   - npm install requirejs
   - npm test
   - rm -rf node_modules
+  - npm install jsdoc
+  - jsdoc -d ../doc/ views/
   - cd ../../../..
 deploy:
   provider: elasticbeanstalk
