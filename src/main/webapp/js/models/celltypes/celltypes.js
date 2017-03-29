@@ -199,12 +199,14 @@ define([
 
 
             keyvalues: {
+                name: "classedefault",
                 attributes: [
                     {name: "variabileDefault", value: "valoreDefault"},
-
+                    {name: "variabileDefault2", value: "valoreDefault2"}
                 ],
                 methods: [
-                    {name: "metodoDefault", visibility: "public", value: "id univoco blabla"}
+                    {name: "metodoDefault", visibility: "public", value: "id univoco blabla",
+                        parameters:["param1:int"]}
                 ]
 
             }
@@ -237,15 +239,44 @@ define([
             return this.get('methods');
         },
 
+        setToValue: function (value, path) {
+            obj = this.get('keyvalues');
+            path = path.split('.');
+            for (i = 0; i < path.length - 1; i++) {
+
+                obj = obj[path[i]];
+
+            }
+            obj[path[i]] = value;
+            console.log( this.get('keyvalues'));
+            this.trigger("uml-update");
+        },
+        executemethod:function(met){
+            return this[met] && this[met].apply(this, [].slice.call(arguments, 1));
+        },
+        addmethod: function() {
+            this.get('keyvalues').methods.push({name:"",value:"",parameters:[]});
+            console.log("added");
+            console.log(this.get('keyvalues'));
+        },
+        addattribute:function(){
+            this.get('keyvalues').attributes.push({name:"",type:""});
+        },
+        addparameter:function(ind){
+
+
+            this.get('keyvalues').methods[ind].parameters.push("");
+        },
+
         updateRectangles: function () {
 
             var attrs = this.get('attrs');
 
-            var rects = [
+            /*var rects = [
                 {type: 'name', text: this.getClassName()},
                 {type: 'attrs', text: this.get('attributes')},
                 {type: 'methods', text: this.get('methods')}
-            ];
+            ];*/
 
             var offsetY = 0;
 
@@ -253,9 +284,9 @@ define([
             // this.set('size.height', (this.get('attributes') + this.get('methods')) * 20);
 
 
-            var rects = [
+            /*var rects = [
                 {type: 'name', text: this.getClassName()},
-            ];
+            ];*/
 
             /*
              if(attrs['uml-class-attrs-rect']){
@@ -284,23 +315,34 @@ define([
 //console.log( this.get('attributesexpanded'));
 
             rects = [
-                {type: 'name', text: this.getClassName()},
+                {type: 'name', text: this.get('keyvalues').name},
                 {
 
                     type: 'attrs',
-                    text: this.get('attributesexpanded') ? this.get('attributes') : "Attributes (click to expand)"
+                    text: this.get('attributesexpanded') ? this.get('keyvalues').attributes : "Attributes (click to expand)"
                 },
-                {type: 'methods', text: this.get('methodsexpanded') ? this.get('methods') : "Methods (click to expand)"}
+                {
+                    type: 'methods',
+                    text: this.get('methodsexpanded') ? this.get('keyvalues').methods : "Methods (click to expand)"
+                }
             ];
             console.log(this.get('keyvalues')['attributes']);
 
             _.each(rects, function (rect) {
 
                 var lines = _.isArray(rect.text) ? rect.text : [rect.text];
-                console.log(lines);
+                //console.log(lines);
                 var rectHeight = lines.length * 15 + 1;
 
-                attrs['.uml-class-' + rect.type + '-text'].text = lines.join('\n');
+                attrs['.uml-class-' + rect.type + '-text'].text = lines.map(function (e) {
+                    //console.log(e);
+                    if (e.hasOwnProperty('name')) {
+                        return e.name + ":" + e.value;
+                    }
+                    else {
+                        return e;
+                    }
+                }).join('\n');
                 attrs['.uml-class-' + rect.type + '-rect'].height = rectHeight;
                 attrs['.uml-class-' + rect.type + '-rect'].transform = 'translate(0,' + offsetY + ')';
 
