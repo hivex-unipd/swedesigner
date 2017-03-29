@@ -32,10 +32,10 @@ define([
          * @name DetailsView#className
          * @type {string}
          */
-        className: "details-view", // utile?
+        className: "details-view", // inutile?
 
         /**
-         * ?
+         * The DOM element corresponding to `DetailsView`.
          * @name DetailsView#el
          * @type {Object}
          */

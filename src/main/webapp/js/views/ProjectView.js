@@ -1,16 +1,11 @@
-/**
- * Created by matte on 21/03/2017.
- */
 define([
     'jquery',
     'underscore',
     'backbone',
     'joint',
     'models/ProjectModel',
-    'models/celltypes/celltypes'
+    'models/celltypes/celltypes' // inutile?
 ], function ($, _, Backbone, joint, ProjectModel) {
-
-
 
     Array.prototype.move = function (old_index, new_index) {
         if (new_index >= this.length) {
@@ -23,13 +18,38 @@ define([
         return this; // for testing purposes
     };
 
-
-
+    /**
+     * @classdesc `ProjectView` represents the drawing area.
+     * It can be the main class diagram or a specific method diagram.
+     * 
+     * @name ProjectView
+     * @class ProjectView
+     * @extends {Backbone.View}
+     */
     var ProjectView = Backbone.View.extend({
+
+        /**
+         * details (?)
+         * @name ProjectView#det
+         * @type {Object}
+         */
         det: {},
+
+        /**
+         * The main drawing area, contained in the HTML `#paper` div.
+         * @name ProjectView#paper
+         * @type {joint.dia.Paper}
+         */
         paper: {},
 
-
+        /**
+         * Initializes `model` with a new `ProjectModel`;
+         * initializes `paper` with a new `joint.dia.Paper` object;
+         * links mouse events to the right actions
+         * [...]
+         * @name ProjectView#initialize
+         * @function
+         */
         initialize: function () {
             this.model = ProjectModel;//new ProjectModel();
             this.paper = new joint.dia.Paper({
@@ -279,7 +299,13 @@ define([
 
         },
 
-
+        /**
+         * ...
+         * @name ProjectView#switch
+         * @function
+         * @param {number} index which graph to swith to
+         * @param {?} selectedCell ?
+         */
         switch: function (index, selectedCell) {
             this.model.switchToGraph(index, selectedCell);
             this.trigger("Switchgraph");

@@ -55,7 +55,7 @@ define([
         },
 
         /**
-         * Links the page events to the desired actions.
+         * The page events, each one linked to the desired actions.
          * @name AppView#events
          * @type {Object}
          */
