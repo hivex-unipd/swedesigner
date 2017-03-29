@@ -61,7 +61,7 @@ public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 		ParsedInstruction[] elsebody = null; //new ParsedInstruction[]{pc2};
 		String condition = "a>2";
 		ParsedIf pif = new ParsedIf(condition, ifbody, elsebody);
-		List<ParsedInstruction> body = new List<ParsedInstruction>{pi, pa, pi2, pa2, pa3, pif};
+		List<ParsedInstruction> body = null; //new List<ParsedInstruction>{pi, pa, pi2, pa2, pa3, pif};
 		ParsedMethod pm = new ParsedMethod("public", true, "void", "stampa", arrayAttr, body);
 		ParsedMethod[] methods = new ParsedMethod[]{pm};
 		String[] extended = new String[]{"Object"};
@@ -76,15 +76,11 @@ public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 		
 		
 		String testo = new String(Files.readAllBytes(Paths.get("src/main/resources/prova.json")));
-		
-		ParsedProgram provv = Parser.createParsedProgram(testo);
-		
-		//{"userId":"1","userName":"Yasir"}
-		
+		ParsedProgram provv = Parser.createParsedProgram(testo);	
 		
 		ApplicationContext context = new AnnotationConfigApplicationContext(GeneratorAssembler.class);
 		RequestHandlerController rhc = (RequestHandlerController)context.getBean("rhc");
-		rhc.prova(pp);
+		rhc.prova(provv);
 		
 		//System.out.println(pclass.renderTemplate(new JavaTemplate(), "java"));		
 		

@@ -4,24 +4,28 @@
       "id":"9999",
       "cells":[  
          {  
-            "type":"uml.class",
-            "id":"26ff1d7e-671d-4add-a74f-a0172e5270c9",
-            "values":{  
+           	   "type":"uml.class",
+           	   "id":"26ff1d7e-671d-4add-a74f-a0172e5270c9",
+			   "values":{  
                "name":"NomeClasseA",
                "static":"false",
                "abstract":"false",
                "attributes":[  
                   {  
                      "id":"bambi",
+                     "static":"false",
                      "varname":"first",
                      "vartype":"int",
-                     "varvisib":"private"
+                     "varvisib":"private",
+                     "varvaldef": "0"
                   },
                   {  
                      "id":"bambi2",
+                     "static":"false",
                      "varname":"second",
                      "vartype":"int",
-                     "varvisib":"private"
+                     "varvisib":"private",
+                     "varvaldef": "0"
                   }
                ],
                "methods":[  
@@ -74,7 +78,7 @@
    },
    "methods":[  
       {  
-         "id":"1234abc",
+         "id":"1234",
          "cells":[  
             {  
                "type":"uml.assignment",
@@ -109,7 +113,7 @@
          ]
       },
       {  
-         "id":"1235abc",
+         "id":"1235",
          "cells":[  
             {  
                "type":"uml.assignment",

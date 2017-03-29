@@ -15,6 +15,7 @@ import server.project.ParsedFor;
 import server.project.ParsedIf;
 import server.project.ParsedInitialization;
 import server.project.ParsedInstruction;
+import server.project.ParsedMethod;
 import server.project.ParsedProgram;
 import server.project.ParsedReturn;
 import server.project.ParsedWhile;
@@ -44,46 +45,61 @@ public class Parser {/*abstract???anche i metodi sono abstract*/
 			}
 			meth.put(id, value);
 		}
-		
-		for(int i = 0; i < meth.size(); i++){
-			System.out.println("Stampa metodo "+i);
-			List<ParsedInstruction> l = meth.get("1234abc");
-			for(int y=0; y<l.size(); y++){
-				System.out.println(l.get(0).toString());
-			}
-		}	
-		
-		List<JSONObject> classes = new ArrayList<JSONObject>();
+		List<ParsedClass> classes = new ArrayList<ParsedClass>();
 		int i=0;
 		boolean isclass = true;
 		while(i<arr.length()&&isclass){
-			String s = arr.getJSONObject(i).getString("type");
-			if(s=="uml.Class" || s=="uml.interface"){
+			JSONObject jclass = arr.getJSONObject(i);
+			String s = jclass.getString("type");
+			System.out.println("Tipo "+s);
+			if(s=="uml.class" || s=="uml.interface"){
+				System.out.println("PASSATO");
 				//classes.put(arr.getJSONObject(i));
+				
+				//creo array per attributi e metodi json
+				JSONArray jattributes = new JSONArray();
+				if(jclass.has("attributes"))
+					jattributes = jclass.getJSONArray("attributes");
+				JSONArray jmethods = new JSONArray();
+				if(jclass.has("methods"))
+					jmethods = jclass.getJSONArray("methods");
+				
+				System.out.println("jattributes lunghezza "+jattributes.length());
+				System.out.println("jmethods lunghezza "+jmethods.length());
+				
+				//creo array per attributi Parsed
+				ParsedAttribute[] attributes = new ParsedAttribute[jattributes.length()];
+				for(int r = 0; r<jattributes.length();r++){
+					JSONObject currentattr = jattributes.getJSONObject(r);
+					//***occorre controllare che ci siano tutti i campi prima di creare l'attributo
+					attributes[r] = new ParsedAttribute(currentattr.getBoolean("static"), currentattr.getString("varvisib"), currentattr.getString("vartype"),currentattr.getString("varname"), currentattr.getString("varvaldef"));
+				}
+				
+				//creo array di metodi Parsed
+				ParsedMethod[] methods = new ParsedMethod[jmethods.length()];
+				for(int r = 0; r<jmethods.length();r++){
+					JSONObject currentmeth = jmethods.getJSONObject(r);
+					//***
+					methods[r] = new ParsedMethod(currentmeth.getString("visibility"), currentmeth.getBoolean("static"),/* currentmeth.getBoolean("abstract"),*/currentmeth.getString("return-type"),currentmeth.getString("name"), attributes/*da cambiare con gli argomenti*/, meth.get(currentmeth.getString("id")));
+				}
+				
+				//creo la parsedclass e la inserisco nell'array di classi
+				classes.add(new ParsedClass(jclass.getString("name"), jclass.getString("visibility"), new String[]{"Object"},new String[]{"Interface"},attributes,methods));
 				i++;
-			}
+			}//fine if
 			else
 				isclass = false;
-		}
+		}//fine while
 		//POST: all'uscita i è tale che o i>=arr.length (ci sono solo classi) o i è l'indice di arr dove si trova la prima relazione;
-		
-		/*while(i<arr.length){
-			
-		}*/
-			
-			
-			
-			
-			
-			
+		/*
 		JSONObject generalclass = arr.getJSONObject(0).getJSONObject("values");
 		JSONArray attributes = generalclass.getJSONArray("attributes");
-		
+		*/
 		/*String cells = Programma.getString("cells");
 		JSONObject tutte_classi = new JSONObject(cells);
 		
 		JSONArray arr = tutte_classi.getJSONArray("cells");*/
-		ParsedAttribute[] fields = new ParsedAttribute[attributes.length()];
+		/*ParsedAttribute[] fields = new ParsedAttribute[attributes.length()];
 		
 		for (i = 0; i < attributes.length(); i++){
 			JSONObject attr = attributes.getJSONObject(i);
@@ -95,15 +111,19 @@ public class Parser {/*abstract???anche i metodi sono abstract*/
 				value = attr.getString("varvalue");
 			ParsedAttribute att = new ParsedAttribute(false, visibility, type, name, value);
 			fields[i] = att;
-		}
+		}*/
 		
-		String classname =generalclass.getString("name");
-		
-		
+		//String classname = generalclass.getString("name");
 		//ParsedClass pclass = new ParsedClass();
-		  //System.out.println(values.getJSONObject(i).getString("id"));
+		//System.out.println(values.getJSONObject(i).getString("id"));
+		for(int w = 0; w<classes.size(); w++){
+			pp.addType(classes.get(w));
+			
+		}
+		System.out.println("Classe Parser: numero di classi in parsedprogram"+pp.nClasses());//flag
 		
-		return new ParsedProgram();};
+		return new ParsedProgram();
+	};
 		
 		
 	//String = instruction.getString("");	
