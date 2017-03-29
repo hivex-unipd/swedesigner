@@ -46,7 +46,17 @@
 				   "static":"false",
 				   "abstract":"false"
             			 }
-		   }
+		   },
+		   
+		   {
+            "type":"uml.generalization",
+            "source":{
+               "id":"26ff1d7e-671d-4add-a74f-a0172e5270c9"
+            },
+            "target":{
+               "id":"f2c00232-2ac0-4ad3-969e-12caf8caa7dd"
+            }
+         }
 		   	  ]
 	},
 		   

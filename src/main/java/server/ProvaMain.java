@@ -85,10 +85,7 @@ public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 		RequestHandlerController rhc = (RequestHandlerController)context.getBean("rhc");
 		rhc.prova(pp);
 		
-		//System.out.println(pclass.renderTemplate(new JavaTemplate(), "java"));
-		
-		String testo = new String(Files.readAllBytes(Paths.get("src/main/resources/prova.json")));
-		
+		//System.out.println(pclass.renderTemplate(new JavaTemplate(), "java"));		
 		
 	}
 
