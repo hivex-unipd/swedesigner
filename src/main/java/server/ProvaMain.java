@@ -30,7 +30,7 @@ import server.template.java.JavaTemplate;
 
 public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 	RequestHandlerController controller;
-	public static void main(String[] args) throws IOException, JSONException{
+	public static void main(String[] args) throws IOException, JSONException, Exception{
 		Template t = new JavaTemplate();
 		
 		//Tutta roba che farà il parser
