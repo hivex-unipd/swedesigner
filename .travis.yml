@@ -11,7 +11,7 @@ before_install:
   - npm test
   - rm -rf node_modules
   - npm install jsdoc
-  - jsdoc -d ../doc -c ../doc/conf.json -R ../../../../README.md models/ views/ collection/
+  - jsdoc -d ../doc -c ../doc/conf.json -R ../../../../README.md -r models/ views/ collection/
   - cd ../../../..
 deploy:
   provider: elasticbeanstalk
