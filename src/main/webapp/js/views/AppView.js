@@ -11,13 +11,14 @@ define([
 ], function ($, _, Backbone, joint, ProjectView, Command, DetailsView, NewCellView) {
 
     /**
-     * @classdesc AppView is the the main view of the front end.
-     * It manages the main graphical interface,
-     * calling the other sub-views (ProjectView, DetailsView, NewCellView)
-     * and setting up the calls to Command.
+     * @classdesc `AppView` is the the main view of the front end.
+     * It manages the main graphical interface, calling the other
+     * sub-views (`ProjectView`, `DetailsView`, `NewCellView`)
+     * and setting up the calls to the `Command` object.
      * 
      * @name AppView
      * @class AppView
+     * @extends {Backbone.View}
      */
     var AppView = Backbone.View.extend({
 
@@ -30,7 +31,7 @@ define([
 
         /**
          * Links each page view to an appropriate object
-         * and declares a variable for indexing them.
+         * and declares the variable `index` for indexing them.
          * @name AppView#views
          * @type {Object}
          */
@@ -43,7 +44,7 @@ define([
 
         /**
          * Initializes the views dictionary with the three sub-views
-         * (ProjectView, DetailsView, NewCellView).
+         * (`ProjectView`, `DetailsView`, `NewCellView`).
          * @name AppView#initialize
          * @function
          */
@@ -82,7 +83,7 @@ define([
 
         /**
          * Saves the entire project diagram to a JSON file
-         * and gives it to the user.
+         * and gives it back to the user.
          * @name AppView#save
          * @function
          * @param {event} event the action event

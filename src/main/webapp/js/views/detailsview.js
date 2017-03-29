@@ -5,32 +5,83 @@ define([
     'joint',
     'views/ProjectView'
 ], function ($, _, Backbone, joint, ProjectView) {
+
     /**
-     * DetailsView class<br/>
-     * Description of the <em>DetailsView</em> class...
+     * @classdesc `DetailsView` shows the details of an element in one diagram.
+     * The diagram can be the main class diagram or a method diagram.
+     * In the first case the elements are classes or links between them,
+     * so `DetailsView` shows the class name, its attributes and methods, etcetera.
+     * In the second case the elements are instruction blocks, so `DetailsView`
+     * shows the operands, parameters, or conditions of a block.
+     * 
      * @name DetailsView
      * @class DetailsView
+     * @extends {Backbone.View}
      */
-
     var DetailsView = Backbone.View.extend({
+
+        /**
+         * The HTML tag populated by `DetailsView`.
+         * @name DetailsView#tagname
+         * @type {string}
+         */
         tagname: "div",
-        className: "details-view",
+
+        /**
+         * The class name.
+         * @name DetailsView#className
+         * @type {string}
+         */
+        className: "details-view", // utile?
+
+        /**
+         * ?
+         * @name DetailsView#el
+         * @type {Object}
+         */
         el: {},
+
+        /**
+         * ?
+         * @private
+         * @name DetailsView#mytemplate
+         * @function
+         */
         mytemplate: _.template($('#item-template').html()),
+
+        /**
+         * ?
+         * @name DetailsView#inputs
+         * @type {Object}
+         */
         inputs: {},
+
         /*events: {
          "click .adda":   "addAttribute",
          "click .addm":  "addMethod",
          "keydown" : "confirm"
          },*/
+
         //paper: null,
 
         //templ: _.template($('#class-template').html()),
 
+        /**
+         * ?
+         * @name DetailsView#events
+         * @type {Object}
+         */
         events: {
             //'blur .edit': 'confirmEdit'
         },
 
+        /**
+         * Initializes `el` with a jQuery object that handles the `#details`
+         * div and starts listening to the `ProjectView` events
+         * 'Switchgraph' and 'changed-cell'.
+         * @name DetailsView#initialize
+         * @function
+         */
         initialize: function () {
 
             this.$el = $("#details");
@@ -44,6 +95,13 @@ define([
             // si riesce a passare paper come parametro?
         },
 
+        /**
+         * Re-paints the `#details` div after a 'changed-cell' event was
+         * fired by the `ProjectView` object. The cell to be rendered
+         * is deduced from `ProjectView.paper.selectedCell`.
+         * @name DetailsView#render
+         * @function
+         */
         render: function () {
             console.log("i'm detailsview and i saw your change");
             //this.$el.html(ProjectView.paper.selectedCell.getClassName());
@@ -88,37 +146,49 @@ define([
 
             return this;
 
-
         },
+
+        /**
+         * Re-paints the `#details` div after a 'Switchgraph' event was
+         * fired by the `ProjectView` object.
+         * @name DetailsView#visib
+         * @function
+         */
         visib: function () {
             if (ProjectView.paper.selectedCell)
                 this.$el.html(ProjectView.paper.selectedCell.getMethods());
         },
 
-         getDescendantProp: function(obj, desc) {
-        var arr = desc.split(".");
-        while(arr.length && (obj = obj[arr.shift()]));
-        return obj;
+        /**
+         * ?
+         * @name DetailsView#getDescendantProp
+         * @function
+         * @param {Object} obj ?
+         * @param {Object} desc ?
+         */
+        getDescendantProp: function(obj, desc) {
+            var arr = desc.split(".");
+            while (arr.length && (obj = obj[arr.shift()]));
+            return obj;
         },
 
-
-
-         confirmEdit: function (e) {
-
+        /**
+         * Logs some event details (?).
+         * @name DetailsView#visib
+         * @function
+         * @param {event} e the action event
+         * @private
+         */
+        confirmEdit: function (e) {
             if (e.which == 13) {
-
              // fai controllo di dati corretti e aggiorna il graph
              //this.model.set("",this.$('#'));
                 console.log(e.target.id);
                 console.log(e.target.value);
                 console.log(ProjectView.paper.selectedCell);
                 //ProjectView.paper.selectedCell.set();
-
             }
-         }
-
-
-
+        }
     });
     return DetailsView;
 });
