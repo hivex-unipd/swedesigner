@@ -1,0 +1,76 @@
+{ "classes":{ 
+     "type":"class",
+      "id":"9999", 
+	  "cells":[
+      
+         {
+            "id":"26ff1d7e-671d-4add-a74f-a0172e5270c9", 
+            "values":{
+               "name":"NomeClasseA",
+               "static":"false",
+               "abstract":"false",
+               "attributes":[
+                  {
+                     "id":"bambi", 
+                     "varname":"first",
+                     "vartype":"int",
+                     "varvisib":"private"
+                  },
+                  {
+                     "id":"bambi2",  
+                     "varname": "second",
+                     "vartype":"int",
+                     "varvisib":"private"
+                  }
+							],
+				"methods":[
+                  {
+					 "static":"false",
+					 "abstract":"false",
+                     "name":"Method1",
+                     "visibility":"public",
+                     "return-type": "void",
+                     "id":"1234abc", 
+                     "parameters":[
+                        "param1:int", "param2:int"
+                     ]
+                   }
+                   ]
+                   }
+           },
+                   
+           {
+				"id":"f2c00232-2ac0-4ad3-969e-12caf8caa7dd",
+				"values":{
+				   "name":"NomeClasseB",
+				   "static":"false",
+				   "abstract":"false"
+            			 }
+		   }
+		   	  ]
+	},
+		   
+		   
+		   
+	"methods":{
+      "type":"activity",
+      "id":"1234abc", 
+      "cells":[
+         {
+            "type":"uml.assignment",
+            "position":{
+               "x":120,
+               "y":190
+            },
+            "size":{
+               "width":100,
+               "height":100
+            },
+            "values":{
+               "name":"param1",
+               "value":"3"
+            }
+         }
+      ]
+   }
+   }
