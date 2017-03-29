@@ -122,9 +122,9 @@ public class Parser {/*abstract???anche i metodi sono abstract*/
 			pp.addType(classes.get(w));
 			
 		}
-		//***System.out.println("Classe Parser: numero di classi in parsedprogram"+pp.nClasses());//flag
+		System.out.println("Classe Parser: numero di classi in parsedprogram"+pp.nClasses());//flag
 		
-		return new ParsedProgram();
+		return pp;
 	};
 		
 		
