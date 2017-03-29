@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: NewCellView</title>
+    <title>JSDoc: Class: NewCellModel</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: NewCellView</h1>
+    <h1 class="page-title">Class: NewCellModel</h1>
 
     
 
@@ -28,13 +28,11 @@
 
 <header>
     
-        <h2>NewCellView</h2>
+        <h2>NewCellModel</h2>
         
-            <div class="class-description"><p><code>NewCellView</code> presents to the user all the available
-elements, relations, and blocks that can be inserted in the
-current diagram (class or method diagram).
-It extracts the available elements by creating and querying
-a <code>NewCellModel</code> object.</p></div>
+            <div class="class-description"><p><code>NewCellModel</code> stores all the available
+elements, relations, and blocks that can be inserted in
+a diagram. Every <code>NewCellView</code> owns a <code>NewCellModel</code>.</p></div>
         
     
 </header>
@@ -48,7 +46,7 @@ a <code>NewCellModel</code> object.</p></div>
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="NewCellView"><span class="type-signature"></span>new NewCellView<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="NewCellModel"><span class="type-signature"></span>new NewCellModel<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
@@ -95,7 +93,7 @@ a <code>NewCellModel</code> object.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="views_newcellview.js.html">views/newcellview.js</a>, <a href="views_newcellview.js.html#line9">line 9</a>
+        <a href="models_newcellmodel.js.html">models/newcellmodel.js</a>, <a href="models_newcellmodel.js.html#line9">line 9</a>
     </li></ul></dd>
     
 
@@ -131,7 +129,7 @@ a <code>NewCellModel</code> object.</p></div>
 
 
     <ul>
-        <li>Backbone.View</li>
+        <li>Backbone.Model</li>
     </ul>
 
 
@@ -150,159 +148,14 @@ a <code>NewCellModel</code> object.</p></div>
 
         
             
-<h4 class="name" id="el"><span class="type-signature"></span>el<span class="type-signature"> :jQuery</span></h4>
-
-
-
-
-<div class="description">
-    <p>The DOM element corresponding to <code>NewCellView</code>.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">jQuery</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="views_newcellview.js.html">views/newcellview.js</a>, <a href="views_newcellview.js.html#line23">line 23</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="events"><span class="type-signature"></span>events<span class="type-signature"> :Object</span></h4>
-
-
-
-
-<div class="description">
-    <p>The page events, each one linked to the desired actions.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="views_newcellview.js.html">views/newcellview.js</a>, <a href="views_newcellview.js.html#line39">line 39</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
 <h4 class="name" id="str"><span class="type-signature"></span>str<span class="type-signature"> :Array</span></h4>
 
 
 
 
 <div class="description">
-    <p>The HTML buttons to be fed into the <code>#components</code> div;
-each of them is a string representing an element that
-can be inserted into the current diagram.</p>
+    <p>The available type of cell that the user
+can insert into the current diagram.</p>
 </div>
 
 
@@ -350,7 +203,7 @@ can be inserted into the current diagram.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="views_newcellview.js.html">views/newcellview.js</a>, <a href="views_newcellview.js.html#line30">line 30</a>
+        <a href="models_newcellmodel.js.html">models/newcellmodel.js</a>, <a href="models_newcellmodel.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -478,7 +331,7 @@ type of cell the user has selected.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="views_newcellview.js.html">views/newcellview.js</a>, <a href="views_newcellview.js.html#line67">line 67</a>
+        <a href="models_newcellmodel.js.html">models/newcellmodel.js</a>, <a href="models_newcellmodel.js.html#line44">line 44</a>
     </li></ul></dd>
     
 
@@ -516,10 +369,8 @@ type of cell the user has selected.</p>
 
 
 <div class="description">
-    <p>Initializes <code>model</code> with a <code>NexCellModel</code> object;
-initializes <code>str</code> with with the HTML buttons for each insertable
-element (deduced from <code>model.str</code>);
-initializes <code>el</code> with the HTML buttons in <code>str</code>.</p>
+    <p>Initialize the <code>str</code> array with all the available
+cell types.</p>
 </div>
 
 
@@ -563,7 +414,7 @@ initializes <code>el</code> with the HTML buttons in <code>str</code>.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="views_newcellview.js.html">views/newcellview.js</a>, <a href="views_newcellview.js.html#line48">line 48</a>
+        <a href="models_newcellmodel.js.html">models/newcellmodel.js</a>, <a href="models_newcellmodel.js.html#line29">line 29</a>
     </li></ul></dd>
     
 
