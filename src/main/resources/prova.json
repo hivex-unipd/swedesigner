@@ -10,6 +10,7 @@
                "name":"NomeClasseA",
                "static":"false",
                "abstract":"false",
+               "visibility":"public",
                "attributes":[  
                   {  
                      "id":"bambi",
@@ -62,8 +63,9 @@
             "values":{  
                "name":"NomeClasseB",
                "static":"false",
-               "abstract":"false"
-            }
+               "abstract":"false",
+               "visibility":"public"
+           }
          },
          {  
             "type":"uml.generalization",

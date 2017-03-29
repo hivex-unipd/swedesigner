@@ -51,21 +51,23 @@ public class Parser {/*abstract???anche i metodi sono abstract*/
 		while(i<arr.length()&&isclass){
 			JSONObject jclass = arr.getJSONObject(i);
 			String s = jclass.getString("type");
-			System.out.println("Tipo "+s);
-			if(s=="uml.class" || s=="uml.interface"){
-				System.out.println("PASSATO");
+			//***System.out.println("Tipo "+s);
+			if(s.equals("uml.class") || s.equals("uml.interface")){
+				//***System.out.println("PASSATO");
 				//classes.put(arr.getJSONObject(i));
+				JSONObject classvalues = jclass.getJSONObject("values");
 				
 				//creo array per attributi e metodi json
 				JSONArray jattributes = new JSONArray();
-				if(jclass.has("attributes"))
-					jattributes = jclass.getJSONArray("attributes");
+				//***System.out.println("has attributes"+classvalues.has("attributes"));
+				if(classvalues.has("attributes"))
+					jattributes = classvalues.getJSONArray("attributes");
 				JSONArray jmethods = new JSONArray();
-				if(jclass.has("methods"))
-					jmethods = jclass.getJSONArray("methods");
+				if(classvalues.has("methods"))
+					jmethods = classvalues.getJSONArray("methods");
 				
-				System.out.println("jattributes lunghezza "+jattributes.length());
-				System.out.println("jmethods lunghezza "+jmethods.length());
+				//***System.out.println("jattributes lunghezza "+jattributes.length());
+				//***System.out.println("jmethods lunghezza "+jmethods.length());
 				
 				//creo array per attributi Parsed
 				ParsedAttribute[] attributes = new ParsedAttribute[jattributes.length()];
@@ -84,7 +86,7 @@ public class Parser {/*abstract???anche i metodi sono abstract*/
 				}
 				
 				//creo la parsedclass e la inserisco nell'array di classi
-				classes.add(new ParsedClass(jclass.getString("name"), jclass.getString("visibility"), new String[]{"Object"},new String[]{"Interface"},attributes,methods));
+				classes.add(new ParsedClass(classvalues.getString("name"), classvalues.getString("visibility"), new String[]{"Object"},new String[]{"Interface"},attributes,methods));
 				i++;
 			}//fine if
 			else
@@ -120,7 +122,7 @@ public class Parser {/*abstract???anche i metodi sono abstract*/
 			pp.addType(classes.get(w));
 			
 		}
-		System.out.println("Classe Parser: numero di classi in parsedprogram"+pp.nClasses());//flag
+		//***System.out.println("Classe Parser: numero di classi in parsedprogram"+pp.nClasses());//flag
 		
 		return new ParsedProgram();
 	};
