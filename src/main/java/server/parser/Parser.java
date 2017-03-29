@@ -31,9 +31,8 @@ public class Parser {/*abstract???anche i metodi sono abstract*/
 			fields[i] = att;
 		}
 		
-		String class
 		
-		ParsedClass pclass = new ParsedClass();
+		//ParsedClass pclass = new ParsedClass();
 		  //System.out.println(values.getJSONObject(i).getString("id"));
 		
 		return new ParsedProgram();};
