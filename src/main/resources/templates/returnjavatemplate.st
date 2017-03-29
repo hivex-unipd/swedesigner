@@ -1,1 +1,1 @@
-returnjavatemplate(return)::="return <return.value>;"
+returnjavatemplate(return)::="return<if(return.value)> <return.value><endif>;"

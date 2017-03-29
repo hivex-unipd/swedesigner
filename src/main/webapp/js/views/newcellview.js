@@ -30,7 +30,7 @@ define([
         /**
          * The HTML buttons to be fed into the `#components` div;
          * each of them is a string representing an element that
-         * can ben inserted into the current diagram.
+         * can be inserted into the current diagram.
          * @name NewCellView#str
          * @type {Array}
          */

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/celltypes/ActivityDiagramElement.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/celltypes/ActivityDiagramElement.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>define([
+    'jquery',
+    'underscore',
+    'backbone',
+    'joint'
+], function ($, _, Backbone, joint) {
+
+    /**
+     * @classdesc `ActivityDiagramElement` is the base class
+     * for all the block elements in the activity diagram of a method.
+     *
+     * @module client.models.celltypes
+     * @name ActivityDiagramElement
+     * @class ActivityDiagramElement
+     * @extends {joint.shapes.basic.Generic}
+     */
+    var ActivityDiagramElement = joint.shapes.basic.Generic.extend({
+
+        /**
+         * The SVG markup for rendering the element on the page.
+         * @name ActivityDiagramElement#markup
+         * @type {string}
+         */
+        markup: [
+            '&lt;g class="activity">',
+            '&lt;rect class="activity-element-name-rect"/>',
+            '&lt;text class="activity-element-name-text"/>',
+            '&lt;/g>'
+        ].join(''),
+
+        /**
+         * The base class default attributes.
+         * @name ActivityDiagramElement#defaults
+         * @type {Object}
+         */
+        defaults: _.defaultsDeep({
+
+            /**
+             * The type of the element.
+             * @name ActivityDiagramElement#defaults#type
+             * @type {string}
+             */
+            type: 'uml.ActivityDiagramElement',
+
+            /**
+             * The CSS attributes for the diagram element.
+             * @name ActivityDiagramElement#defaults#attrs
+             * @type {Object}
+             */
+            attrs: {
+                rect: {'width': 200},
+
+                '.activity-element-name-rect': {
+                    'stroke': 'black',
+                    'stroke-width': 0,
+                    'fill': '#4db6ac'
+                },
+
+                '.activity': {
+                    'stroke': 'black',
+                    'stroke-width': 0,
+                    'fill': '#ffffff'
+                },
+
+                '.activity-element-name-text': {
+                    'ref': '.activity-element-name-rect',
+                    'ref-y': .5,
+                    'ref-x': .5,
+                    'text-anchor': 'middle',
+                    'y-alignment': 'middle',
+                    'fill': 'white',
+                    'font-size': 16,
+                    'font-family': 'Roboto'
+                }
+            },
+
+            /**
+             * Whether the element is expanded. (?)
+             * @name ActivityDiagramElement#defaults#expanded
+             * @type {boolean}
+             */
+            expanded: true,
+
+            /**
+             * Vertical offset from the top of the diagram. (?)
+             * @name ActivityDiagramElement#defaults#offsetY
+             * @type {number}
+             */
+            offsetY: 0,
+
+            /**
+             * ??
+             * @name ActivityDiagramElement#defaults#keyvalues
+             * @type {Object}
+             */
+            keyvalues: {
+                xtype: '[block type]',
+                comment: '[new block]',
+                body : []
+            }
+
+        }, joint.shapes.basic.Generic.prototype.defaults),
+
+        /**
+         * Initializes the CSS attributes.
+         * @name ActivityDiagramElement#initialize
+         * @function
+         */
+        initialize: function () {
+
+            joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
+
+            //_.bindAll(this.setOffsetY,'setOffsetY');
+            this.updateRectangles();
+            //_.bindAll(this, 'getOffsetY');
+
+        },
+
+        getKeyvalues: function () {
+            return this.get('keyvalues');
+        },
+
+        setOffsetY: function (a) {
+            this.offsetY = a;
+        },
+
+        getOffsetY: function () {
+            return this.attributes.offsetY;
+        },
+
+        getOffsetX: function () {
+            return this.getAncestors().length * 50;
+        },
+
+        getHeight: function () {
+            return 35;
+        },
+
+        /**
+         * Updates the CSS attributes, based on the state of the object.
+         * @name ActivityDiagramElement#updateRectangles
+         * @function
+         */
+        updateRectangles: function () {
+
+            var attrs = this.get('attrs');
+
+            // this.set('size.height', (this.get('attributes') + this.get('methods')) * 20);
+
+            this.attributes.position = {x: this.getOffsetX(), y: this.getOffsetY()};
+
+
+            if (this.get("keyvalues").comment.length > 20) {
+                var text = this.getKeyvalues().xtype + "\n" + this.getKeyvalues().comment.slice(0, 20) + "...";
+            } else {
+                var text = this.getKeyvalues().xtype + "\n" + this.getKeyvalues().comment;
+            }
+
+            attrs['.activity-element-name-text'].text = text;
+            attrs['.activity-element-name-rect'].height = this.getHeight();
+            attrs['.activity-element-name-rect'].transform = 'translate(0,0)';
+            console.log("valore offset: ");
+            console.log(this.getOffsetY());
+
+
+            //attrs['.activity'].transform = 'translate(0,' + this.getOffsetY()+ ')';
+            //console.log(this.getOffsetY());
+
+        }
+    });
+    return ActivityDiagramElement;
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ActivityDiagramElement.html">ActivityDiagramElement</a></li><li><a href="AppView.html">AppView</a></li><li><a href="Commands.html">Commands</a></li><li><a href="DetailsView.html">DetailsView</a></li><li><a href="DiagramsCollection.html">DiagramsCollection</a></li><li><a href="NewCellModel.html">NewCellModel</a></li><li><a href="NewCellView.html">NewCellView</a></li><li><a href="ProjectView.html">ProjectView</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Mar 29 2017 17:53:45 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
