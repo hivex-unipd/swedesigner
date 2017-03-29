@@ -1,5 +1,11 @@
 package server;
 
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import org.json.JSONException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.stringtemplate.v4.ST;
@@ -8,6 +14,7 @@ import org.stringtemplate.v4.STGroupDir;
 
 import server.controller.RequestHandlerController;
 import server.generator.GeneratorAssembler;
+import server.parser.Parser;
 import server.project.ParsedAssignment;
 import server.project.ParsedAttribute;
 import server.project.ParsedClass;
@@ -23,8 +30,7 @@ import server.template.java.JavaTemplate;
 
 public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 	RequestHandlerController controller;
-	
-	public static void main(String[] args){
+	public static void main(String[] args) throws IOException, JSONException{
 		Template t = new JavaTemplate();
 		
 		//Tutta roba che farà il parser
@@ -67,12 +73,19 @@ public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 		
 		/**** ADESSO ARRIVA IL BELLO ***/
 		
+		
+		String testo = new String(Files.readAllBytes(Paths.get("src/main/resources/prova.json")));
+		
+		ParsedProgram provv = Parser.createParsedProgram(testo);
+		
+		//{"userId":"1","userName":"Yasir"}
+		
+		
 		ApplicationContext context = new AnnotationConfigApplicationContext(GeneratorAssembler.class);
 		RequestHandlerController rhc = (RequestHandlerController)context.getBean("rhc");
 		rhc.prova(pp);
 		
-		//System.out.println(pclass.renderTemplate(new JavaTemplate(), "java"));
-		
+		//System.out.println(pclass.renderTemplate(new JavaTemplate(), "java"));		
 		
 	}
 
