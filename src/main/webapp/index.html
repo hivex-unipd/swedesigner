@@ -123,8 +123,50 @@
 
 
                     <script type="text/template" id="item-template">
-                        <label><%= name %></label>
-                        <input class="edit" value="<%= value %>" id="<%=name%>">
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="name">
+                            <label class="mdl-textfield__label" for="classname">Nome classe</label>
+                            <input class="edit mdl-textfield__input" value="<%= name %>" name="name" id="classname">
+                        </div>
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                             id="attributes">
+                            <% for(var attr in attributes) { %>
+                            <fieldset>
+                                <label class="" for="attributes.<%=attr%>.name">Nome variabile</label>
+                                <input class="edit" value="<%= attributes[attr].name %>"
+                                       name="attributes.<%=attr%>.name">
+
+                                <label class="" for="attributes.<%=attr%>.value">Valore che sarà tipo</label>
+                                <input class="edit " value="<%= attributes[attr].value %>"
+                                       name="attributes.<%=attr%>.value">
+                            </fieldset>
+
+
+                            <% } %>
+                            <button class="add" name="addattribute">Aggiungi attributo</button>
+
+                        </div>
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                             id="methods">
+                            <% for(var met in methods) { %>
+
+                            <label class="" for="<%=methods[met].name%>">Nome metodo</label>
+                            <input class="edit " value="<%= methods[met].name %>" name="methods.<%=met%>.name">
+
+                            <label class="" for="<%=methods[met].name%>">Valore</label>
+                            <input class="edit " value="<%= methods[met].value %>" name="methods.<%=met%>.value">
+
+
+
+                            <div id="parameters">
+                                <%  for(var par in methods[met].parameters)
+                                {%>
+                                <label class="" for="methods.<%=met%>.parameters.<%=par%>">Parametro</label>
+                                <input class="edit " value="<%=methods[met].parameters[par]%>" name="methods.<%=met%>.parameters.<%=par%>">
+                                <button class="add" name="addparameter.<%=par%>">Aggiungi Parametro</button>
+                            </div>
+                            <% }} %>
+                            <button class="add" name="addmethod">Aggiungi Metodo</button>
+                        </div>
                     </script>
 
                 </div>

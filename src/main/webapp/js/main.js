@@ -8,8 +8,14 @@ require.config({
         lodash: 'libs/lodash/lodash',
         backbone: 'libs/backbone/backbone',
         text: 'libs/require/text',
-        joint: 'libs/jointjs/joint'
+        joint: 'libs/jointjs/joint',
+        material: 'libs/mdl/material'
 
+    },
+    shim:{
+        'material': {
+            exports: "componentHandler"
+        }
     },
     map: {
         "*": {

@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'joint',
-    'views/ProjectView'
-], function ($, _, Backbone, joint, ProjectView) {
+    'views/ProjectView',
+    'material'
+], function ($, _, Backbone, joint, ProjectView,componentHandler) {
 
     /**
      * @classdesc `DetailsView` shows the details of an element in one diagram.
@@ -119,29 +120,29 @@ define([
 
 
 
-            var fn = function (element) {
+            /*var fn = function (element) {
                 //console.log("no lazy?");
                 if(_.isArray(element)) {console.log(element); console.log("è array"); _.each(element, fn, this) }
                 else  {console.log(element); output += this.mytemplate(element);}
-            };
+            };*/
 
             console.log("ripperoni");
             //c.attributes.keyvalues.forEach(fn);
-            _.each(c.attributes.keyvalues, fn, this);
+           // _.each(c.attributes.keyvalues, fn, this);
 
             console.log("finironi");
 
-
+            output = this.mytemplate(c.attributes.keyvalues);
 
             // this.$el.html(this.mytemplate({title: "titolo molto divino", val:"valore molto animale"}));
             this.$el.html(output);
 
-
+            componentHandler.upgradeDom(); //refresh material design
 
             // idee per il binding a due vie: salvarsi in un array inputs i vari input e in qualche modo confirmedit si prende
             // solo quello che gli serve... mi sembra comunque terribilmente inefficiente... che facciamo?
             // bb
-            this.delegateEvents(_.extend(this.events, {'keypress .edit': 'confirmEdit'}));
+            this.delegateEvents(_.extend(this.events, {'keypress .edit': 'confirmEdit','click .add': 'execmod'}));
 
 
 
@@ -158,6 +159,15 @@ define([
         visib: function () {
             if (ProjectView.paper.selectedCell)
                 this.$el.html(ProjectView.paper.selectedCell.getMethods());
+        },
+        /**
+         * Execute a method of the model passing its name as string
+         * @param e The method name
+         */
+        execmod: function(e){
+            var tmp = e.target.name.split(".");
+            ProjectView.paper.selectedCell.executemethod(tmp[0],tmp[1]);
+            this.render();
         },
 
         /**
@@ -187,6 +197,9 @@ define([
                 console.log(e.target.id);
                 console.log(e.target.value);
                 console.log(ProjectView.paper.selectedCell);
+
+                ProjectView.paper.selectedCell.setToValue(e.target.value,e.target.name);
+
                 //ProjectView.paper.selectedCell.set();
             }
         }
