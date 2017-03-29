@@ -2,7 +2,7 @@
 *.class
 
 ### Node.js modules
-node_modules
+js/node_modules
 
 ### Apple
 .DS_store
