@@ -15,7 +15,7 @@ public class ParsedInitialization extends ParsedInstruction {
 		this.value = value;
 	}
 	
-	public String renderTemplate(Template t, String lang){
+	public String renderTemplate(Template t) {
 		ST template = t.getInitializationTemplate();
 		template.add("att", this);
 		return template.render();	

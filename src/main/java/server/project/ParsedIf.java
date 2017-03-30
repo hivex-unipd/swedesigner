@@ -15,19 +15,19 @@ public class ParsedIf extends ParsedInstruction {
 		this.elsebody = elsebody;
 	}
 	
-	public String renderTemplate(Template t, String lang){
+	public String renderTemplate(Template t) {
 		ST template = t.getIfTemplate();
 		String ifbody_string ="";
 		if(ifbody!=null){
 			for(int i=0; i<ifbody.length; i++){
-			ifbody_string += ifbody[i].renderTemplate(t, lang);
+			ifbody_string += ifbody[i].renderTemplate(t);
 			}
 		}
 		
 		String elsebody_string ="";
 		if(elsebody!=null){
 			for(int i=0; i<elsebody.length; i++){
-		elsebody_string += elsebody[i].renderTemplate(t, lang);
+		elsebody_string += elsebody[i].renderTemplate(t);
 			}
 		}
 		template.add("if1", this);

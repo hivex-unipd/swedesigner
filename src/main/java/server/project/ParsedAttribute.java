@@ -21,7 +21,7 @@ public class ParsedAttribute implements ParsedElement {
     public String getValue(){return value;}
     public boolean getIsStatic(){return isStatic;}
     
-	public String renderTemplate(Template t, String lang){
+	public String renderTemplate(Template t) {
 		ST template = t.getAttributeTemplate();
 		template.add("att", this);
 		return template.render();

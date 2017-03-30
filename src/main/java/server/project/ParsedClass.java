@@ -30,12 +30,12 @@ public class ParsedClass extends ParsedType {
 	 public ParsedAttribute[] getAttributes(){return attributes;}
 	 public ParsedMethod[] getMethods(){return methods;}
 	
-	public String renderTemplate(Template t, String lang){
+	public String renderTemplate(Template t) {
 		ST template = t.getClassTemplate();
 		template.add("class", this);
 		String methods_string = "";
 		for(int i=0; i<methods.length; i++){
-			methods_string += methods[i].renderTemplate(t, "java");
+			methods_string += methods[i].renderTemplate(t);
 		}
 		template.add("methods", methods_string);
 		return template.render();

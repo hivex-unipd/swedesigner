@@ -10,7 +10,7 @@ public class ParsedAssignmentTest {
 	public void assignmentIsParsed() {
 		ParsedAssignment instruction = new ParsedAssignment("variable", "1");
 		JavaTemplate template = new JavaTemplate();
-		String result = instruction.renderTemplate(template, "pippo");
+		String result = instruction.renderTemplate(template);
 		assertEquals(result, "variable = 1;");
 	}
 }

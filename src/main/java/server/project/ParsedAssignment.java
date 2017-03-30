@@ -13,7 +13,7 @@ public class ParsedAssignment extends ParsedInstruction {
 		this.value = value;
 	}
 	
-	public String renderTemplate(Template t, String lang){
+	public String renderTemplate(Template t) {
 		ST template = t.getAssignmentTemplate();
 		template.add("assignment", this);
 		return template.render();
