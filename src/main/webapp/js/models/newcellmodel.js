@@ -3,7 +3,8 @@ define([
     'underscore',
     'backbone',
     'joint',
-    'models/ProjectModel'
+    'models/ProjectModel',
+    'models/newcellfactory'
 ], function ($, _, Backbone, joint, ProjectModel) {
 
     /**
@@ -34,8 +35,13 @@ define([
          */
         initialize: function () {
             console.log(this.str);
+            this.registerCells("");
+        },
+
+        registerCells: function(diag){
             for (var property in joint.shapes.uml) {
-                if (joint.shapes.uml.hasOwnProperty(property)) {
+                if (joint.shapes.uml.hasOwnProperty(property) && property.startsWith("Hx")) {
+                    console.log(property);
                     this.str.push(property);
                 }
             }
@@ -49,6 +55,7 @@ define([
          * @param {event} event the action event
          */
         addCell: function (type) {
+
             //console.log(type);
             ProjectModel.addCellFromType(type);
         }
