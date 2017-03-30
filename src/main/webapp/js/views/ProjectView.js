@@ -7,16 +7,7 @@ define([
 
 ], function ($, _, Backbone, joint, ProjectModel) {
 
-    Array.prototype.move = function (old_index, new_index) {
-        if (new_index >= this.length) {
-            var k = new_index - this.length;
-            while ((k--) + 1) {
-                this.push(undefined);
-            }
-        }
-        this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-        return this; // for testing purposes
-    };
+
 
     /**
      * @classdesc `ProjectView` represents the drawing area.
@@ -149,9 +140,13 @@ define([
                 if(this.selectedCell != cellView.model)
                 {
                     this.selectedCell = cellView.model;
-                    this.trigger("changed-cell");
-                    console.log("ho cambiato la selectedcell");
-                    console.log(this.selectedCell);
+                    if(cellView.model instanceof joint.shapes.uml.ClassDiagramElement)
+                    {
+                        this.trigger("changed-cell");
+                        console.log("ho cambiato la selectedcell");
+                        console.log(this.selectedCell);
+
+                    }
 
                 }
 
@@ -191,15 +186,28 @@ define([
                 console.log(curr);
 
 
+                var move = function (a, old_index, new_index) {
+                    if (new_index >= a.length) {
+                        var k = new_index - a.length;
+                        while ((k--) + 1) {
+                            a.push(undefined);
+                        }
+                    }
+                    a.splice(new_index, 0, a.splice(old_index, 1)[0]);
+                    return a; // for testing purposes
+                };
+
 
 
                 var index = g.indexOf(curr);//curr.get("index"); // è necessario cercare a che indice vorrebbe mettere la cosa
 
+
+                console.log(g);
                 if(index+1<=g.length-1 && curr.get("position").y > g[index+1].get("position").y)
                 {
                     //curr.set("index", index+1);
                     // g[index+1].set("index", index); // -1+1 mi raccomando
-                    g.move(index,index+1);
+                    move(g,index,index+1);
                 }
 
                 // sarebbe >=1 ma c'è ancora il link in mezzo (senza sarebbe 0)
@@ -207,7 +215,7 @@ define([
                 {
                     ///curr.set("index", index-1);
                     // g[index-1].set("index", index); // -1+1 mi raccomando
-                    g.move(index,index-1);
+                    move(g, index,index-1);
                 }
 
 
