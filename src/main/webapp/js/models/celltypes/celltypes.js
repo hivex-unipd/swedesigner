@@ -53,7 +53,7 @@ define([
             },
 
 
-
+            index: 0,
             expanded: true,
             offsetY: 0,
 
@@ -137,13 +137,13 @@ define([
             attrs['.activity-element-name-text'].text = text;
             attrs['.activity-element-name-rect'].height = this.getHeight();
 
-            console.log(this.getEmbeddedCells({deep:true}));
+            //console.log(this.getEmbeddedCells({deep:true}));
             attrs['.activity-element-body-rect'].height = 150-35+ this.getEmbeddedCells({deep:true}).length *150 - 20 ;
 
             attrs['.activity-element-name-rect'].transform = 'translate(0,0)';
             attrs['.activity-element-body-rect'].transform = 'translate(0,35)';
-            console.log("valore offset: ");
-            console.log(this.getOffsetY());
+            ///console.log("valore offset: ");
+            //console.log(this.getOffsetY());
 
 
 

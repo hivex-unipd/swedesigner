@@ -248,9 +248,22 @@ define([
                 //index: 2
             });
 
+            var d = new joint.shapes.uml.ActivityDiagramElement({
+
+                offsetY: 500,
+                keyvalues: {
+                    xtype: 'ASSEGNAZIONE',
+                    comment: 'D ultima cosa',
+                    body : [],
+
+                },
+                //index: 2
+            });
+
             x.cells.push(a);
             x.cells.push(b);
             x.cells.push(c);
+            x.cells.push(d);
 
             console.log(x);
 
