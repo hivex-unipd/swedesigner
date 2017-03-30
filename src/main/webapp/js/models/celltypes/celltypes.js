@@ -371,9 +371,8 @@ define([
 
         },
         events: {
-            'click .togglemethods': 'togglemethods',
-            'click .toggleattributes': 'toggleattributes',
-
+            'mousedown .togglemethods': 'togglemethods',
+            'mousedown .toggleattributes': 'toggleattributes',
 
 
         },
