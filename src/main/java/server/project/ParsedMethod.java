@@ -24,12 +24,12 @@ public class ParsedMethod implements ParsedElement {
 		this.body = body;
 	}
 	
-	public String renderTemplate(Template t, String lang){
+	public String renderTemplate(Template t) {
 		ST template = t.getMethodTemplate();
 		template.add("method", this); 
 		String body_string = "";
 		for(int i=0; i<body.size(); i++){
-			body_string += body.get(i).renderTemplate(t, lang);
+			body_string += body.get(i).renderTemplate(t);
 		}
 		template.add("body", body_string);
 		return template.render();

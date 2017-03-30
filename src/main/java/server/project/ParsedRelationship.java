@@ -10,7 +10,7 @@ public class ParsedRelationship implements ParsedElement {
 	private Type type;
 	private int min, max;
 	@Override
-	public String renderTemplate(Template t, String lang) {
+	public String renderTemplate(Template t) {
 		// TODO Auto-generated method stub
 		return null;
 	}

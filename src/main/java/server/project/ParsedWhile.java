@@ -13,13 +13,13 @@ public class ParsedWhile extends ParsedInstruction {
 		this.body = body;
 	}
 	
-	public String renderTemplate(Template t, String lang){
+	public String renderTemplate(Template t) {
 		ST template = t.getWhileTemplate();
 		template.add("while", this);
 		String body_string = "";
 		if(body!=null){
 			for(int i=0; i<body.length; i++){
-			body_string+=body[i].renderTemplate(t, lang);
+			body_string+=body[i].renderTemplate(t);
 			}
 		}
 		

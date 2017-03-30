@@ -7,6 +7,6 @@ public class ParsedCustom extends ParsedInstruction {
 	public ParsedCustom(String instruction){
 		this.instruction = instruction;
 	}
-	public String renderTemplate(Template t, String lang){
+	public String renderTemplate(Template t) {
 		return instruction+"\n";/*implementazione*/};
 }

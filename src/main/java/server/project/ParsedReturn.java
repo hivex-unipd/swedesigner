@@ -11,7 +11,7 @@ public class ParsedReturn extends ParsedInstruction {
 		this.value = value;
 	}
 	
-	public String renderTemplate(Template t, String lang){
+	public String renderTemplate(Template t) {
 		ST template = t.getReturnTemplate();
 		template.add("return", this);
 		return template.render();

@@ -20,8 +20,8 @@ public class JavaGenerator implements Generator {
 	public void generate(String IdReq, ParsedProgram p){
 		String program = "";
 		for(int i=0; i<p.nClasses(); i++){
-			program += p.getType(i).renderTemplate(template, "java");
-			/*String type = p.getType(i).renderTemplate(template, "java");
+			program += p.getType(i).renderTemplate(template);
+			/*String type = p.getType(i).renderTemplate(template);
 			try{
 				String path = "C:/Users/alber/Desktop/SOURCES/prova.java";
 				File tipo = new File(path);

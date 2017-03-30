@@ -18,12 +18,12 @@ public class ParsedFor extends ParsedInstruction {
 		
 	}
 	
-	public String renderTemplate(Template t, String lang){
+	public String renderTemplate(Template t) {
 		ST template = t.getForTemplate();
 		String body_string ="";
 		if(body!=null){
 			for(int i=0; i<body.length; i++){
-			body_string += body[i].renderTemplate(t, lang);
+			body_string += body[i].renderTemplate(t);
 			}
 		}
 		
