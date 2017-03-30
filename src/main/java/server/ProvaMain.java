@@ -35,7 +35,7 @@ public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 		Template t = new JavaTemplate();
 		
 		String testo = new String(Files.readAllBytes(Paths.get("src/main/resources/prova.json")));
-		ParsedProgram provv = Parser.createParsedProgram(testo);	
+		ParsedProgram provv = new Parser().createParsedProgram(testo);	
 		
 		ApplicationContext context = new AnnotationConfigApplicationContext(GeneratorAssembler.class);
 		RequestHandlerController rhc = (RequestHandlerController)context.getBean("rhc");

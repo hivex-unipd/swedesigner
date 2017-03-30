@@ -25,25 +25,33 @@ import server.project.ParsedType;
 import server.project.ParsedWhile;
 
 public class Parser {
-	public static ParsedProgram createParsedProgram(String jsonstring) throws Exception{
+	List<String> errors = new ArrayList<String>();
+	
+	public ParsedProgram createParsedProgram(String jsonstring) throws Exception{
 		
 		ParsedProgram pp = new ParsedProgram();
-		
-		JSONArray arr = new JSONObject(jsonstring).getJSONObject("classes").getJSONArray("cells");
-		JSONArray meths = new JSONObject(jsonstring).getJSONArray("methods");
+		JSONObject program = new JSONObject(jsonstring);
+		JSONObject objectclasses = (program.has("classes")? program.getJSONObject("classes"):new JSONObject());
+		JSONArray arr = (objectclasses.has("cells")?objectclasses.getJSONArray("cells"):new JSONArray());
+		JSONArray meths = (program.has("methods")?program.getJSONArray("methods"):new JSONArray());
 		
 		HashMap<String, List<ParsedInstruction>> meth = new HashMap<String, List<ParsedInstruction>>();
 		
 		for(int i = 0; i<meths.length(); i++){ //ciclo diagrammi delle attività (metodo)
 			JSONObject jmeth = meths.getJSONObject(i);
-			String id = jmeth.getString("id");
-			JSONArray jblocks = jmeth.getJSONArray("cells");
+			String id = null;
+			if(jmeth.has("id"))
+				id = jmeth.getString("id");
+			else
+				errors.add("JSON format error: Cannot find id in method");
+			
+			JSONArray jblocks = (jmeth.has("cells")?jmeth.getJSONArray("cells"):new JSONArray());
 			List<ParsedInstruction> value = new ArrayList<ParsedInstruction>();
 			for(int j = 0; j < jblocks.length(); j++){ //ciclo blocchi esterni del particolare diagramma (metodo)
 				JSONObject external = jblocks.getJSONObject(j);
 				if(!external.has("parent")){
 					//inizio ricorsione
-					ParsedInstruction k = Parser.recursiveBuilder(external, jblocks, j+1);
+					ParsedInstruction k = recursiveBuilder(external, jblocks, j+1);
 					value.add(k);
 				}
 			}
@@ -55,39 +63,82 @@ public class Parser {
 		HashMap<String, ParsedType> alltypes = new HashMap<String, ParsedType>();
 		while(i<arr.length()&&isclass){
 			JSONObject jclass = arr.getJSONObject(i);
-			String s = jclass.getString("type");
+			String s = "";
+			if(jclass.has("type"))
+				s = jclass.getString("type");
+			else
+				errors.add("JSON format error: cannot find type of type");
+			
 
 			if(s.equals("uml.class") || s.equals("uml.interface")){
 				
 				//classes.put(arr.getJSONObject(i));
-				JSONObject classvalues = jclass.getJSONObject("values");
+				JSONObject classvalues = (jclass.has("values")?jclass.getJSONObject("values"):new JSONObject());
 				
 				//creo array per attributi JSON
-				JSONArray jattributes = new JSONArray();
-				if(classvalues.has("attributes"))
-					jattributes = classvalues.getJSONArray("attributes");
+				JSONArray jattributes = (classvalues.has("attributes")?classvalues.getJSONArray("attributes"):new JSONArray());
 				
 				//creo array per metodi JSON
-				JSONArray jmethods = new JSONArray();
-				if(classvalues.has("methods"))
-					jmethods = classvalues.getJSONArray("methods");
-
+				JSONArray jmethods = (classvalues.has("methods")?classvalues.getJSONArray("methods"):new JSONArray());
+				
 				//creo array per attributi Parsed
 				List<ParsedAttribute> attributes = new ArrayList<ParsedAttribute>();
 				for(int r = 0; r<jattributes.length();r++){
 					JSONObject currentattr = jattributes.getJSONObject(r);
 					//***occorre controllare che ci siano tutti i campi prima di creare l'attributo
-					attributes.add(new ParsedAttribute(currentattr.getBoolean("static"), currentattr.getString("varvisib"), currentattr.getString("vartype"),currentattr.getString("varname"), currentattr.getString("varvaldef")));
+					boolean isstatic = (currentattr.has("static")?currentattr.getBoolean("static"):false);
+					String visibility = (currentattr.has("varvisib")?currentattr.getString("varvisib"):null);
+					String varvaldef = (currentattr.has("varvaldef")?currentattr.getString("varvaldef"):null);
+					String vartype = "";
+					if(currentattr.has("vartype"))
+						vartype = currentattr.getString("vartype");
+					else
+						errors.add("Cannot find type of attribute");
+					
+					String varname = "";
+					if(currentattr.has("varname"))
+						vartype = currentattr.getString("varname");
+					else
+						errors.add("Cannot find name of attribute");
+						
+					attributes.add(new ParsedAttribute(isstatic, visibility, vartype, varname, varvaldef));
 				}
 				
 				//creo array di metodi Parsed
 				ParsedMethod[] methods = new ParsedMethod[jmethods.length()];
 				for(int r = 0; r<jmethods.length();r++){
 					JSONObject currentmeth = jmethods.getJSONObject(r);
-					//***
-					methods[r] = new ParsedMethod(currentmeth.getString("visibility"), currentmeth.getBoolean("static"),/* currentmeth.getBoolean("abstract"), */currentmeth.getString("return-type"),currentmeth.getString("name"),null /*attributes da cambiare con gli argomenti*/, meth.get(currentmeth.getString("id")));
+					JSONArray params = (currentmeth.has("parameters")?currentmeth.getJSONArray("parameters"):new JSONArray());
+					ParsedAttribute[] args = (params.length()>0?new ParsedAttribute[params.length()]:new ParsedAttribute[0]);
+		
+					for(int p=0; p<args.length; p++){
+						String arginfo = params.getString(p);
+						if(arginfo.contains(":")){
+							String[] infos = arginfo.split(":");
+							args[p] = new ParsedAttribute(false, null, infos[1], infos[0], null);
+						}
+						else
+							errors.add("JSON format error: parameter "+(p+1)+" of method");
+					}
+					String visibility = (currentmeth.has("visibility")?currentmeth.getString("visibility"):null);
+					boolean isstatic = (currentmeth.has("static")?currentmeth.getBoolean("static"):false);
+					boolean isabstract = (currentmeth.has("abstract")?currentmeth.getBoolean("abstract"):false);
+					
+					String returntype = "";
+					if(currentmeth.has("return-type"))
+						returntype = currentmeth.getString("return-type");
+					else
+						errors.add("Retun type not found in method");
+					
+					String name = "";
+					if(currentmeth.has("name"))
+						name = currentmeth.getString("name");
+					else
+						errors.add("Name not found in method");
+					
+					methods[r] = new ParsedMethod(visibility , isstatic, isabstract, returntype, name, args, meth.get(currentmeth.getString("id")));
 				}
-				
+			//************************ARRIVATI QUI A CONTROLLARE GLI ERRORI******************************************//	
 				//creo la parsedclass e la inserisco nell'array di classi
 				String id = jclass.getString("id");
 				alltypes.put(id, new ParsedClass(classvalues.getString("name"), classvalues.getString("visibility"),attributes,methods));
@@ -136,7 +187,7 @@ public class Parser {
 	};
 		
 
-	private static ParsedInstruction recursiveBuilder(JSONObject instruction, JSONArray jblocks, int i) throws Exception{
+	private ParsedInstruction recursiveBuilder(JSONObject instruction, JSONArray jblocks, int i) throws Exception{
 		String type = instruction.getString("type");
 		ParsedInstruction currentinst = null;
 		JSONObject values = instruction.getJSONObject("values");
@@ -197,7 +248,7 @@ public class Parser {
 					otherinstruction = jblocks.getJSONObject(f);
 					found = true;
 					found_at = f;
-					pi[y] = Parser.recursiveBuilder(otherinstruction, jblocks, found_at+1);
+					pi[y] = recursiveBuilder(otherinstruction, jblocks, found_at+1);
 				}
 			}
 		}

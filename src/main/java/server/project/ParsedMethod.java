@@ -9,15 +9,17 @@ import server.template.Template;
 public class ParsedMethod implements ParsedElement {
 	private String visibility;
 	private boolean is_static;
+	private boolean is_abstract;
 	private String return_type;
 	private String name;
 	private ParsedAttribute[] args;
 	private List<ParsedInstruction> body;
 	
 	//costruttore
-	public ParsedMethod(String visibility, boolean is_static, String return_type, String name, ParsedAttribute[] args, List<ParsedInstruction> body){
+	public ParsedMethod(String visibility, boolean is_static, boolean is_abstract, String return_type, String name, ParsedAttribute[] args, List<ParsedInstruction> body){
 		this.visibility = visibility;
 		this.is_static = is_static;
+		this.is_abstract = is_abstract;
 		this.return_type = return_type;
 		this.name = name;
 		this.args = args;
@@ -41,6 +43,10 @@ public class ParsedMethod implements ParsedElement {
 	
 	public boolean getIs_static() {
 		return is_static;
+	}
+	
+	public boolean getIs_abstract() {
+		return is_abstract;
 	}
 	
 	public String getReturn_type() {
