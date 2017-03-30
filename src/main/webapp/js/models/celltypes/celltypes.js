@@ -20,6 +20,8 @@ define([
             '<g class="activity">',
             '<rect class="activity-element-name-rect"/>',
             '<text class="activity-element-name-text"/>',
+            '<rect class="activity-element-body-rect"/>',
+
             '</g>'
         ].join(''),
 
@@ -33,6 +35,7 @@ define([
 
 
                 '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
+                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
 
                 '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
 
@@ -119,7 +122,12 @@ define([
 
             attrs['.activity-element-name-text'].text = text;
             attrs['.activity-element-name-rect'].height = this.getHeight();
+
+            console.log(this.getEmbeddedCells({deep:true}));
+            attrs['.activity-element-body-rect'].height = 150-35+ this.getEmbeddedCells({deep:true}).length *150 - 20 ;
+
             attrs['.activity-element-name-rect'].transform = 'translate(0,0)';
+            attrs['.activity-element-body-rect'].transform = 'translate(0,35)';
             console.log("valore offset: ");
             console.log(this.getOffsetY());
 
@@ -373,8 +381,6 @@ define([
         events: {
             'mousedown .togglemethods': 'togglemethods',
             'mousedown .toggleattributes': 'toggleattributes',
-
-
         },
         toggleattributes: function () {
 

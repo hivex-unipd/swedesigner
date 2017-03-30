@@ -116,44 +116,43 @@ define([
 
 
 
+            var pointerUpFunction = function (cellView, evt, x, y) {
 
 
-            this.paper.on('cell:pointerup', function (cellView, evt, x, y) {
-
-
-
-                var cell = cellView.model;
-                var cellViewsBelow = this.findViewsFromPoint(cell.getBBox().center());
-
-                if (cellViewsBelow.length) {
-                    // Note that the findViewsFromPoint() returns the view for the `cell` itself.
-                    var cellViewBelow = _.find(cellViewsBelow, function(c) { return c.model.id !== cell.id });
-
-                    // Prevent recursive embedding.
-                    if (cellViewBelow && cellViewBelow.model.get('parent') !== cell.id) {
-                        cellViewBelow.model.embed(cell);
-                    }
-                }
-
-
-
-                if(this.selectedCell != cellView.model)
+                if(cellView)
                 {
-                    this.selectedCell = cellView.model;
-                    if(cellView.model instanceof joint.shapes.uml.ClassDiagramElement)
-                    {
-                        this.trigger("changed-cell");
-                        console.log("ho cambiato la selectedcell");
-                        console.log(this.selectedCell);
+                    var cell = cellView.model;
+                    var cellViewsBelow = this.findViewsFromPoint(cell.getBBox().center());
+
+                    if (cellViewsBelow.length) {
+                        // Note that the findViewsFromPoint() returns the view for the `cell` itself.
+                        var cellViewBelow = _.find(cellViewsBelow, function(c) { return c.model.id !== cell.id });
+
+                        // Prevent recursive embedding.
+                        if (cellViewBelow && cellViewBelow.model.get('parent') !== cell.id) {
+                            cellViewBelow.model.embed(cell);
+                        }
+                    }
+                    if (this.selectedCell != cellView.model) {
+                        this.selectedCell = cellView.model;
+                        if (cellView.model instanceof joint.shapes.uml.ClassDiagramElement) {
+                            this.trigger("changed-cell");
+                            console.log("ho cambiato la selectedcell");
+                            console.log(this.selectedCell);
+
+                        }
 
                     }
-
                 }
 
 
 
 
-                var offsetY = 0;
+
+
+
+
+
 
                 //var g = this.model.options.graphs[this.model.options.currentindex] ;
 
@@ -165,27 +164,23 @@ define([
 
                 var g = this.model.attributes.cells.models;
                 //var g = ;//this.getCurrentGraph();
-                console.log("questo è g");
-                console.log(g);
-                console.log(typeof g);
 
-                console.log(g[1]);
 
 
                 var curr = this.selectedCell;
 
-/*
-                var xyz = Array.from(g);
-                console.log(xyz);
-                console.log(typeof xyz);
+                /*
+                 var xyz = Array.from(g);
+                 console.log(xyz);
+                 console.log(typeof xyz);
 
-                var index = xyz.findIndex(curr);
-*/
+                 var index = xyz.findIndex(curr);
+                 */
 
                 console.log("questa è la cella selezionata: ");
                 console.log(curr);
 
-
+/*
                 var move = function (a, old_index, new_index) {
                     if (new_index >= a.length) {
                         var k = new_index - a.length;
@@ -202,12 +197,18 @@ define([
                 var index = g.indexOf(curr);//curr.get("index"); // è necessario cercare a che indice vorrebbe mettere la cosa
 
 
-                console.log(g);
+                console.log("spostamenti effettuati:");
                 if(index+1<=g.length-1 && curr.get("position").y > g[index+1].get("position").y)
                 {
                     //curr.set("index", index+1);
                     // g[index+1].set("index", index); // -1+1 mi raccomando
+                    //console.log(g);
+
                     move(g,index,index+1);
+                   // console.log(g);
+
+                    console.log("sposto>");
+                    console.log(index) ;
                 }
 
                 // sarebbe >=1 ma c'è ancora il link in mezzo (senza sarebbe 0)
@@ -215,19 +216,28 @@ define([
                 {
                     ///curr.set("index", index-1);
                     // g[index-1].set("index", index); // -1+1 mi raccomando
+                    //console.log(g);
+
                     move(g, index,index-1);
+                   // console.log(g);
+                    console.log("sposto<");
+                    console.log(index) ;
+
                 }
 
 
+*/
 
 
+                var offsetY = 50;
 
+                /*
                 var calcOffset = function(el)
                 {
-                    console.log(el);
+                    ///ìconsole.log(el);
                     if(el.body || el.body!= {}) {
                         //el.setOffsetY(offsetY);
-                        console.log(el);
+                        //console.log(el);
                         //el.offsetY = offsetY;
 
                         el.attributes.offsetY = offsetY;
@@ -246,11 +256,19 @@ define([
                 };
 
                 _.each(g, function(el) {
-                    console.log(el);
+                    //console.log(el);
                     calcOffset(el);
-                });
+                });*/
 
-                console.log (g);
+
+
+                for(i=0;i<g.length;i++)
+                {
+                    g[i].attributes.offsetY = offsetY;
+                    offsetY += 150;
+                }
+
+                //console.log (g);
 
                 //g[0].updateRectangles();
 
@@ -264,6 +282,7 @@ define([
                 //g[1].updateRectangles();
 
 
+                console.log(g);
                 for(i = 0; i<g.length; i++)
                 {
                     if(g[i].get("type") == "uml.ActivityDiagramElement")
@@ -275,7 +294,10 @@ define([
 
 
                     }
-                    else{console.log(g[i]); console.log("questo no :(");}
+                    else {
+                        console.log(g[i]);
+                        console.log("questo no :(");
+                    }
 
                 }
 
@@ -287,24 +309,29 @@ define([
 
 
                 //this.trigger("uml-update");
-/*
-                _.each(g, function(el){
-                    console.log(el);
-                    el.updateRectangles();
-                });
-*/
+                /*
+                 _.each(g, function(el){
+                 console.log(el);
+                 el.updateRectangles();
+                 });
+                 */
 
 
                 //console.log(cellView.model.getClassName());
-            });/*
+            };
+
+
+            this.paper.on('cell:pointerup', pointerUpFunction);/*
             this.paper.on('blank:pointerdown', function (evt, x, y) {
                 //console.log(evt);
                //console.log(x,y);
             });*/
 
             this.model.addInitialsCells();
-            this.trigger("cell:pointerup"); // come faccio a triggerare la cosa che ho definito sopra?
+            //this.trigger("cell:pointerup"); // come faccio a triggerare la cosa che ho definito sopra?
 
+            console.log(this);
+            // pointerUpFunction();
 
         },
 

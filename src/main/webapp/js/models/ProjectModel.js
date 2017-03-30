@@ -57,7 +57,7 @@ define([
                     method:"nomeclasse.nomemetodo",
                     id:"1234",
                     "cells":[
-                        {
+                        /*{
                             "type":"link",
                             "source":{
                                 "x":80,
@@ -83,7 +83,7 @@ define([
                                     "d":"M 10 0 L 0 5 L 10 10 z"
                                 }
                             }
-                        }
+                        }*/
                     ]
                 }
             ]
@@ -207,41 +207,60 @@ define([
 
             console.log(this.options);
 
-            var x = _.find(this.options.graphs, function (obj) { console.log(obj); return obj.id =='1234'; });
+            var x = _.find(this.options.graphs, function (obj) {
+                console.log(obj); return obj.id =='1234';
+            });
 
             console.log(x);
 
             var a = new joint.shapes.uml.ActivityDiagramElement({
-                offsetY: 150,
+                offsetY: 50,
                 keyvalues: {
                     xtype: 'FOR',
-                    comment: 'Qua faccio un ciclo',
+                    comment: 'A Qua faccio un ciclo',
                     body : [],
 
                 },
-                index: 1
+                //index: 1
             });
 
             var b = new joint.shapes.uml.ActivityDiagramElement({
 
-                offsetY: 300,
+               offsetY: 200,
                 keyvalues: {
                     xtype: 'ASSEGNAZIONE',
-                    comment: 'Qua faccio una cosa interessante',
+                    comment: 'B Qua faccio una cosa interessante',
                     body : [],
 
                 },
-                index: 2
+                //index: 2
             });
 
+            var c = new joint.shapes.uml.ActivityDiagramElement({
+
+                offsetY: 350,
+                keyvalues: {
+                    xtype: 'ASSEGNAZIONE',
+                    comment: 'C Qua faccio un\'altra cosa',
+                    body : [],
+
+                },
+                //index: 2
+            });
 
             x.cells.push(a);
             x.cells.push(b);
+            x.cells.push(c);
 
             console.log(x);
 
 
             this.switchToGraph(1);
+
+            //this.trigger("cell:pointerdown");
+//            this.trigger("cell:pointerup");
+
+
 
             //console.log(x.cells[1]);
 
