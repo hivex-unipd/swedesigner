@@ -19,7 +19,6 @@ public class JavaGenerator implements Generator {
 	public String renderAllTemplates(Template t){return null;};
 	public void generate(String IdReq, ParsedProgram p){
 		String program = "";
-		System.out.println(p.nClasses());
 		for(int i=0; i<p.nClasses(); i++){
 			program += p.getType(i).renderTemplate(template, "java");
 			/*String type = p.getType(i).renderTemplate(template, "java");

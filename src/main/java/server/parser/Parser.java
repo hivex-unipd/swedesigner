@@ -45,7 +45,7 @@ public class Parser {/*abstract???anche i metodi sono abstract*/
 			}
 			meth.put(id, value);
 		}
-		List<ParsedClass> classes = new ArrayList<ParsedClass>();
+		
 		int i=0;
 		boolean isclass = true;
 		while(i<arr.length()&&isclass){
@@ -57,18 +57,16 @@ public class Parser {/*abstract???anche i metodi sono abstract*/
 				//classes.put(arr.getJSONObject(i));
 				JSONObject classvalues = jclass.getJSONObject("values");
 				
-				//creo array per attributi e metodi json
+				//creo array per attributi JSON
 				JSONArray jattributes = new JSONArray();
-				//***System.out.println("has attributes"+classvalues.has("attributes"));
 				if(classvalues.has("attributes"))
 					jattributes = classvalues.getJSONArray("attributes");
+				
+				//creo array per metodi JSON
 				JSONArray jmethods = new JSONArray();
 				if(classvalues.has("methods"))
 					jmethods = classvalues.getJSONArray("methods");
-				
-				//***System.out.println("jattributes lunghezza "+jattributes.length());
-				//***System.out.println("jmethods lunghezza "+jmethods.length());
-				
+
 				//creo array per attributi Parsed
 				ParsedAttribute[] attributes = new ParsedAttribute[jattributes.length()];
 				for(int r = 0; r<jattributes.length();r++){
@@ -82,47 +80,17 @@ public class Parser {/*abstract???anche i metodi sono abstract*/
 				for(int r = 0; r<jmethods.length();r++){
 					JSONObject currentmeth = jmethods.getJSONObject(r);
 					//***
-					methods[r] = new ParsedMethod(currentmeth.getString("visibility"), currentmeth.getBoolean("static"),/* currentmeth.getBoolean("abstract"),*/currentmeth.getString("return-type"),currentmeth.getString("name"), attributes/*da cambiare con gli argomenti*/, meth.get(currentmeth.getString("id")));
+					methods[r] = new ParsedMethod(currentmeth.getString("visibility"), currentmeth.getBoolean("static"),/* currentmeth.getBoolean("abstract"), */currentmeth.getString("return-type"),currentmeth.getString("name"), attributes/*da cambiare con gli argomenti*/, meth.get(currentmeth.getString("id")));
 				}
 				
 				//creo la parsedclass e la inserisco nell'array di classi
-				classes.add(new ParsedClass(classvalues.getString("name"), classvalues.getString("visibility"), new String[]{"Object"},new String[]{"Interface"},attributes,methods));
+				pp.addType(new ParsedClass(classvalues.getString("name"), classvalues.getString("visibility"), new String[]{"Object"},new String[]{"Interface"},attributes,methods));
 				i++;
 			}//fine if
 			else
 				isclass = false;
 		}//fine while
 		//POST: all'uscita i è tale che o i>=arr.length (ci sono solo classi) o i è l'indice di arr dove si trova la prima relazione;
-		/*
-		JSONObject generalclass = arr.getJSONObject(0).getJSONObject("values");
-		JSONArray attributes = generalclass.getJSONArray("attributes");
-		*/
-		/*String cells = Programma.getString("cells");
-		JSONObject tutte_classi = new JSONObject(cells);
-		
-		JSONArray arr = tutte_classi.getJSONArray("cells");*/
-		/*ParsedAttribute[] fields = new ParsedAttribute[attributes.length()];
-		
-		for (i = 0; i < attributes.length(); i++){
-			JSONObject attr = attributes.getJSONObject(i);
-			String visibility = attr.getString("varvisib");
-			String name = attr.getString("varname");
-			String type = attr.getString("vartype");
-			String value = null;
-			if(attr.has("varvalue"))
-				value = attr.getString("varvalue");
-			ParsedAttribute att = new ParsedAttribute(false, visibility, type, name, value);
-			fields[i] = att;
-		}*/
-		
-		//String classname = generalclass.getString("name");
-		//ParsedClass pclass = new ParsedClass();
-		//System.out.println(values.getJSONObject(i).getString("id"));
-		for(int w = 0; w<classes.size(); w++){
-			pp.addType(classes.get(w));
-			
-		}
-		System.out.println("Classe Parser: numero di classi in parsedprogram"+pp.nClasses());//flag
 		
 		return pp;
 	};
