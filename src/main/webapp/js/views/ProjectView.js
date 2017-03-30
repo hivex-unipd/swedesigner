@@ -135,7 +135,7 @@ define([
                     }
                     if (this.selectedCell != cellView.model) {
                         this.selectedCell = cellView.model;
-                        if (cellView.model instanceof joint.shapes.uml.ClassDiagramElement) {
+                        if (true) {//cellView.model instanceof joint.shapes.uml.ClassDiagramElement) {
                             this.trigger("changed-cell");
                             console.log("ho cambiato la selectedcell");
                             console.log(this.selectedCell);
@@ -152,14 +152,12 @@ define([
 
 
 
-
-
                 //var g = this.model.options.graphs[this.model.options.currentindex] ;
 
 
 
 
-                console.log(this);
+                //console.log(this);
                 //var g = this.model.options.graphs;
 
                 var g = this.model.attributes.cells.models;
@@ -177,8 +175,8 @@ define([
                  var index = xyz.findIndex(curr);
                  */
 
-                console.log("questa è la cella selezionata: ");
-                console.log(curr);
+                //console.log("questa è la cella selezionata: ");
+                //console.log(curr);
 
 /*
                 var move = function (a, old_index, new_index) {
@@ -197,7 +195,11 @@ define([
                 var index = g.indexOf(curr);//curr.get("index"); // è necessario cercare a che indice vorrebbe mettere la cosa
 
 
+
                 console.log("spostamenti effettuati:");
+
+                //console.log(g);
+
                 if(index+1<=g.length-1 && curr.get("position").y > g[index+1].get("position").y)
                 {
                     //curr.set("index", index+1);
@@ -234,7 +236,11 @@ define([
                 /*
                 var calcOffset = function(el)
                 {
+
                     ///ìconsole.log(el);
+
+                    //console.log(el);
+
                     if(el.body || el.body!= {}) {
                         //el.setOffsetY(offsetY);
                         //console.log(el);
@@ -272,7 +278,7 @@ define([
 
                 //g[0].updateRectangles();
 
-                console.log("chiamo update");
+                //console.log("chiamo update");
 
 
 
@@ -294,6 +300,7 @@ define([
 
 
                     }
+
                     else {
                         console.log(g[i]);
                         console.log("questo no :(");
