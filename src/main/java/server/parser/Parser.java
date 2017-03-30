@@ -3,7 +3,10 @@ package server.parser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.json.*;
 
@@ -18,6 +21,7 @@ import server.project.ParsedInstruction;
 import server.project.ParsedMethod;
 import server.project.ParsedProgram;
 import server.project.ParsedReturn;
+import server.project.ParsedType;
 import server.project.ParsedWhile;
 
 public class Parser {
@@ -48,6 +52,7 @@ public class Parser {
 		
 		int i=0;
 		boolean isclass = true;
+		HashMap<String, ParsedType> alltypes = new HashMap<String, ParsedType>();
 		while(i<arr.length()&&isclass){
 			JSONObject jclass = arr.getJSONObject(i);
 			String s = jclass.getString("type");
@@ -68,11 +73,11 @@ public class Parser {
 					jmethods = classvalues.getJSONArray("methods");
 
 				//creo array per attributi Parsed
-				ParsedAttribute[] attributes = new ParsedAttribute[jattributes.length()];
+				List<ParsedAttribute> attributes = new ArrayList<ParsedAttribute>();
 				for(int r = 0; r<jattributes.length();r++){
 					JSONObject currentattr = jattributes.getJSONObject(r);
 					//***occorre controllare che ci siano tutti i campi prima di creare l'attributo
-					attributes[r] = new ParsedAttribute(currentattr.getBoolean("static"), currentattr.getString("varvisib"), currentattr.getString("vartype"),currentattr.getString("varname"), currentattr.getString("varvaldef"));
+					attributes.add(new ParsedAttribute(currentattr.getBoolean("static"), currentattr.getString("varvisib"), currentattr.getString("vartype"),currentattr.getString("varname"), currentattr.getString("varvaldef")));
 				}
 				
 				//creo array di metodi Parsed
@@ -80,17 +85,52 @@ public class Parser {
 				for(int r = 0; r<jmethods.length();r++){
 					JSONObject currentmeth = jmethods.getJSONObject(r);
 					//***
-					methods[r] = new ParsedMethod(currentmeth.getString("visibility"), currentmeth.getBoolean("static"),/* currentmeth.getBoolean("abstract"), */currentmeth.getString("return-type"),currentmeth.getString("name"), attributes/*da cambiare con gli argomenti*/, meth.get(currentmeth.getString("id")));
+					methods[r] = new ParsedMethod(currentmeth.getString("visibility"), currentmeth.getBoolean("static"),/* currentmeth.getBoolean("abstract"), */currentmeth.getString("return-type"),currentmeth.getString("name"),null /*attributes da cambiare con gli argomenti*/, meth.get(currentmeth.getString("id")));
 				}
 				
 				//creo la parsedclass e la inserisco nell'array di classi
-				pp.addType(new ParsedClass(classvalues.getString("name"), classvalues.getString("visibility"), new String[]{"Object"},new String[]{"Interface"},attributes,methods));
+				String id = jclass.getString("id");
+				alltypes.put(id, new ParsedClass(classvalues.getString("name"), classvalues.getString("visibility"),attributes,methods));
 				i++;
 			}//fine if
 			else
 				isclass = false;
 		}//fine while
 		//POST: all'uscita i è tale che o i>=arr.length (ci sono solo classi) o i è l'indice di arr dove si trova la prima relazione;
+		
+		//Inserimento relazioni
+		for(; i<arr.length();i++){
+			JSONObject rel = arr.getJSONObject(i);
+			String type = rel.getString("type");
+			ParsedType source = alltypes.get(rel.get("source"));
+			String target = alltypes.get(rel.get("target")).getName();
+			
+			switch(type){
+				case "uml.generalization" : {
+					source.addExtended(target);
+					break;
+				}
+				case "uml.implementation" : {
+					source.addImplemented(target);
+					break;
+				}
+				case "uml.reference" : {
+					int molt = rel.getInt("molteplicity");
+					String typeatt = target+(molt>1?"[]":"");
+					String nameatt = rel.getString("name");
+					String value = (molt>1?"new "+target+"["+molt+"]":null);//non esistono valori di default per i riferimenti singoli!!!
+					//non si può indicare se un attributo è statico o la particolare visibilità
+					source.addAttribute(new ParsedAttribute(false, null, typeatt, nameatt, value));
+					break;
+				}
+				default : throw new Exception(); 
+			}	
+		}
+		Iterator<Entry<String, ParsedType>> it = alltypes.entrySet().iterator();
+		while(it.hasNext()){
+			Map.Entry<String, ParsedType> entry = (Map.Entry<String, ParsedType>)it.next();
+			pp.addType(entry.getValue());
+		}
 		
 		return pp;
 	};
@@ -153,7 +193,7 @@ public class Parser {
 			boolean found = false;
 			int found_at = 0;
 			for(int f = i; f<jblocks.length()&&!found; f++){
-				if(jblocks.getJSONObject(f).getString("id")==id){
+				if(jblocks.getJSONObject(f).getString("id").equals(id)){
 					otherinstruction = jblocks.getJSONObject(f);
 					found = true;
 					found_at = f;

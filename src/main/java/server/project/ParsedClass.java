@@ -1,5 +1,8 @@
 package server.project;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.stringtemplate.v4.ST;
 
 import server.template.Template;
@@ -7,17 +10,14 @@ import server.template.Template;
 public class ParsedClass extends ParsedType {
 	private String name;
 	private String visibility;
-	private String[] extended;
-	private String[] implemented;
-	//private String[] referenced;
-	private ParsedAttribute[] attributes;
+	private List<String> extended = new ArrayList<String>();
+	private List<String> implemented = new ArrayList<String>();
+	private List<ParsedAttribute> attributes = new ArrayList<ParsedAttribute>();
 	private ParsedMethod[] methods;
 	
-	public ParsedClass(String name, String visibility, String[] extended, String[] implemented, ParsedAttribute[] attributes, ParsedMethod[] methods){
+	public ParsedClass(String name, String visibility, List<ParsedAttribute> attributes, ParsedMethod[] methods){
 		this.name = name;
 		this.visibility = visibility;
-		this.extended = extended;
-		this.implemented =implemented;
 		this.attributes = attributes;
 		this.methods = methods;
 	}
@@ -25,9 +25,9 @@ public class ParsedClass extends ParsedType {
 	//metodi getter
 	 public String getVisibility(){ return visibility;}
 	 public String getName(){return name;}
-	 public String[] getExtended(){return extended;}
-	 public String[] getImplemented(){return implemented;}
-	 public ParsedAttribute[] getAttributes(){return attributes;}
+	 public List<String> getExtended(){return extended;}
+	 public List<String> getImplemented(){return implemented;}
+	 public List<ParsedAttribute> getAttributes(){return attributes;}
 	 public ParsedMethod[] getMethods(){return methods;}
 	
 	public String renderTemplate(Template t, String lang){
@@ -39,5 +39,22 @@ public class ParsedClass extends ParsedType {
 		}
 		template.add("methods", methods_string);
 		return template.render();
+	}
+
+	@Override
+	public void addExtended(String s) {
+		extended.add(s);
+	}
+
+	@Override
+	public void addImplemented(String s) {
+		implemented.add(s);
+		
+	}
+
+	@Override
+	public void addAttribute(ParsedAttribute pa) {
+		attributes.add(pa);
+		
 	}
 }
