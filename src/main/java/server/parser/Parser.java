@@ -20,7 +20,7 @@ import server.project.ParsedProgram;
 import server.project.ParsedReturn;
 import server.project.ParsedWhile;
 
-public class Parser {/*abstract???anche i metodi sono abstract*/
+public class Parser {
 	public static ParsedProgram createParsedProgram(String jsonstring) throws Exception{
 		
 		ParsedProgram pp = new ParsedProgram();
@@ -51,9 +51,9 @@ public class Parser {/*abstract???anche i metodi sono abstract*/
 		while(i<arr.length()&&isclass){
 			JSONObject jclass = arr.getJSONObject(i);
 			String s = jclass.getString("type");
-			//***System.out.println("Tipo "+s);
+
 			if(s.equals("uml.class") || s.equals("uml.interface")){
-				//***System.out.println("PASSATO");
+				
 				//classes.put(arr.getJSONObject(i));
 				JSONObject classvalues = jclass.getJSONObject("values");
 				
@@ -95,8 +95,7 @@ public class Parser {/*abstract???anche i metodi sono abstract*/
 		return pp;
 	};
 		
-		
-	//String = instruction.getString("");	
+
 	private static ParsedInstruction recursiveBuilder(JSONObject instruction, JSONArray jblocks, int i) throws Exception{
 		String type = instruction.getString("type");
 		ParsedInstruction currentinst = null;
