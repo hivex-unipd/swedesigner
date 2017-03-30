@@ -12,6 +12,7 @@ public class ParsedAttribute implements ParsedElement {
     private String type;
     private String name;
     private String value;
+    private boolean isfinal = false;
     
     public ParsedAttribute(boolean s, String vis, String t,String n, String val){ isStatic = s; visibility = vis; type = t; name = n; value = val;}
     

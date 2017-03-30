@@ -69,12 +69,15 @@
          },
          {  
             "type":"uml.generalization",
-            "source":{  
-               "id":"26ff1d7e-671d-4add-a74f-a0172e5270c9"
-            },
-            "target":{  
-               "id":"f2c00232-2ac0-4ad3-969e-12caf8caa7dd"
-            }
+            "source":"26ff1d7e-671d-4add-a74f-a0172e5270c9",
+            "target":"f2c00232-2ac0-4ad3-969e-12caf8caa7dd"
+         },
+         {  
+            "type":"uml.reference",
+            "source":"26ff1d7e-671d-4add-a74f-a0172e5270c9",
+            "target":"f2c00232-2ac0-4ad3-969e-12caf8caa7dd",
+            "molteplicity": "2",
+            "name" : "Riferimento"
          }
       ]
    },
@@ -82,7 +85,7 @@
       {  
          "id":"1234",
          "cells":[  
-            {  
+            {  "id":"0000",
                "type":"uml.assignment",
                "position":{  
                   "x":120,
@@ -98,6 +101,7 @@
                }
             },
             {  
+               "id":"0001",
                "type":"uml.assignment",
                "position":{  
                   "x":120,
@@ -111,6 +115,35 @@
                   "name":"param2",
                   "value":"5"
                }
+            },
+            {
+            	"id":"0002",
+            	"type":"uml.while",
+            	"values":{
+            		"condition": "param2 < 4"
+            	},
+            	"embeds":[
+            		"0003",
+            		"0004"
+            	]
+            	
+            },
+            {
+            	"parent":"0002",
+            	"id": "0003",
+            	"type": "uml.assignment",
+            	"values":{
+            		"name" : "param2",
+            		"value" : "4"
+            	}
+            },
+            {
+            	"parent":"0002",
+            	"id": "0004",
+            	"type": "uml.if",
+            	"values":{
+            		"condition" : "true"
+            	}
             }
          ]
       },

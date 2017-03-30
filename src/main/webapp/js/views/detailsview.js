@@ -126,11 +126,14 @@ define([
                 else  {console.log(element); output += this.mytemplate(element);}
             };*/
 
-            console.log("ripperoni");
+           //console.log("ripperoni");
             //c.attributes.keyvalues.forEach(fn);
            // _.each(c.attributes.keyvalues, fn, this);
 
-            console.log("finironi");
+            //console.log("finironi");
+
+            console.log(c);
+
 
             output = this.mytemplate(c.attributes.keyvalues);
 

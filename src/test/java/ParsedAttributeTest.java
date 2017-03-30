@@ -11,6 +11,7 @@ public class ParsedAttributeTest {
 		ParsedAttribute instruction = new ParsedAttribute(false, "private", "String", "pippo", "test");
 		JavaTemplate template = new JavaTemplate();
 		String result = instruction.renderTemplate(template);
-//		assertEquals(result, "private String pippo = \"test\";");
+//		assertEquals(result, "private String pippo = \"test\";"); // <<<<<<<<
+//		da lanciare quando attribute sarà implementato
 	}
 }

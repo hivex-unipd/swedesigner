@@ -1,4 +1,4 @@
-whilejavatemplate(while, body)::<<
+whilejavatemplate(while, body)::=<<
 while(<while.condition>){
 	<body>
 }

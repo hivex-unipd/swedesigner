@@ -1,20 +1,21 @@
 package server.project;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ParsedProgram {
-	private ParsedType[] classes = new ParsedType[10];
-	private int n_classes = 0;
+	private List<ParsedType> classes = new ArrayList<ParsedType>();
 	
 	public void addType(ParsedType type){
-		classes[n_classes] = type;
-		n_classes++;
+		classes.add(type);
 	}
 	
 	public int nClasses(){
-		return n_classes;
+		return classes.size();
 	}
 	
 	public ParsedType getType(int i){
-		return classes[i];
+		return classes.get(i);
 	}
 
 }
