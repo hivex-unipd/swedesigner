@@ -116,22 +116,47 @@ define([
 
         },
 
+        /**
+         * Returns KeyValues.
+         * @name ActivityDiagramElement#getKeyvalues
+         * @return {Object} KeyValues
+         */
         getKeyvalues: function () {
             return this.get('keyvalues');
         },
 
+        /**
+         * Sets the vertical offset from the top to `a` pixels.
+         * @name ActivityDiagramElement#setOffsetY
+         * @param {number} a vertical offset
+         */
         setOffsetY: function (a) {
             this.offsetY = a;
         },
 
+        /**
+         * Returns the vertical offset of the element from the top.
+         * @name ActivityDiagramElement#getOffsetY
+         * @return {number} the vertical offset
+         */
         getOffsetY: function () {
             return this.attributes.offsetY;
         },
 
+        /**
+         * Returns the indentation level of the element (in pixels).
+         * @name ActivityDiagramElement#getOffsetX
+         * @return {number} the indentation level
+         */
         getOffsetX: function () {
             return this.getAncestors().length * 50;
         },
 
+        /**
+         * Returns the height of the element (in pixels).
+         * @name ActivityDiagramElement#getHeight
+         * @return {number} the height
+         */
         getHeight: function () {
             return 35;
         },
