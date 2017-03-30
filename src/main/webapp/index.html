@@ -122,7 +122,7 @@
                    --> </div>
 
 
-                    <script type="text/template" id="item-template">
+                    <script type="text/template" id="uml.ClassDiagramElement">
                         <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="name">
                             <label class="mdl-textfield__label" for="classname">Nome classe</label>
                             <input class="edit mdl-textfield__input" value="<%= name %>" name="name" id="classname">
@@ -168,6 +168,21 @@
                             <button class="add" name="addmethod">Aggiungi Metodo</button>
                         </div>
                     </script>
+
+                    <script type="text/template" id="uml.ActivityDiagramElement">
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="typediv">
+                            <label class="mdl-textfield__label" for="xtype">Nome classe</label>
+                            <input class="edit mdl-textfield__input" value="<%= xtype %>" name="xtype" id="xtype">
+                        </div>
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="commentdiv">
+                            <label class="mdl-textfield__label" for="comment">Nome classe</label>
+                            <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment" id="comment">
+                        </div>
+
+
+                    </script>
+
+
 
                 </div>
             </div>

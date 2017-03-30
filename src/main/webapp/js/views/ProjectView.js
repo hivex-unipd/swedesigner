@@ -140,11 +140,11 @@ define([
                 if(this.selectedCell != cellView.model)
                 {
                     this.selectedCell = cellView.model;
-                    if(cellView.model instanceof joint.shapes.uml.ClassDiagramElement)
+                    if(true)//cellView.model instanceof joint.shapes.uml.ClassDiagramElement)
                     {
                         this.trigger("changed-cell");
-                        console.log("ho cambiato la selectedcell");
-                        console.log(this.selectedCell);
+                        //console.log("ho cambiato la selectedcell");
+                        //console.log(this.selectedCell);
 
                     }
 
@@ -160,16 +160,16 @@ define([
 
 
 
-                console.log(this);
+                //console.log(this);
                 //var g = this.model.options.graphs;
 
                 var g = this.model.attributes.cells.models;
                 //var g = ;//this.getCurrentGraph();
-                console.log("questo è g");
-                console.log(g);
-                console.log(typeof g);
+                //console.log("questo è g");
+                //console.log(g);
+                //console.log(typeof g);
 
-                console.log(g[1]);
+                //console.log(g[1]);
 
 
                 var curr = this.selectedCell;
@@ -182,8 +182,8 @@ define([
                 var index = xyz.findIndex(curr);
 */
 
-                console.log("questa è la cella selezionata: ");
-                console.log(curr);
+                //console.log("questa è la cella selezionata: ");
+                //console.log(curr);
 
 
                 var move = function (a, old_index, new_index) {
@@ -202,7 +202,7 @@ define([
                 var index = g.indexOf(curr);//curr.get("index"); // è necessario cercare a che indice vorrebbe mettere la cosa
 
 
-                console.log(g);
+                //console.log(g);
                 if(index+1<=g.length-1 && curr.get("position").y > g[index+1].get("position").y)
                 {
                     //curr.set("index", index+1);
@@ -224,10 +224,10 @@ define([
 
                 var calcOffset = function(el)
                 {
-                    console.log(el);
+                    //console.log(el);
                     if(el.body || el.body!= {}) {
                         //el.setOffsetY(offsetY);
-                        console.log(el);
+                        //console.log(el);
                         //el.offsetY = offsetY;
 
                         el.attributes.offsetY = offsetY;
@@ -246,15 +246,15 @@ define([
                 };
 
                 _.each(g, function(el) {
-                    console.log(el);
+                    //console.log(el);
                     calcOffset(el);
                 });
 
-                console.log (g);
+                //console.log (g);
 
                 //g[0].updateRectangles();
 
-                console.log("chiamo update");
+                //console.log("chiamo update");
 
 
 
@@ -275,7 +275,10 @@ define([
 
 
                     }
-                    else{console.log(g[i]); console.log("questo no :(");}
+                    else{
+                        //console.log(g[i]);
+                        //console.log("questo no :(");
+                    }
 
                 }
 

@@ -75,6 +75,20 @@ define([
 
         },
 
+        setToValue: function (value, path) {
+            obj = this.get('keyvalues');
+            path = path.split('.');
+            for (i = 0; i < path.length - 1; i++) {
+
+                obj = obj[path[i]];
+
+            }
+            obj[path[i]] = value;
+            console.log( this.get('keyvalues'));
+            this.updateRectangles();
+            this.trigger("uml-update");
+        },
+
         getKeyvalues: function () {
             return this.get('keyvalues');
         },
@@ -249,6 +263,7 @@ define([
             }
             obj[path[i]] = value;
             console.log( this.get('keyvalues'));
+            this.updateRectangles();
             this.trigger("uml-update");
         },
         executemethod:function(met){

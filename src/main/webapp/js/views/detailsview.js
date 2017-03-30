@@ -5,7 +5,7 @@ define([
     'joint',
     'views/ProjectView',
     'material'
-], function ($, _, Backbone, joint, ProjectView,componentHandler) {
+], function ($, _, Backbone, joint, ProjectView, componentHandler) {
 
     /**
      * @classdesc `DetailsView` shows the details of an element in one diagram.
@@ -49,7 +49,7 @@ define([
          * @name DetailsView#mytemplate
          * @function
          */
-        mytemplate: _.template($('#item-template').html()),
+        mytemplate: {},
 
         /**
          * ?
@@ -89,7 +89,7 @@ define([
             this.$el = $("#details");
             console.log(ProjectView.paper);
             //this.listenTo(paper, "cellChanged", this.changeModel);
-
+            //this.mytemplate = _.template($('#uml.ClassDiagramElement').html());
 
             // occhio
             this.listenTo(ProjectView.paper, "changed-cell", this.render);
@@ -109,8 +109,11 @@ define([
             //this.$el.html(ProjectView.paper.selectedCell.getClassName());
 
             //this.$el.html(this.mytemplate({title: "titolo molto divino", val:"valore molto animale"}));
-
-            console.log(ProjectView.paper.selectedCell);
+            this.mytemplate = _.template($('#'+ProjectView.paper.selectedCell.get("type").replace(/\./g, "\\.")).html());
+            //this.mytemplate = _.template($('#uml\\.ClassDiagramElement').html()),
+                //console.log(this.mytemplate);
+            console.log(ProjectView.paper.selectedCell.get("type"));
+                console.log(ProjectView.paper.selectedCell);
             console.log(ProjectView.paper.selectedCell.attributes.keyvalues);
             var c = ProjectView.paper.selectedCell;
 
@@ -118,17 +121,15 @@ define([
             var output = "";
 
 
-
-
             /*var fn = function (element) {
-                //console.log("no lazy?");
-                if(_.isArray(element)) {console.log(element); console.log("è array"); _.each(element, fn, this) }
-                else  {console.log(element); output += this.mytemplate(element);}
-            };*/
+             //console.log("no lazy?");
+             if(_.isArray(element)) {console.log(element); console.log("è array"); _.each(element, fn, this) }
+             else  {console.log(element); output += this.mytemplate(element);}
+             };*/
 
-           //console.log("ripperoni");
+            //console.log("ripperoni");
             //c.attributes.keyvalues.forEach(fn);
-           // _.each(c.attributes.keyvalues, fn, this);
+            // _.each(c.attributes.keyvalues, fn, this);
 
             //console.log("finironi");
 
@@ -145,8 +146,7 @@ define([
             // idee per il binding a due vie: salvarsi in un array inputs i vari input e in qualche modo confirmedit si prende
             // solo quello che gli serve... mi sembra comunque terribilmente inefficiente... che facciamo?
             // bb
-            this.delegateEvents(_.extend(this.events, {'keypress .edit': 'confirmEdit','click .add': 'execmod'}));
-
+            this.delegateEvents(_.extend(this.events, {'keypress .edit': 'confirmEdit', 'click .add': 'execmod'}));
 
 
             return this;
@@ -167,9 +167,9 @@ define([
          * Execute a method of the model passing its name as string
          * @param e The method name
          */
-        execmod: function(e){
+        execmod: function (e) {
             var tmp = e.target.name.split(".");
-            ProjectView.paper.selectedCell.executemethod(tmp[0],tmp[1]);
+            ProjectView.paper.selectedCell.executemethod(tmp[0], tmp[1]);
             this.render();
         },
 
@@ -180,7 +180,7 @@ define([
          * @param {Object} obj ?
          * @param {Object} desc ?
          */
-        getDescendantProp: function(obj, desc) {
+        getDescendantProp: function (obj, desc) {
             var arr = desc.split(".");
             while (arr.length && (obj = obj[arr.shift()]));
             return obj;
@@ -195,13 +195,13 @@ define([
          */
         confirmEdit: function (e) {
             if (e.which == 13) {
-             // fai controllo di dati corretti e aggiorna il graph
-             //this.model.set("",this.$('#'));
+                // fai controllo di dati corretti e aggiorna il graph
+                //this.model.set("",this.$('#'));
                 console.log(e.target.id);
                 console.log(e.target.value);
                 console.log(ProjectView.paper.selectedCell);
 
-                ProjectView.paper.selectedCell.setToValue(e.target.value,e.target.name);
+                ProjectView.paper.selectedCell.setToValue(e.target.value, e.target.name);
 
                 //ProjectView.paper.selectedCell.set();
             }
