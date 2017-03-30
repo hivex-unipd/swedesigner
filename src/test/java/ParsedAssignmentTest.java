@@ -7,7 +7,7 @@ import server.template.java.JavaTemplate;
 
 public class ParsedAssignmentTest {
 	@Test
-	public void assignmentIsParsed() {
+	public void assignmentIsWellFormed() {
 		ParsedAssignment instruction = new ParsedAssignment("variable", "1");
 		JavaTemplate template = new JavaTemplate();
 		String result = instruction.renderTemplate(template);
