@@ -288,12 +288,16 @@ define([
                 //g[1].updateRectangles();
 
 
+
+                var l = g.length;
                 console.log(g);
-                for(i = 0; i<g.length; i++)
+                console.log(l);
+                for(i = 0; i<l; i++)
                 {
                     if(g[i].get("type") == "uml.ActivityDiagramElement")
                     {
                         g[i].updateRectangles();
+
 
                         this.removeView(g[i]);
                         this.renderView(g[i]); // per qualche ragione è necessario..
@@ -307,6 +311,7 @@ define([
                     }
 
                 }
+                this.trigger("uml-update");
 
                 //this.removeView(g[1]);
                 //this.renderView(g[1]); // per qualche ragione è necessario..
