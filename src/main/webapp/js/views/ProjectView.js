@@ -3,11 +3,11 @@ define([
     'underscore',
     'backbone',
     'joint',
-    'models/ProjectModel',
-    'models/celltypes/celltypes' // inutile?
+    'models/ProjectModel'
+
 ], function ($, _, Backbone, joint, ProjectModel) {
 
-    /*Array.prototype.move = function (old_index, new_index) {
+    Array.prototype.move = function (old_index, new_index) {
         if (new_index >= this.length) {
             var k = new_index - this.length;
             while ((k--) + 1) {
@@ -16,7 +16,7 @@ define([
         }
         this.splice(new_index, 0, this.splice(old_index, 1)[0]);
         return this; // for testing purposes
-    };*/
+    };
 
     /**
      * @classdesc `ProjectView` represents the drawing area.

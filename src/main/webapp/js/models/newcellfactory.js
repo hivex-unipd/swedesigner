@@ -5,7 +5,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'joint',
+    'joint'
 ], function ($, _, Backbone, joint) {
     var abstractCellFactory = (function () {
 

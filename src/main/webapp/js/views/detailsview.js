@@ -92,7 +92,7 @@ define([
 
 
             // occhio
-            // this.listenTo(ProjectView.paper, "changed-cell", this.render);
+            this.listenTo(ProjectView.paper, "changed-cell", this.render);
             this.listenTo(ProjectView, "Switchgraph", this.visib);
             // si riesce a passare paper come parametro?
         },
