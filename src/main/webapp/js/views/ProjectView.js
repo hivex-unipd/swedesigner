@@ -175,6 +175,7 @@ define([
                 //var g = this.model.options.graphs;
 
                 var g = this.model.attributes.cells.models;
+                console.log(this.model.attributes.cells);
                 //var g = ;//this.getCurrentGraph();
 
                 var curr = this.selectedCell;
@@ -192,7 +193,7 @@ define([
                 //console.log("questa è la cella selezionata: ");
                 //console.log(curr);
 
-if(changed) {
+    if(changed) {
 
 
     var move = function (a, old_index, new_index) {
@@ -384,30 +385,6 @@ if(changed) {
         }
 
     }
-    ///this.trigger("uml-update");
-
-    //this.removeView(g[1]);
-    //this.renderView(g[1]); // per qualche ragione è necessario..
-
-
-
-
-
-    //this.trigger("uml-update");
-    /*
-     _.each(g, function(el){
-     console.log(el);
-     el.updateRectangles();
-     });
-     */
-
-
-    //console.log(cellView.model.getClassName());
-
-
-
-
-
 
             };
 
@@ -427,10 +404,25 @@ if(changed) {
                         return c.model.id !== cell.id
                     });
 
+
+
+                    v = this.model.getElements();
+
+
+                    for(i=0;i<v.length;i++)
+                    {
+
+                        this.findViewByModel(v[i]).unhighlight();
+
+                    }
+
                     if(index!=-1)
                     {
                         cellViewBelow = cellViewsBelow[index];
                         cellViewBelow.highlight();
+
+                        console.log("view highlight");
+                        console.log(cellViewBelow);
 
                     }
 
