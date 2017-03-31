@@ -121,6 +121,9 @@ define([
                 if (cell.get('parent')) {
                     this.model.getCell(cell.get('parent')).unembed(cell);
                 }
+
+
+
             });
 
 
@@ -175,7 +178,7 @@ define([
                 var curr = this.selectedCell;
 
 
-                console.log(g);
+                //console.log(g);
                 /*
                  var xyz = Array.from(g);
                  console.log(xyz);
@@ -215,10 +218,10 @@ define([
 
 
                 while(nextIndex<=g.length-1 && g[nextIndex].getAncestors().indexOf( g[currentIndex] ) != -1 ) {
-                    console.log(g[currentIndex]);
-                    console.log(g[nextIndex].getAncestors());
+                    //console.log(g[currentIndex]);
+                    //console.log(g[nextIndex].getAncestors());
                     nextIndex++;
-                    console.log("yup");
+                    //console.log("yup");
                 }
 
 
@@ -232,19 +235,19 @@ define([
                     {
                         var figli = g[currentIndex].getEmbeddedCells();
                         move(g,currentIndex,nextIndex-1);
-                        console.log("sposto ");
-                        console.log(currentIndex);
-                        console.log(nextIndex-1);
+                        //console.log("sposto ");
+                        //console.log(currentIndex);
+                        //console.log(nextIndex-1);
                         for(i=0;i<figli.length;i++)
                         {
                             move(g,currentIndex,nextIndex-1+i);
-                            console.log("sposto ");
-                            console.log(currentIndex);
-                            console.log(nextIndex-1+i);
+                            //console.log("sposto ");
+                            //console.log(currentIndex);
+                            //console.log(nextIndex-1+i);
 
                         }
                     }
-                    console.log("finito di spostare");
+                    //console.log("finito di spostare");
                     //console.log(currentIndex);
                     //console.log(nextIndex);
                 }
@@ -259,26 +262,26 @@ define([
                 {
                     while(prevIndex>=0 && curr.get("position").y < g[prevIndex].get("position").y)
                     {
-                        console.log(curr.get("position").y );
-                        console.log(g[prevIndex].get("position").y);
+                        //console.log(curr.get("position").y );
+                       // console.log(g[prevIndex].get("position").y);
                         prevIndex--;
-                        console.log(prevIndex);
+                        //console.log(prevIndex);
 
                     }
                     if(prevIndex!=currentIndex-1)
                     {
                         var figli = g[currentIndex].getEmbeddedCells();
                         move(g,currentIndex,prevIndex+1);
-                        console.log("sposto ");
-                        console.log(currentIndex);
-                        console.log(prevIndex+1);
+                        //console.log("sposto ");
+                        //console.log(currentIndex);
+                        //console.log(prevIndex+1);
 
                         for(i=1;i<=figli.length;i++)
                         {
                             move(g,currentIndex+i,prevIndex+i+1);
-                            console.log("sposto ");
-                            console.log(currentIndex+i);
-                            console.log(prevIndex+1+i);
+                            //console.log("sposto ");
+                            //console.log(currentIndex+i);
+                            //console.log(prevIndex+1+i);
 
                         }
                     }
@@ -322,25 +325,68 @@ define([
 
                 for(i=0;i<g.length;i++)
                 {
-                    g[i].attributes.offsetY = offsetY;
-                    offsetY += 150;
+                    var hidden = false;/*
+                    _.each(g[i].getAncestors(), function (el) {
+                        if(!el.get("expanded"))
+                        {
+                            hidden = true; return;
+                        }
+                    }*/
+
+
+                    g[i].getAncestors().every(function (el) {
+                        if(!el.get("expanded"))
+                        {
+                            hidden = true;
+                            g[i].set("hidden", true);
+                        } return !hidden; // se every ritorna false, esce dal loop (per efficienza)
+                    });
+
+                    if(!hidden) {
+                        g[i].set("hidden", false);
+                        g[i].attributes.offsetY = offsetY;
+
+                        if(!g[i].get("expanded"))
+                        {
+                            offsetY += 50;// se è ridotto ho bisogno di meno spazio
+                        }
+
+                        else
+                        {
+                            offsetY += 150;
+                        }
+
+                    }
+                    else
+                    {
+                        g[i].set("hidden", true);
+                    }
+
                 }
 
                 var l = g.length;
                 //console.log(g);
                 //console.log(l);
 
-                for(i = 0; i<l; i++)
+                for(ii = 0; ii<l; ii++)
                 {
-                    if(g[i].get("type") == "uml.ActivityDiagramElement")
+
+                    if(g[ii].get("type") == "uml.ActivityDiagramElement")
                     {
-                        g[i].updateRectangles();
-                        this.removeView(g[i]);
-                        this.renderView(g[i]); // per qualche ragione è necessario..
+                        if(false)//g[i].get("hidden"))
+                        {
+                            this.removeView(g[ii]);
+                        }
+                        else
+                        {
+                            g[ii].updateRectangles();
+                            this.removeView(g[ii]);
+                            this.renderView(g[ii]); // per qualche ragione è necessario..
+                        }
                     }
 
                     else {
-                        console.log(g[i]);
+                        console.log(g[ii]);
                         console.log("questo no :(");
                     }
 

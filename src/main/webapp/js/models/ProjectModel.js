@@ -252,18 +252,60 @@ define([
 
                 offsetY: 500,
                 keyvalues: {
-                    xtype: 'ASSEGNAZIONE',
-                    comment: 'D ultima cosa',
+                    xtype: 'IF',
+                    comment: 'D iffone',
                     body : [],
 
                 },
                 //index: 2
             });
 
+            var  ee = new joint.shapes.uml.ActivityDiagramElement({
+
+                offsetY: 500,
+                keyvalues: {
+                    xtype: 'WHILE',
+                    comment: 'E girogirogiro',
+                    body : [],
+
+                },
+                //index: 2
+            });
+
+            var f = new joint.shapes.uml.ActivityDiagramElement({
+
+                offsetY: 500,
+                keyvalues: {
+                    xtype: 'CUSTOM',
+                    comment: 'F scribscrib',
+                    body : [],
+
+                },
+                //index: 2
+            });
+
+            var g = new joint.shapes.uml.ActivityDiagramElement({
+
+                offsetY: 500,
+                keyvalues: {
+                    xtype: 'RETURN',
+                    comment: 'G fine',
+                    body : [],
+
+                },
+                //index: 2
+            });
+
+
+
             x.cells.push(a);
             x.cells.push(b);
             x.cells.push(c);
             x.cells.push(d);
+            x.cells.push(ee);
+            x.cells.push(f);
+            x.cells.push(g);
+
 
             console.log(x);
 

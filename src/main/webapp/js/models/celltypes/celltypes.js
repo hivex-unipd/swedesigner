@@ -21,6 +21,7 @@ define([
             '<rect class="activity-element-name-rect"/>',
             '<text class="activity-element-name-text"/>',
             '<rect class="activity-element-body-rect"/>',
+            '<rect class="activity-toggle"/>',
 
             '</g>'
         ].join(''),
@@ -34,6 +35,7 @@ define([
 
 
 
+                '.activity-toggle': {'fill': '#eedd99'},
                 '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
                 '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
 
@@ -55,6 +57,7 @@ define([
 
             index: 0,
             expanded: true,
+            hidden: false,
             offsetY: 0,
 
             keyvalues: {
@@ -117,38 +120,78 @@ define([
 
         updateRectangles: function () {
 
-
+            console.log("updateRect");
+            console.log(this.get("keyvalues").xtype);
             var attrs = this.get('attrs');
 
             // this.set('size.height', (this.get('attributes') + this.get('methods')) * 20);
 
-            this.attributes.position = {x: this.getOffsetX(), y: this.getOffsetY()};
-
-
-            if (this.get("keyvalues").comment.length > 20) {
-                var text = this.getKeyvalues().xtype + "\n" + this.getKeyvalues().comment.slice(0, 20) + "...";
-
-            }
-            else
+            if(this.get("hidden"))
             {
-                var text = this.getKeyvalues().xtype + "\n" + this.getKeyvalues().comment;
+                // hack cattivissimo per evitare creazioni di nuovi oggetti e nascondere l'oggetto
+                this.attributes.position = {x: -9999, y: -9999};
             }
 
-            attrs['.activity-element-name-text'].text = text;
-            attrs['.activity-element-name-rect'].height = this.getHeight();
+            else {
 
-            //console.log(this.getEmbeddedCells({deep:true}));
-            attrs['.activity-element-body-rect'].height = 150-35+ this.getEmbeddedCells({deep:true}).length *150 - 20 ;
-
-            attrs['.activity-element-name-rect'].transform = 'translate(0,0)';
-            attrs['.activity-element-body-rect'].transform = 'translate(0,35)';
-            ///console.log("valore offset: ");
-            //console.log(this.getOffsetY());
+                this.attributes.position = {x: this.getOffsetX(), y: this.getOffsetY()};
 
 
+                if (this.get("keyvalues").comment.length > 20) {
+                    var text = this.getKeyvalues().xtype + "\n" + this.getKeyvalues().comment.slice(0, 20) + "...";
 
-            //attrs['.activity'].transform = 'translate(0,' + this.getOffsetY()+ ')';
-            //console.log(this.getOffsetY());
+                }
+                else
+                {
+                    var text = this.getKeyvalues().xtype + "\n" + this.getKeyvalues().comment;
+                }
+
+                attrs['.activity-toggle'].transform = 'translate(180,0)';
+                attrs['.activity-toggle'].height = 35;
+                attrs['.activity-toggle'].width = 20;
+                //attrs['.activity-toggle'].text = '+';
+
+
+                attrs['.activity-element-name-text'].text = text;
+                attrs['.activity-element-name-rect'].height = this.getHeight();
+
+                //console.log(this.getEmbeddedCells({deep:true}));
+
+                if(this.get("expanded"))
+                {
+                    //var l = _.where(this.getEmbeddedCells({deep:true}), {attributes.hidden: true})
+
+                    var embedded = this.getEmbeddedCells({deep:true});
+                    console.log(embedded);
+                    var h = 0;
+                    for(i=0;i<embedded.length;i++)
+                    {
+                        if(!embedded[i].get("hidden")) {h+=150;}
+                    }
+
+
+
+                    console.log(h);
+                    attrs['.activity-element-body-rect'].height = 150-35+ h - 20 ;
+                }
+
+                else
+                {
+                    attrs['.activity-element-body-rect'].height = 0;
+                }
+
+                attrs['.activity-element-name-rect'].transform = 'translate(0,0)';
+                attrs['.activity-element-body-rect'].transform = 'translate(0,35)';
+                ///console.log("valore offset: ");
+                //console.log(this.getOffsetY());
+
+
+
+                //attrs['.activity'].transform = 'translate(0,' + this.getOffsetY()+ ')';
+                //console.log(this.getOffsetY());
+
+
+            }
 
 
         },
@@ -162,6 +205,33 @@ define([
     });
 
 
+    joint.shapes.uml.ActivityDiagramElementView = joint.dia.ElementView.extend({
+
+        initialize: function () {
+            joint.dia.ElementView.prototype.initialize.apply(this, arguments);
+
+            this.listenTo(this.model, 'uml-update', function () {
+                console.log("update interfaccia");
+                this.update();
+                this.resize();
+            });
+            ///this.listenTo(this.model, 'click', toggl);
+
+        },
+        events: {
+            'mousedown .activity-toggle': 'toggle',
+
+        },
+        toggle: function () {
+
+            console.log("togglo!");
+            this.model.set("expanded", !this.model.get("expanded"));
+            this.model.updateRectangles();
+            this.update(); // ecco cosa dovevi fare, le cose funzionavano già
+
+        }
+
+    });
 
     joint.shapes.uml.ClassDiagramElement = joint.shapes.basic.Generic.extend({
 
@@ -415,6 +485,8 @@ define([
 
 
     });
+
+
 
 
 
