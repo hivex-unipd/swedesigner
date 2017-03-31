@@ -120,8 +120,8 @@ define([
 
         updateRectangles: function () {
 
-            console.log("updateRect");
-            console.log(this.get("keyvalues").xtype);
+            //console.log("updateRect");
+            //console.log(this.get("keyvalues").xtype);
             var attrs = this.get('attrs');
 
             // this.set('size.height', (this.get('attributes') + this.get('methods')) * 20);
@@ -162,17 +162,25 @@ define([
                     //var l = _.where(this.getEmbeddedCells({deep:true}), {attributes.hidden: true})
 
                     var embedded = this.getEmbeddedCells({deep:true});
-                    console.log(embedded);
+                    //console.log(embedded);
                     var h = 0;
                     for(i=0;i<embedded.length;i++)
                     {
-                        if(!embedded[i].get("hidden")) {h+=150;}
+                        if(embedded[i].get("hidden")) {h+=0;}
+                        if(!embedded[i].get("hidden") && embedded[i].get("expanded")) {h+=100;}
+                        if(!embedded[i].get("hidden") && !embedded[i].get("expanded")) {h+=50;}
                     }
 
 
 
-                    console.log(h);
-                    attrs['.activity-element-body-rect'].height = 150-35+ h - 20 ;
+                    //console.log(h);
+                    if(h!=0)
+                    {
+                        attrs['.activity-element-body-rect'].height =  35+20+ h ;
+                    }
+                    else{
+                        attrs['.activity-element-body-rect'].height =  35+ 20;
+                    }
                 }
 
                 else

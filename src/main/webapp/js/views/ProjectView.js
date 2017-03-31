@@ -132,6 +132,7 @@ define([
 
             var pointerUpFunction = function (cellView, evt, x, y) {
 
+                var changed = false;
                 // EMBED e selectedcell
                 if(cellView)
                 {
@@ -155,6 +156,7 @@ define([
                         }
                     }
                     if (this.selectedCell != cellView.model) {
+                        changed = true;
                         this.selectedCell = cellView.model;
                         if (true) {//cellView.model instanceof joint.shapes.uml.ClassDiagramElement) {
                             this.trigger("changed-cell");
@@ -190,226 +192,223 @@ define([
                 //console.log("questa è la cella selezionata: ");
                 //console.log(curr);
 
-
-                var move = function (a, old_index, new_index) {
-                    if (new_index >= a.length) {
-                        var k = new_index - a.length;
-                        while ((k--) + 1) {
-                            a.push(undefined);
-                        }
-                    }
-                    a.splice(new_index, 0, a.splice(old_index, 1)[0]);
-                    return a; // for testing purposes
-                };
+if(changed) {
 
 
-
-                var currentIndex = g.indexOf(curr);//curr.get("index"); // è necessario cercare a che indice vorrebbe mettere la cosa
-
-
-
-                //console.log(g);
-
-                // controllo se  la cella è andata in basso, oltre altri blocchi
-                // nextindex è la prossima non embeddata
-
-
-                var nextIndex = currentIndex +1 ;
+    var move = function (a, old_index, new_index) {
+        if (new_index >= a.length) {
+            var k = new_index - a.length;
+            while ((k--) + 1) {
+                a.push(undefined);
+            }
+        }
+        a.splice(new_index, 0, a.splice(old_index, 1)[0]);
+        return a; // for testing purposes
+    };
 
 
-                while(nextIndex<=g.length-1 && g[nextIndex].getAncestors().indexOf( g[currentIndex] ) != -1 ) {
-                    //console.log(g[currentIndex]);
-                    //console.log(g[nextIndex].getAncestors());
-                    nextIndex++;
-                    //console.log("yup");
-                }
+    var currentIndex = g.indexOf(curr);//curr.get("index"); // è necessario cercare a che indice vorrebbe mettere la cosa
 
 
-                if(nextIndex<=g.length-1 && curr.get("position").y > g[nextIndex].get("position").y)
-                {
-                    while(nextIndex<=g.length-1 && curr.get("position").y > g[nextIndex].get("position").y)
-                    {
-                        nextIndex++;
-                    }
-                    if(nextIndex!=currentIndex+1)
-                    {
-                        var figli = g[currentIndex].getEmbeddedCells();
-                        move(g,currentIndex,nextIndex-1);
-                        //console.log("sposto ");
-                        //console.log(currentIndex);
-                        //console.log(nextIndex-1);
-                        for(i=0;i<figli.length;i++)
-                        {
-                            move(g,currentIndex,nextIndex-1+i);
-                            //console.log("sposto ");
-                            //console.log(currentIndex);
-                            //console.log(nextIndex-1+i);
+    //console.log(g);
 
-                        }
-                    }
-                    //console.log("finito di spostare");
-                    //console.log(currentIndex);
-                    //console.log(nextIndex);
-                }
+    // controllo se  la cella è andata in basso, oltre altri blocchi
+    // nextindex è la prossima non embeddata
 
 
-                // controllo se la cella è andata in altro, oltre altri blocchi
-                var prevIndex = currentIndex-1;
-
-                //while(g[currentIndex] in g[nextIndex].getAncestors()) {nextIndex++;}
-
-                if(prevIndex>=0 && curr.get("position").y < g[prevIndex].get("position").y)
-                {
-                    while(prevIndex>=0 && curr.get("position").y < g[prevIndex].get("position").y)
-                    {
-                        //console.log(curr.get("position").y );
-                       // console.log(g[prevIndex].get("position").y);
-                        prevIndex--;
-                        //console.log(prevIndex);
-
-                    }
-                    if(prevIndex!=currentIndex-1)
-                    {
-                        var figli = g[currentIndex].getEmbeddedCells();
-                        move(g,currentIndex,prevIndex+1);
-                        //console.log("sposto ");
-                        //console.log(currentIndex);
-                        //console.log(prevIndex+1);
-
-                        for(i=1;i<=figli.length;i++)
-                        {
-                            move(g,currentIndex+i,prevIndex+i+1);
-                            //console.log("sposto ");
-                            //console.log(currentIndex+i);
-                            //console.log(prevIndex+1+i);
-
-                        }
-                    }
-
-                }
-
-/*
-                if(index+1<=g.length-1 && curr.get("position").y > g[index+1].get("position").y)
-                {
-                    //curr.set("index", index+1);
-                    // g[index+1].set("index", index); // -1+1 mi raccomando
-                    //console.log(g);
-
-                    move(g,index,index+1);
-                   // console.log(g);
-
-                    console.log("sposto>");
-                    console.log(index) ;
-                }*/
-
-                // sarebbe >=1 ma c'è ancora il link in mezzo (senza sarebbe 0)
-               /*
-                if(index-1>=1 && curr.get("position").y < g[index-1].get("position").y )
-                {
-                    ///curr.set("index", index-1);
-                    // g[index-1].set("index", index); // -1+1 mi raccomando
-                    //console.log(g);
-
-                    move(g, index,index-1);
-                   // console.log(g);
-                    console.log("sposto<");
-                    console.log(index) ;
-
-                }*/
+    var nextIndex = currentIndex + 1;
 
 
+    while (nextIndex <= g.length - 1 && g[nextIndex].getAncestors().indexOf(g[currentIndex]) != -1) {
+        //console.log(g[currentIndex]);
+        //console.log(g[nextIndex].getAncestors());
+        nextIndex++;
+        //console.log("yup");
+    }
 
 
+    if (nextIndex <= g.length - 1 && curr.get("position").y > g[nextIndex].get("position").y) {
+        while (nextIndex <= g.length - 1 && curr.get("position").y > g[nextIndex].get("position").y) {
+            nextIndex++;
+        }
+        if (nextIndex != currentIndex + 1) {
+            var figli = g[currentIndex].getEmbeddedCells();
+            move(g, currentIndex, nextIndex - 1);
+            //console.log("sposto ");
+            //console.log(currentIndex);
+            //console.log(nextIndex-1);
+            for (i = 0; i < figli.length; i++) {
+                move(g, currentIndex, nextIndex - 1 + i);
+                //console.log("sposto ");
+                //console.log(currentIndex);
+                //console.log(nextIndex-1+i);
 
-                var offsetY = 50;
-
-                for(i=0;i<g.length;i++)
-                {
-                    var hidden = false;/*
-                    _.each(g[i].getAncestors(), function (el) {
-                        if(!el.get("expanded"))
-                        {
-                            hidden = true; return;
-                        }
-                    }*/
+            }
+        }
+        //console.log("finito di spostare");
+        //console.log(currentIndex);
+        //console.log(nextIndex);
+    }
 
 
-                    g[i].getAncestors().every(function (el) {
-                        if(!el.get("expanded"))
-                        {
-                            hidden = true;
-                            g[i].set("hidden", true);
-                        } return !hidden; // se every ritorna false, esce dal loop (per efficienza)
-                    });
+    // controllo se la cella è andata in altro, oltre altri blocchi
+    var prevIndex = currentIndex - 1;
 
-                    if(!hidden) {
-                        g[i].set("hidden", false);
-                        g[i].attributes.offsetY = offsetY;
+    //while(g[currentIndex] in g[nextIndex].getAncestors()) {nextIndex++;}
 
-                        if(!g[i].get("expanded"))
-                        {
-                            offsetY += 50;// se è ridotto ho bisogno di meno spazio
-                        }
+    if (prevIndex >= 0 && curr.get("position").y < g[prevIndex].get("position").y) {
+        while (prevIndex >= 0 && curr.get("position").y < g[prevIndex].get("position").y) {
+            //console.log(curr.get("position").y );
+            // console.log(g[prevIndex].get("position").y);
+            prevIndex--;
+            //console.log(prevIndex);
 
-                        else
-                        {
-                            offsetY += 150;
-                        }
+        }
+        if (prevIndex != currentIndex - 1) {
+            var figli = g[currentIndex].getEmbeddedCells();
+            move(g, currentIndex, prevIndex + 1);
+            //console.log("sposto ");
+            //console.log(currentIndex);
+            //console.log(prevIndex+1);
 
-                    }
-                    else
-                    {
-                        g[i].set("hidden", true);
-                    }
+            for (i = 1; i <= figli.length; i++) {
+                move(g, currentIndex + i, prevIndex + i + 1);
+                //console.log("sposto ");
+                //console.log(currentIndex+i);
+                //console.log(prevIndex+1+i);
 
-                }
+            }
+        }
 
-                var l = g.length;
-                //console.log(g);
-                //console.log(l);
+    }
 
-                for(ii = 0; ii<l; ii++)
-                {
+    /*
+     if(index+1<=g.length-1 && curr.get("position").y > g[index+1].get("position").y)
+     {
+     //curr.set("index", index+1);
+     // g[index+1].set("index", index); // -1+1 mi raccomando
+     //console.log(g);
 
-                    if(g[ii].get("type") == "uml.ActivityDiagramElement")
-                    {
-                        if(false)//g[i].get("hidden"))
-                        {
-                            this.removeView(g[ii]);
-                        }
-                        else
-                        {
-                            g[ii].updateRectangles();
-                            this.removeView(g[ii]);
-                            this.renderView(g[ii]); // per qualche ragione è necessario..
-                        }
-                    }
+     move(g,index,index+1);
+     // console.log(g);
 
-                    else {
-                        console.log(g[ii]);
-                        console.log("questo no :(");
-                    }
+     console.log("sposto>");
+     console.log(index) ;
+     }*/
 
-                }
-                ///this.trigger("uml-update");
+    // sarebbe >=1 ma c'è ancora il link in mezzo (senza sarebbe 0)
+    /*
+     if(index-1>=1 && curr.get("position").y < g[index-1].get("position").y )
+     {
+     ///curr.set("index", index-1);
+     // g[index-1].set("index", index); // -1+1 mi raccomando
+     //console.log(g);
 
-                //this.removeView(g[1]);
-                //this.renderView(g[1]); // per qualche ragione è necessario..
+     move(g, index,index-1);
+     // console.log(g);
+     console.log("sposto<");
+     console.log(index) ;
+
+     }*/
+
+
+}
+
+    var offsetY = 50;
+
+    for(i=0;i<g.length;i++)
+    {
+        var hidden = false;/*
+     _.each(g[i].getAncestors(), function (el) {
+     if(!el.get("expanded"))
+     {
+     hidden = true; return;
+     }
+     }*/
+
+
+        g[i].getAncestors().every(function (el) {
+            if(!el.get("expanded"))
+            {
+                hidden = true;
+                g[i].set("hidden", true);
+            } return !hidden; // se every ritorna false, esce dal loop (per efficienza)
+        });
+
+        if(!hidden) {
+            g[i].set("hidden", false);
+            g[i].attributes.offsetY = offsetY;
+
+            if(!g[i].get("expanded"))
+            {
+                offsetY += 50;// se è ridotto ho bisogno di meno spazio
+            }
+
+            else
+            {
+                offsetY += 100;
+            }
+
+        }
+        else
+        {
+            g[i].set("hidden", true);
+        }
+
+    }
+
+    var l = g.length;
+    //console.log(g);
+    //console.log(l);
+
+    for(ii = 0; ii<l; ii++)
+    {
+
+        if(g[ii].get("type") == "uml.ActivityDiagramElement")
+        {
+            if(false)//g[i].get("hidden"))
+            {
+                this.removeView(g[ii]);
+            }
+            else
+            {
+                g[ii].updateRectangles();
+                this.removeView(g[ii]);
+                this.renderView(g[ii]); // per qualche ragione è necessario..
+            }
+        }
+
+        else {
+            console.log(g[ii]);
+            console.log("questo no :(");
+        }
+
+    }
+    ///this.trigger("uml-update");
+
+    //this.removeView(g[1]);
+    //this.renderView(g[1]); // per qualche ragione è necessario..
 
 
 
 
 
-                //this.trigger("uml-update");
-                /*
-                 _.each(g, function(el){
-                 console.log(el);
-                 el.updateRectangles();
-                 });
-                 */
+    //this.trigger("uml-update");
+    /*
+     _.each(g, function(el){
+     console.log(el);
+     el.updateRectangles();
+     });
+     */
 
 
-                //console.log(cellView.model.getClassName());
+    //console.log(cellView.model.getClassName());
+
+
+
+
+
+
             };
 
             this.paper.on('cell:pointermove', function(cellView) {
