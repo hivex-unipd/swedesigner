@@ -85,7 +85,7 @@ public class Parser {
 				List<ParsedAttribute> attributes = new ArrayList<ParsedAttribute>();
 				for(int r = 0; r<jattributes.length();r++){
 					JSONObject currentattr = jattributes.getJSONObject(r);
-					//***occorre controllare che ci siano tutti i campi prima di creare l'attributo
+					//occorre controllare che ci siano tutti i campi prima di creare l'attributo
 					boolean isstatic = (currentattr.has("static")?currentattr.getBoolean("static"):false);
 					String visibility = (currentattr.has("varvisib")?currentattr.getString("varvisib"):null);
 					String varvaldef = (currentattr.has("varvaldef")?currentattr.getString("varvaldef"):null);
@@ -138,10 +138,15 @@ public class Parser {
 					
 					methods[r] = new ParsedMethod(visibility , isstatic, isabstract, returntype, name, args, meth.get(currentmeth.getString("id")));
 				}
-			//************************ARRIVATI QUI A CONTROLLARE GLI ERRORI******************************************//	
+
 				//creo la parsedclass e la inserisco nell'array di classi
-				String id = jclass.getString("id");
-				alltypes.put(id, new ParsedClass(classvalues.getString("name"), classvalues.getString("visibility"),attributes,methods));
+				String id = "";
+				if(jclass.has("id")){
+					id = jclass.getString("id");
+					alltypes.put(id, new ParsedClass(classvalues.getString("name"), classvalues.getString("visibility"),attributes,methods));
+				}
+				else
+					errors.add("Id not found in class: this class is not inserted");
 				i++;
 			}//fine if
 			else
@@ -149,34 +154,70 @@ public class Parser {
 		}//fine while
 		//POST: all'uscita i è tale che o i>=arr.length (ci sono solo classi) o i è l'indice di arr dove si trova la prima relazione;
 		
+		int attNoName = 0; //***attributi senza nome creati da relazioni "reference"
 		//Inserimento relazioni
 		for(; i<arr.length();i++){
 			JSONObject rel = arr.getJSONObject(i);
-			String type = rel.getString("type");
-			ParsedType source = alltypes.get(rel.get("source"));
-			String target = alltypes.get(rel.get("target")).getName();
 			
-			switch(type){
-				case "uml.generalization" : {
-					source.addExtended(target);
-					break;
-				}
-				case "uml.implementation" : {
-					source.addImplemented(target);
-					break;
-				}
-				case "uml.reference" : {
-					int molt = rel.getInt("molteplicity");
-					String typeatt = target+(molt>1?"[]":"");
-					String nameatt = rel.getString("name");
-					String value = (molt>1?"new "+target+"["+molt+"]":null);//non esistono valori di default per i riferimenti singoli!!!
-					//non si può indicare se un attributo è statico o la particolare visibilità
-					source.addAttribute(new ParsedAttribute(false, null, typeatt, nameatt, value));
-					break;
-				}
-				default : throw new Exception(); 
-			}	
-		}
+			//source della relazione
+			String sourcestring = "";
+			if(rel.has("source"))
+				sourcestring = rel.getString("source");
+			else
+				errors.add("JSON format error: cannot find source of relationship");
+			ParsedType source = alltypes.get(sourcestring); 							//null se non esiste la chiave corrispondente alla sorgente
+			
+			//tipo della relazione
+			String type = "";															//"" se non esiste il tipo della relazione
+			if(rel.has("type"))
+				type = rel.getString("type");
+			else
+				errors.add("JSON format error: cannot find type of relationship");
+			
+			//target della relazione
+			String targetstring = "";
+			if(rel.has("target"))
+				targetstring = rel.getString("target");
+			else
+				errors.add("JSON format error: cannot find target of relationship");
+			ParsedType targettype = alltypes.get(targetstring);
+			String target = ""; 														//"" se non esiste il target della relazione
+			if(targettype!=null)
+				target = targettype.getName();
+			
+			if(source!=null && !type.equals("") && !target.equals("")){					//controllo valori accettabili
+				switch(type){
+						case "uml.generalization" : {
+							source.addExtended(target);
+							break;
+						}
+						case "uml.implementation" : {
+							source.addImplemented(target);
+							break;
+						}
+						case "uml.reference" : {
+							int molt = 1; //molteplicita di default
+							if(rel.has("molteplicity"))
+								molt = rel.getInt("molteplicity");
+							
+							String typeatt = target+(molt>1 ? "[]" : "");
+							
+							String nameatt = "";
+							if(rel.has("name"))
+								nameatt = rel.getString("name");
+							else
+								nameatt = target+source+"reference"+(attNoName++);
+															
+							String value = (molt>1 ? "new "+target+"["+molt+"]" : null);//non esistono valori di default per i riferimenti singoli!!!
+							
+							//***non si può indicare se un attributo è statico o la particolare visibilità
+							source.addAttribute(new ParsedAttribute(false, null, typeatt, nameatt, value));
+							break;
+						}
+						default : errors.add("JSON format error: type of relationship is not correct"); 
+				}//fine switch
+			}//fine if
+		}//fine ciclo for
 		Iterator<Entry<String, ParsedType>> it = alltypes.entrySet().iterator();
 		while(it.hasNext()){
 			Map.Entry<String, ParsedType> entry = (Map.Entry<String, ParsedType>)it.next();
