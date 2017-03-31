@@ -187,8 +187,10 @@ define([
         },
 
         /**
-         * Logs some event details (?).
-         * @name DetailsView#visib
+         * Confirms the edits performed in a given field
+         * inside the `#details` div and updates the
+         * corresponding cell of the diagram.
+         * @name DetailsView#confirmEdit
          * @function
          * @param {event} e the action event
          * @private

@@ -1,10 +1,3 @@
-/*! JointJS v1.0.3 (2016-11-22) - JavaScript diagramming library
-
-
- This Source Code Form is subject to the terms of the Mozilla Public
- License, v. 2.0. If a copy of the MPL was not distributed with this
- file, You can obtain one at http://mozilla.org/MPL/2.0/.
- */
 define([
     'jquery',
     'underscore',
@@ -12,34 +5,74 @@ define([
     'joint'
 ], function ($, _, Backbone, joint) {
 
-
-
+    /**
+     * @classdesc `ActivityDiagramElement` is the base class
+     * for all the block elements in the activity diagram of a method.
+     *
+     * @module client.models.celltypes
+     * @name ActivityDiagramElement
+     * @class ActivityDiagramElement
+     * @extends {joint.shapes.basic.Generic}
+     */
     joint.shapes.uml.ActivityDiagramElement = joint.shapes.basic.Generic.extend({
 
+        /**
+         * The SVG markup for rendering the element on the page.
+         * @name ActivityDiagramElement#markup
+         * @type {string}
+         */
         markup: [
             '<g class="activity">',
             '<rect class="activity-element-name-rect"/>',
             '<text class="activity-element-name-text"/>',
             '<rect class="activity-element-body-rect"/>',
             '<rect class="activity-toggle"/>',
-
             '</g>'
         ].join(''),
 
+        /**
+         * The base class default attributes.
+         * @name ActivityDiagramElement#defaults
+         * @type {Object}
+         */
         defaults: _.defaultsDeep({
 
+            /**
+             * The type of the element.
+             * @name ActivityDiagramElement#defaults#type
+             * @type {string}
+             */
             type: 'uml.ActivityDiagramElement',
 
+            /**
+             * The CSS attributes for the diagram element.
+             * @name ActivityDiagramElement#defaults#attrs
+             * @type {Object}
+             */
             attrs: {
                 rect: {'width': 200},
 
+                '.activity-toggle': {
+                    'fill': '#eedd99'
+                },
 
+                '.activity-element-name-rect': {
+                    'stroke': 'black',
+                    'stroke-width': 0,
+                    'fill': '#4db6ac'
+                },
 
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
+                '.activity-element-body-rect': {
+                    'stroke': 'black',
+                    'stroke-width': 2,
+                    'fill': '#ffffff'
+                },
 
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
+                '.activity': {
+                    'stroke': 'black',
+                    'stroke-width': 0,
+                    'fill': '#ffffff'
+                },
 
                 '.activity-element-name-text': {
                     'ref': '.activity-element-name-rect',
@@ -50,26 +83,54 @@ define([
                     'fill': 'white',
                     'font-size': 16,
                     'font-family': 'Roboto'
-                },
-
+                }
             },
 
-
+            /**
+             * ?
+             * @name ActivityDiagramElement#defaults#index
+             * @type {number}
+             */
             index: 0,
+
+            /**
+             * Whether the element is expanded. (?)
+             * @name ActivityDiagramElement#defaults#expanded
+             * @type {boolean}
+             */
             expanded: true,
+
+            /**
+             * Whether the element is hidden. (?)
+             * @name ActivityDiagramElement#defaults#hidden
+             * @type {boolean}
+             */
             hidden: false,
+
+            /**
+             * Vertical offset from the top of the diagram. (?)
+             * @name ActivityDiagramElement#defaults#offsetY
+             * @type {number}
+             */
             offsetY: 0,
 
+            /**
+             * ?
+             * @name ActivityDiagramElement#defaults#keyvalues
+             * @type {Object}
+             */
             keyvalues: {
                 xtype: '[block type]',
                 comment: '[new block]',
-                body : [],
-
+                body : []
             }
-
-
         }, joint.shapes.basic.Generic.prototype.defaults),
 
+        /**
+         * Initializes the CSS attributes.
+         * @name ActivityDiagramElement#initialize
+         * @function
+         */
         initialize: function () {
 
             joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
@@ -81,6 +142,12 @@ define([
 
         },
 
+        /**
+         * Sets the cell to a given state.
+         * @name ActivityDiagramElement#setToValue
+         * @param {string} value the desired state
+         * @param {string} path the path to the cell (?)
+         */
         setToValue: function (value, path) {
             obj = this.get('keyvalues');
             path = path.split('.');
@@ -95,29 +162,57 @@ define([
             this.trigger("uml-update");
         },
 
+        /**
+         * Returns KeyValues.
+         * @name ActivityDiagramElement#getKeyvalues
+         * @return {Object} KeyValues
+         */
         getKeyvalues: function () {
             return this.get('keyvalues');
         },
 
-
+        /**
+         * Sets the vertical offset from the top to `a` pixels.
+         * @name ActivityDiagramElement#setOffsetY
+         * @param {number} a vertical offset
+         */
         setOffsetY: function (a) {
             this.offsetY = a;
         },
 
+        /**
+         * Returns the vertical offset of the element from the top.
+         * @name ActivityDiagramElement#getOffsetY
+         * @return {number} the vertical offset
+         */
         getOffsetY: function () {
             return this.attributes.offsetY;
         },
 
+        /**
+         * Returns the indentation level of the element (in pixels).
+         * @name ActivityDiagramElement#getOffsetX
+         * @return {number} the indentation level
+         */
         getOffsetX: function () {
             return this.getAncestors().length * 50;
 
         },
 
+        /**
+         * Returns the element height (in pixels).
+         * @name ActivityDiagramElement#getHeight
+         * @return {number} the height
+         */
         getHeight: function () {
             return 35;
         },
 
-
+        /**
+         * Updates the CSS attributes, based on the state of the object.
+         * @name ActivityDiagramElement#updateRectangles
+         * @function
+         */
         updateRectangles: function () {
 
             //console.log("updateRect");
@@ -201,14 +296,7 @@ define([
 
             }
 
-
-        },
-
-
-
-
-
-
+        }
 
     });
 
