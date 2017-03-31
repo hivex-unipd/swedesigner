@@ -40,7 +40,7 @@ public class Parser {
 		//Array delle relazioni
 		JSONArray rels = (unity.has("relationshipsarray")?unity.getJSONArray("relationshipsarray"):new JSONArray());
 		//Array dei metodi (fuori da cells)
-		JSONArray meths = (program.has("methods")?program.getJSONArray("methods"):new JSONArray());
+		JSONArray meths = (objectclasses.has("methods")?objectclasses.getJSONArray("methods"):new JSONArray());
 		
 		HashMap<String, List<ParsedInstruction>> meth = new HashMap<String, List<ParsedInstruction>>();
 		
