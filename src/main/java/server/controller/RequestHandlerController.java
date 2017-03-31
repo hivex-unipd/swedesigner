@@ -1,5 +1,7 @@
 package server.controller;
 
+import java.io.FileNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -13,7 +15,7 @@ public class RequestHandlerController {
 	
 	public void HandleGeneratorRequest(){}
 	public void HandleStereotypesRequest(){};
-	public void prova(ParsedProgram p){
+	public void prova(ParsedProgram p) throws FileNotFoundException{
 		generator.generate("Prova", p);
 	}
 	

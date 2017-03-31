@@ -49,7 +49,7 @@ public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 		/*parte zip*/
 		byte[] buffer = new byte[1024];
 		
-		FileOutputStream fos = new FileOutputStream("src/main/resources/prova.zip");/*In Java, FileOutputStream is a bytes 
+		FileOutputStream fos = new FileOutputStream("src/main/resources/ContentFile/prova.zip");/*In Java, FileOutputStream is a bytes 
 		stream class that’s used to handle raw binary data. To write the data to file, you have to convert the data into 
 		bytes and save it to file*//*crea il zip vuoto*/
 		ZipOutputStream zos = new ZipOutputStream(fos);/*This class implements an output stream filter for writing files 

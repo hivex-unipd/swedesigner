@@ -1,6 +1,7 @@
 package server.generator.java;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -17,20 +18,16 @@ public class JavaGenerator implements Generator {
 	@Qualifier("javatemplate")
 	private Template template;
 	public String renderAllTemplates(Template t){return null;};
-	public void generate(String IdReq, ParsedProgram p){
+	public void generate(String IdReq, ParsedProgram p) throws FileNotFoundException{
 		String program = "";
 		for(int i=0; i<p.nClasses(); i++){
 			program += p.getType(i).renderTemplate(template);
-			/*String type = p.getType(i).renderTemplate(template);
-			try{
-				String path = "C:/Users/alber/Desktop/SOURCES/prova.java";
-				File tipo = new File(path);
-			    PrintWriter writer = new PrintWriter(tipo);
-			    writer.println(type);
-			    writer.close();
-			} catch (IOException e) {
-			   // do something
-			}*/
+			String type = p.getType(i).renderTemplate(template);
+			String path = "src/main/resources/ContentFile/"+p.getType(i).getName()+".java";
+			File tipo = new File(path);
+		    PrintWriter writer = new PrintWriter(tipo);
+		    writer.println(type);
+		    writer.close();
 		}
 		System.out.println(program);
 	};
