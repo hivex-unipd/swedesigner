@@ -301,8 +301,24 @@ define([
     });
 
 
+
+    /**
+     * @classdesc [...]
+     *
+     * @module client.models.celltypes
+     * @name ActivityDiagramElementView
+     * @class ActivityDiagramElementView
+     * @extends {joint.dia.ElementView}
+     */
     joint.shapes.uml.ActivityDiagramElementView = joint.dia.ElementView.extend({
 
+        /**
+         * Sets the view to listen to its model;
+         * in particular, the view listens to the
+         * 'uml-update' event from the model.
+         * @name ActivityDiagramElementView#initialize
+         * @function
+         */
         initialize: function () {
             joint.dia.ElementView.prototype.initialize.apply(this, arguments);
 
@@ -314,10 +330,21 @@ define([
             ///this.listenTo(this.model, 'click', toggl);
 
         },
+
+        /**
+         * The activity diagram events, each one linked to the desired action.
+         * @name ActivityDiagramElementView#events
+         * @type {Object}
+         */
         events: {
             'mousedown .activity-toggle': 'toggle',
-
         },
+
+        /**
+         * Toggles the expansion of a cell, given its state.
+         * @name ActivityDiagramElementView#toggle
+         * @function
+         */
         toggle: function () {
 
             console.log("togglo!");
@@ -328,6 +355,8 @@ define([
         }
 
     });
+
+
 
     joint.shapes.uml.ClassDiagramElement = joint.shapes.basic.Generic.extend({
 
@@ -542,9 +571,9 @@ define([
         }
 
 
-
-
     });
+
+
 
     joint.shapes.uml.ClassDiagramElementView = joint.dia.ElementView.extend({
 
