@@ -94,7 +94,7 @@ public class Parser {
 				errors.add("JSON format error: cannot find id of type: this type is not inserted in the list of type");
 			
 			//inserisco il tipo solamente se ha id e type definiti
-			if(!id.equals("") && !s.equals("")){
+			if((s.equals("uml.class") || s.equals("uml.interface")) && !id.equals("")){
 				//creo array per attributi Parsed
 				List<ParsedAttribute> attributes = new ArrayList<ParsedAttribute>();
 				for(int r = 0; r<jattributes.length();r++){
@@ -155,7 +155,7 @@ public class Parser {
 
 				//creo la parsedclass e la inserisco nell'array di classi
 				alltypes.put(id, new ParsedClass(classvalues.getString("name"), classvalues.getString("visibility"),attributes,methods));
-			}
+			}//fine if
 		}//fine for
 		
 		int attNoName = 0; //***attributi senza nome creati da relazioni "reference"
