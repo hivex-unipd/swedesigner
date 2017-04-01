@@ -1,10 +1,3 @@
-/*! JointJS v1.0.3 (2016-11-22) - JavaScript diagramming library
-
-
- This Source Code Form is subject to the terms of the Mozilla Public
- License, v. 2.0. If a copy of the MPL was not distributed with this
- file, You can obtain one at http://mozilla.org/MPL/2.0/.
- */
 define([
     'jquery',
     'underscore',
@@ -20,12 +13,36 @@ define([
     celltypes.activity = {};
     celltypes.class = {};
 
+
+
+    /**
+     * @classdesc `ClassDiagramElement` is the base class for every
+     * element of the class diagram. Elements can be classes,
+     * interfaces, annotations or links between them.
+     *
+     * @module client.model.celltypes.class
+     * @name ClassDiagramElement
+     * @class ClassDiagramElement
+     * @extends {joint.shapes.basic.Generic}
+     */
     celltypes.class.ClassDiagramElement = joint.shapes.basic.Generic.extend({
+
+        /**
+         * Default attributes of a `ClassDiagramElement` object.
+         * @name ClassDiagramElement#defaults
+         * @type {Object}
+         */
         defaults: _.defaultsDeep({
-
             type: 'uml.ClassDiagramElement'
-
         }, joint.shapes.basic.Generic.prototype.defaults),
+
+        /**
+         * Sets `updateRectangles()` as a callback to the `values`
+         * member; then calls `updateRectangles()` for actually
+         * rendering the cell for the first time.
+         * @name ClassDiagramElement#initialize
+         * @function
+         */
         initialize: function () {
             this.on('change:values', function () {
                 this.updateRectangles();
@@ -34,33 +51,76 @@ define([
             this.updateRectangles();
             joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
         },
+
+        /**
+         * Returns the values held by the cell,
+         * i.e. the name, attributes, methods etcetera.
+         * @name ClassDiagramElement#getValues
+         * @function
+         * @return {Object} the cell's contents
+         */
         getValues: function () {
             return this.get("values");
         },
+
+        /**
+         * Renders the cell, based on its state.
+         * @name ClassDiagramElement#updateRectangles
+         * @function
+         */
         updateRectangles: function () {
             //non fare niente sulla classe astratta
         },
+
+        /**
+         * Sets `values.<path>` to `<value>`.
+         * @name ClassDiagramElement#setToValue
+         * @function
+         * @param {Object} value the value to be assigned
+         * @param {string} path the member to be set
+         */
         setToValue: function (value, path) {
             obj = this.getValues();
             path = path.split('.');
             for (i = 0; i < path.length - 1; i++) {
-
                 obj = obj[path[i]];
-
             }
             obj[path[i]] = value;
             this.updateRectangles();
             this.trigger("uml-update");
         },
+
+        /**
+         * Executes the method whose name matches `met`.
+         * @name ClassDiagramElement#executemethod
+         * @function
+         * @param {function} met the method to be executed
+         */
         executemethod: function (met) {
             return this[met] && this[met].apply(this, [].slice.call(arguments, 1));
         }
-
-
     });
 
+
+
+    /**
+     * @classdesc `ClassDiagramElementView` is the view for
+     * each`ClassDiagramElement`.
+     *
+     * @module client.model.celltypes.class
+     * @name ClassDiagramElementView
+     * @class ClassDiagramElementView
+     * @extends {joint.dia.ElementView}
+     */
     celltypes.class.ClassDiagramElementView = joint.dia.ElementView.extend({
 
+        /**
+         * Calls the base class `initialize()` method
+         * and sets the view to react to a model update
+         * by calling `update()` and then `resize()`.
+         * @name ClassDiagramElementView#initialize
+         * @function
+         */
         initialize: function () {
             joint.dia.ElementView.prototype.initialize.apply(this, arguments);
 
@@ -69,62 +129,120 @@ define([
                 this.update();
                 this.resize();
             });
-
         },
+
+        /**
+         * The events on the view, each one linked to its callback.
+         * @name ClassDiagramElementView#events
+         * @type {Object}
+         */
         events: {
             'mousedown .togglemethods': 'togglemethods',
-            'mousedown .toggleattributes': 'toggleattributes',
+            'mousedown .toggleattributes': 'toggleattributes'
         },
 
-        //non so se sia giusto tenerli qua...boh vedremo
-        toggleattributes: function () {
-
+        /**
+         * Toggles the display of the class attributes.
+         * @name ClassDiagramElementView#toggleattributes
+         * @function
+         */
+        toggleattributes: function () { //non so se sia giusto tenerli qua...boh vedremo
             this.model.set("attributesexpanded", !this.model.get("attributesexpanded"));
             _.each(this.model.graph.getConnectedLinks(this.model),function(){
                 this.reparent();
             });
             this.model.updateRectangles();
             this.update(); // ecco cosa dovevi fare, le cose funzionavano già
-
         },
-        togglemethods: function () {
 
+        /**
+         * Toggles the display of the class methods.
+         * @name ClassDiagramElementView#togglemethods
+         * @function
+         */
+        togglemethods: function () {
             this.model.set("methodsexpanded", !this.model.get("methodsexpanded"));
             this.model.updateRectangles();
             this.update(); // ecco cosa dovevi fare, le cose funzionavano già
-
         }
-
     });
 
+
+
+    /**
+     * @classdesc `HxClass` represents a UML class in a
+     * class diagram.
+     *
+     * @module client.model.celltypes.class
+     * @name HxClass
+     * @class HxClass
+     * @extends {celltypes.class.ClassDiagramElement}
+     */
     celltypes.class.HxClass = celltypes.class.ClassDiagramElement.extend({
+
+        /**
+         * Calls the base class `initialize()` method.
+         * @name HxClass#initialize
+         * @function
+         */
+        initialize: function () {
+            celltypes.class.ClassDiagramElement.prototype.initialize.apply(this, arguments);
+        },
+
+        /**
+         * The HTML markup for the cell.
+         * @name HxClass#markup
+         * @type {string}
+         */
         markup: [
             '<g class="rotatable">',
-            '<g class="">',
+            '<g>',
             '<rect class="uml-class-name-rect"/><rect class="uml-class-attrs-rect toggleattributes"/><rect class="uml-class-divider-rect"/><rect class="uml-class-methods-rect togglemethods"/>',
             '</g>',
             '<text class="uml-class-name-text"/><text class="uml-class-attrs-text toggleattributes"/><text class="uml-class-methods-text togglemethods"/>',
             '</g>'
         ].join(''),
+
+        /**
+         * Default attributes of an `HxClass` object:
+         * type, position in the canvas, CSS attributes,
+         * and the state and contents of the cell.
+         * @name ClassDiagramElement#defaults
+         * @type {Object}
+         */
         defaults: _.defaultsDeep({
 
             type: 'class.HxClass',
+
             position: {x: 200, y: 200},
-            size:{width: 100, height: 100},
+
+            size: {width: 100, height: 100},
 
             attrs: {
                 rect: {'width': 200},
 
-                '.uml-class-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.uml-class-attrs-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff', 'expanded': 'false'},
+                '.uml-class-name-rect': {
+                    'stroke': 'black',
+                    'stroke-width': 0,
+                    'fill': '#4db6ac'
+                },
+                '.uml-class-attrs-rect': {
+                    'stroke': 'black',
+                    'stroke-width': 0,
+                    'fill': '#ffffff', 
+                'expanded': 'false'
+                },
                 '.uml-class-methods-rect': {
                     'stroke': 'black',
                     'stroke-width': 0,
                     'fill': '#eeeeee',
                     'expanded': 'false'
                 },
-                '.uml-class-divider-rect': {'stroke': 'black', 'stroke-width': 1, 'fill': 'black'},
-
+                '.uml-class-divider-rect': {
+                    'stroke': 'black',
+                    'stroke-width': 1,
+                    'fill': 'black'
+                },
 
                 '.uml-class-name-text': {
                     'ref': '.uml-class-name-rect',
@@ -137,20 +255,26 @@ define([
                     'font-family': 'Roboto'
                 },
                 '.uml-class-attrs-text': {
-                    'ref': '.uml-class-attrs-rect', 'ref-y': 5, 'ref-x': 5,
-                    'fill': '#222222', 'font-size': 12, 'font-family': 'monospace'
+                    'ref': '.uml-class-attrs-rect',
+                    'ref-y': 5,
+                    'ref-x': 5,
+                    'fill': '#222222',
+                    'font-size': 12,
+                    'font-family': 'monospace'
                 },
                 '.uml-class-methods-text': {
-                    'ref': '.uml-class-methods-rect', 'ref-y': 5, 'ref-x': 5,
-                    'fill': '#222222', 'font-size': 12, 'font-family': 'monospace'
+                    'ref': '.uml-class-methods-rect',
+                    'ref-y': 5,
+                    'ref-x': 5,
+                    'fill': '#222222',
+                    'font-size': 12,
+                    'font-family': 'monospace'
                 }
-
             },
 
-
             attributesexpanded: false,
-            methodsexpanded: false,
 
+            methodsexpanded: false,
 
             values: {
                 name: "classedefault",
@@ -173,20 +297,23 @@ define([
                         parameters: ["param1:int"]
                     }
                 ]
-
             }
         }, celltypes.class.ClassDiagramElement.prototype.defaults),
-        initialize: function () {
-            celltypes.class.ClassDiagramElement.prototype.initialize.apply(this, arguments);
-        },
-        updateRectangles: function () {
 
+        /**
+         * Renders the cell, based on its state.
+         * @name HxClass#updateRectangles
+         * @function
+         */
+        updateRectangles: function () {
             var attrs = this.get('attrs');
             var offsetY = 0;
             rects = [
-                {type: 'name', text: this.getValues().name},
                 {
-
+                    type: 'name',
+                    text: this.getValues().name
+                },
+                {
                     type: 'attrs',
                     text: this.get('attributesexpanded') ? this.getValues().attributes : "Attributes (click to expand)"
                 },
@@ -250,6 +377,12 @@ define([
 
             celltypes.class.ClassDiagramElement.prototype.updateRectangles.apply(this, arguments);
         },
+
+        /**
+         * Adds a new method to the class represented by the cell.
+         * @name HxClass#addmethod
+         * @function
+         */
         addmethod: function () {
             this.getValues().methods.push({
                 name: "",
@@ -259,14 +392,32 @@ define([
                 parameters: []
             });
         },
+
+        /**
+         * Adds a new attribute to the class represented by the cell.
+         * @name HxClass#addmethod
+         * @function
+         */
         addattribute: function () {
-            this.getValues().attributes.push({name: "", type: ""});
+            this.getValues().attributes.push({
+                name: "",
+                type: ""
+            });
         },
+
+        /**
+         * Adds a new argument to the `ind`th method in
+         * the class represented by the cell.
+         * @name HxClass#addmethod
+         * @function
+         * @param {number} ind the method's position
+         */
         addparameter: function (ind) {
             this.getValues().methods[ind].parameters.push("");
         }
-
     });
+
+
 
     celltypes.class.HxInterface = celltypes.class.ClassDiagramElement.extend({
         markup: [
