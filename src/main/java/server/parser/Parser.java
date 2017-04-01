@@ -234,73 +234,122 @@ public class Parser {
 	};
 		
 
-	private ParsedInstruction recursiveBuilder(JSONObject instruction, JSONArray jblocks, int i) throws Exception{
-		String type = instruction.getString("type");
-		ParsedInstruction currentinst = null;
-		JSONObject values = instruction.getJSONObject("values");
-		switch(type){
-			case "uml.assignment" : {
-				currentinst = new ParsedAssignment(values.getString("name"), values.getString("value"));
-				break;
+	//la funzione ritorna null nel caso in cui i JSONObject e JSONArray passati come parametri non abbiano le informazioni necessarie
+		//per creare l'istruzione stessa!
+		private ParsedInstruction recursiveBuilder(JSONObject instruction, JSONArray jblocks, int i)throws Exception{
+			String type = "";
+			if(instruction.has("type"))
+				type = instruction.getString("type");
+			else
+				errors.add("JSON format error: cannot find type of instruction");
+			ParsedInstruction currentinst = null;
+			JSONObject values = null;
+			if(instruction.has("values")){
+				values = instruction.getJSONObject("values");
 			}
-			case "uml.custom" : {
-				currentinst = new ParsedCustom(values.getString("instruction"));
-				break;
+			else
+				errors.add("JSON format error: cannot find values of instruction");
+			
+			if(!type.equals("")&&values!=null){//se nel JSON non sono inseriti il tipo e i valori delle istruzioni, non ha senso inserirle!
+				switch(type){
+					case "uml.assignment" : {
+						String name = (values.has("name") ? values.getString("name") : "");
+						String value = (values.has("value") ? values.getString("value") : "");
+						
+						if(!name.equals("")&&!value.equals(""))
+							currentinst = new ParsedAssignment(name, value);
+						else
+							errors.add("JSON format error: missing information for assignment instruction");
+						
+						break;
+					}
+					case "uml.custom" : {
+						String value = (values.has("value") ? values.getString("value") : "");
+						
+						if(!value.equals(""))
+							currentinst = new ParsedCustom(value);
+						else
+							errors.add("JSON format error: missing information for custom instruction");
+						break;
+					}
+					case "uml.for" : {//nessun controllo, il for può avere tutte le informazioni mancanti!
+						String init = (values.has("init")?values.getString("init"):null);
+						String condition = (values.has("condition")?values.getString("condition"):null);
+						String step = (values.has("step")?values.getString("step"):null);
+						//da vedere se init e step sono stringhe oppure ParsedInit/ParsedAssign
+						currentinst = new ParsedFor(null, condition, null, null);	
+						break;
+					}
+					case "uml.if" : {
+						String condition = (values.has("condition") ? values.getString("condition") : "");;
+						if(!condition.equals(""))
+							currentinst = new ParsedIf(condition, null, null);
+						else
+							errors.add("JSON format error: missing information for if instruction");
+						break;
+					}
+					case "uml.initialization" : {//*******non servirebbe in effetti richiedere la presenza del tipo (indipendenza dal linguaggio)
+						String value = (values.has("value")?values.getString("value"):null);
+						String typei = (values.has("type") ? values.getString("type") : "");
+						String name = (values.has("name") ? values.getString("name") : "");
+						if(!typei.equals("")&&!name.equals(""))
+							currentinst = new ParsedInitialization(typei, name, value);
+						else
+							errors.add("JSON format error: missing information for initialization instruction");
+						break;
+					}
+					case "uml.return" : {//nessun controllo, il return può essere anche implicito;
+						String value = (values.has("value")?values.getString("value"):null);
+						currentinst = new ParsedReturn(value);
+						break;
+					}
+					case "uml.while" : {
+						String condition = (values.has("condition") ? values.getString("condition") : "");;
+						if(!condition.equals(""))
+							currentinst = new ParsedWhile(condition, null);
+						else
+							errors.add("JSON format error: missing information for while instruction");
+						break;
+					}
+					default : errors.add("JSON fromat error: type of instruction is not correct");
+				}
+			
+			
+			
+			if(!instruction.has("embeds")){
+				return currentinst;
 			}
-			case "uml.for" : {
-				String init = (values.has("init")?values.getString("init"):null);
-				String condition = (values.has("condition")?values.getString("condition"):null);
-				String step = (values.has("step")?values.getString("step"):null);
-				//da vedere se init e step sono stringhe oppure ParsedInit/ParsedAssign
-				currentinst = new ParsedFor(null, condition, null, null);	
-				break;
-			}
-			case "uml.if" : {
-				String condition = (values.has("condition")?values.getString("condition"):null);
-				currentinst = new ParsedIf(condition, null, null);
-				break;
-			}
-			case "uml.initialization" : {
-				String value = (values.has("value")?values.getString("value"):null);
-				currentinst = new ParsedInitialization(values.getString("type"), values.getString("name"), value);
-				break;
-			}
-			case "uml.return" : {
-				String value = (values.has("value")?values.getString("value"):null);
-				currentinst = new ParsedReturn(value);
-				break;
-			}
-			case "uml.while" : {
-				String condition = (values.has("condition")?values.getString("condition"):null);
-				currentinst = new ParsedWhile(condition, null);
-				break;
-			}
-			default : throw new Exception();
-		}
-		
-		if(!instruction.has("embeds")){
-			return currentinst;
-		}
-		//se ha figli
-		JSONArray embeds = instruction.getJSONArray("embeds");
-		int embedslength = embeds.length();
-		List<ParsedInstruction> pi = new ArrayList<ParsedInstruction>();
-		for(int y = 0; y<embedslength; y++){ //ciclo i figli
-			String id = embeds.getString(y);
-			JSONObject otherinstruction = null;
-			boolean found = false;
-			int found_at = 0;
-			for(int f = i; f<jblocks.length()&&!found; f++){
-				if(jblocks.getJSONObject(f).getString("id").equals(id)){
-					otherinstruction = jblocks.getJSONObject(f);
-					found = true;
-					found_at = f;
-					pi.add(recursiveBuilder(otherinstruction, jblocks, found_at+1));
+			
+			//se invece ha figli
+			JSONArray embeds = instruction.getJSONArray("embeds");//esiste sicuramente
+			int embedslength = embeds.length();
+			List<ParsedInstruction> pi = new ArrayList<ParsedInstruction>();
+			for(int y = 0; y<embedslength; y++){ //ciclo i figli, se entro in embeds vuol dire che almeno una stringa c'è!
+				String id = embeds.getString(y);
+				JSONObject otherinstruction = null;
+				boolean found = false;
+				int found_at = 0;
+				for(int f = i; f<jblocks.length()&&!found; f++){
+					JSONObject block = jblocks.getJSONObject(f);
+					String idblock = "";
+					if(block.has("id"))
+						idblock = block.getString("id");
+					else
+						errors.add("JSON format error: cannot find id in block");
+					
+					if(idblock.equals(id)){
+						otherinstruction = block;
+						found = true;
+						found_at = f;
+						pi.add(recursiveBuilder(otherinstruction, jblocks, found_at+1));
+					}
 				}
 			}
+			currentinst.setBody(pi); //chiamata polimorfa
+		  }//fine if esterno che controlla la presenza di type e values dell'istruzione
+			
+			//se non ci sono le informazioni necessarie per creare l'istruzione, essa risulta vuota.
+		  	return currentinst;
 		}
-		currentinst.setBody(pi); //chiamata polimorfa
-		return currentinst;
-	}
 	public void saveToDisk(String IdReq){};
 }
