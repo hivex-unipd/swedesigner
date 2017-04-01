@@ -125,7 +125,7 @@ public class Parser {
 					JSONArray params = (currentmeth.has("parameters")?currentmeth.getJSONArray("parameters"):new JSONArray());
 					List<ParsedAttribute> args = new ArrayList<ParsedAttribute>();
 					
-					for(int p=0; p<args.size(); p++){
+					for(int p=0; p<params.length(); p++){
 						String arginfo = params.getString(p);
 						if(arginfo.contains(":")){
 							String[] infos = arginfo.split(":");
