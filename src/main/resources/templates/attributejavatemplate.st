@@ -1,1 +1,1 @@
-attributejavatemplate(att) ::= "<att.type> <att.name>"
+attributejavatemplate(att) ::= "<if(att.isFinal)>final <endif><att.type> <att.name>"

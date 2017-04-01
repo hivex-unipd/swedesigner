@@ -1,16 +1,18 @@
 package server.project;
 
+import java.util.List;
+
 import org.stringtemplate.v4.ST;
 
 import server.template.Template;
 
 public class ParsedFor extends ParsedInstruction {
-	private ParsedInitialization init;
+	private String init;
 	private String condition;
-	private ParsedAssignment step;
-	private ParsedInstruction[] body;
+	private String step;
+	private List<ParsedInstruction> body;
 	
-	public ParsedFor(ParsedInitialization init, String condition, ParsedAssignment step, ParsedInstruction[] body){
+	public ParsedFor(String init, String condition, String step, List<ParsedInstruction> body){
 		this.init = init;
 		this.condition = condition;
 		this.step = step;
@@ -22,8 +24,8 @@ public class ParsedFor extends ParsedInstruction {
 		ST template = t.getForTemplate();
 		String body_string ="";
 		if(body!=null){
-			for(int i=0; i<body.length; i++){
-			body_string += body[i].renderTemplate(t);
+			for(int i=0; i<body.size(); i++){
+			body_string += body.get(i).renderTemplate(t);
 			}
 		}
 		
@@ -32,7 +34,7 @@ public class ParsedFor extends ParsedInstruction {
 		return template.render();
 		}
 
-	public ParsedInstruction getInit() {
+	public String getInit() {
 		return init;
 	}
 
@@ -41,15 +43,15 @@ public class ParsedFor extends ParsedInstruction {
 	}
 
 
-	public ParsedAssignment getStep() {
+	public String getStep() {
 		return step;
 	}
 
-	public ParsedInstruction[] getBody() {
+	public List<ParsedInstruction> getBody() {
 		return body;
 	}
 	
-	public void setBody(ParsedInstruction[] pi){
+	public void setBody(List<ParsedInstruction> pi){
 		this.body = pi;
 	} 
 
