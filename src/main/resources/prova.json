@@ -16,7 +16,7 @@
                      {
                         "id":"bambi",
                         "static":"false",
-                        "varname":"first",
+                        "varname":"FIRST_VARIABLE",
                         "vartype":"int",
                         "varvisib":"private",
                         "varvaldef":"0"
@@ -24,7 +24,7 @@
                      {
                         "id":"bambi2",
                         "static":"false",
-                        "varname":"second",
+                        "varname":"second-variable",
                         "vartype":"int",
                         "varvisib":"private",
                         "varvaldef":"0"
@@ -39,7 +39,7 @@
                         "return-type":"void",
                         "id":"1234",
                         "parameters":[
-                           "param1:int",
+                           "PARAM-1:int",
                            "param2:int"
                         ]
                      },
@@ -51,7 +51,7 @@
                         "return-type":"void",
                         "id":"1235",
                         "parameters":[
-                           "param1:int",
+                           "PARAM_1:int",
                            "param2:int"
                         ]
                      }

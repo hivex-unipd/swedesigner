@@ -111,10 +111,10 @@ public class Parser {
 					
 					String varname = "";
 					if(currentattr.has("varname"))
-						vartype = currentattr.getString("varname");
+						varname = currentattr.getString("varname");
 					else
 						errors.add("Cannot find name of attribute");
-						
+
 					attributes.add(new ParsedAttribute(isstatic, visibility, vartype, varname, varvaldef));
 				}
 				
