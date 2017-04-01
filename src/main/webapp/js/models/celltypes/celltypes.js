@@ -1102,6 +1102,10 @@ define([
             return this.get('keyvalues');
         },
 
+        getValues:function(){
+            return this.get('keyvalues');
+        },
+
 
         setOffsetY: function (a) {
             this.offsetY = a;

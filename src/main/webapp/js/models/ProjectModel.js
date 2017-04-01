@@ -8,7 +8,7 @@ define([
     'joint',
     'collection/DiagramsCollection',
     'models/celltypes/celltypes'
-],function ($, _, Backbone, joint, DiagramsCollection) {
+],function ($, _, Backbone, joint, DiagramsCollection,celltypes) {
 
     var ProjectModel = Backbone.Model.extend({
 
@@ -90,7 +90,7 @@ define([
         },
         initialize: function(){
 
-            this.graph = new joint.dia.Graph();
+            this.graph = new joint.dia.Graph({}, { cellNamespace: Swedesigner.client.model.celltypes });
 
             console.log(this.graph);
             //var a = new joint.shapes.uml.Class();

@@ -42,7 +42,7 @@ define([
         registerCells: function(diag){
 
             for (var property in celltypes[diag]) {
-                if (joint.shapes.uml.hasOwnProperty(property) && property.startsWith("Hx")) {
+                if (celltypes[diag].hasOwnProperty(property) && property.startsWith("Hx")) {
                     console.log(property);
                     this.str.push(property);
                 }
