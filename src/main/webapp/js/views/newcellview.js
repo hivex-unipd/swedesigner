@@ -59,7 +59,7 @@ define([
             console.log(this.model.str);
             for (var p in this.model.str) {
                console.log(p);
-                this.str.push('<button id="' + this.model.str[p] + '"" class="newcompbt mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect mdl-button--colored mdl-color-text--white">' + this.model.str[p] + '</button>');
+                this.str.push('<button id="' + this.model.str[p] + '"" class="newcompbt ">' + this.model.str[p] + '</button>');
                 console.log(this.str);
             }
             this.$el.html(_.each(this.str));

@@ -146,7 +146,7 @@ define([
             // idee per il binding a due vie: salvarsi in un array inputs i vari input e in qualche modo confirmedit si prende
             // solo quello che gli serve... mi sembra comunque terribilmente inefficiente... che facciamo?
             // bb
-            this.delegateEvents(_.extend(this.events, {'keypress .edit': 'confirmEdit', 'click .add': 'execmod'}));
+            this.delegateEvents(_.extend(this.events, {'keypress .edit': 'confirmEdit', 'change .edit': 'confirmEdit', 'click .add': 'execmod'}));
 
 
             return this;
@@ -196,7 +196,7 @@ define([
          * @private
          */
         confirmEdit: function (e) {
-            if (e.which == 13) {
+            if ((e.type=="keypress" && e.which == 13) || e.type=="change") {
                 // fai controllo di dati corretti e aggiorna il graph
                 //this.model.set("",this.$('#'));
                 console.log(e.target.id);
