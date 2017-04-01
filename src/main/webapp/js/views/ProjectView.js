@@ -292,7 +292,7 @@ define([
                 }
             }
 
-            
+
 
             console.log(currentIndex);
             console.log(nextIndex);
@@ -364,6 +364,34 @@ define([
                             prevIndex--;
                         }
             */
+
+
+            // se le celle non sono allo stesso livello blabla
+            if(g[prevIndex+1].get("parent") != g[currentIndex].get("parent"))
+            {
+                console.log("i seguenti sono diversi");
+                console.log(g[prevIndex+1].get("parent"));
+                console.log(">>> ");
+                console.log(g[currentIndex].get("parent"));
+
+                while(prevIndex+1 > 0
+                && g[prevIndex+1].get("parent") != g[currentIndex].get("parent")
+                && !(g[currentIndex].get("parent") == g[prevIndex+1].id)
+                && this.model.getCommonAncestor(g[currentIndex],g[prevIndex+1])
+                    )
+                    //&& (g[nextIndex].get("parent")))
+                {
+                    console.log("questo era diverso");
+                    console.log(g[prevIndex+1].get("parent"));
+                    console.log(g[prevIndex+1].get("keyvalues").comment);
+                    //console.log(g[currentIndex].get("parent"));
+
+                    prevIndex--;
+                }
+            }
+
+
+
             move(g, currentIndex, prevIndex + 1);
             //console.log("sposto ");
             //console.log(currentIndex);
