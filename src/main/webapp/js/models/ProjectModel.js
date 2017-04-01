@@ -124,7 +124,7 @@ define([
                     methods: ['+ setAttr(): bool']
                 });
             } else {
-                newClass = new joint.shapes.uml.ClassDiagramElement({
+                newClass = new joint.shapes.uml.HxClass({
                     position: newPosition,
                     size: newSize,
                     name: 'MyClass3',

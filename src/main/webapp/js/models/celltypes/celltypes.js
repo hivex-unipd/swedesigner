@@ -360,20 +360,22 @@ define([
 
     joint.shapes.uml.ClassDiagramElement = joint.shapes.basic.Generic.extend({
 
-        markup: [
+        markup: '',
+/*        markup: [
             '<g class="rotatable">',
             '<g class="">',
             '<rect class="uml-class-name-rect"/><rect class="uml-class-attrs-rect toggleattributes"/><rect class="uml-class-divider-rect"/><rect class="uml-class-methods-rect togglemethods"/>',
             '</g>',
             '<text class="uml-class-name-text"/><text class="uml-class-attrs-text toggleattributes"/><text class="uml-class-methods-text togglemethods"/>',
             '</g>'
-        ].join(''),
+        ].join(''),*/
 
         defaults: _.defaultsDeep({
 
             type: 'uml.ClassDiagramElement',
 
-            attrs: {
+            attrs: {},
+/*            attrs: {
                 rect: {'width': 200},
 
                 '.uml-class-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
@@ -405,8 +407,7 @@ define([
                     'ref': '.uml-class-methods-rect', 'ref-y': 5, 'ref-x': 5,
                     'fill': '#222222', 'font-size': 12, 'font-family': 'monospace'
                 }
-
-            },
+            },*/
 
             name: [],
             attributes: [],
@@ -414,8 +415,8 @@ define([
             attributesexpanded: false,
             methodsexpanded: false,
 
-
-            keyvalues: {
+            keyvalues: {}
+/*            keyvalues: {
                 name: "classedefault",
                 attributes: [
                     {name: "variabileDefault", value: "valoreDefault"},
@@ -425,8 +426,7 @@ define([
                     {name: "metodoDefault", visibility: "public", value: "id univoco blabla",
                         parameters:["param1:int"]}
                 ]
-
-            }
+            }*/
 
             // l'idea è che ogni cella abbia sto coso che contiene tutte le cose che vogliamo editare
             // quindi attributes e methods dovrebbero stare qua dentro
@@ -441,7 +441,6 @@ define([
                 this.trigger('uml-update');
             }, this);
             //this.on('cell:pointerup', function (cellView, evt, x, y) {        this.updateRectangles(); });
-
 
             this.updateRectangles();
 
@@ -469,18 +468,22 @@ define([
             this.updateRectangles();
             this.trigger("uml-update");
         },
-        executemethod:function(met){
+
+        executemethod: function (met) {
             return this[met] && this[met].apply(this, [].slice.call(arguments, 1));
         },
+
         addmethod: function() {
             this.get('keyvalues').methods.push({name:"",value:"",parameters:[]});
             console.log("added");
             console.log(this.get('keyvalues'));
         },
-        addattribute:function(){
+
+        addattribute: function () {
             this.get('keyvalues').attributes.push({name:"",type:""});
         },
-        addparameter:function(ind){
+
+        addparameter: function (ind) {
 
 
             this.get('keyvalues').methods[ind].parameters.push("");
@@ -488,7 +491,7 @@ define([
 
         updateRectangles: function () {
 
-            var attrs = this.get('attrs');
+            //var attrs = this.get('attrs');
 
             /*var rects = [
                 {type: 'name', text: this.getClassName()},
@@ -497,7 +500,6 @@ define([
             ];*/
 
             var offsetY = 0;
-
 
             // this.set('size.height', (this.get('attributes') + this.get('methods')) * 20);
 
@@ -532,7 +534,22 @@ define([
 
 //console.log( this.get('attributesexpanded'));
 
-            rects = [
+            // così gestisce sottoclassi che non abbiano attrs:
+            var rects = [];
+            rects.push({
+                type: 'name',
+                text: this.get('keyvalues').name
+            });
+            if (this.get('keyvalues').attributes != undefined) {
+                rects.push({
+                    type: 'attrs', text: this.get('attributesexpanded') ? this.get('keyvalues').attributes : "Attributes (click to expand)"
+                });
+            }
+            rects.push({
+                type: 'methods', text: this.get('methodsexpanded') ? this.get('keyvalues').methods : "Methods (click to expand)"
+            });
+
+/*            rects = [
                 {type: 'name', text: this.get('keyvalues').name},
                 {
 
@@ -543,7 +560,7 @@ define([
                     type: 'methods',
                     text: this.get('methodsexpanded') ? this.get('keyvalues').methods : "Methods (click to expand)"
                 }
-            ];
+            ];*/
             console.log(this.get('keyvalues')['attributes']);
 
             _.each(rects, function (rect) {
@@ -567,10 +584,7 @@ define([
                 offsetY += rectHeight + 1;
 
             });
-
         }
-
-
     });
 
 
@@ -588,27 +602,122 @@ define([
             ///this.listenTo(this.model, 'click', toggl);
 
         },
+
         events: {
             'mousedown .togglemethods': 'togglemethods',
             'mousedown .toggleattributes': 'toggleattributes',
         },
-        toggleattributes: function () {
 
+        toggleattributes: function () {
             this.model.set("attributesexpanded", !this.model.get("attributesexpanded"));
             this.model.updateRectangles();
             this.update(); // ecco cosa dovevi fare, le cose funzionavano già
 
         },
-        togglemethods: function () {
 
+        togglemethods: function () {
             this.model.set("methodsexpanded", !this.model.get("methodsexpanded"));
             this.model.updateRectangles();
             this.update(); // ecco cosa dovevi fare, le cose funzionavano già
+        }
+    });
 
-        },
 
 
 
+
+    joint.shapes.uml.HxClass = joint.shapes.basic.Generic.extend({
+
+        markup: [
+            '<g class="rotatable">',
+            '<g class="">',
+            '<rect class="uml-class-name-rect"/><rect class="uml-class-attrs-rect toggleattributes"/><rect class="uml-class-divider-rect"/><rect class="uml-class-methods-rect togglemethods"/>',
+            '</g>',
+            '<text class="uml-class-name-text"/><text class="uml-class-attrs-text toggleattributes"/><text class="uml-class-methods-text togglemethods"/>',
+            '</g>'
+        ].join(''),
+
+        defaults: _.defaultsDeep({
+
+            type: 'uml.HxClass',
+
+            attrs: {
+                rect: {'width': 200},
+
+                '.uml-class-name-rect': {
+                    'stroke': 'black',
+                    'stroke-width': 0,
+                    'fill': '#4db6ac'
+                },
+                '.uml-class-attrs-rect': {
+                    'stroke': 'black',
+                    'stroke-width': 0,
+                    'fill': '#ffffff',
+                    'expanded': 'false'
+                },
+                '.uml-class-methods-rect': {
+                    'stroke': 'black',
+                    'stroke-width': 0,
+                    'fill': '#eeeeee',
+                    'expanded': 'false'
+                },
+                '.uml-class-divider-rect': {
+                    'stroke': 'black',
+                    'stroke-width': 1,
+                    'fill': 'black'
+                },
+
+                '.uml-class-name-text': {
+                    'ref': '.uml-class-name-rect',
+                    'ref-y': .5,
+                    'ref-x': .5,
+                    'text-anchor': 'middle',
+                    'y-alignment': 'middle',
+                    'fill': 'white',
+                    'font-size': 16,
+                    'font-family': 'Roboto'
+                },
+                '.uml-class-attrs-text': {
+                    'ref': '.uml-class-attrs-rect',
+                    'ref-y': 5,
+                    'ref-x': 5,
+                    'fill': '#222222',
+                    'font-size': 12,
+                    'font-family': 'monospace'
+                },
+                '.uml-class-methods-text': {
+                    'ref': '.uml-class-methods-rect',
+                    'ref-y': 5,
+                    'ref-x': 5,
+                    'fill': '#222222',
+                    'font-size': 12,
+                    'font-family': 'monospace'
+                }
+            },
+
+            name: [],
+            attributes: [],
+            methods: [],
+            attributesexpanded: false,
+            methodsexpanded: false,
+
+
+            keyvalues: {
+                name: "classedefault",
+                attributes: [
+                    {name: "variabileDefault", value: "valoreDefault"},
+                    {name: "variabileDefault2", value: "valoreDefault2"}
+                ],
+                methods: [
+                    {name: "metodoDefault", visibility: "public", value: "id univoco blabla",
+                        parameters:["param1:int"]}
+                ]
+            }
+            // l'idea è che ogni cella abbia sto coso che contiene tutte le cose che vogliamo editare
+            // quindi attributes e methods dovrebbero stare qua dentro
+
+
+        }, joint.shapes.basic.Generic.prototype.defaults)
     });
 
 
