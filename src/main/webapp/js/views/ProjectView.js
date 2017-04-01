@@ -78,6 +78,7 @@ define([
                 }),
 
                 selectedCell: null,
+                isHighlighted: false,
 
                 interactive: function (cellView) {
                     if (cellView.model instanceof joint.dia.Link) {
@@ -206,7 +207,11 @@ define([
     };
 
 
+
+
+
     var currentIndex = g.indexOf(curr);//curr.get("index"); // è necessario cercare a che indice vorrebbe mettere la cosa
+
 
 
     //console.log(g);
@@ -218,6 +223,14 @@ define([
     var nextIndex = currentIndex + 1;
     var prevIndex = currentIndex - 1;
 
+                if(!this.isHighlighted)
+                {
+                    console.log("not high");
+                    while(nextIndex<g.length-1 && g[nextIndex+1].get("parent")){ nextIndex++; }
+                    while(prevIndex>0 && g[prevIndex].get("parent")){prevIndex--;}
+                    console.log(nextIndex);
+                    console.log(prevIndex);
+                }
 
     while (nextIndex <= g.length - 1 && g[nextIndex].getAncestors().indexOf(g[currentIndex]) != -1) {
         //console.log(g[currentIndex]);
@@ -365,7 +378,7 @@ define([
                         }
             */
 
-
+/*
             // se le celle non sono allo stesso livello blabla
             if(g[prevIndex+1].get("parent") != g[currentIndex].get("parent"))
             {
@@ -388,7 +401,7 @@ define([
 
                     prevIndex--;
                 }
-            }
+            }*/
 
 
 
@@ -534,10 +547,15 @@ debug();
                     {
                         cellViewBelow = cellViewsBelow[index];
                         cellViewBelow.highlight();
+                        this.isHighlighted = true;
 
                         //console.log("view highlight");
                        // console.log(cellViewBelow);
 
+                    }
+                    else
+                    {
+                        this.isHighlighted= false;
                     }
 
                 }
