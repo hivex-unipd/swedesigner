@@ -5,12 +5,12 @@ import org.stringtemplate.v4.ST;
 import server.template.Template;
 
 public class ParsedFor extends ParsedInstruction {
-	private ParsedInitialization init;
+	private String init;
 	private String condition;
-	private ParsedAssignment step;
+	private String step;
 	private ParsedInstruction[] body;
 	
-	public ParsedFor(ParsedInitialization init, String condition, ParsedAssignment step, ParsedInstruction[] body){
+	public ParsedFor(String init, String condition, String step, ParsedInstruction[] body){
 		this.init = init;
 		this.condition = condition;
 		this.step = step;
@@ -32,7 +32,7 @@ public class ParsedFor extends ParsedInstruction {
 		return template.render();
 		}
 
-	public ParsedInstruction getInit() {
+	public String getInit() {
 		return init;
 	}
 
@@ -41,7 +41,7 @@ public class ParsedFor extends ParsedInstruction {
 	}
 
 
-	public ParsedAssignment getStep() {
+	public String getStep() {
 		return step;
 	}
 
