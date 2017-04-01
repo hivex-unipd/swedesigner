@@ -13,9 +13,9 @@ public class ParsedClass extends ParsedType {
 	private List<String> extended = new ArrayList<String>();
 	private List<String> implemented = new ArrayList<String>();
 	private List<ParsedAttribute> attributes = new ArrayList<ParsedAttribute>();
-	private ParsedMethod[] methods;
+	private List<ParsedMethod> methods;
 	
-	public ParsedClass(String name, String visibility, List<ParsedAttribute> attributes, ParsedMethod[] methods){
+	public ParsedClass(String name, String visibility, List<ParsedAttribute> attributes, List<ParsedMethod> methods){
 		this.name = name;
 		this.visibility = visibility;
 		this.attributes = attributes;
@@ -28,14 +28,14 @@ public class ParsedClass extends ParsedType {
 	 public List<String> getExtended(){return extended;}
 	 public List<String> getImplemented(){return implemented;}
 	 public List<ParsedAttribute> getAttributes(){return attributes;}
-	 public ParsedMethod[] getMethods(){return methods;}
+	 public List<ParsedMethod> getMethods(){return methods;}
 	
 	public String renderTemplate(Template t) {
 		ST template = t.getClassTemplate();
 		template.add("class", this);
 		String methods_string = "";
-		for(int i=0; i<methods.length; i++){
-			methods_string += methods[i].renderTemplate(t);
+		for(int i=0; i<methods.size(); i++){
+			methods_string += methods.get(i).renderTemplate(t);
 		}
 		template.add("methods", methods_string);
 		return template.render();

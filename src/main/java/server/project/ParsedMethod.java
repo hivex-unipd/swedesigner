@@ -12,11 +12,11 @@ public class ParsedMethod implements ParsedElement {
 	private boolean is_abstract;
 	private String return_type;
 	private String name;
-	private ParsedAttribute[] args;
+	private List<ParsedAttribute> args;
 	private List<ParsedInstruction> body;
 	
 	//costruttore
-	public ParsedMethod(String visibility, boolean is_static, boolean is_abstract, String return_type, String name, ParsedAttribute[] args, List<ParsedInstruction> body){
+	public ParsedMethod(String visibility, boolean is_static, boolean is_abstract, String return_type, String name, List<ParsedAttribute> args, List<ParsedInstruction> body){
 		this.visibility = visibility;
 		this.is_static = is_static;
 		this.is_abstract = is_abstract;
@@ -57,7 +57,7 @@ public class ParsedMethod implements ParsedElement {
 	public String getName(){
 		return name;
 	}
-	public ParsedAttribute[] getArgs() {
+	public List<ParsedAttribute> getArgs() {
 		return args;
 	}
 	
