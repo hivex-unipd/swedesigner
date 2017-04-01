@@ -16,7 +16,7 @@ public class ParsedClassTest {
 	@Test
 	public void classContainsBasicInfo() {
 		List<ParsedAttribute> attributes = new ArrayList<ParsedAttribute>();
-		ParsedMethod[] methods = {};
+		List<ParsedMethod> methods = new ArrayList<ParsedMethod>();
 		ParsedClass instruction = new ParsedClass("MyClass", "public", attributes, methods);
 		JavaTemplate template = new JavaTemplate();
 		String result = instruction.renderTemplate(template);

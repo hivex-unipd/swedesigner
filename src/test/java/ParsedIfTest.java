@@ -5,7 +5,6 @@ import static org.hamcrest.CoreMatchers.*;
 import org.junit.Test;
 
 import server.project.ParsedIf;
-import server.project.ParsedAssignment;
 import server.project.ParsedInstruction;
 import server.template.java.JavaTemplate;
 
@@ -16,8 +15,8 @@ public class ParsedIfTest {
 	@Test
 	public void ifContainsBasicInfo() {
 		String condition = "x == 10";
-		ParsedInstruction[] body = {};
-		ParsedInstruction[] elseBody = {};
+		List<ParsedInstruction> body = new ArrayList<ParsedInstruction>();
+		List<ParsedInstruction> elseBody = new ArrayList<ParsedInstruction>();
 		ParsedIf test = new ParsedIf(condition, body, elseBody);
 		JavaTemplate template = new JavaTemplate();
 		String result = test.renderTemplate(template);
