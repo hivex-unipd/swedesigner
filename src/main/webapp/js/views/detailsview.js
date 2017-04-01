@@ -136,7 +136,7 @@ define([
             console.log(c);
 
 
-            output = this.mytemplate(c.attributes.keyvalues);
+            output = this.mytemplate(c.getValues());
 
             // this.$el.html(this.mytemplate({title: "titolo molto divino", val:"valore molto animale"}));
             this.$el.html(output);

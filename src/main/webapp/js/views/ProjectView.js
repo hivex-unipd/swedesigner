@@ -245,7 +245,7 @@ define([
 
                     for(j=0;j<g.length;j++)
                     {
-                        x += "|" + g[j].get("keyvalues").comment[0] + "|";
+                        x += "|" + g[j].get("values").comment[0] + "|";
                     }
                     console.log(x);
                 };
@@ -298,7 +298,7 @@ define([
                 {
                     console.log("questo era diverso");
                     console.log(g[nextIndex].get("parent"));
-                    console.log(g[nextIndex].get("keyvalues").comment);
+                    console.log(g[nextIndex].get("values").comment);
                     //console.log(g[currentIndex].get("parent"));
 
                     nextIndex++;
