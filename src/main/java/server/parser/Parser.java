@@ -119,17 +119,17 @@ public class Parser {
 				}
 				
 				//creo array di metodi Parsed
-				ParsedMethod[] methods = new ParsedMethod[jmethods.length()];
+				List<ParsedMethod> methods = new ArrayList<ParsedMethod>();
 				for(int r = 0; r<jmethods.length();r++){
 					JSONObject currentmeth = jmethods.getJSONObject(r);
 					JSONArray params = (currentmeth.has("parameters")?currentmeth.getJSONArray("parameters"):new JSONArray());
-					ParsedAttribute[] args = (params.length()>0?new ParsedAttribute[params.length()]:new ParsedAttribute[0]);
+					List<ParsedAttribute> args = new ArrayList<ParsedAttribute>();
 					
-					for(int p=0; p<args.length; p++){
+					for(int p=0; p<args.size(); p++){
 						String arginfo = params.getString(p);
 						if(arginfo.contains(":")){
 							String[] infos = arginfo.split(":");
-							args[p] = new ParsedAttribute(false, null, infos[1], infos[0], null);
+							args.add(new ParsedAttribute(false, null, infos[1], infos[0], null));
 						}
 						else
 							errors.add("JSON format error: parameter "+(p+1)+" of method");
@@ -150,7 +150,7 @@ public class Parser {
 					else
 						errors.add("Name not found in method");
 					
-					methods[r] = new ParsedMethod(visibility , isstatic, isabstract, returntype, name, args, meth.get(currentmeth.getString("id")));
+					methods.add(new ParsedMethod(visibility , isstatic, isabstract, returntype, name, args, meth.get(currentmeth.getString("id"))));
 				}
 
 				//creo la parsedclass e la inserisco nell'array di classi
@@ -284,7 +284,7 @@ public class Parser {
 		//se ha figli
 		JSONArray embeds = instruction.getJSONArray("embeds");
 		int embedslength = embeds.length();
-		ParsedInstruction[] pi = new ParsedInstruction[embedslength];
+		List<ParsedInstruction> pi = new ArrayList<ParsedInstruction>();
 		for(int y = 0; y<embedslength; y++){ //ciclo i figli
 			String id = embeds.getString(y);
 			JSONObject otherinstruction = null;
@@ -295,7 +295,7 @@ public class Parser {
 					otherinstruction = jblocks.getJSONObject(f);
 					found = true;
 					found_at = f;
-					pi[y] = recursiveBuilder(otherinstruction, jblocks, found_at+1);
+					pi.add(recursiveBuilder(otherinstruction, jblocks, found_at+1));
 				}
 			}
 		}

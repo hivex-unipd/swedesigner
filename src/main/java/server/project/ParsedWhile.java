@@ -1,14 +1,16 @@
 package server.project;
 
+import java.util.List;
+
 import org.stringtemplate.v4.ST;
 
 import server.template.Template;
 
 public class ParsedWhile extends ParsedInstruction {
 	private String condition;
-	private ParsedInstruction[] body;
+	private List<ParsedInstruction> body;
 	
-	public ParsedWhile(String condition, ParsedInstruction[] body){
+	public ParsedWhile(String condition, List<ParsedInstruction> body){
 		this.condition = condition;
 		this.body = body;
 	}
@@ -18,8 +20,8 @@ public class ParsedWhile extends ParsedInstruction {
 		template.add("while", this);
 		String body_string = "";
 		if(body!=null){
-			for(int i=0; i<body.length; i++){
-			body_string+=body[i].renderTemplate(t);
+			for(int i=0; i<body.size(); i++){
+			body_string+=body.get(i).renderTemplate(t);
 			}
 		}
 		
@@ -31,11 +33,11 @@ public class ParsedWhile extends ParsedInstruction {
 		return condition;
 	}
 
-	public ParsedInstruction[] getBody() {
+	public List<ParsedInstruction> getBody() {
 		return body;
 	}
 	
-	public void setBody(ParsedInstruction[] pi){
+	public void setBody(List<ParsedInstruction> pi){
 		this.body = pi;
 	} 
 

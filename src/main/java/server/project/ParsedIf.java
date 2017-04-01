@@ -1,15 +1,17 @@
 package server.project;
 
+import java.util.List;
+
 import org.stringtemplate.v4.ST;
 
 import server.template.Template;
 
 public class ParsedIf extends ParsedInstruction {
 	private String condition;
-	private ParsedInstruction[] ifbody;
-	private ParsedInstruction[] elsebody;
+	private List<ParsedInstruction> ifbody;
+	private List<ParsedInstruction> elsebody;
 	
-	public ParsedIf(String condition, ParsedInstruction[] ifbody, ParsedInstruction[] elsebody){
+	public ParsedIf(String condition, List<ParsedInstruction> ifbody, List<ParsedInstruction> elsebody){
 		this.condition = condition;
 		this.ifbody = ifbody;
 		this.elsebody = elsebody;
@@ -19,15 +21,15 @@ public class ParsedIf extends ParsedInstruction {
 		ST template = t.getIfTemplate();
 		String ifbody_string ="";
 		if(ifbody!=null){
-			for(int i=0; i<ifbody.length; i++){
-			ifbody_string += ifbody[i].renderTemplate(t);
+			for(int i=0; i<ifbody.size(); i++){
+			ifbody_string += ifbody.get(i).renderTemplate(t);
 			}
 		}
 		
 		String elsebody_string ="";
 		if(elsebody!=null){
-			for(int i=0; i<elsebody.length; i++){
-		elsebody_string += elsebody[i].renderTemplate(t);
+			for(int i=0; i<elsebody.size(); i++){
+		elsebody_string += elsebody.get(i).renderTemplate(t);
 			}
 		}
 		template.add("if1", this);
@@ -40,15 +42,15 @@ public class ParsedIf extends ParsedInstruction {
 		return condition;
 	}
 
-	public ParsedInstruction[] getIfbody() {
+	public List<ParsedInstruction> getIfbody() {
 		return ifbody;
 	}
 
-	public ParsedInstruction[] getElsebody() {
+	public List<ParsedInstruction> getElsebody() {
 		return elsebody;
 	}
 	
-	public void setBody(ParsedInstruction[] pi){
+	public void setBody(List<ParsedInstruction> pi){
 		this.ifbody = pi;
 	} 
 
