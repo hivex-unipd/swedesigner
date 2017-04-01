@@ -193,8 +193,6 @@ define([
                 //console.log("questa è la cella selezionata: ");
                 //console.log(curr);
 
-    if(changed) {
-
 
     var move = function (a, old_index, new_index) {
         if (new_index >= a.length) {
@@ -218,6 +216,7 @@ define([
 
 
     var nextIndex = currentIndex + 1;
+    var prevIndex = currentIndex - 1;
 
 
     while (nextIndex <= g.length - 1 && g[nextIndex].getAncestors().indexOf(g[currentIndex]) != -1) {
@@ -228,18 +227,109 @@ define([
     }
 
 
+                var debug = function () {
+                    var x = "";
+
+                    for(j=0;j<g.length;j++)
+                    {
+                        x += "|" + g[j].get("keyvalues").comment[0] + "|";
+                    }
+                    console.log(x);
+                };
+
     if (nextIndex <= g.length - 1 && curr.get("position").y > g[nextIndex].get("position").y) {
         while (nextIndex <= g.length - 1 && curr.get("position").y > g[nextIndex].get("position").y) {
             nextIndex++;
         }
+
+       // if(nextIndex >= g.length) { nextIndex = g.length-1;}
         if (nextIndex != currentIndex + 1) {
-            var figli = g[currentIndex].getEmbeddedCells();
-            move(g, currentIndex, nextIndex - 1);
+            var figli = g[currentIndex].getEmbeddedCells({deep:true});
+            console.log("figli");
+            console.log(figli);
+
+            //var n = g.getCommonAncestor([g[currentIndex], g[nextIndex]]);
+            // passo tutti i (eventuali) figli del prossimo
+
+
+           // console.log(this.model.getCommonAncestor(g[currentIndex], g[nextIndex-1]).get("keyvalues").comment);
+
+            // console.log(g[nextIndex-1].get("keyvalues").comment);
+
+           // console.log(g[nextIndex-1].get("embeds"));
+
+
+            //se le due celle prese non sono allo stesso livello, allora percorri la nextindex fino a trovare una allo stesso livello
+            /// oppure trovare il padre
+
+            console.log("questo è g");
+            console.log(g);
+
+            //console.log(g[nextIndex].get("keyvalues").comment);
+            //console.log(g[currentIndex].get("keyvalues").comment);
+            //console.log(g[nextIndex].get("parent"));
+            //console.log(g[currentIndex].get("parent"));
+            if(nextIndex != g.length && g[nextIndex].get("parent") != g[currentIndex].get("parent"))
+            {
+                console.log("i seguenti sono diversi");
+                console.log(g[nextIndex].get("parent"));
+                console.log(">>> ");
+                console.log(g[currentIndex].get("parent"));
+
+                while(nextIndex <= g.length - 1
+                && g[nextIndex].get("parent") != g[currentIndex].get("parent")
+                && !(g[currentIndex].get("parent") == g[nextIndex].id)
+                 && this.model.getCommonAncestor(g[currentIndex],g[nextIndex])
+                    )
+                //&& (g[nextIndex].get("parent")))
+                {
+                    console.log("questo era diverso");
+                    console.log(g[nextIndex].get("parent"));
+                    console.log(g[nextIndex].get("keyvalues").comment);
+                    //console.log(g[currentIndex].get("parent"));
+
+                    nextIndex++;
+                }
+            }
+
+            
+
+            console.log(currentIndex);
+            console.log(nextIndex);
+
+
+
+
+
+
+            /*
+            while(g[nextIndex-1].get("embeds") && this.model.getCommonAncestor(g[currentIndex], g[nextIndex-1]) && nextIndex< g.length )
+            {
+                console.log(this.model.getCommonAncestor(g[currentIndex], g[nextIndex-1]).get("keyvalues").comment);
+
+                nextIndex++;
+                console.log("+");
+            }*/
+            /*console.log(g[nextIndex-1].getAncestors()[0]);
+            console.log(g[nextIndex-1].getAncestors()[0].get("keyvalues").comment);
+            console.log(g[currentIndex].getAncestors()[0].get("keyvalues").comment);
+            while(g[nextIndex].getAncestors()[0]!=g[currentIndex].getAncestors()[0] && nextIndex < g.length)
+            {
+                nextIndex++;
+                console.log("+");
+            }*/
+
+            debug();
+            //move(g, currentIndex, nextIndex - 1);
+
+          // debug();
             //console.log("sposto ");
             //console.log(currentIndex);
             //console.log(nextIndex-1);
-            for (i = 0; i < figli.length; i++) {
-                move(g, currentIndex, nextIndex - 1 + i);
+            console.log(figli.length);
+            for (i = 0; i <= figli.length; i++) {
+                move(g, currentIndex, nextIndex - 1);
+                debug();
                 //console.log("sposto ");
                 //console.log(currentIndex);
                 //console.log(nextIndex-1+i);
@@ -253,11 +343,10 @@ define([
 
 
     // controllo se la cella è andata in altro, oltre altri blocchi
-    var prevIndex = currentIndex - 1;
 
     //while(g[currentIndex] in g[nextIndex].getAncestors()) {nextIndex++;}
 
-    if (prevIndex >= 0 && curr.get("position").y < g[prevIndex].get("position").y) {
+    else if (prevIndex >= 0 && curr.get("position").y < g[prevIndex].get("position").y) {
         while (prevIndex >= 0 && curr.get("position").y < g[prevIndex].get("position").y) {
             //console.log(curr.get("position").y );
             // console.log(g[prevIndex].get("position").y);
@@ -266,14 +355,24 @@ define([
 
         }
         if (prevIndex != currentIndex - 1) {
-            var figli = g[currentIndex].getEmbeddedCells();
+            var figli = g[currentIndex].getEmbeddedCells({deep:true});
+            console.log(figli);
+
+            /*
+                        while(g[prevIndex].get("embeds") && this.model.getCommonAncestor(g[currentIndex], g[prevIndex]) && prevIndex > 0 )
+                        {
+                            prevIndex--;
+                        }
+            */
             move(g, currentIndex, prevIndex + 1);
             //console.log("sposto ");
             //console.log(currentIndex);
             //console.log(prevIndex+1);
+debug();
 
             for (i = 1; i <= figli.length; i++) {
                 move(g, currentIndex + i, prevIndex + i + 1);
+                debug();
                 //console.log("sposto ");
                 //console.log(currentIndex+i);
                 //console.log(prevIndex+1+i);
@@ -281,7 +380,7 @@ define([
             }
         }
 
-    }
+
 
     /*
      if(index+1<=g.length-1 && curr.get("position").y > g[index+1].get("position").y)
@@ -319,14 +418,7 @@ define([
 
     for(i=0;i<g.length;i++)
     {
-        var hidden = false;/*
-     _.each(g[i].getAncestors(), function (el) {
-     if(!el.get("expanded"))
-     {
-     hidden = true; return;
-     }
-     }*/
-
+        var hidden = false;
 
         g[i].getAncestors().every(function (el) {
             if(!el.get("expanded"))
@@ -351,10 +443,10 @@ define([
             }
 
         }
-        else
+        /*else
         {
             g[i].set("hidden", true);
-        }
+        }*/
 
     }
 
@@ -367,16 +459,10 @@ define([
 
         if(g[ii].get("type") == "uml.ActivityDiagramElement")
         {
-            if(false)//g[i].get("hidden"))
-            {
-                this.removeView(g[ii]);
-            }
-            else
-            {
-                g[ii].updateRectangles();
-                this.removeView(g[ii]);
-                this.renderView(g[ii]); // per qualche ragione è necessario..
-            }
+            g[ii].updateRectangles();
+            this.removeView(g[ii]);
+            this.renderView(g[ii]); // per qualche ragione è necessario..
+
         }
 
         else {
@@ -421,8 +507,8 @@ define([
                         cellViewBelow = cellViewsBelow[index];
                         cellViewBelow.highlight();
 
-                        console.log("view highlight");
-                        console.log(cellViewBelow);
+                        //console.log("view highlight");
+                       // console.log(cellViewBelow);
 
                     }
 
