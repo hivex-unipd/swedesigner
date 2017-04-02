@@ -10,7 +10,8 @@ define([
 
     /**
      * @classdesc `ProjectView` represents the drawing area.
-     * It can be the main class diagram or a specific method diagram.
+     * It can be the main class diagram or the activity diagram
+     * of a particular method.
      *
      * @module client.view
      * @name ProjectView
@@ -34,15 +35,15 @@ define([
         paper: {},
 
         /**
-         * Initializes `model` with a new `ProjectModel`;
-         * initializes `paper` with a new `joint.dia.Paper` object;
-         * links mouse events to the right actions
-         * [...]
+         * Initializes the view's `model` with a new `ProjectModel`;
+         * initializes the view's `paper` with a new `joint.dia.Paper` object;
+         * links mouse dragging events to the right callbacks.
          * @name ProjectView#initialize
          * @function
          */
         initialize: function () {
             this.model = ProjectModel;//new ProjectModel();
+
             this.paper = new joint.dia.Paper({
                 el: $('#paper'),
                 model: this.model.graph,
@@ -79,10 +80,9 @@ define([
 
                 interactive: function (cellView) {
                     if (cellView.model instanceof joint.dia.Link) {
-                        // Disable the default vertex add functionality on pointerdown.
+                        // Disable the default vertexAdd functionality on 'pointerdown' event.
                         return {vertexAdd: false};
                     }
-
 
                     return true;
                 }
@@ -98,25 +98,9 @@ define([
              {
 
 
-
              });*/
 
-            this.paper.on('cell:pointerdown', function (cellView, evt, x, y) {
-
-                var cell = cellView.model;
-
-                if (!cell.get('embeds') || cell.get('embeds').length === 0) {
-                    // Show the dragged element above all the other cells (except when the
-                    // element is a parent).
-                    //cell.toFront();
-                }
-
-                if (cell.get('parent')) {
-                    this.model.getCell(cell.get('parent')).unembed(cell);
-                }
-
-            });
-
+            this.paper.on('cell:pointerdown', this.pointerDownFunction);
             this.paper.on('cell:pointermove', this.pointerMoveFunction);
             this.paper.on('cell:pointerup', this.pointerUpFunction);
             /*
@@ -134,8 +118,30 @@ define([
         },
 
         /**
+         * Manages the moment when the user is attempting
+         * to drag the cell with the pointer; this is a callback
+         * to the 'pointerdown' event on the view.
+         * @name ProjectView#pointerUpFunction
+         * @function
+         */
+        pointerDownFunction: function (cellView, evt, x, y) {
+            var cell = cellView.model;
+
+            if (!cell.get('embeds') || cell.get('embeds').length === 0) {
+                // Show the dragged element above all the other cells (except when the
+                // element is a parent).
+                //cell.toFront();
+            }
+
+            if (cell.get('parent')) {
+                this.model.getCell(cell.get('parent')).unembed(cell);
+            }
+        },
+
+        /**
          * Manages the release of the pointer from a cell
-         * (i.e. when the user has finished dragging the cell).
+         * (i.e. when the user has finished dragging the cell);
+         * this is a callback to the 'pointerup' event on the view.
          * @name ProjectView#pointerUpFunction
          * @function
          */
@@ -178,7 +184,6 @@ define([
                         console.log(this.selectedCell);
 
                     }
-
                 }
             }
 
@@ -232,13 +237,13 @@ define([
             var getPrev = function (m, g, c) {
                 var p = g[c].get("parent");
                 // se non esiste?
-                if(p)
+                if (p)
                 {
                     p = m.getCell(p);
 
-                    for(var i=0;i<p.getEmbeddedCells().length;i++)
+                    for (var i=0;i<p.getEmbeddedCells().length;i++)
                     {
-                        if(getNext(g, c+i+1) == g[c])
+                        if (getNext(g, c+i+1) == g[c])
                         {
                             return g[c+i+1];
                         }
@@ -247,8 +252,8 @@ define([
                 else
                 {
                     var i = c-1;
-                    while(g[i] && g[i].get("parent")) { i--; }
-                    //if(!g[i]) return g[0];
+                    while (g[i] && g[i].get("parent")) { i--; }
+                    //if (!g[i]) return g[0];
                     return g[i];
                 }
             };
@@ -256,12 +261,12 @@ define([
             var getPrevIndex = function (m, g, c) {
                 var p = g[c].get("parent");
                 // se non esiste?
-                if(p)
+                if (p)
                 {
                     p = m.getCell(p);
-                    for(var i=0;i<p.getEmbeddedCells().length;i++)
+                    for (var i=0;i<p.getEmbeddedCells().length;i++)
                     {
-                        if(getNext(g, c+i+1) == g[c])
+                        if (getNext(g, c+i+1) == g[c])
                         {
                             return c+i+1;
                         }
@@ -270,8 +275,8 @@ define([
                 else
                 {
                     var i = c-1;
-                    while(g[i] && g[i].get("parent")) { i--; }
-                    //if(!g[i]) return undefined;
+                    while (g[i] && g[i].get("parent")) { i--; }
+                    //if (!g[i]) return undefined;
 
                     console.log("previndex: ", i);
                     return i;
@@ -280,7 +285,7 @@ define([
 
             // incremento indice di quanto necessario per spostarla visivamente
 
-            var nextCell = getNext(g,currentIndex);
+            var nextCell = getNext(g, currentIndex);
             var nextCellIndex = getNextIndex(g, currentIndex);
 
             //nextIndex = nextCellIndex;
@@ -289,7 +294,7 @@ define([
 
 
 
-            if(nextCellIndex < g.length && g[currentIndex].get("position").y > g[nextCellIndex].get("position").y)
+            if (nextCellIndex < g.length && g[currentIndex].get("position").y > g[nextCellIndex].get("position").y)
             {
                 console.log(curr.get("keyvalues").comment[0], g[nextIndex].get("keyvalues").comment[0]);
                 console.log(g[currentIndex].get("position").y, ">", g[nextIndex].get("position").y);
@@ -304,13 +309,13 @@ define([
                     //nextIndex = getNextIndex(g,nextIndex);
                     nextIndex++;
                 }
-                nextIndex --;
+                nextIndex--;
                 //console.log(nextIndex<g.length, this.model.getCommonAncestor(g[currentIndex],g[nextIndex])
                 //    , !parentCell.get("embeds").indexOf(g[nextIndex]) );
 
 
                 // trovare algoritmo per saltare quelli non giusti
-                while( false &&
+                while ( false &&
                     nextIndex<g.length
                     && parentCell.get("embeds").indexOf(g[nextIndex])==-1
                     // finché non trovo g[nextIndex] nel mio parent continuo a cercare
@@ -340,7 +345,7 @@ define([
                 prevIndex--;
                 // trovare algoritmo per saltare quelli non giusti
 
-                while( false &&
+                while ( false &&
                     prevIndex>0
                 && parentCell.get("embeds").indexOf(g[prevIndex])==-1
                     && !g[prevIndex] == parentCell
@@ -363,7 +368,7 @@ define([
                 //prevIndex = getPrevIndex(this.model, g,prevIndex);
             }
 
-            if(!nextCell) { }
+            if (!nextCell) { }
 
 
             //console.log(nextCell.get("keyvalues").comment,
@@ -429,7 +434,7 @@ define([
             if (prevIndex != currentIndex) {
                 console.log("spostato in alto");
                 // se le celle non sono allo stesso livello blabla
-                if( false &&
+                if ( false &&
                     prevIndex > 0
 
                     )
@@ -510,7 +515,8 @@ define([
 
         /**
          * Manages the release of the pointer from a cell
-         * (i.e. when the user has finished dragging the cell) - 3.
+         * (i.e. when the user has finished dragging the cell) - 3;
+         * this is a callback to the 'pointerup' event on the view.
          * @name ProjectView#pointerUpFunction3
          * @function
          */
@@ -629,7 +635,7 @@ define([
                     nextIndex++;
                 }
 
-                // if(nextIndex >= g.length) { nextIndex = g.length-1;}
+                // if (nextIndex >= g.length) { nextIndex = g.length-1;}
                 if (nextIndex != currentIndex + 1) {
                     var figli = g[currentIndex].getEmbeddedCells({deep: true});
                     console.log("figli");
@@ -684,7 +690,7 @@ define([
 
 
                     /*
-                     while(g[nextIndex-1].get("embeds") && this.model.getCommonAncestor(g[currentIndex], g[nextIndex-1]) && nextIndex< g.length )
+                     while (g[nextIndex-1].get("embeds") && this.model.getCommonAncestor(g[currentIndex], g[nextIndex-1]) && nextIndex< g.length )
                      {
                      console.log(this.model.getCommonAncestor(g[currentIndex], g[nextIndex-1]).get("keyvalues").comment);
 
@@ -694,7 +700,7 @@ define([
                     /*console.log(g[nextIndex-1].getAncestors()[0]);
                      console.log(g[nextIndex-1].getAncestors()[0].get("keyvalues").comment);
                      console.log(g[currentIndex].getAncestors()[0].get("keyvalues").comment);
-                     while(g[nextIndex].getAncestors()[0]!=g[currentIndex].getAncestors()[0] && nextIndex < g.length)
+                     while (g[nextIndex].getAncestors()[0]!=g[currentIndex].getAncestors()[0] && nextIndex < g.length)
                      {
                      nextIndex++;
                      console.log("+");
@@ -725,7 +731,7 @@ define([
 
             // controllo se la cella è andata in altro, oltre altri blocchi
 
-            //while(g[currentIndex] in g[nextIndex].getAncestors()) {nextIndex++;}
+            //while (g[currentIndex] in g[nextIndex].getAncestors()) {nextIndex++;}
 
             else if (prevIndex >= 0 && curr.get("position").y < g[prevIndex].get("position").y) {
                 while (prevIndex >= 0 && curr.get("position").y < g[prevIndex].get("position").y) {
@@ -740,7 +746,7 @@ define([
                     console.log(figli);
 
                     /*
-                     while(g[prevIndex].get("embeds") && this.model.getCommonAncestor(g[currentIndex], g[prevIndex]) && prevIndex > 0 )
+                     while (g[prevIndex].get("embeds") && this.model.getCommonAncestor(g[currentIndex], g[prevIndex]) && prevIndex > 0 )
                      {
                      prevIndex--;
                      }
@@ -778,14 +784,14 @@ define([
 
 
                     /*
-                     if(g[prevIndex+1].get("parent") != g[currentIndex].get("parent"))
+                     if (g[prevIndex+1].get("parent") != g[currentIndex].get("parent"))
                      {
                      console.log("i seguenti sono diversi");
                      console.log(g[prevIndex+1].get("parent"));
                      console.log(">>> ");
                      console.log(g[currentIndex].get("parent"));
 
-                     while(prevIndex+1 > 0
+                     while (prevIndex+1 > 0
                      && g[prevIndex+1].get("parent") != g[currentIndex].get("parent")
                      && !(g[currentIndex].get("parent") == g[prevIndex+1].id)
                      && this.model.getCommonAncestor(g[currentIndex],g[prevIndex+1])
@@ -820,7 +826,7 @@ define([
 
 
                 /*
-                 if(index+1<=g.length-1 && curr.get("position").y > g[index+1].get("position").y)
+                 if (index+1<=g.length-1 && curr.get("position").y > g[index+1].get("position").y)
                  {
                  //curr.set("index", index+1);
                  // g[index+1].set("index", index); // -1+1 mi raccomando
@@ -835,7 +841,7 @@ define([
 
                 // sarebbe >=1 ma c'è ancora il link in mezzo (senza sarebbe 0)
                 /*
-                 if(index-1>=1 && curr.get("position").y < g[index-1].get("position").y )
+                 if (index-1>=1 && curr.get("position").y < g[index-1].get("position").y )
                  {
                  ///curr.set("index", index-1);
                  // g[index-1].set("index", index); // -1+1 mi raccomando
@@ -909,7 +915,8 @@ define([
 
         /**
          * Manages the movement of the pointer when
-         * the user is dragging the cell.
+         * the user is dragging the cell; this is a
+         * callback to the 'pointermove' event on the view.
          * @name ProjectView#pointerMoveFunction
          * @function
          */
@@ -957,7 +964,7 @@ define([
         },
 
         /**
-         * ...
+         * Switches between different graph views.
          * @name ProjectView#switch
          * @function
          * @param {number} index which graph to swith to
