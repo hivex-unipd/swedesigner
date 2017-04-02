@@ -289,20 +289,26 @@ define([
                         nextIndex++;
                     }
                     nextIndex --;
-                    console.log(nextIndex<g.length, this.model.getCommonAncestor(g[currentIndex],g[nextIndex])
-                        , !parentCell.get("embeds").indexOf(g[nextIndex]) );
+                    //console.log(nextIndex<g.length, this.model.getCommonAncestor(g[currentIndex],g[nextIndex])
+                    //    , !parentCell.get("embeds").indexOf(g[nextIndex]) );
 
 
                     // trovare algoritmo per saltare quelli non giusti
                     while( false &&
                         nextIndex<g.length
-                    && this.model.getCommonAncestor(g[currentIndex],g[nextIndex])
+                        && parentCell.get("embeds").indexOf(g[nextIndex])==-1
+                        // finché non trovo g[nextIndex] nel mio parent continuo a cercare
+                        //&& !g[nextIndex] == getNext(g,parentCell)
+                        // oppure nel caso sono andato troppo oltre, basta (ho raggiunto il prossimo blocco)
+
+                    //&& this.model.getCommonAncestor(g[currentIndex],g[nextIndex])
                     //&& !parentCell.get("embeds").indexOf(g[nextIndex])
                         )
                     {
+                        console.log("avaanti");
                         nextIndex++;
                     }
-                   // nextIndex--;
+                    // nextIndex--;
 
 
                 }
@@ -310,7 +316,7 @@ define([
 
                 // decremento indice di quanto necessario per spostarla visivamente
 
-                while (prevIndex-1 > 0 && curr.get("position").y < g[prevIndex-1].get("position").y) {
+                while (prevIndex-1 >= 0 && curr.get("position").y < g[prevIndex-1].get("position").y) {
                     console.log(curr.get("keyvalues").comment[0], g[prevIndex-1].get("keyvalues").comment[0]);
                     console.log(g[currentIndex].get("position").y, "<", g[prevIndex-1].get("position").y);
                     console.log(prevIndex-1,"<", g.length);
@@ -320,12 +326,15 @@ define([
 
                     while( false &&
                         prevIndex>0
-                    && g[prevIndex].get("parent") != g[currentIndex].get("parent")
+                    && parentCell.get("embeds").indexOf(g[prevIndex])==-1
+                        && !g[prevIndex] == parentCell
+
+                        //&& g[prevIndex].get("parent") != g[currentIndex].get("parent")
                     //&& !parentCell.get("embeds").indexOf(g[prevIndex])
                         )
                     {
 
-                        console.log(prevIndex>0, g[prevIndex].get("parent") != g[currentIndex].get("parent") , !g[prevIndex].get("embeds"));
+                        //console.log(prevIndex>0, g[prevIndex].get("parent") != g[currentIndex].get("parent") , !g[prevIndex].get("embeds"));
 
                         prevIndex--;
                         console.log("retro");
@@ -381,7 +390,7 @@ define([
                     && g[nextIndex].getEmbeddedCells({deep:true})
 
 
-                        
+
                     // && g[nextIndex].get("parent") != g[currentIndex].get("parent")
                         // && !(g[currentIndex].get("parent") == g[nextIndex].id)
                         // && this.model.getCommonAncestor(g[currentIndex], g[nextIndex])
