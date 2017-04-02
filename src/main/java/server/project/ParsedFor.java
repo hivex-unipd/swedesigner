@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.stringtemplate.v4.ST;
 
+import server.check.Check;
 import server.template.Template;
 
 public class ParsedFor extends ParsedInstruction {
@@ -53,6 +54,5 @@ public class ParsedFor extends ParsedInstruction {
 	
 	public void setBody(List<ParsedInstruction> pi){
 		this.body = pi;
-	} 
-
+	}
 }

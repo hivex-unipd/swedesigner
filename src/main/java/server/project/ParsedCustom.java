@@ -1,5 +1,6 @@
 package server.project;
 
+import server.check.Check;
 import server.template.Template;
 
 public class ParsedCustom extends ParsedInstruction {
@@ -8,5 +9,5 @@ public class ParsedCustom extends ParsedInstruction {
 		this.instruction = instruction;
 	}
 	public String renderTemplate(Template t) {
-		return instruction+"\n";/*implementazione*/};
+		return instruction+"\n";/*implementazione*/}
 }

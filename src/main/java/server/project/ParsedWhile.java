@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.stringtemplate.v4.ST;
 
+import server.check.Check;
 import server.template.Template;
 
 public class ParsedWhile extends ParsedInstruction {
@@ -39,6 +40,6 @@ public class ParsedWhile extends ParsedInstruction {
 	
 	public void setBody(List<ParsedInstruction> pi){
 		this.body = pi;
-	} 
+	}
 
 }
