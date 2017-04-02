@@ -1,8 +1,9 @@
 package server.project;
 
+import server.check.Check;
 import server.template.Template;
 
-class ParsedInterface extends ParsedType {
+public class ParsedInterface extends ParsedType {
 	public String renderTemplate(Template t) {
 		return null;/*implementazione*/}
 
@@ -28,5 +29,5 @@ class ParsedInterface extends ParsedType {
 	public String getName() {
 		// TODO Auto-generated method stub
 		return null;
-	};
+	}
 }

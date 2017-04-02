@@ -2,6 +2,7 @@ package server.project;
 
 import org.stringtemplate.v4.ST;
 
+import server.check.Check;
 import server.template.Template;
 
 public class ParsedAssignment extends ParsedInstruction {
@@ -26,5 +27,4 @@ public class ParsedAssignment extends ParsedInstruction {
 	public String getValue() {
 		return value;
 	}
-
 }

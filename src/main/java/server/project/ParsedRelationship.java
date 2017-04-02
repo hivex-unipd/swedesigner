@@ -1,5 +1,6 @@
 package server.project;
 
+import server.check.Check;
 import server.template.Template;
 
 public class ParsedRelationship implements ParsedElement {

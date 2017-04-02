@@ -2,6 +2,7 @@ package server.project;
 
 import org.stringtemplate.v4.ST;
 
+import server.check.Check;
 import server.template.Template;
 
 public class ParsedAttribute implements ParsedElement {
@@ -35,4 +36,5 @@ public class ParsedAttribute implements ParsedElement {
 		template.add("att", this);
 		return template.render();
 	}
+
 }
