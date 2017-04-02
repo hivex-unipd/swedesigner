@@ -733,26 +733,26 @@ define([
                     // devo spostare solo blocchi dello stesso livello
                     console.log(g[nextIndex].get("keyvalues").comment[0]);
 
-/*
-                    if(parentCell != g[nextIndex] && parentCell)
-                    {
-                        while ( parentCell.get("embeds").indexOf(g[nextIndex].id) == -1 || g[currentIndex] == g[nextIndex])
-                            // ovviamente g[currentCell] lo è già
-                        // contrtollo pure che tra gli embed non ci sia la currentcell (non mi posso fidare di lei
-                        {
-                            console.log("non ho trovato ",
-                                g[nextIndex].get("keyvalues").comment[0], " dentro ", parentCell.get("keyvalues").comment[0]);
-                            nextIndex--;
-                        }
-                        console.log(" ho trovato ",
-                            g[nextIndex].get("keyvalues").comment[0], " dentro ", parentCell.get("keyvalues").comment[0]);
+                    /*
+                     if(parentCell != g[nextIndex] && parentCell)
+                     {
+                     while ( parentCell.get("embeds").indexOf(g[nextIndex].id) == -1 || g[currentIndex] == g[nextIndex])
+                     // ovviamente g[currentCell] lo è già
+                     // contrtollo pure che tra gli embed non ci sia la currentcell (non mi posso fidare di lei
+                     {
+                     console.log("non ho trovato ",
+                     g[nextIndex].get("keyvalues").comment[0], " dentro ", parentCell.get("keyvalues").comment[0]);
+                     nextIndex--;
+                     }
+                     console.log(" ho trovato ",
+                     g[nextIndex].get("keyvalues").comment[0], " dentro ", parentCell.get("keyvalues").comment[0]);
 
-                        nextIndex = getNextIndex(g, nextIndex);
-                        console.log("seleziono", g[nextIndex].get("keyvalues").comment[0]);
-                        nextIndex--;
-                        console.log("seleziono", g[nextIndex].get("keyvalues").comment[0]);
+                     nextIndex = getNextIndex(g, nextIndex);
+                     console.log("seleziono", g[nextIndex].get("keyvalues").comment[0]);
+                     nextIndex--;
+                     console.log("seleziono", g[nextIndex].get("keyvalues").comment[0]);
 
-                    }*/
+                     }*/
 
 
                     // && g[nextIndex].get("parent") != g[currentIndex].get("parent")
@@ -781,20 +781,20 @@ define([
                     console.log(g[prevIndex].get("keyvalues").comment[0]);
                     //prevIndex--;
                     console.log(g[prevIndex].get("keyvalues").comment[0]);
-/*
-                    while (parentCell != g[prevIndex] && parentCell.get("embeds").indexOf(g[prevIndex].id) == -1) // ovviamente g[currentCell] lo è già
-                    {
-                        console.log("non ho trovato ",
-                            g[prevIndex].get("keyvalues").comment[0], " dentro ", parentCell.get("keyvalues").comment[0]);
+                    /*
+                     while (parentCell != g[prevIndex] && parentCell.get("embeds").indexOf(g[prevIndex].id) == -1) // ovviamente g[currentCell] lo è già
+                     {
+                     console.log("non ho trovato ",
+                     g[prevIndex].get("keyvalues").comment[0], " dentro ", parentCell.get("keyvalues").comment[0]);
 
-                        prevIndex--;
-                    }
-                    console.log("trovato ", g[prevIndex].get("keyvalues").comment[0], " dentro ", parentCell.get("keyvalues").comment[0]);
+                     prevIndex--;
+                     }
+                     console.log("trovato ", g[prevIndex].get("keyvalues").comment[0], " dentro ", parentCell.get("keyvalues").comment[0]);
 
-                    prevIndex = getNextIndex(g, prevIndex);
-                    console.log("passo a ", g[prevIndex].get("keyvalues").comment[0]);
-                    //prevIndex--;
-*/
+                     prevIndex = getNextIndex(g, prevIndex);
+                     console.log("passo a ", g[prevIndex].get("keyvalues").comment[0]);
+                     //prevIndex--;
+                     */
 
                     debug();
 
