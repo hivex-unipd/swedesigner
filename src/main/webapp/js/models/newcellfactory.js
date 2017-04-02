@@ -42,5 +42,14 @@ define([
     abstractCellFactory.registerCell("HxAssociation",celltypes.class.HxAssociation);
     abstractCellFactory.registerCell("HxImplementation",celltypes.class.HxImplementation);
 
+    abstractCellFactory.registerCell("HxAssignement",celltypes.activity.HxAssignement);
+    abstractCellFactory.registerCell("HxCustom",celltypes.activity.HxCustom);
+    abstractCellFactory.registerCell("HxElse",celltypes.activity.HxElse);
+    abstractCellFactory.registerCell("HxFor",celltypes.activity.HxFor);
+    abstractCellFactory.registerCell("HxIf",celltypes.activity.HxIf);
+    abstractCellFactory.registerCell("HxInitialization",celltypes.activity.HxInitialization);
+    abstractCellFactory.registerCell("HxReturn",celltypes.activity.HxReturn);
+    abstractCellFactory.registerCell("HxWhile",celltypes.activity.HxWhile);
+
     return abstractCellFactory;
 });

@@ -379,6 +379,9 @@ define([
             this.options.currentindex =0;
             this.graph.resetCells(this.options.graphs[this.options.currentindex].cells);
         },
+        getIndexFromId:function(id){
+            return this.options.graphs.findIndex((x)=> x.method == id);
+        },
 
         getCurrentGraph: function () {
             return this.get("graph");
