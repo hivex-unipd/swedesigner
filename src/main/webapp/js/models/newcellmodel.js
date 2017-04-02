@@ -4,8 +4,9 @@ define([
     'backbone',
     'joint',
     'models/ProjectModel',
-    'models/newcellfactory'
-], function ($, _, Backbone, joint, ProjectModel) {
+    'models/newcellfactory',
+    'models/celltypes/celltypes'
+], function ($, _, Backbone, joint, ProjectModel,abstractCellFactory,celltypes) {
 
     /**
      * @classdesc `NewCellModel` stores all the available
@@ -35,12 +36,13 @@ define([
          */
         initialize: function () {
             console.log(this.str);
-            this.registerCells("");
+            this.registerCells("class");
         },
 
         registerCells: function(diag){
-            for (var property in joint.shapes.uml) {
-                if (joint.shapes.uml.hasOwnProperty(property) && property.startsWith("Hx")) {
+
+            for (var property in celltypes[diag]) {
+                if (celltypes[diag].hasOwnProperty(property) && property.startsWith("Hx")) {
                     console.log(property);
                     this.str.push(property);
                 }
@@ -56,8 +58,10 @@ define([
          */
         addCell: function (type) {
 
+            var cell = abstractCellFactory.getCell(type);
             //console.log(type);
-            ProjectModel.addCellFromType(type);
+            ProjectModel.addCell(cell);
+            //ProjectModel.addCellFromType(type);
         }
     });
     return NewCellModel;

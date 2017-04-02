@@ -5,8 +5,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'joint'
-], function ($, _, Backbone, joint) {
+    'joint',
+    'models/celltypes/celltypes'
+], function ($, _, Backbone, joint,celltypes) {
     var abstractCellFactory = (function () {
 
         // Storage for our vehicle types
@@ -21,11 +22,11 @@ define([
 
             registerCell: function ( type, Cell ) {
                 var proto = Cell.prototype;
-
+                types[type]= Cell;
                 // only register classes that fulfill the vehicle contract
-                if ( proto.markup ) {
-                    types[type] = Cell;
-                }
+                /*if ( proto.markup ) {
+                 types[type] = Cell;
+                 }*/
 
                 return abstractCellFactory;
             }
@@ -35,7 +36,11 @@ define([
     /**
      * non so se mettere da un altra parte sta roba sotto di registrazione
      */
-    //abstractCellFactory.registerCell("HxInterface",)
+    abstractCellFactory.registerCell("HxInterface",celltypes.class.HxInterface);
+    abstractCellFactory.registerCell("HxClass",celltypes.class.HxClass);
+    abstractCellFactory.registerCell("HxGeneralization",celltypes.class.HxGeneralization);
+    abstractCellFactory.registerCell("HxAssociation",celltypes.class.HxAssociation);
+    abstractCellFactory.registerCell("HxImplementation",celltypes.class.HxImplementation);
 
     return abstractCellFactory;
 });

@@ -8,7 +8,7 @@ define([
     'joint',
     'collection/DiagramsCollection',
     'models/celltypes/celltypes'
-],function ($, _, Backbone, joint, DiagramsCollection) {
+],function ($, _, Backbone, joint, DiagramsCollection,celltypes) {
 
     var ProjectModel = Backbone.Model.extend({
 
@@ -90,7 +90,7 @@ define([
         },
         initialize: function(){
 
-            this.graph = new joint.dia.Graph();
+            this.graph = new joint.dia.Graph({}, { cellNamespace: Swedesigner.client.model.celltypes });
 
             console.log(this.graph);
             //var a = new joint.shapes.uml.Class();
@@ -107,7 +107,7 @@ define([
         },
         addCell: function (cell) {
             //meglio aggiungere sia a current graph o solo al graph e poi fare export in json?
-            this.options.graphs[this.options.currentindex].push(cell);
+            //this.options.graphs[this.options.currentindex].push(cell);
             this.graph.addCell(cell);
         },
         addCellFromType: function(type) {
@@ -124,7 +124,7 @@ define([
                     methods: ['+ setAttr(): bool']
                 });
             } else {
-                newClass = new joint.shapes.uml.ClassDiagramElement({
+                newClass = new joint.shapes.uml.HxClass({
                     position: newPosition,
                     size: newSize,
                     name: 'MyClass3',
@@ -148,9 +148,9 @@ define([
             });
             this.options.currentgraph.push(link);*/
             //this.options.currentgraph = this.options.graphs[0];
-            this.graph.fromJSON(this.options.graphs[this.options.currentindex]);
+            //this.graph.fromJSON(this.options.graphs[this.options.currentindex]);
 
-	        var class2 = new joint.shapes.uml.ClassDiagramElement({
+	        /*var class2 = new joint.shapes.uml.ClassDiagramElement({
             position: {x: 120, y: 190},
             size: {width: 100, height: 100},
             name: 'MyClass2',
@@ -166,7 +166,7 @@ define([
                 ]
 
             },
-            });
+            });*/
 
             /*var class3 = new uml.ClassDiagramElement({
                 position: {x: 120, y: 190},
@@ -193,7 +193,7 @@ define([
                     }
                 }
             });*/
-            this.graph.addCell(class2);
+            //this.graph.addCell(class2);
 	        //this.graph.addCell(class2);
             //this.graph.addCell(class3);
             //this.graph.resetCells(this.options.currentgraph.cells);
@@ -201,8 +201,8 @@ define([
 
 
             // OLD
-            console.log(class2);
-            class2.attributes.keyvalues.methods[0].diagram = '1234';
+            //console.log(class2);
+            //class2.attributes.keyvalues.methods[0].diagram = '1234';
 
 
             console.log(this.options);

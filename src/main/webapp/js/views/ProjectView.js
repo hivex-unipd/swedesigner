@@ -324,10 +324,12 @@ define([
                     //&& !parentCell.get("embeds").indexOf(g[prevIndex])
                         )
                     {
+
                         console.log(prevIndex>0, g[prevIndex].get("parent") != g[currentIndex].get("parent") , !g[prevIndex].get("embeds"));
 
                         prevIndex--;
                         console.log("retro");
+
                     }
                     console.log(prevIndex>0, g[prevIndex].get("parent") != g[currentIndex].get("parent") , !g[prevIndex].get("embeds"));
 
@@ -379,6 +381,7 @@ define([
                     && g[nextIndex].getEmbeddedCells({deep:true})
 
 
+                        
                     // && g[nextIndex].get("parent") != g[currentIndex].get("parent")
                         // && !(g[currentIndex].get("parent") == g[nextIndex].id)
                         // && this.model.getCommonAncestor(g[currentIndex], g[nextIndex])
@@ -436,6 +439,7 @@ define([
                         }
                         return !hidden; // se every ritorna false, esce dal loop (per efficienza)
                     });
+
 
                     if (!hidden) {
                         g[i].set("hidden", false);
