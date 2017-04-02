@@ -45,11 +45,11 @@ public class JavaCheck implements Check {
 		//per prima cosa controllo che gli argomenti siano tutti legali
 		List<ParsedAttribute> args = pm.getArgs();
 		for(int i=0; i<args.size(); i++){
-			try{ //args.get(i).check(this); si tratta di un metodo non ancora implementato (vedi commento ParsedElement);
+			/*try{ //args.get(i).check(this); si tratta di un metodo non ancora implementato (vedi commento ParsedElement);
 			}catch(LanguageException e){
 				//faccio il merge delle due liste
 				errors.addAll(e.getErrors());
-			}
+			}*/
 		}
 		
 		List<ParsedInstruction> body = pm.getBody();
@@ -60,12 +60,12 @@ public class JavaCheck implements Check {
 				errors.add("Java language error: method "+pm.getName()+" is declared abstract but has implemented body");
 		else//controllo che tutte le istruzioni del metodo siano legali nel linguaggio Java
 			for(int i=0; i<body.size(); i++){
-				try{
+				/*try{
 					//body.get(i).check(this); si tratta di un metodo non ancora implementato (vedi commento ParsedElement);
 				}catch(LanguageException e){
 					//faccio il merge delle due liste
 					errors.addAll(e.getErrors());
-				}
+				}*/
 			}
 		if(errors.size()!=0)
 			throw new LanguageException(errors);
