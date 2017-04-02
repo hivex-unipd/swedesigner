@@ -159,9 +159,13 @@ define([
                 };
 
                 debug();
+                console.log("SPOSTO", g[currentIndex].get("keyvalues").comment[0]);
+
                 move(g, currentIndex, g.length-1);
 
                 for (var i = 0; i < figli.length; i++) {
+                    console.log("SPOSTO", g[currentIndex].get("keyvalues").comment[0]);
+
                     move(g, currentIndex, g.length-1);
                     debug();
                 }
@@ -193,6 +197,7 @@ define([
 
                         // Prevent recursive embedding.
                         if (cellViewBelow && cellViewBelow.model.get('parent') !== cell.id) {
+
                             cellViewBelow.model.embed(cell);
                             embedded = true;
                             parentCell = cellViewBelow.model;
@@ -290,6 +295,60 @@ define([
                     }
                 };
 
+
+                var correctEmbedding = function(index, parent, cell)
+                {
+                    var embcells = parent.getEmbeddedCells();
+
+                    console.log("correggo embed");
+                    var deba = parent.get("embeds");
+
+                    var deb = [];
+                    for(var i=0;i<embcells.length;i++)
+                    {
+                        deb.push(embcells[i].get("keyvalues").comment[0]);
+                    }
+                    console.log(deb);
+
+
+                    parent.unembed(embcells.pop(cell));
+                    for(var i=0;i<embcells.length;i++)
+                    {
+                        parent.unembed(embcells[i]);
+                        console.log(embcells[i].id, "deembedded");
+                    }
+                    console.log(parent, "parent");
+
+
+
+                    for(var i=0; i<index+1;i++)
+                    {
+                        console.log("e1", embcells[i].get("keyvalues").comment[0]);
+                        parent.embed(embcells[i]);
+                        console.log(parent);
+                    }
+                    console.log("c", cell.get("keyvalues").comment[0]);
+                    parent.embed(cell);
+                    console.log(parent);
+
+                    for (var i=index+1;i<embcells.length;i++)
+                    {
+                        console.log("e2", embcells[i].get("keyvalues").comment[0]);
+                        parent.embed(embcells[i]);
+                    }
+                    console.log("corretti embed");
+
+                    embcells = parent.getEmbeddedCells();
+                    deb = [];
+                    for(var i=0;i<embcells.length;i++)
+                    {
+                        deb.push(embcells[i].get("keyvalues").comment[0]);
+                    }
+                    console.log(deb);
+
+
+                };
+
                 // se parentCell esiste
                 if(parentCell)
                 {
@@ -311,6 +370,7 @@ define([
                     else
                     {
 
+                        console.log(g);
                         console.log("i miei fratelli sono:");
                         var ff = parentCell.get("embeds");
                         console.log(ff);
@@ -318,35 +378,59 @@ define([
                         var found = false;
 
                         fratelli = [];
+                        var frad = [];
                         for(var i=0; i<ff.length;i++)
                         {
-                            if(ff[i]!=curr.id) {fratelli.push(ff[i]);}
+                            if(ff[i]!=curr.id) {
+                                fratelli.push(ff[i]);
+                                frad.push(this.model.getCell(ff[i]).get("keyvalues").comment[0]);
+                            }
                         }
-
+                        console.log(frad);
+/*
+                        var fratelliOrdinati = [];
+                        for(var i=0;i < g.length;i++)
+                        {
+                            if(fratelli.indexOf(g[i])!=-1)
+                            {
+                                fratelliOrdinati.push(g[i]);
+                            }
+                        }
+                        fratelli = fratelliOrdinati;
+  */
                         for(var i=0; i < fratelli.length && !found;i++)
                         {
                             // i miei fratelli sono in ordine di y crescente.
                             // il primo fratello che mi supera in y è quello che mi seguirà
                             console.log(y, " < ", this.model.getCell(fratelli[i]).get("position").y);
-                            if(fratelli[i]!= curr.id && y < this.model.getCell(fratelli[i]).get("position").y)
+                            if(y < this.model.getCell(fratelli[i]).get("position").y)
                             {
 
                                 found = true;
                                 if(i!=0) {
+                                    console.log("pezzo buggato?");
                                     // bad
                                     // se non è il primo dentro il blocco
-                                    var dest = g.indexOf(this.model.getCell(fratelli[i]));
+                                    var dest = g.indexOf(this.model.getCell(fratelli[i-1]));
+                                    dest+= this.model.getCell(fratelli[i-1]).getEmbeddedCells({deep:true}).length;
                                     //dest = dest + this.model.getCell(fratelli[i]).getEmbeddedCells({deep: true}).length;
                                     //dest--;
+
+
+                                    correctEmbedding(i-1,parentCell,curr);
                                     for (var j = 0; j <= figli.length; j++) {
-                                        move(g, g.length - 1 - figli.length + j, dest + j);
+                                        move(g, g.length - 1 - figli.length + j, dest + j +1);
                                         debug();
                                     }
                                 }
                                 else
                                 {
+                                    console.log("i=0");
                                     var dest = g.indexOf(parentCell);
                                     dest++;
+
+                                    correctEmbedding(0,parentCell,curr);
+
                                     for (var j = 0; j <= figli.length; j++) {
                                         move(g, g.length - 1 - figli.length + j, dest + j);
                                         debug();
@@ -368,7 +452,7 @@ define([
                             else
                             {
                                 // bad
-                                console.log("non dovrebbe mai accadere");
+                                //console.log("non dovrebbe mai accadere");
                                 index = fratelli.length-1;
                             }
 
@@ -378,6 +462,9 @@ define([
                             console.log(this.model.getCell(fratelli[index]).getEmbeddedCells({deep:true}).length);
                             dest = dest + this.model.getCell(fratelli[index]).getEmbeddedCells({deep:true}).length;
                             dest++;
+
+                            correctEmbedding(index,parentCell,curr);
+
                             for (var w = 0; w <= figli.length; w++) {
                                 move(g, g.length-1-figli.length+w, dest+w);
                                 debug();
@@ -411,6 +498,8 @@ define([
                             console.log(figli);
                             console.log(figli.length);
                             var k =0;
+                            //correctEmbedding(i,parentCell,curr);
+
                             for ( k = 0; k <= figli.length; k++) {
                                 console.log("ciclo",k);
                                 move(g, g.length-1-figli.length+k, dest+k);
@@ -483,6 +572,10 @@ define([
                     }
 
                 }
+
+
+
+
 
             };
 
