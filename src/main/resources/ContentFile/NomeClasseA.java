@@ -6,7 +6,7 @@ param1 = 3;param2 = 5;while(param2 < 4){
 	param2 = 4;if (true) {
 		}
 }
-};private static void Method2(final int PARAM_1, int param2){
+}private static void Method2(final int PARAM_1, int param2){
 param1 = 3;param2 = 5;
-};
+}
 };

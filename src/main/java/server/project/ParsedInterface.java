@@ -25,7 +25,7 @@ public class ParsedInterface extends ParsedType{
 	public void addMethod(ParsedMethod pm) throws ParsedException{
 		String vis = pm.getVisibility();
 		List<ParsedInstruction> body = pm.getBody();
-		if((vis==null||vis.equals("public"))&&body==null)
+		if((vis==null||vis.equals("public")||vis.equals("package"))&&body.size()==0)
 			getMethods().add(pm);
 		else
 			throw new ParsedException("ParsedInterface error: cannot add non public or implemented method "+pm.getName()+" to interface "+getName());
