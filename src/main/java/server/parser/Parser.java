@@ -52,7 +52,7 @@ public class Parser {
 			if(jmeth.has("id"))
 				id = jmeth.getString("id");
 			else
-				errors.add("JSON format error: Cannot find id in method");
+				errors.add("JSON format error: Cannot find id in body of method");
 			
 			JSONArray jblocks = (jmeth.has("cells")?jmeth.getJSONArray("cells"):new JSONArray());
 			List<ParsedInstruction> value = new ArrayList<ParsedInstruction>();
@@ -110,24 +110,24 @@ public class Parser {
 				//aggiungo al parsedtype gli attributi
 				for(int r = 0; r<jattributes.length();r++){
 					JSONObject currentattr = jattributes.getJSONObject(r);
-					//occorre controllare che ci siano tutti i campi prima di creare l'attributo
-					boolean isstatic = (currentattr.has("static")?currentattr.getBoolean("static"):false);
-					String visibility = (currentattr.has("varvisib")?currentattr.getString("varvisib"):null);
-					String varvaldef = (currentattr.has("varvaldef")?currentattr.getString("varvaldef"):null);
-					String vartype = "";
-					if(currentattr.has("vartype"))
-						vartype = currentattr.getString("vartype");
-					else
-						errors.add("Cannot find type of attribute");
 					
 					String varname = "";
 					if(currentattr.has("varname"))
 						varname = currentattr.getString("varname");
 					else
 						errors.add("Cannot find name of attribute");
-
-					try { pt.addField(new ParsedAttribute(isstatic, visibility, vartype, varname, varvaldef));}
-					catch(ParsedException e){errors.add(e.getError());}
+					
+					if(!varname.equals("")){
+						//occorre controllare che ci siano tutti i campi prima di creare l'attributo
+						boolean isstatic = (currentattr.has("static")?currentattr.getBoolean("static"):false);
+						String visibility = (currentattr.has("varvisib")?currentattr.getString("varvisib"):null);
+						String varvaldef = (currentattr.has("varvaldef")?currentattr.getString("varvaldef"):null);
+						String vartype = (currentattr.has("vartype") ? currentattr.getString("vartype") : null);
+						
+						try { pt.addField(new ParsedAttribute(isstatic, visibility, vartype, varname, varvaldef));}
+						catch(ParsedException e){errors.add(e.getError());}
+					}
+					
 				}
 				
 				//aggiungo i metodi al parsed type
@@ -145,11 +145,8 @@ public class Parser {
 						else
 							errors.add("JSON format error: parameter "+(p+1)+" of method");
 					}
-					String visibility = (currentmeth.has("visibility")?currentmeth.getString("visibility"):null);
-					boolean isstatic = (currentmeth.has("static")?currentmeth.getBoolean("static"):false);
-					boolean isabstract = (currentmeth.has("abstract")?currentmeth.getBoolean("abstract"):false);
 					
-					String returntype = "";
+					String returntype = "";//vincolo del nostro programma
 					if(currentmeth.has("return-type"))
 						returntype = currentmeth.getString("return-type");
 					else
@@ -160,12 +157,19 @@ public class Parser {
 						namemeth = currentmeth.getString("name");
 					else
 						errors.add("Name not found in method");
+					if(!returntype.equals("")&&namemeth.equals("")){
+						
+						String visibility = (currentmeth.has("visibility")?currentmeth.getString("visibility"):null);
+						boolean isstatic = (currentmeth.has("static")?currentmeth.getBoolean("static"):false);
+						boolean isabstract = (currentmeth.has("abstract")?currentmeth.getBoolean("abstract"):false);
+						
+						try{pt.addMethod(new ParsedMethod(visibility , isstatic, isabstract, returntype, namemeth, args, meth.get(currentmeth.getString("id"))));}
+						catch(ParsedException e){errors.add(e.getError());}
+					}
 					
-					try{pt.addMethod(new ParsedMethod(visibility , isstatic, isabstract, returntype, namemeth, args, meth.get(currentmeth.getString("id"))));}
-					catch(ParsedException e){errors.add(e.getError());}
 				}
 				
-				String visibility = (classvalues.has("visibility") ? classvalues.getString("visibility") : "package");
+				String visibility = (classvalues.has("visibility") ? classvalues.getString("visibility") : null);
 				try{ pt.setVisibility(visibility);}catch(ParsedException e){errors.add(e.getError());}
 				//inserisco il pt nell'array di classi
 				alltypes.put(id, pt);
@@ -268,7 +272,7 @@ public class Parser {
 				errors.add("JSON format error: cannot find values of instruction");
 			
 			if(!type.equals("")&&values!=null){//se nel JSON non sono inseriti il tipo e i valori delle istruzioni, non ha senso inserirle!
-				switch(type){
+				switch(type){//I VINCOLI IMPOSTI ALLE DIVERSE ISTRUZIONI SONO CARATTERIZZANTI PER IL NOSTRO PROGRAMMA
 					case "uml.assignment" : {
 						String name = (values.has("name") ? values.getString("name") : "");
 						String value = (values.has("value") ? values.getString("value") : "");
@@ -294,7 +298,7 @@ public class Parser {
 						String condition = (values.has("condition")?values.getString("condition"):null);
 						String step = (values.has("step")?values.getString("step"):null);
 						//da vedere se init e step sono stringhe oppure ParsedInit/ParsedAssign
-						currentinst = new ParsedFor(null, condition, null, null);	
+						currentinst = new ParsedFor(init, condition, step, null);	
 						break;
 					}
 					case "uml.if" : {
@@ -307,12 +311,12 @@ public class Parser {
 					}
 					case "uml.initialization" : {//*******non servirebbe in effetti richiedere la presenza del tipo (indipendenza dal linguaggio)
 						String value = (values.has("value")?values.getString("value"):null);
-						String typei = (values.has("type") ? values.getString("type") : "");
+						String typei = (values.has("type") ? values.getString("type") : null);
 						String name = (values.has("name") ? values.getString("name") : "");
-						if(!typei.equals("")&&!name.equals(""))
+						if(!name.equals(""))
 							currentinst = new ParsedInitialization(typei, name, value);
 						else
-							errors.add("JSON format error: missing information for initialization instruction");
+							errors.add("JSON format error: missing name of value for initialization instruction");
 						break;
 					}
 					case "uml.return" : {//nessun controllo, il return può essere anche implicito;
