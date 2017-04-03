@@ -14,10 +14,12 @@ import server.project.ParsedAssignment;
 import server.project.ParsedAttribute;
 import server.project.ParsedClass;
 import server.project.ParsedCustom;
+import server.project.ParsedException;
 import server.project.ParsedFor;
 import server.project.ParsedIf;
 import server.project.ParsedInitialization;
 import server.project.ParsedInstruction;
+import server.project.ParsedInterface;
 import server.project.ParsedMethod;
 import server.project.ParsedProgram;
 import server.project.ParsedReturn;
@@ -95,8 +97,17 @@ public class Parser {
 			
 			//inserisco il tipo solamente se ha id e type definiti
 			if((s.equals("uml.class") || s.equals("uml.interface")) && !id.equals("")){
-				//creo array per attributi Parsed
-				List<ParsedAttribute> attributes = new ArrayList<ParsedAttribute>();
+				boolean isInterface = (s.equals("uml.interface") ? true : false);
+	            String name = (classvalues.has("name") ? classvalues.getString("name") : id);
+	            ParsedType pt;
+	            if(isInterface)
+	            	pt = new ParsedInterface(name);
+	            else{
+	            	boolean isAbstract = (classvalues.has("abstract") ? classvalues.getBoolean("abstract") : false);
+	            	pt = new ParsedClass(name, isAbstract);
+	            }
+	            	
+				//aggiungo al parsedtype gli attributi
 				for(int r = 0; r<jattributes.length();r++){
 					JSONObject currentattr = jattributes.getJSONObject(r);
 					//occorre controllare che ci siano tutti i campi prima di creare l'attributo
@@ -115,11 +126,11 @@ public class Parser {
 					else
 						errors.add("Cannot find name of attribute");
 
-					attributes.add(new ParsedAttribute(isstatic, visibility, vartype, varname, varvaldef));
+					try { pt.addField(new ParsedAttribute(isstatic, visibility, vartype, varname, varvaldef));}
+					catch(ParsedException e){errors.add(e.getError());}
 				}
 				
-				//creo array di metodi Parsed
-				List<ParsedMethod> methods = new ArrayList<ParsedMethod>();
+				//aggiungo i metodi al parsed type
 				for(int r = 0; r<jmethods.length();r++){
 					JSONObject currentmeth = jmethods.getJSONObject(r);
 					JSONArray params = (currentmeth.has("parameters")?currentmeth.getJSONArray("parameters"):new JSONArray());
@@ -144,17 +155,20 @@ public class Parser {
 					else
 						errors.add("Retun type not found in method");
 					
-					String name = "";
+					String namemeth = "";
 					if(currentmeth.has("name"))
-						name = currentmeth.getString("name");
+						namemeth = currentmeth.getString("name");
 					else
 						errors.add("Name not found in method");
 					
-					methods.add(new ParsedMethod(visibility , isstatic, isabstract, returntype, name, args, meth.get(currentmeth.getString("id"))));
+					try{pt.addMethod(new ParsedMethod(visibility , isstatic, isabstract, returntype, namemeth, args, meth.get(currentmeth.getString("id"))));}
+					catch(ParsedException e){errors.add(e.getError());}
 				}
-
-				//creo la parsedclass e la inserisco nell'array di classi
-				alltypes.put(id, new ParsedClass(classvalues.getString("name"), classvalues.getString("visibility"),attributes,methods));
+				
+				String visibility = (classvalues.has("visibility") ? classvalues.getString("visibility") : "package");
+				try{ pt.setVisibility(visibility);}catch(ParsedException e){errors.add(e.getError());}
+				//inserisco il pt nell'array di classi
+				alltypes.put(id, pt);
 			}//fine if
 		}//fine for
 		
@@ -192,11 +206,13 @@ public class Parser {
 			if(source!=null && !type.equals("") && !target.equals("")){					//controllo valori accettabili
 				switch(type){
 						case "uml.generalization" : {
-							source.addExtended(target);
+							try{source.addSupertype(target, "class");}
+							catch(ParsedException e){errors.add(e.getError());}
 							break;
 						}
 						case "uml.implementation" : {
-							source.addImplemented(target);
+							try{source.addSupertype(target, "interface");}
+							catch(ParsedException e){errors.add(e.getError());}
 							break;
 						}
 						case "uml.reference" : {
@@ -215,7 +231,8 @@ public class Parser {
 							String value = (molt>1 ? "new "+target+"["+molt+"]" : null);//non esistono valori di default per i riferimenti singoli!!!
 							
 							//***non si può indicare se un attributo è statico o la particolare visibilità
-							source.addAttribute(new ParsedAttribute(false, null, typeatt, nameatt, value));
+							try{source.addField(new ParsedAttribute(false, null, typeatt, nameatt, value));}
+							catch(ParsedException e){errors.add(e.getError());}
 							break;
 						}
 						default : errors.add("JSON format error: type of relationship is not correct"); 

@@ -20,4 +20,6 @@ public interface Template {
 	public ST getMethodTemplate();
 
 	public ST getWhileTemplate();
+
+	public ST getInterfaceTemplate();
 }
