@@ -38,9 +38,15 @@ define([
             console.log(this.str);
             this.registerCells("class");
         },
+        switchComponents:function () {
+          if(ProjectModel.options.currentindex=="class")
+              this.registerCells("class");
+          else
+              this.registerCells("activity");
+        },
 
         registerCells: function(diag){
-
+            this.str.length=0;
             for (var property in celltypes[diag]) {
                 if (celltypes[diag].hasOwnProperty(property) && property.startsWith("Hx")) {
                     console.log(property);

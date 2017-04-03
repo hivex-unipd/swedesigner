@@ -111,56 +111,59 @@ define([
                         }
                     }
                 }
-                var cell = cellView.model;
+                console.log(ProjectModel.options.currentindex);
+                if(ProjectModel.options.currentindex!="class") {
+                    var cell = cellView.model;
 
-                if (!cell.get('embeds') || cell.get('embeds').length === 0) {
-                    // Show the dragged element above all the other cells (except when the
-                    // element is a parent).
-                    //cell.toFront();
-                }
+                    if (!cell.get('embeds') || cell.get('embeds').length === 0) {
+                        // Show the dragged element above all the other cells (except when the
+                        // element is a parent).
+                        //cell.toFront();
+                    }
 
-                if (cell.get('parent')) {
-                    this.model.getCell(cell.get('parent')).unembed(cell);
-                }
-                var g = this.model.attributes.cells.models;
+                    if (cell.get('parent')) {
+                        this.model.getCell(cell.get('parent')).unembed(cell);
+                    }
+                    var g = this.model.attributes.cells.models;
 
-                var currentCell = this.selectedCell;
-                console.log(this.selectedCell);
-                var currentIndex = g.indexOf(currentCell);
-                var figli = currentCell.getEmbeddedCells({deep: true});
+                    var currentCell = this.selectedCell;
+                    console.log(this.selectedCell);
+                    var currentIndex = g.indexOf(currentCell);
+                    var figli = currentCell.getEmbeddedCells({deep: true});
 
-                var move = function (a, old_index, new_index) {
-                    if (new_index >= a.length) {
-                        var k = new_index - a.length;
-                        while ((k--) + 1) {
-                            a.push(undefined);
+                    var move = function (a, old_index, new_index) {
+                        if (new_index >= a.length) {
+                            var k = new_index - a.length;
+                            while ((k--) + 1) {
+                                a.push(undefined);
+                            }
                         }
-                    }
-                    a.splice(new_index, 0, a.splice(old_index, 1)[0]);
-                    return a; // for testing purposes
-                };
-                // funzione di debug
-                var debug = function () {
-                    var x = "";
+                        a.splice(new_index, 0, a.splice(old_index, 1)[0]);
+                        return a; // for testing purposes
+                    };
+                    // funzione di debug
+                    var debug = function () {
+                        var x = "";
 
-                    for (var d = 0; d < g.length; d++) {
-                        x += "|" + g[d].get("keyvalues").comment[0] + "|";
-                    }
-                    console.log(x);
-                };
+                        for (var d = 0; d < g.length; d++) {
+                            x += "|" + g[d].get("keyvalues").comment[0] + "|";
+                        }
+                        console.log(x);
+                    };
 
-                debug();
-                console.log("SPOSTO", g[currentIndex].get("keyvalues").comment[0]);
-
-                move(g, currentIndex, g.length-1);
-
-                for (var i = 0; i < figli.length; i++) {
+                    debug();
                     console.log("SPOSTO", g[currentIndex].get("keyvalues").comment[0]);
 
-                    move(g, currentIndex, g.length-1);
+                    move(g, currentIndex, g.length - 1);
+
+                    for (var i = 0; i < figli.length; i++) {
+                        console.log("SPOSTO", g[currentIndex].get("keyvalues").comment[0]);
+
+                        move(g, currentIndex, g.length - 1);
+                        debug();
+                    }
                     debug();
                 }
-                debug();
 
 			};
 			
@@ -643,12 +646,14 @@ define([
 
 			};
 			
-			if(this.model.currentIndex !=0) // da cambiare
+			if(this.model.options.currentIndex !="class") // da cambiare
 			{
-				this.paper.on('cell:pointerdown', pointerDownFunction);
+
 				this.paper.on('cell:pointerup', pointerUpFunction);
 			    this.paper.on('cell:pointermove', pointerMoveFunction);
 			}
+
+            this.paper.on('cell:pointerdown', pointerDownFunction);
 
             /*
              this.paper.on('blank:pointerdown', function (evt, x, y) {
@@ -656,7 +661,7 @@ define([
              //console.log(x,y);
              });*/
 
-            this.model.addInitialsCells();
+            //this.model.addInitialsCells();
             //this.trigger("cell:pointerup"); // come faccio a triggerare la cosa che ho definito sopra?
 						
 			// console.log(this);
@@ -671,8 +676,8 @@ define([
          * @param {number} index which graph to swith to
          * @param {?} selectedCell ?
          */
-        switch: function (index, selectedCell) {
-            this.model.switchToGraph(index, selectedCell);
+        switch: function (id) {
+            this.model.switchToGraph(id);
             this.trigger("Switchgraph");
         }
     });

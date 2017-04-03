@@ -15,10 +15,18 @@ define([
         graph: {},
 
         options: {
-            currentindex: 0,
+            currentindex: "class",
             id: new Date().getMilliseconds(),
             currentgraph: {},
-            graphs: [
+            graphs:{
+                classes:{
+                    id:new Date().getMilliseconds(),
+                    classesarray:[],
+                    relationshipsArray:[]
+                },
+                methods:[]
+            }
+            /*graphs: [
                 {
                     type: "class",
                     id: '9999',
@@ -83,10 +91,10 @@ define([
                          "d":"M 10 0 L 0 5 L 10 10 z"
                          }
                          }
-                         }*/
+                         }
                     ]
                 }
-            ]
+            ]*/
         },
         initialize: function () {
 
@@ -353,9 +361,9 @@ define([
         },
         switchToGraph: function (id) {
 
-            this.options.graphs[this.options.currentindex] = this.graph.toJSON();
-            this.options.currentindex = id;//this.options.graphs[index] || {}
-            this.graph.resetCells(this.options.graphs[this.options.currentindex].cells);
+            //this.options.graphs[this.options.currentindex] = this.graph.toJSON();
+            //this.options.currentindex = id;//this.options.graphs[index] || {}
+            //this.graph.resetCells(this.options.graphs[this.options.currentindex].cells);
 
             //parte nuova in fase di implementazione
             this.saveCurrentDiagram();
@@ -378,8 +386,8 @@ define([
         saveCurrentDiagram(){
 
             if (this.options.currentindex == "class") {
-                this.options.graphs.classes.classesArray.push(this.graph.getElements());
-                this.options.graphs.classes.relationshipsArray.push(this.graph.getLinks());
+                this.options.graphs.classes.classesArray=(this.graph.getElements());
+                this.options.graphs.classes.relationshipsArray=(this.graph.getLinks());
             }
             else {
                 var index = this.getIndexFromId(this.options.currentindex);
