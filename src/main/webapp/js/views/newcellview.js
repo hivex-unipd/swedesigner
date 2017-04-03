@@ -58,10 +58,12 @@ define([
             //console.log("ehi ci sono");
             this.model = new NewCellModel;
             //console.log(this.model.str);
-            this.model.on("change str",this.render(),this);
-            this.listenTo(ProjectView,"Switchgraph",this.model.switchComponents);
+            this.listenTo(this.model,"change:str",this.render);
+            this.listenTo(ProjectView,"Switchgraph",this.switch);
+            this.render();
         },
         render:function(){
+            this.str=[];
             for (var p in this.model.str) {
                 //console.log(p);
                 this.str.push('<button id="' + this.model.str[p] + '"" class="newcompbt ">' + this.model.str[p] + '</button>');
@@ -69,6 +71,10 @@ define([
             }
             this.$el.html(_.each(this.str));
         },
+        switch:function () {
+           this.model.switchComponents();
+        },
+
 
         /**
          * Adds a new cell to the current diagram, based on which

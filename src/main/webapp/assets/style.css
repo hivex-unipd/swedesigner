@@ -29,6 +29,9 @@
     height: 100%;
 }
 
+#savefile{
+    cursor: pointer;
+}
 
 .main{
     height: calc(100% - 64px);

@@ -21,7 +21,7 @@ define([
             graphs:{
                 classes:{
                     id:new Date().getMilliseconds(),
-                    classesarray:[],
+                    classesArray:[],
                     relationshipsArray:[]
                 },
                 methods:[]
@@ -366,6 +366,7 @@ define([
             //this.graph.resetCells(this.options.graphs[this.options.currentindex].cells);
 
             //parte nuova in fase di implementazione
+            console.log("id:",id);
             this.saveCurrentDiagram();
             if (id == "class") {
                 this.options.currentindex = id;
@@ -382,6 +383,7 @@ define([
                 }
             }
 
+
         },
         saveCurrentDiagram(){
 
@@ -397,13 +399,14 @@ define([
                 else {
                     this.options.graphs.methods.push({
                         id: this.options.currentindex,
-                        cells: graph.getCells()
+                        cells: this.graph.getCells()
                     });
                 }
             }
         },
         saveDiagram: function () {
-            this.options.graphs[this.options.currentindex] = this.graph.toJSON();
+            this.saveCurrentDiagram();
+            //this.options.graphs[this.options.currentindex] = this.graph.toJSON();
             return JSON.stringify(this.options.graphs);
         },
         loadDiagram: function (diag) {
@@ -412,9 +415,11 @@ define([
 
             this.options.currentindex = 0;
             this.graph.resetCells(this.options.graphs[this.options.currentindex].cells);*/
+            //console.log(diag);
             this.options.graphs = JSON.parse(diag);
+            console.log(this.options.graphs);
             this.options.currentindex = "class";
-            this.graph.resetCells(this.options.graphs.classes.classesArray.concat(this.options.graph.classes.relationshipsArray));
+            this.graph.resetCells(this.options.graphs.classes.classesArray.concat(this.options.graphs.classes.relationshipsArray));
 
         },
         getIndexFromId: function (id) {

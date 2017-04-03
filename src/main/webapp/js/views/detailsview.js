@@ -107,7 +107,7 @@ define([
         render: function () {
             console.log("i'm detailsview and i saw your change");
             //this.$el.html(ProjectView.paper.selectedCell.getClassName());
-            console.log("sele",ProjectView.paper.selectedCell);
+            //console.log("sele", _.template($('#'+ProjectView.paper.selectedCell.get("type").replace(/\./g, "\\.")).html()));
             //this.$el.html(this.mytemplate({title: "titolo molto divino", val:"valore molto animale"}));
             this.mytemplate = _.template($('#'+ProjectView.paper.selectedCell.get("type").replace(/\./g, "\\.")).html());
             //this.mytemplate = _.template($('#uml\\.ClassDiagramElement').html()),
@@ -159,7 +159,7 @@ define([
 
         },
         switch:function (e) {
-          ProjectView.switch(e.value);
+          ProjectView.switch(e.target.value);
         },
 
         /**
