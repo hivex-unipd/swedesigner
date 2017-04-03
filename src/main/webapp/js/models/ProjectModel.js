@@ -8,89 +8,97 @@ define([
     'joint',
     'collection/DiagramsCollection',
     'models/celltypes/celltypes'
-],function ($, _, Backbone, joint, DiagramsCollection,celltypes) {
+], function ($, _, Backbone, joint, DiagramsCollection, celltypes) {
 
     var ProjectModel = Backbone.Model.extend({
 
-        graph:{},
+        graph: {},
 
-        options:{
-            currentindex:0,
-            id:new Date().getMilliseconds(),
-            currentgraph:{},
-            graphs:[
+        options: {
+            currentindex: "class",
+            id: new Date().getMilliseconds(),
+            currentgraph: {},
+            graphs:{
+                classes:{
+                    id:new Date().getMilliseconds(),
+                    classesArray:[],
+                    relationshipsArray:[]
+                },
+                methods:[]
+            }
+            /*graphs: [
                 {
-                    type:"class",
-                    id:'9999',
-                    "cells":[
+                    type: "class",
+                    id: '9999',
+                    "cells": [
                         {
-                            "type":"link",
-                            "source":{
-                                "x":10,
-                                "y":20
+                            "type": "link",
+                            "source": {
+                                "x": 10,
+                                "y": 20
                             },
-                            "target":{
-                                "x":350,
-                                "y":20
+                            "target": {
+                                "x": 350,
+                                "y": 20
                             },
-                            "id":"26ff1d7e-671d-4add-a74f-a0172e5270c9",
-                            "attrs":{
-                                ".connection":{
-                                    "stroke":"#222138"
+                            "id": "26ff1d7e-671d-4add-a74f-a0172e5270c9",
+                            "attrs": {
+                                ".connection": {
+                                    "stroke": "#222138"
                                 },
-                                ".marker-source":{
-                                    "fill":"#31d0c6",
-                                    "stroke":"none",
-                                    "d":"M 10 0 L 0 5 L 10 10 z"
+                                ".marker-source": {
+                                    "fill": "#31d0c6",
+                                    "stroke": "none",
+                                    "d": "M 10 0 L 0 5 L 10 10 z"
                                 },
-                                ".marker-target":{
-                                    "fill":"#fe854f",
-                                    "stroke":"#7c68fc",
-                                    "d":"M 10 0 L 0 5 L 10 10 z"
+                                ".marker-target": {
+                                    "fill": "#fe854f",
+                                    "stroke": "#7c68fc",
+                                    "d": "M 10 0 L 0 5 L 10 10 z"
                                 }
                             }
                         }
                     ]
                 },
                 {
-                    type:"method",
-                    method:"nomeclasse.nomemetodo",
-                    id:"1234",
-                    "cells":[
+                    type: "method",
+                    method: "nomeclasse.nomemetodo",
+                    id: "1234",
+                    "cells": [
                         /*{
-                            "type":"link",
-                            "source":{
-                                "x":80,
-                                "y":80
-                            },
-                            "target":{
-                                "x":350,
-                                "y":20
-                            },
-                            "id":"26ff1d7e-671d-4add-a74f-a0172e5270c9",
-                            "attrs":{
-                                ".connection":{
-                                    "stroke":"#222138"
-                                },
-                                ".marker-source":{
-                                    "fill":"#31d0c6",
-                                    "stroke":"none",
-                                    "d":"M 10 0 L 0 5 L 10 10 z"
-                                },
-                                ".marker-target":{
-                                    "fill":"#fe854f",
-                                    "stroke":"#7c68fc",
-                                    "d":"M 10 0 L 0 5 L 10 10 z"
-                                }
-                            }
-                        }*/
+                         "type":"link",
+                         "source":{
+                         "x":80,
+                         "y":80
+                         },
+                         "target":{
+                         "x":350,
+                         "y":20
+                         },
+                         "id":"26ff1d7e-671d-4add-a74f-a0172e5270c9",
+                         "attrs":{
+                         ".connection":{
+                         "stroke":"#222138"
+                         },
+                         ".marker-source":{
+                         "fill":"#31d0c6",
+                         "stroke":"none",
+                         "d":"M 10 0 L 0 5 L 10 10 z"
+                         },
+                         ".marker-target":{
+                         "fill":"#fe854f",
+                         "stroke":"#7c68fc",
+                         "d":"M 10 0 L 0 5 L 10 10 z"
+                         }
+                         }
+                         }
                     ]
                 }
-            ]
+            ]*/
         },
-        initialize: function(){
+        initialize: function () {
 
-            this.graph = new joint.dia.Graph({}, { cellNamespace: Swedesigner.client.model.celltypes });
+            this.graph = new joint.dia.Graph({}, {cellNamespace: Swedesigner.client.model.celltypes});
 
             console.log(this.graph);
             //var a = new joint.shapes.uml.Class();
@@ -103,14 +111,13 @@ define([
             //this.options.currentgraph = this.options.graphs.at(0);
 
 
-
         },
         addCell: function (cell) {
             //meglio aggiungere sia a current graph o solo al graph e poi fare export in json?
             //this.options.graphs[this.options.currentindex].push(cell);
             this.graph.addCell(cell);
         },
-        addCellFromType: function(type) {
+        addCellFromType: function (type) {
             var newClass;
             var newPosition = {x: 200, y: 200};
             var newSize = {width: 100, height: 100};
@@ -135,69 +142,68 @@ define([
 
             this.graph.addCell(newClass);
         },
-        addInitialsCells: function(){
+        addInitialsCells: function () {
             /*var link = new joint.dia.Link({
-                source: { x: 10, y: 20 },
-                target: { x: 350, y: 20 },
-                attrs: {}
-            });
-            link.attr({
-                '.connection': { stroke: '#222138' },
-                '.marker-source': { fill: '#31d0c6', stroke: 'none', d: 'M 10 0 L 0 5 L 10 10 z' },
-                '.marker-target': { fill: '#fe854f', stroke: '#7c68fc', d: 'M 10 0 L 0 5 L 10 10 z' }
-            });
-            this.options.currentgraph.push(link);*/
+             source: { x: 10, y: 20 },
+             target: { x: 350, y: 20 },
+             attrs: {}
+             });
+             link.attr({
+             '.connection': { stroke: '#222138' },
+             '.marker-source': { fill: '#31d0c6', stroke: 'none', d: 'M 10 0 L 0 5 L 10 10 z' },
+             '.marker-target': { fill: '#fe854f', stroke: '#7c68fc', d: 'M 10 0 L 0 5 L 10 10 z' }
+             });
+             this.options.currentgraph.push(link);*/
             //this.options.currentgraph = this.options.graphs[0];
             //this.graph.fromJSON(this.options.graphs[this.options.currentindex]);
 
-	        /*var class2 = new joint.shapes.uml.ClassDiagramElement({
-            position: {x: 120, y: 190},
-            size: {width: 100, height: 100},
-            name: 'MyClass2',
-            attributes: ['- fruit: int', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog'],
-            methods: ['+ HasBanana(): bool', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void'],
-            keyvalues: {
-                attributes: [
-                    {name: "variabileDefault", value: "valoreDefault"},
-                    {name: "variabileDefault2", value: "valoreDefault2"}
-                ],
-                methods: [
-                    {name: "metodoDefault", visibility: "public", value: "id univoco blabla"}
-                ]
+            /*var class2 = new joint.shapes.uml.ClassDiagramElement({
+             position: {x: 120, y: 190},
+             size: {width: 100, height: 100},
+             name: 'MyClass2',
+             attributes: ['- fruit: int', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog'],
+             methods: ['+ HasBanana(): bool', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void'],
+             keyvalues: {
+             attributes: [
+             {name: "variabileDefault", value: "valoreDefault"},
+             {name: "variabileDefault2", value: "valoreDefault2"}
+             ],
+             methods: [
+             {name: "metodoDefault", visibility: "public", value: "id univoco blabla"}
+             ]
 
-            },
-            });*/
+             },
+             });*/
 
             /*var class3 = new uml.ClassDiagramElement({
-                position: {x: 120, y: 190},
-                size: {width: 100, height: 100},
-                name: 'MyClass3rda',
-                attributes: ['- fruit: int', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog'],
-                methods: ['+ HasBanana(): bool', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void'],
+             position: {x: 120, y: 190},
+             size: {width: 100, height: 100},
+             name: 'MyClass3rda',
+             attributes: ['- fruit: int', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog', '+ animal: Dog'],
+             methods: ['+ HasBanana(): bool', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void', '- pet(): void'],
 
-            });*/
+             });*/
             /*var class2 = new joint.shapes.uml.Class({
-                position: { x:200  , y: 500 },
-                size: { width: 180, height: 50 },
-                name: 'Man',
-                attrs: {
-                    '.uml-class-name-rect': {
-                        fill: '#ff8450',
-                        stroke: '#fff',
-                        'stroke-width': 0.5
-                    },
-                    '.uml-class-attrs-rect, .uml-class-methods-rect': {
-                        fill: '#fe976a',
-                        stroke: '#fff',
-                        'stroke-width': 0.5
-                    }
-                }
-            });*/
+             position: { x:200  , y: 500 },
+             size: { width: 180, height: 50 },
+             name: 'Man',
+             attrs: {
+             '.uml-class-name-rect': {
+             fill: '#ff8450',
+             stroke: '#fff',
+             'stroke-width': 0.5
+             },
+             '.uml-class-attrs-rect, .uml-class-methods-rect': {
+             fill: '#fe976a',
+             stroke: '#fff',
+             'stroke-width': 0.5
+             }
+             }
+             });*/
             //this.graph.addCell(class2);
-	        //this.graph.addCell(class2);
+            //this.graph.addCell(class2);
             //this.graph.addCell(class3);
             //this.graph.resetCells(this.options.currentgraph.cells);
-
 
 
             // OLD
@@ -208,7 +214,8 @@ define([
             console.log(this.options);
 
             var x = _.find(this.options.graphs, function (obj) {
-                console.log(obj); return obj.id =='1234';
+                console.log(obj);
+                return obj.id == '1234';
             });
 
             console.log(x);
@@ -218,7 +225,7 @@ define([
                 keyvalues: {
                     xtype: 'FOR',
                     comment: 'A Qua faccio un ciclo',
-                    body : [],
+                    body: [],
 
                 },
                 //index: 1
@@ -226,11 +233,11 @@ define([
 
             var b = new joint.shapes.uml.ActivityDiagramElement({
 
-               offsetY: 200,
+                offsetY: 200,
                 keyvalues: {
                     xtype: 'ASSEGNAZIONE',
                     comment: 'B Qua faccio una cosa interessante',
-                    body : [],
+                    body: [],
 
                 },
                 //index: 2
@@ -242,7 +249,7 @@ define([
                 keyvalues: {
                     xtype: 'ASSEGNAZIONE',
                     comment: 'C Qua faccio un\'altra cosa',
-                    body : [],
+                    body: [],
 
                 },
                 //index: 2
@@ -254,19 +261,19 @@ define([
                 keyvalues: {
                     xtype: 'IF',
                     comment: 'D iffone',
-                    body : [],
+                    body: [],
 
                 },
                 //index: 2
             });
 
-            var  ee = new joint.shapes.uml.ActivityDiagramElement({
+            var ee = new joint.shapes.uml.ActivityDiagramElement({
 
                 offsetY: 500,
                 keyvalues: {
                     xtype: 'WHILE',
                     comment: 'E girogirogiro',
-                    body : [],
+                    body: [],
 
                 },
                 //index: 2
@@ -278,7 +285,7 @@ define([
                 keyvalues: {
                     xtype: 'CUSTOM',
                     comment: 'F scribscrib',
-                    body : [],
+                    body: [],
 
                 },
                 //index: 2
@@ -290,12 +297,11 @@ define([
                 keyvalues: {
                     xtype: 'RETURN',
                     comment: 'G fine',
-                    body : [],
+                    body: [],
 
                 },
                 //index: 2
             });
-
 
 
             x.cells.push(a);
@@ -316,71 +322,108 @@ define([
 //            this.trigger("cell:pointerup");
 
 
-
             //console.log(x.cells[1]);
 
             //x.cells[1]
             // x.cells[1].updateRectangles();
 
 
-
             //a.updateRectangles();
 
 
+            /*
+             this.graph.on('change:position', function(cell) {
 
+             var parentId = cell.get('parent');
+             if (!parentId) return;
 
+             var parent = graph.getCell(parentId);
+             var parentBbox = parent.getBBox();
+             var cellBbox = cell.getBBox();
 
+             if (parentBbox.containsPoint(cellBbox.origin()) &&
+             parentBbox.containsPoint(cellBbox.topRight()) &&
+             parentBbox.containsPoint(cellBbox.corner()) &&
+             parentBbox.containsPoint(cellBbox.bottomLeft())) {
 
+             // All the four corners of the child are inside
+             // the parent area.
+             return;
+             }
 
-/*
-            this.graph.on('change:position', function(cell) {
+             // Revert the child position.
+             cell.set('position', cell.previous('position'));
+             });
 
-                var parentId = cell.get('parent');
-                if (!parentId) return;
-
-                var parent = graph.getCell(parentId);
-                var parentBbox = parent.getBBox();
-                var cellBbox = cell.getBBox();
-
-                if (parentBbox.containsPoint(cellBbox.origin()) &&
-                    parentBbox.containsPoint(cellBbox.topRight()) &&
-                    parentBbox.containsPoint(cellBbox.corner()) &&
-                    parentBbox.containsPoint(cellBbox.bottomLeft())) {
-
-                    // All the four corners of the child are inside
-                    // the parent area.
-                    return;
-                }
-
-                // Revert the child position.
-                cell.set('position', cell.previous('position'));
-            });
-
-*/
+             */
 
 
         },
-        switchToGraph: function(index){
+        switchToGraph: function (id) {
 
-            this.options.graphs[this.options.currentindex] = this.graph.toJSON();
-            this.options.currentindex = index;//this.options.graphs[index] || {}
-            this.graph.resetCells(this.options.graphs[this.options.currentindex].cells);
-            //console.log(this.options.currentgraph);
-            //console.log(JSON.stringify(this.graph.toJSON()));
+            //this.options.graphs[this.options.currentindex] = this.graph.toJSON();
+            //this.options.currentindex = id;//this.options.graphs[index] || {}
+            //this.graph.resetCells(this.options.graphs[this.options.currentindex].cells);
+
+            //parte nuova in fase di implementazione
+            console.log("id:",id);
+            this.saveCurrentDiagram();
+            if (id == "class") {
+                this.options.currentindex = id;
+                this.graph.resetCells(this.options.graphs.classes.classesArray.concat(this.options.graph.classes.relationshipsArray));
+            }
+            else {
+                var index = this.getIndexFromId(id);
+                this.options.currentindex = id;
+                if (index != -1) {
+                    this.graph.resetCells(this.options.graphs.methods[index].cells);
+                }
+                else {
+                    this.graph.resetCells([]);
+                }
+            }
+
+
+        },
+        saveCurrentDiagram(){
+
+            if (this.options.currentindex == "class") {
+                this.options.graphs.classes.classesArray=(this.graph.getElements());
+                this.options.graphs.classes.relationshipsArray=(this.graph.getLinks());
+            }
+            else {
+                var index = this.getIndexFromId(this.options.currentindex);
+                if (index != -1) {
+                    this.options.graphs.methods[index].cells = graph.getCells();
+                }
+                else {
+                    this.options.graphs.methods.push({
+                        id: this.options.currentindex,
+                        cells: this.graph.getCells()
+                    });
+                }
+            }
         },
         saveDiagram: function () {
-            this.options.graphs[this.options.currentindex] = this.graph.toJSON();
+            this.saveCurrentDiagram();
+            //this.options.graphs[this.options.currentindex] = this.graph.toJSON();
             return JSON.stringify(this.options.graphs);
         },
-        loadDiagram:function (diag){
-            console.log("switch");
-            this.options.graphs=JSON.parse(diag);
-            
-            this.options.currentindex =0;
-            this.graph.resetCells(this.options.graphs[this.options.currentindex].cells);
+        loadDiagram: function (diag) {
+            /*console.log("switch");
+            this.options.graphs = JSON.parse(diag);
+
+            this.options.currentindex = 0;
+            this.graph.resetCells(this.options.graphs[this.options.currentindex].cells);*/
+            //console.log(diag);
+            this.options.graphs = JSON.parse(diag);
+            console.log(this.options.graphs);
+            this.options.currentindex = "class";
+            this.graph.resetCells(this.options.graphs.classes.classesArray.concat(this.options.graphs.classes.relationshipsArray));
+
         },
-        getIndexFromId:function(id){
-            return this.options.graphs.findIndex((x)=> x.method == id);
+        getIndexFromId: function (id) {
+            return this.options.graphs.methods.findIndex((x) => x.id == id);
         },
 
         getCurrentGraph: function () {
@@ -389,5 +432,5 @@ define([
 
 
     });
-    return  new ProjectModel;
+    return new ProjectModel;
 });

@@ -181,15 +181,19 @@
                                     <label class="mdl-textfield__label" for="methods.<%=met%>.parameters.<%=par%>">Parametro</label>
                                     <input class="edit mdl-textfield__input" value="<%=methods[met].parameters[par]%>"
                                            name="methods.<%=met%>.parameters.<%=par%>">
-                                    <button class="add"
-                                            name="addparameter.<%=par%>">Aggiungi Parametro
-                                    </button>
+
                                 </div>
+                                <% } %>
+                                <button class="add"
+                                        name="addparameter.<%=met%>">Aggiungi Parametro
+                                </button>
                             </div>
-                            <% }} %>
+
                             <button class="add" name="addmethod">Aggiungi
                                 Metodo
                             </button>
+                            <button class="switch" name="switch" value="<%= methods[met].id %>">Vai al diagramma delle attività</button>
+                            <% } %>
                         </div>
                     </script>
 
@@ -220,15 +224,19 @@
                                     <label class="mdl-textfield__label" for="methods.<%=met%>.parameters.<%=par%>">Parametro</label>
                                     <input class="edit mdl-textfield__input" value="<%=methods[met].parameters[par]%>"
                                            name="methods.<%=met%>.parameters.<%=par%>">
-                                    <button class="add"
-                                            name="addparameter.<%=par%>">Aggiungi Parametro
-                                    </button>
+
                                 </div>
+                                <% } %>
+                                <button class="add"
+                                        name="addparameter.<%=met%>">Aggiungi Parametro
+                                </button>
                             </div>
-                            <% }} %>
+
                             <button class="add" name="addmethod">Aggiungi
                                 Metodo
                             </button>
+                            <button class="switch" name="switch" value="<%= methods[met].id %>">Vai al diagramma delle attività</button>
+                            <% } %>
                         </div>
                     </script>
 

@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'joint',
-    'models/newcellmodel'
-], function ($, _, Backbone, joint, NewCellModel) {
+    'models/newcellmodel',
+    'views/ProjectView'
+], function ($, _, Backbone, joint, NewCellModel,ProjectView) {
 
     /**
      * @classdesc `NewCellView` presents to the user all the available
@@ -54,16 +55,26 @@ define([
          * @function
          */
         initialize: function () {
-            console.log("ehi ci sono");
+            //console.log("ehi ci sono");
             this.model = new NewCellModel;
-            console.log(this.model.str);
+            //console.log(this.model.str);
+            this.listenTo(this.model,"change:str",this.render);
+            this.listenTo(ProjectView,"Switchgraph",this.switch);
+            this.render();
+        },
+        render:function(){
+            this.str=[];
             for (var p in this.model.str) {
-               console.log(p);
+                //console.log(p);
                 this.str.push('<button id="' + this.model.str[p] + '"" class="newcompbt ">' + this.model.str[p] + '</button>');
-                console.log(this.str);
+                //console.log(this.str);
             }
             this.$el.html(_.each(this.str));
         },
+        switch:function () {
+           this.model.switchComponents();
+        },
+
 
         /**
          * Adds a new cell to the current diagram, based on which

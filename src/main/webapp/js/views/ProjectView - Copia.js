@@ -1313,7 +1313,7 @@ define([
              //console.log(x,y);
              });*/
 
-            this.model.addInitialsCells();
+            //this.model.addInitialsCells();
             //this.trigger("cell:pointerup"); // come faccio a triggerare la cosa che ho definito sopra?
 
             console.log(this);

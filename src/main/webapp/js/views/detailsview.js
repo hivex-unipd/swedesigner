@@ -93,7 +93,7 @@ define([
 
             // occhio
             this.listenTo(ProjectView.paper, "changed-cell", this.render);
-            this.listenTo(ProjectView, "Switchgraph", this.visib);
+            //this.listenTo(ProjectView, "Switchgraph", this.visib);
             // si riesce a passare paper come parametro?
         },
 
@@ -107,14 +107,14 @@ define([
         render: function () {
             console.log("i'm detailsview and i saw your change");
             //this.$el.html(ProjectView.paper.selectedCell.getClassName());
-
+            //console.log("sele", _.template($('#'+ProjectView.paper.selectedCell.get("type").replace(/\./g, "\\.")).html()));
             //this.$el.html(this.mytemplate({title: "titolo molto divino", val:"valore molto animale"}));
             this.mytemplate = _.template($('#'+ProjectView.paper.selectedCell.get("type").replace(/\./g, "\\.")).html());
             //this.mytemplate = _.template($('#uml\\.ClassDiagramElement').html()),
                 //console.log(this.mytemplate);
-            console.log(ProjectView.paper.selectedCell.get("type"));
-                console.log(ProjectView.paper.selectedCell);
-            console.log(ProjectView.paper.selectedCell.attributes.keyvalues);
+           // console.log(ProjectView.paper.selectedCell.get("type"));
+             //   console.log(ProjectView.paper.selectedCell);
+            //console.log(ProjectView.paper.selectedCell.attributes.keyvalues);
             var c = ProjectView.paper.selectedCell;
 
 
@@ -146,11 +146,20 @@ define([
             // idee per il binding a due vie: salvarsi in un array inputs i vari input e in qualche modo confirmedit si prende
             // solo quello che gli serve... mi sembra comunque terribilmente inefficiente... che facciamo?
             // bb
-            this.delegateEvents(_.extend(this.events, {'keypress .edit': 'confirmEdit', 'change .edit': 'confirmEdit', 'click .add': 'execmod'}));
+            this.delegateEvents(_.extend(this.events,
+                {'keypress .edit': 'confirmEdit',
+                    'change .edit': 'confirmEdit',
+                    'click .add': 'execmod',
+                    'click .switch': 'switch'
+                }
+                ));
 
 
             return this;
 
+        },
+        switch:function (e) {
+          ProjectView.switch(e.target.value);
         },
 
         /**

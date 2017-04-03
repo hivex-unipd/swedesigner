@@ -35,18 +35,28 @@ define([
          * @function
          */
         initialize: function () {
+
             console.log(this.str);
             this.registerCells("class");
+           // this.listenTo(ProjectModel,"Switchgraph",this.switchComponents());
+        },
+        switchComponents:function () {
+            console.log("ehi sto provando a cambiare");
+          if(ProjectModel.options.currentindex=="class")
+              this.registerCells("class");
+          else
+              this.registerCells("activity");
         },
 
         registerCells: function(diag){
-
+            this.str.length=0;
             for (var property in celltypes[diag]) {
                 if (celltypes[diag].hasOwnProperty(property) && property.startsWith("Hx")) {
                     console.log(property);
                     this.str.push(property);
                 }
             }
+            this.trigger("change:str");
         },
 
         /**
