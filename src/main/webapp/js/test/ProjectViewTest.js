@@ -11,11 +11,11 @@ describe('ProjectView', function () {
 				pview.paper.el.dispatchEvent(evt);
 				assert(pview.model.attributes.cells.models == 'a');
 			});*/
-			var pview = requirejs(['../views/ProjectView.js']);
+/*			var pview = requirejs(['../views/ProjectView.js']);
 			var evt = document.createEvent('HTMLEvents');
 			var result = !evt.initEvent('cell:pointerdown', true, true); // initEvent(event type, bubbling, cancelable)
 			pview.paper.el.dispatchEvent(evt);
-//			assert(pview.model.attributes.cells.models == 'a');
+//			assert(pview.model.attributes.cells.models == 'a');*/
 		});
 	});
 });
