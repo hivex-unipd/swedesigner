@@ -7,7 +7,6 @@ import server.stereotype.Stereotype;
 
 public abstract class ParsedType implements ParsedElement{
  		private String name;
-  		protected String visibility;
   		private List<ParsedMethod> methods = new ArrayList<ParsedMethod>();
   		private List<ParsedAttribute> attributes = new ArrayList<ParsedAttribute>(); //o protected o comunque ho i metodi di get necessari per accederci
   		private List<String> extended = new ArrayList<String>(); 
@@ -18,7 +17,6 @@ public abstract class ParsedType implements ParsedElement{
   		}
   
   		public String getName(){ return name;}
-  		public String getVisibility(){ return visibility;}
   		public List<ParsedMethod> getMethods(){return methods;};
   		public List<ParsedAttribute> getAttributes(){return attributes;}
   		public List<String> getExtended(){return extended;}
@@ -27,7 +25,6 @@ public abstract class ParsedType implements ParsedElement{
   		public abstract void addField(ParsedAttribute pa) throws ParsedException;
   		public abstract void addMethod(ParsedMethod pm) throws ParsedException;
   		public abstract void addSupertype(String name, String type) throws ParsedException;
-  		public abstract void setVisibility(String visibility) throws ParsedException;
 }
 
 

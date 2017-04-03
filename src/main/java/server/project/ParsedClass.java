@@ -34,11 +34,6 @@ public class ParsedClass extends ParsedType {
 				else throw new ParsedException("ParsedClass error: class "+getName()+" cannot implement or extend "+type);
 			}else throw new ParsedException("ParsedClass error: missing information of supertype like name or type");
 		}
-		public void setVisibility(String visibility) throws ParsedException{
-			if(visibility!=null&&(!visibility.equals("private")&&!visibility.equals("public")&&visibility.equals("protected")&&!visibility.equals("package")))
-				throw new ParsedException("ParsedClass error: class "+getName()+" cannot have "+visibility+" visibility");
-			this.visibility = visibility;
-		}
 	
 	public String renderTemplate(Template t) {
 		ST template = t.getClassTemplate();

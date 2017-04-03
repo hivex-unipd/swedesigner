@@ -41,15 +41,6 @@ public class ParsedInterface extends ParsedType{
 			throw new ParsedException("ParsedInterface error: missing information of supertype like name or type");
 	}
 
-	public void setVisibility(String visibility) throws ParsedException{
-		if(visibility!=null){
-			if(visibility.equals("public")||visibility.equals("package"))
-				this.visibility = visibility;
-			else
-				throw new ParsedException("ParsedInterface error: interface "+getName()+" cannot have "+visibility+" visibility");
-		}
-	}
-
 	@Override
 	public String renderTemplate(Template t) {
 		ST template = t.getInterfaceTemplate();

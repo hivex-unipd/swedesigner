@@ -157,7 +157,7 @@ public class Parser {
 						namemeth = currentmeth.getString("name");
 					else
 						errors.add("Name not found in method");
-					if(!returntype.equals("")&&namemeth.equals("")){
+					if(!returntype.equals("")&&!namemeth.equals("")){
 						
 						String visibility = (currentmeth.has("visibility")?currentmeth.getString("visibility"):null);
 						boolean isstatic = (currentmeth.has("static")?currentmeth.getBoolean("static"):false);
@@ -169,8 +169,6 @@ public class Parser {
 					
 				}
 				
-				String visibility = (classvalues.has("visibility") ? classvalues.getString("visibility") : null);
-				try{ pt.setVisibility(visibility);}catch(ParsedException e){errors.add(e.getError());}
 				//inserisco il pt nell'array di classi
 				alltypes.put(id, pt);
 			}//fine if
