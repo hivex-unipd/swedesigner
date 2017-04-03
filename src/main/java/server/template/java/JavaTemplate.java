@@ -63,4 +63,10 @@ public class JavaTemplate implements Template {
 		ST st = group.getInstanceOf("whilejavatemplate");
 		return st;
 	}
+
+	@Override
+	public ST getInterfaceTemplate() {
+		ST st = group.getInstanceOf("interfacejavatemplate");
+		return st;
+	}
 }

@@ -6,7 +6,7 @@
          "classesarray":[
             {
                "type":"uml.class",
-               "id":"26ff1d7e-671d-4add-a74f-a0172e5270c9",
+               "id":"f6ff1d7e-671d-4add-a74f-a0172e5270c9",
                "values":{
                   "name":"NomeClasseA",
                   "static":"false",
@@ -59,17 +59,62 @@
                }
             },
             {
+               "type":"uml.interface";
                "id":"f2c00232-2ac0-4ad3-969e-12caf8caa7dd",
                "values":{
-                  "name":"NomeClasseB",
+                  "name":"PrimaInterfaccia",
                   "static":"false",
                   "abstract":"false",
-                  "visibility":"public"
+                  "visibility":"public",
+                  "attributes":[
+                     {
+                        "id":"bambi",
+                        "static":"true",
+                        "varname":"FIRST_VARIABLE",
+                        "vartype":"int",
+                        "varvisib":"public",
+                        "varvaldef":"0"
+                     },
+                     {
+                        "id":"bambi2",
+                        "static":"false",
+                        "varname":"second-variable",
+                        "vartype":"int",
+                        "varvisib":"private",
+                        "varvaldef":"0"
+                     }
+                  ],
+                  "methods":[
+                     {
+                        "static":"false",
+                        "abstract":"false",
+                        "name":"Method1",
+                        "visibility":"public",
+                        "return-type":"void",
+                        "id":"1236",
+                        "parameters":[
+                           "PARAM-1:int",
+                           "param2:int"
+                        ]
+                     },
+                     {
+                        "static":"true",
+                        "abstract":"false",
+                        "name":"Method2",
+                        "visibility":"private",
+                        "return-type":"void",
+                        "id":"1235",
+                        "parameters":[
+                           "PARAM_1:int",
+                           "param2:int"
+                        ]
+                     }
+                  ]
                }
             },
             {
                "type":"uml.class",
-               "id":"f2c00232-2ac0-4ad3-969e-12caf8caa7df",
+               "id":"22c00232-2ac0-4ad3-969e-12caf8caa7df",
                "values":{
                   "name":"NomeClasseC",
                   "static":"false",
@@ -202,6 +247,9 @@
                   }
                }
             ]
-         }
+         },
+         {
+            "id":"1236"
+          }
       ]
    }

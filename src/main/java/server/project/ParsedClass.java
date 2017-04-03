@@ -9,53 +9,45 @@ import server.check.Check;
 import server.template.Template;
 
 public class ParsedClass extends ParsedType {
-	private String name;
-	private String visibility;
-	private List<String> extended = new ArrayList<String>();
 	private List<String> implemented = new ArrayList<String>();
-	private List<ParsedAttribute> attributes = new ArrayList<ParsedAttribute>();
-	private List<ParsedMethod> methods;
-	
-	public ParsedClass(String name, String visibility, List<ParsedAttribute> attributes, List<ParsedMethod> methods){
-		this.name = name;
-		this.visibility = visibility;
-		this.attributes = attributes;
-		this.methods = methods;
-	}
-	
-	//metodi getter
-	 public String getVisibility(){ return visibility;}
-	 public String getName(){return name;}
-	 public List<String> getExtended(){return extended;}
-	 public List<String> getImplemented(){return implemented;}
-	 public List<ParsedAttribute> getAttributes(){return attributes;}
-	 public List<ParsedMethod> getMethods(){return methods;}
+		private boolean isAbstract = false;
+		
+		public ParsedClass(String name, boolean isAbstract){
+			super(name);
+			this.isAbstract = isAbstract;
+		}
+
+		public boolean getIsAbstract(){ return isAbstract;}
+		
+		public void addField(ParsedAttribute pa) throws ParsedException{
+			getAttributes().add(pa);
+		}
+		public void addMethod(ParsedMethod pm) throws ParsedException{
+			getMethods().add(pm);
+		}
+		public void addSupertype(String name, String type) throws ParsedException{
+			if(name!=null&&type!=null){
+				if(type.equals("class"))
+					getExtended().add(name);
+				else if(type.equals("interface"))
+					implemented.add(name);
+				else throw new ParsedException("ParsedClass error: class "+getName()+" cannot implement or extend "+type);
+			}else throw new ParsedException("ParsedClass error: missing information of supertype like name or type");
+		}
+		public void setVisibility(String visibility) throws ParsedException{
+			if(visibility!=null&&(!visibility.equals("private")&&!visibility.equals("public")&&visibility.equals("protected")&&!visibility.equals("package")))
+				throw new ParsedException("ParsedClass error: class "+getName()+" cannot have "+visibility+" visibility");
+			this.visibility = visibility;
+		}
 	
 	public String renderTemplate(Template t) {
 		ST template = t.getClassTemplate();
 		template.add("class", this);
 		String methods_string = "";
-		for(int i=0; i<methods.size(); i++){
-			methods_string += methods.get(i).renderTemplate(t);
+		for(int i=0; i<getMethods().size(); i++){
+			methods_string += getMethods().get(i).renderTemplate(t);
 		}
 		template.add("methods", methods_string);
 		return template.render();
-	}
-
-	@Override
-	public void addExtended(String s) {
-		extended.add(s);
-	}
-
-	@Override
-	public void addImplemented(String s) {
-		implemented.add(s);
-		
-	}
-
-	@Override
-	public void addAttribute(ParsedAttribute pa) {
-		attributes.add(pa);
-		
 	}
 }
