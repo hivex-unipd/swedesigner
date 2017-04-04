@@ -43,72 +43,81 @@ define([
          */
 
 
-        // if this.model.currentIndex != 'class'
-        initialize: function () {
-            this.model = ProjectModel;//new ProjectModel();
-            this.paper = new joint.dia.Paper({
-                el: $('#paper'),
-                model: this.model.graph,
-                width: 1500,
-                height: 1000,
-                gridSize: 6,
-                drawGrid: true,
-                background: {
-                    color: '#6764A7'
+		renderActivity: function () {
+				 // CODICE OK
+					//console.log(this);
+				    //var g = this.paper.attributes.cells.models;
+					var m = this.model;
+					var p = this.paper;
+					console.log(m);
+					var g = m.graph.get("cells").models;
+					console.log(g);
+					if(g && m.options.currentindex != 'class')
+					{
+						var offsetY = 50;
 
-                },
-                elementView: function (element) {
-                    if (element.get("type").startsWith("class")) {
-                        return celltypes.class.ClassDiagramElementView;
-                    }
-                    else {
-                        return celltypes.activity.ActivityDiagramElementView;
-                    }
-                },
+                    for (i = 0; i < g.length; i++) {
+                        var hidden = false;
+
+                        g[i].getAncestors().every(function (el) {
+                            if (!el.get("expanded")) {
+                                hidden = true;
+                                g[i].set("hidden", true);
+                            }
+                            return !hidden; // se every ritorna false, esce dal loop (per efficienza)
+                        });
 
 
-                highlighting: {
-                    'default': {
-                        name: 'stroke',
-                        options: {
-                            padding: 3
+                        if (!hidden) {
+                            g[i].set("hidden", false);
+                            g[i].attributes.offsetY = offsetY;
+
+                            if (!g[i].get("expanded")) {
+                                offsetY += 50;// se è ridotto ho bisogno di meno spazio
+                            }
+
+                            else {
+                                offsetY += 100;
+                            }
+
                         }
-                    },
+                        /*else
+                         {
+                         g[i].set("hidden", true);
+                         }*/
 
-                },
-
-                //clickThreshold: 1,
-                linkView: joint.dia.LinkView.extend({
-                    pointerdblclick: function (evt, x, y) {
-                        if (V(evt.target).hasClass('connection') || V(evt.target).hasClass('connection-wrap')) {
-                            this.addVertex({x: x, y: y});
-                        }
-                    },
-                    /*pointerclick: function (evt, x, y) {
-                     console.log("you clicked a link");
-                     // codice per dire a detailsview che è cambiato qualcosa
-                     }*/
-                }),
-
-                selectedCell: null,
-                isHighlighted: false,
-
-                interactive: function (cellView) {
-                    if (cellView.model instanceof joint.dia.Link) {
-                        // Disable the default vertex add functionality on pointerdown.
-                        return {vertexAdd: false};
                     }
 
+                    var l = g.length;
+                    //console.log(g);
+                    //console.log(l);
 
-                    return true;
+                    for (ii = 0; ii < l; ii++) {
+
+                        if (true) {//g[ii].get("type").startsWith("activity") == "uml.ActivityDiagramElement") {
+                            g[ii].updateRectangles();
+							console.log(this);
+                            p.removeView(g[ii]);
+                            p.renderView(g[ii]); // per qualche ragione è necessario..
+
+                        }
+
+                        else {
+                            console.log(g[ii]);
+                            console.log("questo no :(");
+                        }
+
+                    }
+					}
+                    
                 },
 
-
-            });
-
-            var pointerDownFunction = function (cellView, evt, x, y) {
+			
+		
+             pointerDownFunction : function (cellView, evt, x, y) {
 
                 if (cellView) {
+					console.log(this);
                     if (this.selectedCell != cellView.model) {
                         changed = true;
                         this.selectedCell = cellView.model;
@@ -175,9 +184,9 @@ define([
 
                 }
 
-            };
+            },
 
-            var pointerUpFunction = function (cellView, evt, x, y) {
+            pointerUpFunction : function (cellView, evt, x, y) {
                 if (cellView.model.get("type").startsWith("activity")) {
                     var changed = false;
                     var parentCell = null;
@@ -526,67 +535,15 @@ define([
 
                     }
 
+					//console.log(this);
+					console.log(this);
+					//this.renderActivity();
+                    this.trigger("renderActivity");
+				}
+            },
 
-                    // CODICE OK
-                    var offsetY = 50;
-
-                    for (i = 0; i < g.length; i++) {
-                        var hidden = false;
-
-                        g[i].getAncestors().every(function (el) {
-                            if (!el.get("expanded")) {
-                                hidden = true;
-                                g[i].set("hidden", true);
-                            }
-                            return !hidden; // se every ritorna false, esce dal loop (per efficienza)
-                        });
-
-
-                        if (!hidden) {
-                            g[i].set("hidden", false);
-                            g[i].attributes.offsetY = offsetY;
-
-                            if (!g[i].get("expanded")) {
-                                offsetY += 50;// se è ridotto ho bisogno di meno spazio
-                            }
-
-                            else {
-                                offsetY += 100;
-                            }
-
-                        }
-                        /*else
-                         {
-                         g[i].set("hidden", true);
-                         }*/
-
-                    }
-
-                    var l = g.length;
-                    //console.log(g);
-                    //console.log(l);
-
-                    for (ii = 0; ii < l; ii++) {
-
-                        if (true) {//g[ii].get("type").startsWith("activity") == "uml.ActivityDiagramElement") {
-                            g[ii].updateRectangles();
-                            this.removeView(g[ii]);
-                            this.renderView(g[ii]); // per qualche ragione è necessario..
-
-                        }
-
-                        else {
-                            console.log(g[ii]);
-                            console.log("questo no :(");
-                        }
-
-                    }
-                }
-
-
-            };
-
-            var pointerMoveFunction = function (cellView) {
+			
+            pointerMoveFunction: function (cellView) {
                 var cell = cellView.model;
                 if (cell.get("type").startsWith("activity")) {
 
@@ -630,15 +587,95 @@ define([
                     }
                 }
 
-            };
+            },
 
 
-            this.paper.on('cell:pointerup', pointerUpFunction);
-            this.paper.on('cell:pointermove', pointerMoveFunction);
+		
+        // if this.model.currentIndex != 'class'
+        initialize: function () {
+            this.model = ProjectModel;//new ProjectModel();
+            this.paper = new joint.dia.Paper({
+                el: $('#paper'),
+                model: this.model.graph,
+                width: 1500,
+                height: 1000,
+                gridSize: 6,
+                drawGrid: true,
+                background: {
+                    color: '#6764A7'
+
+                },
+                elementView: function (element) {
+                    if (element.get("type").startsWith("class")) {
+                        return celltypes.class.ClassDiagramElementView;
+                    }
+                    else {
+                        return celltypes.activity.ActivityDiagramElementView;
+                    }
+                },
 
 
-            this.paper.on('cell:pointerdown', pointerDownFunction);
+                highlighting: {
+                    'default': {
+                        name: 'stroke',
+                        options: {
+                            padding: 3
+                        }
+                    },
 
+                },
+
+                //clickThreshold: 1,
+                linkView: joint.dia.LinkView.extend({
+                    pointerdblclick: function (evt, x, y) {
+                        if (V(evt.target).hasClass('connection') || V(evt.target).hasClass('connection-wrap')) {
+                            this.addVertex({x: x, y: y});
+                        }
+                    },
+                    /*pointerclick: function (evt, x, y) {
+                     console.log("you clicked a link");
+                     // codice per dire a detailsview che è cambiato qualcosa
+                     }*/
+                }),
+
+                selectedCell: null,
+                isHighlighted: false,
+
+                interactive: function (cellView) {
+                    if (cellView.model instanceof joint.dia.Link) {
+                        // Disable the default vertex add functionality on pointerdown.
+                        return {vertexAdd: false};
+                    }
+
+
+                    return true;
+                },
+
+
+            });
+
+			
+            this.paper.on('cell:pointerup', this.pointerUpFunction);
+            this.paper.on('cell:pointermove', this.pointerMoveFunction);
+
+
+            this.paper.on('cell:pointerdown', this.pointerDownFunction);
+
+			console.log(this);
+			var m = this.model;
+			
+				this.renderActivity();
+			
+			
+			this.listenTo(this.paper,'renderActivity', this.renderActivity);
+			this.listenTo(this.model,'renderActivity', function() { 
+				this.pointerDownFunction(this.paper.findView(this.graph.get("cells").models[0]), {}, 0,0);
+				this.pointerUpFunction({}, {}, 0,0);
+			} );
+			this.listenTo(this.model,'addcell',this.renderActivity);
+			//pointerDownFunction();
+			
+			
             //zoom in futuro
             /*graphscale =1;
             this.paper.on('blank:mousewheel',function (evt, x, y, delta) {
