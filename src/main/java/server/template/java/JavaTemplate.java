@@ -69,4 +69,10 @@ public class JavaTemplate implements Template {
 		ST st = group.getInstanceOf("interfacejavatemplate");
 		return st;
 	}
+
+	@Override
+	public ST getElseTemplate() {
+		ST st = group.getInstanceOf("elsejavatemplate");
+		return st;
+	}
 }
