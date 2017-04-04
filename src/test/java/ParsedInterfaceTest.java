@@ -16,8 +16,8 @@ public class ParsedInterfaceTest {
 	public void interfaceContainsBasicInfo() throws ParsedException {
 		ParsedInterface type = new ParsedInterface("MyInterface");
 		ParsedAttribute field = new ParsedAttribute(true, "public", "String", "DATA", "test");
-		List<ParsedAttribute> arguments = new ArrayList<ParsedAttribute>();
-		List<ParsedInstruction> body = new ArrayList<ParsedInstruction>();
+		List<ParsedAttribute> arguments = Arrays.asList();
+		List<ParsedInstruction> body = Arrays.asList();
 		ParsedMethod method = new ParsedMethod("public", false, false, "boolean", "isGood", arguments, body);
 		type.addField(field);
 		type.addMethod(method);
@@ -59,8 +59,8 @@ public class ParsedInterfaceTest {
 	@Test(expected = ParsedException.class)
 	public void interfaceRejectsPrivateMethods() throws ParsedException {
 		ParsedInterface type = new ParsedInterface("MyInterface");
-		List<ParsedAttribute> arguments = new ArrayList<ParsedAttribute>();
-		List<ParsedInstruction> body = new ArrayList<ParsedInstruction>();
+		List<ParsedAttribute> arguments = Arrays.asList();
+		List<ParsedInstruction> body = Arrays.asList();
 		ParsedMethod method = new ParsedMethod("private", false, false, "int", "privateMethod", arguments, body);
 		type.addMethod(method);
 	}
@@ -68,7 +68,7 @@ public class ParsedInterfaceTest {
 	@Test(expected = ParsedException.class)
 	public void interfaceRejectsConcreteMethods() throws ParsedException {
 		ParsedInterface type = new ParsedInterface("MyInterface");
-		List<ParsedAttribute> arguments = new ArrayList<ParsedAttribute>();
+		List<ParsedAttribute> arguments = Arrays.asList();
 		ParsedInstruction inst2 = new ParsedInitialization("boolean", "x", "true");
 		ParsedInstruction inst1 = new ParsedAssignment("x", "false");
 		List<ParsedInstruction> body = Arrays.asList(inst1, inst2);

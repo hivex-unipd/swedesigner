@@ -9,7 +9,7 @@ import server.project.ParsedInstruction;
 import server.template.java.JavaTemplate;
 
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ParsedForTest {
 	@Test
@@ -17,7 +17,7 @@ public class ParsedForTest {
 		String init = "int i = 0";
 		String condition = "i < 10";
 		String step = "i++";
-		List<ParsedInstruction> body = new ArrayList<ParsedInstruction>();
+		List<ParsedInstruction> body = Arrays.asList();
 		ParsedFor cycle = new ParsedFor(init, condition, step, body);
 		JavaTemplate template = new JavaTemplate();
 		String result = cycle.renderTemplate(template);

@@ -11,7 +11,7 @@ import server.project.ParsedException;
 import server.template.java.JavaTemplate;
 
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ParsedClassTest {
 	@Test

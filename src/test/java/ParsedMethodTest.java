@@ -11,7 +11,7 @@ import server.project.ParsedException;
 import server.template.java.JavaTemplate;
 
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ParsedMethodTest {
 	@Test
@@ -21,8 +21,8 @@ public class ParsedMethodTest {
 		boolean is_abstract = false;
 		String return_type = "int";
 		String name = "getInteger";
-		List<ParsedAttribute> arguments = new ArrayList<ParsedAttribute>();
-		List<ParsedInstruction> body = new ArrayList<ParsedInstruction>();
+		List<ParsedAttribute> arguments = Arrays.asList();
+		List<ParsedInstruction> body = Arrays.asList();
 
 		ParsedMethod method = new ParsedMethod(visibility, is_static, is_abstract, return_type, name, arguments, body);
 

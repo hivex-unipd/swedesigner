@@ -1,1 +1,1 @@
-forjavatemplate(for, body)::="for (<for.init:initjavatemplate()> <for.condition>; <for.step:assignmentjavatemplate()>){<body>}"
+forjavatemplate(for, body)::="for (<for.init:initjavatemplate()> <for.condition>; <for.step:assignmentjavatemplate()>) {<body>}"

@@ -1,5 +1,5 @@
 whilejavatemplate(while, body)::=<<
-while(<while.condition>){
+while (<while.condition>) {
 	<body>
 }
 >>
