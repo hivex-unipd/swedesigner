@@ -52,6 +52,8 @@ define([
             this.views.project = ProjectView;
             this.views.details = new DetailsView;
             this.views.newCell = new NewCellView;
+
+            this.listenTo(this.views.project,"Switchgraph",this.toggleVisib);
         },
 
         /**
@@ -66,8 +68,12 @@ define([
             'change #files': 'load'
         },
 
+        toggleVisib:function () {
+          $("#switchtoclass").toggle();
+        },
+
         switchToClass:function (e) {
-            console.log("appviewwwwwwwwww");
+            //console.log("appviewwwwwwwwww");
             this.views.project.switch("class");
         },
 

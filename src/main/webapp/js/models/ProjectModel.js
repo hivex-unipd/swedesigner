@@ -18,83 +18,83 @@ define([
             currentindex: "class",
             id: new Date().getMilliseconds(),
             currentgraph: {},
-            graphs:{
-                classes:{
-                    id:new Date().getMilliseconds(),
-                    classesArray:[],
-                    relationshipsArray:[]
+            graphs: {
+                classes: {
+                    id: new Date().getMilliseconds(),
+                    classesArray: [],
+                    relationshipsArray: []
                 },
-                methods:[]
+                methods: []
             }
             /*graphs: [
-                {
-                    type: "class",
-                    id: '9999',
-                    "cells": [
-                        {
-                            "type": "link",
-                            "source": {
-                                "x": 10,
-                                "y": 20
-                            },
-                            "target": {
-                                "x": 350,
-                                "y": 20
-                            },
-                            "id": "26ff1d7e-671d-4add-a74f-a0172e5270c9",
-                            "attrs": {
-                                ".connection": {
-                                    "stroke": "#222138"
-                                },
-                                ".marker-source": {
-                                    "fill": "#31d0c6",
-                                    "stroke": "none",
-                                    "d": "M 10 0 L 0 5 L 10 10 z"
-                                },
-                                ".marker-target": {
-                                    "fill": "#fe854f",
-                                    "stroke": "#7c68fc",
-                                    "d": "M 10 0 L 0 5 L 10 10 z"
-                                }
-                            }
-                        }
-                    ]
-                },
-                {
-                    type: "method",
-                    method: "nomeclasse.nomemetodo",
-                    id: "1234",
-                    "cells": [
-                        /*{
-                         "type":"link",
-                         "source":{
-                         "x":80,
-                         "y":80
-                         },
-                         "target":{
-                         "x":350,
-                         "y":20
-                         },
-                         "id":"26ff1d7e-671d-4add-a74f-a0172e5270c9",
-                         "attrs":{
-                         ".connection":{
-                         "stroke":"#222138"
-                         },
-                         ".marker-source":{
-                         "fill":"#31d0c6",
-                         "stroke":"none",
-                         "d":"M 10 0 L 0 5 L 10 10 z"
-                         },
-                         ".marker-target":{
-                         "fill":"#fe854f",
-                         "stroke":"#7c68fc",
-                         "d":"M 10 0 L 0 5 L 10 10 z"
-                         }
-                         }
-                         }
-                    ]
-                }
-            ]*/
+             {
+             type: "class",
+             id: '9999',
+             "cells": [
+             {
+             "type": "link",
+             "source": {
+             "x": 10,
+             "y": 20
+             },
+             "target": {
+             "x": 350,
+             "y": 20
+             },
+             "id": "26ff1d7e-671d-4add-a74f-a0172e5270c9",
+             "attrs": {
+             ".connection": {
+             "stroke": "#222138"
+             },
+             ".marker-source": {
+             "fill": "#31d0c6",
+             "stroke": "none",
+             "d": "M 10 0 L 0 5 L 10 10 z"
+             },
+             ".marker-target": {
+             "fill": "#fe854f",
+             "stroke": "#7c68fc",
+             "d": "M 10 0 L 0 5 L 10 10 z"
+             }
+             }
+             }
+             ]
+             },
+             {
+             type: "method",
+             method: "nomeclasse.nomemetodo",
+             id: "1234",
+             "cells": [
+             /*{
+             "type":"link",
+             "source":{
+             "x":80,
+             "y":80
+             },
+             "target":{
+             "x":350,
+             "y":20
+             },
+             "id":"26ff1d7e-671d-4add-a74f-a0172e5270c9",
+             "attrs":{
+             ".connection":{
+             "stroke":"#222138"
+             },
+             ".marker-source":{
+             "fill":"#31d0c6",
+             "stroke":"none",
+             "d":"M 10 0 L 0 5 L 10 10 z"
+             },
+             ".marker-target":{
+             "fill":"#fe854f",
+             "stroke":"#7c68fc",
+             "d":"M 10 0 L 0 5 L 10 10 z"
+             }
+             }
+             }
+             ]
+             }
+             ]*/
         },
         initialize: function () {
 
@@ -116,7 +116,7 @@ define([
             //meglio aggiungere sia a current graph o solo al graph e poi fare export in json?
             //this.options.graphs[this.options.currentindex].push(cell);
             this.graph.addCell(cell);
-			this.trigger('addcell');
+            this.trigger('addcell');
         },
         addCellFromType: function (type) {
             var newClass;
@@ -367,7 +367,7 @@ define([
             //this.graph.resetCells(this.options.graphs[this.options.currentindex].cells);
 
             //parte nuova in fase di implementazione
-            console.log("id:",id);
+            console.log("id:", id);
             this.saveCurrentDiagram();
             if (id == "class") {
                 this.options.currentindex = id;
@@ -389,8 +389,8 @@ define([
         saveCurrentDiagram(){
 
             if (this.options.currentindex == "class") {
-                this.options.graphs.classes.classesArray=(this.graph.getElements());
-                this.options.graphs.classes.relationshipsArray=(this.graph.getLinks());
+                this.options.graphs.classes.classesArray = (this.graph.getElements());
+                this.options.graphs.classes.relationshipsArray = (this.graph.getLinks());
             }
             else {
                 var index = this.getIndexFromId(this.options.currentindex);
@@ -412,22 +412,24 @@ define([
         },
         loadDiagram: function (diag) {
             /*console.log("switch");
-            this.options.graphs = JSON.parse(diag);
+             this.options.graphs = JSON.parse(diag);
 
-            this.options.currentindex = 0;
-            this.graph.resetCells(this.options.graphs[this.options.currentindex].cells);*/
+             this.options.currentindex = 0;
+             this.graph.resetCells(this.options.graphs[this.options.currentindex].cells);*/
             //console.log(diag);
             this.options.graphs = JSON.parse(diag);
             console.log(this.options.graphs);
             this.options.currentindex = "class";
             this.graph.resetCells(this.options.graphs.classes.classesArray.concat(this.options.graphs.classes.relationshipsArray));
-			this.trigger("renderActivity");
+            this.trigger("renderActivity");
 
         },
         getIndexFromId: function (id) {
             return this.options.graphs.methods.findIndex((x) => x.id == id);
         },
-
+        getCurrentDiagramType:function () {
+          return this.options.currentindex=="class"?"class":"activity";
+        },
         getCurrentGraph: function () {
             return this.get("graph");
         },
