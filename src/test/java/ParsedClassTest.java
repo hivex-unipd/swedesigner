@@ -24,4 +24,30 @@ public class ParsedClassTest {
 		assertThat(result, containsString("class MyClass"));
 		assertThat(result, containsString("private String pippo = test"));
 	}
+
+	@Test
+	public void classCanImplementInterfaces() throws ParsedException {
+		ParsedClass type = new ParsedClass("MyClass", false);
+		type.addSupertype("MyInterface", "interface");
+		type.addSupertype("OtherInterface", "interface");
+	}
+
+	@Test
+	public void classCanExtendClass() throws ParsedException {
+		ParsedClass type = new ParsedClass("MyClass", false);
+		type.addSupertype("OtherClass", "class");
+	}
+
+//	@Test(expected = ParsedException.class)
+//	public void classCannotExtendMultipleClasses() throws ParsedException {
+//		ParsedClass type = new ParsedClass("MyClass", false);
+//		type.addSupertype("SomeBaseClass", "class");
+//		type.addSupertype("OtherBaseClass", "class");
+//	}
+
+	@Test(expected = ParsedException.class)
+	public void baseClassNeedsName() throws ParsedException {
+		ParsedClass type = new ParsedClass("MyClass", false);
+		type.addSupertype("Nothing", null);
+	}
 }
