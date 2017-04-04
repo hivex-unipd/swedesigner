@@ -16,13 +16,14 @@ import java.util.Arrays;
 public class ParsedClassTest {
 	@Test
 	public void classContainsBasicInfo() throws ParsedException {
-		ParsedClass type = new ParsedClass("MyClass", false);
-		ParsedAttribute field = new ParsedAttribute(false, "private", "String", "pippo", "test");
+		ParsedClass type = new ParsedClass("MyClass", true);
+		ParsedAttribute field = new ParsedAttribute(false, "private", "String", "pippo", "\"test\"");
 		type.addField(field);
 		JavaTemplate template = new JavaTemplate();
 		String result = type.renderTemplate(template);
-		assertThat(result, containsString("class MyClass"));
-		assertThat(result, containsString("private String pippo = test"));
+		assertThat(result, containsString("abstract class MyClass"));
+		assertThat(result, containsString("private String pippo = \"test\""));
+		// TODO gestire le virgolette?
 	}
 
 	@Test
@@ -38,7 +39,7 @@ public class ParsedClassTest {
 		type.addSupertype("OtherClass", "class");
 	}
 
-//	@Test(expected = ParsedException.class)
+//	@Test(expected = ParsedException.class) // TODO
 //	public void classCannotExtendMultipleClasses() throws ParsedException {
 //		ParsedClass type = new ParsedClass("MyClass", false);
 //		type.addSupertype("SomeBaseClass", "class");

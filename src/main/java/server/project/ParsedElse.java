@@ -20,7 +20,7 @@ public class ParsedElse extends ParsedInstruction {
 		String elsebody_string ="";
 		if(elsebody!=null){
 			for(int i=0; i<elsebody.size(); i++){
-		elsebody_string += elsebody.get(i).renderTemplate(t);
+				elsebody_string += elsebody.get(i).renderTemplate(t);
 			}
 		}
 		template.add("elsebody", elsebody_string);

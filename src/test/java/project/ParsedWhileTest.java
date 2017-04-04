@@ -17,12 +17,14 @@ public class ParsedWhileTest {
 	@Test
 	public void whileContainsBasicInfo() {
 		String condition = "i < 10";
-		ParsedInstruction inst1 = new ParsedInitialization("String", "s", "pippo");
+		ParsedInstruction inst1 = new ParsedInitialization("String", "s", "\"pippo\"");
 		ParsedInstruction inst2 = new ParsedAssignment("i",  "i + 1");
 		List<ParsedInstruction> body = Arrays.asList(inst1, inst2);
 		ParsedWhile cycle = new ParsedWhile(condition, body);
 		JavaTemplate template = new JavaTemplate();
 		String result = cycle.renderTemplate(template);
 		assertThat(result, containsString("while (i < 10)"));
+		assertThat(result, containsString("String s = \"pippo\";"));
+		assertThat(result, containsString("i = i + 1;"));
 	}
 }

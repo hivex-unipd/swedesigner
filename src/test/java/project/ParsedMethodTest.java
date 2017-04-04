@@ -7,6 +7,7 @@ import org.junit.Test;
 import server.project.ParsedMethod;
 import server.project.ParsedAttribute;
 import server.project.ParsedInstruction;
+import server.project.ParsedInitialization;
 import server.project.ParsedException;
 import server.template.java.JavaTemplate;
 
@@ -22,12 +23,14 @@ public class ParsedMethodTest {
 		String return_type = "int";
 		String name = "getInteger";
 		List<ParsedAttribute> arguments = Arrays.asList();
-		List<ParsedInstruction> body = Arrays.asList();
+		ParsedInstruction inst1 = new ParsedInitialization("Object", "tmp", "new Object()");
+		List<ParsedInstruction> body = Arrays.asList(inst1);
 
 		ParsedMethod method = new ParsedMethod(visibility, is_static, is_abstract, return_type, name, arguments, body);
 
 		JavaTemplate template = new JavaTemplate();
 		String result = method.renderTemplate(template);
 		assertThat(result, containsString("public int getInteger()"));
+		assertThat(result, containsString("Object tmp = new Object();"));
 	}
 }
