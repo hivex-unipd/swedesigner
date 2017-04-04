@@ -15,16 +15,12 @@ import java.util.ArrayList;
 
 public class ParsedClassTest {
 	@Test
-	public void classContainsBasicInfo() {
-		ParsedClass instruction = new ParsedClass("MyClass", false);
+	public void classContainsBasicInfo() throws ParsedException {
+		ParsedClass type = new ParsedClass("MyClass", false);
 		ParsedAttribute field = new ParsedAttribute(false, "private", "String", "pippo", "test");
-		try {
-			instruction.addField(field);
-		} catch(ParsedException e) {
-			// boh?!
-		}
+		type.addField(field);
 		JavaTemplate template = new JavaTemplate();
-		String result = instruction.renderTemplate(template);
+		String result = type.renderTemplate(template);
 		assertThat(result, containsString("class MyClass"));
 		assertThat(result, containsString("private String pippo = test"));
 	}

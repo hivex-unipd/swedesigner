@@ -16,12 +16,12 @@ public class ParsedAttributeTest {
 		assertThat(result, containsString("String pippo"));
 	}
 
-// da lanciare quando sarà implementato bene: <<<<<<
+//	da lanciare quando sarà implementato bene: <<<<<<
 //	@Test
 //	public void attributeIsParsed() {
 //		ParsedAttribute instruction = new ParsedAttribute(false, "private", "String", "pippo", "test");
 //		JavaTemplate template = new JavaTemplate();
 //		String result = instruction.renderTemplate(template);
-//		assertEquals(result, "private String pippo = \"test\";");
+//		assertEquals("private String pippo = \"test\";", result);
 //	}
 }
