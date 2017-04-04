@@ -214,6 +214,7 @@ public class Parser {
 		else
 			return null;
 	}
+	
 	//****quinta funzione***
 	private void relBuilder(JSONArray rels, HashMap<String, ParsedType> alltypes)throws Exception{
 		int attNoName = 0; //***attributi senza nome creati da relazioni "reference"
