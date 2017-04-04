@@ -39,7 +39,7 @@ public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 	public static void main(String[] args) throws IOException, JSONException, Exception{
 		Template t = new JavaTemplate();
 		
-		String testo = new String(Files.readAllBytes(Paths.get("src/main/resources/prova.json")));
+		String testo = new String(Files.readAllBytes(Paths.get("src/main/resources/project.json")));
 		ParsedProgram provv = new Parser().createParsedProgram(testo);	
 		
 		ApplicationContext context = new AnnotationConfigApplicationContext(GeneratorAssembler.class);
