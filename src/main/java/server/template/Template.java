@@ -22,4 +22,6 @@ public interface Template {
 	public ST getWhileTemplate();
 
 	public ST getInterfaceTemplate();
+
+	public ST getElseTemplate();
 }

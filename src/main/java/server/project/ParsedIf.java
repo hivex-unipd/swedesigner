@@ -10,12 +10,11 @@ import server.template.Template;
 public class ParsedIf extends ParsedInstruction {
 	private String condition;
 	private List<ParsedInstruction> ifbody;
-	private List<ParsedInstruction> elsebody;
 	
-	public ParsedIf(String condition, List<ParsedInstruction> ifbody, List<ParsedInstruction> elsebody){
+	
+	public ParsedIf(String condition, List<ParsedInstruction> ifbody){
 		this.condition = condition;
 		this.ifbody = ifbody;
-		this.elsebody = elsebody;
 	}
 	
 	public String renderTemplate(Template t) {
@@ -27,15 +26,8 @@ public class ParsedIf extends ParsedInstruction {
 			}
 		}
 		
-		String elsebody_string ="";
-		if(elsebody!=null){
-			for(int i=0; i<elsebody.size(); i++){
-		elsebody_string += elsebody.get(i).renderTemplate(t);
-			}
-		}
 		template.add("if1", this);
 		template.add("ifbody", (ifbody_string==""?null:ifbody_string));
-		template.add("elsebody", (elsebody_string==""?null:elsebody_string));
 		return template.render();
 	}
 
@@ -45,14 +37,6 @@ public class ParsedIf extends ParsedInstruction {
 
 	public List<ParsedInstruction> getIfbody() {
 		return ifbody;
-	}
-
-	public List<ParsedInstruction> getElsebody() {
-		return elsebody;
-	}
-	
-	public void setBody(List<ParsedInstruction> pi){
-		this.ifbody = pi;
 	}
 
 }

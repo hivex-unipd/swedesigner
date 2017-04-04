@@ -14,6 +14,7 @@ import server.project.ParsedAssignment;
 import server.project.ParsedAttribute;
 import server.project.ParsedClass;
 import server.project.ParsedCustom;
+import server.project.ParsedElse;
 import server.project.ParsedException;
 import server.project.ParsedFor;
 import server.project.ParsedIf;
@@ -34,18 +35,35 @@ public class Parser {
 		ParsedProgram pp = new ParsedProgram();
 		JSONObject program = new JSONObject(jsonstring);
 		//JSONObject di primo livello
-		JSONObject objectclasses = (program.has("classes")? program.getJSONObject("classes"):new JSONObject());
-		//Array contenente classesarray e relationshipsarray
-		JSONObject unity = (objectclasses.has("cells")?objectclasses.getJSONObject("cells"):new JSONObject());
+		JSONObject unity = (program.has("classes")? program.getJSONObject("classes"):new JSONObject());
 		//Array delle classi
-		JSONArray clas = (unity.has("classesarray")?unity.getJSONArray("classesarray"):new JSONArray());
+		JSONArray clas = (unity.has("classesArray")?unity.getJSONArray("classesArray"):new JSONArray());
 		//Array delle relazioni
-		JSONArray rels = (unity.has("relationshipsarray")?unity.getJSONArray("relationshipsarray"):new JSONArray());
+		JSONArray rels = (unity.has("relationshipsArray")?unity.getJSONArray("relationshipsArray"):new JSONArray());
 		//Array dei metodi (fuori da cells)
 		JSONArray meths = (program.has("methods")?program.getJSONArray("methods"):new JSONArray());
 		
-		HashMap<String, List<ParsedInstruction>> meth = new HashMap<String, List<ParsedInstruction>>();
+		HashMap<String, List<ParsedInstruction>> meth = bodyMeths(meths);
+		HashMap<String, ParsedType> alltypes = typeBuilder(clas, meth);
 		
+		
+		//inserisco le giuste relazioni all'interno dei tipi della hash map 
+		relBuilder(rels, alltypes);
+		
+		Iterator<Entry<String, ParsedType>> it = alltypes.entrySet().iterator();
+		while(it.hasNext()){
+			Map.Entry<String, ParsedType> entry = (Map.Entry<String, ParsedType>)it.next();
+			pp.addType(entry.getValue());
+		}
+		
+		for(int err = 0; err < errors.size(); err++)
+			System.out.println("***"+errors.get(err)+"\n");
+		return pp;
+	};//*****fine Parser
+	
+	//****prima funzione***
+	private HashMap<String, List<ParsedInstruction>> bodyMeths(JSONArray meths) throws Exception{
+		HashMap<String, List<ParsedInstruction>> meth = new HashMap<String, List<ParsedInstruction>>();
 		for(int i = 0; i<meths.length(); i++){ //ciclo diagrammi delle attività (metodo)
 			JSONObject jmeth = meths.getJSONObject(i);
 			String id = null;
@@ -61,12 +79,18 @@ public class Parser {
 				if(!external.has("parent")){
 					//inizio ricorsione
 					ParsedInstruction k = recursiveBuilder(external, jblocks, j+1);
-					value.add(k);
+					if(k!=null){
+						value.add(k);
+					}	
 				}
 			}
 			meth.put(id, value);
 		}
-		
+		return meth;
+	}
+
+	//****seconda funzione***
+	private HashMap<String, ParsedType> typeBuilder(JSONArray clas, HashMap<String, List<ParsedInstruction>> meth) throws Exception{
 		HashMap<String, ParsedType> alltypes = new HashMap<String, ParsedType>();
 		for(int i = 0; i<clas.length(); i++){
 			JSONObject jclass = clas.getJSONObject(i);
@@ -79,7 +103,6 @@ public class Parser {
 			
 			//creo array per metodi JSON
 			JSONArray jmethods = (classvalues.has("methods")?classvalues.getJSONArray("methods"):new JSONArray());
-			
 			
 			//ricavo il tipo
 			String s = "";
@@ -96,8 +119,8 @@ public class Parser {
 				errors.add("JSON format error: cannot find id of type: this type is not inserted in the list of type");
 			
 			//inserisco il tipo solamente se ha id e type definiti
-			if((s.equals("uml.class") || s.equals("uml.interface")) && !id.equals("")){
-				boolean isInterface = (s.equals("uml.interface") ? true : false);
+			if((s.equals("class.HxClass") || s.equals("class.HxInterface")) && !id.equals("")){
+				boolean isInterface = (s.equals("class.HxInterface") ? true : false);
 	            String name = (classvalues.has("name") ? classvalues.getString("name") : id);
 	            ParsedType pt;
 	            if(isInterface)
@@ -106,74 +129,94 @@ public class Parser {
 	            	boolean isAbstract = (classvalues.has("abstract") ? classvalues.getBoolean("abstract") : false);
 	            	pt = new ParsedClass(name, isAbstract);
 	            }
-	            	
+	         
 				//aggiungo al parsedtype gli attributi
 				for(int r = 0; r<jattributes.length();r++){
 					JSONObject currentattr = jattributes.getJSONObject(r);
-					
-					String varname = "";
-					if(currentattr.has("varname"))
-						varname = currentattr.getString("varname");
-					else
-						errors.add("Cannot find name of attribute");
-					
-					if(!varname.equals("")){
-						//occorre controllare che ci siano tutti i campi prima di creare l'attributo
-						boolean isstatic = (currentattr.has("static")?currentattr.getBoolean("static"):false);
-						String visibility = (currentattr.has("varvisib")?currentattr.getString("varvisib"):null);
-						String varvaldef = (currentattr.has("varvaldef")?currentattr.getString("varvaldef"):null);
-						String vartype = (currentattr.has("vartype") ? currentattr.getString("vartype") : null);
-						
-						try { pt.addField(new ParsedAttribute(isstatic, visibility, vartype, varname, varvaldef));}
+					ParsedAttribute pa = attrBuilder(currentattr);
+					if(pa!=null){
+						try { pt.addField(pa);}
 						catch(ParsedException e){errors.add(e.getError());}
-					}
-					
+					}			
 				}
 				
 				//aggiungo i metodi al parsed type
 				for(int r = 0; r<jmethods.length();r++){
 					JSONObject currentmeth = jmethods.getJSONObject(r);
-					JSONArray params = (currentmeth.has("parameters")?currentmeth.getJSONArray("parameters"):new JSONArray());
-					List<ParsedAttribute> args = new ArrayList<ParsedAttribute>();
-					
-					for(int p=0; p<params.length(); p++){
-						String arginfo = params.getString(p);
-						if(arginfo.contains(":")){
-							String[] infos = arginfo.split(":");
-							args.add(new ParsedAttribute(false, null, infos[1], infos[0], null));
-						}
-						else
-							errors.add("JSON format error: parameter "+(p+1)+" of method");
-					}
-					
-					String returntype = "";//vincolo del nostro programma
-					if(currentmeth.has("return-type"))
-						returntype = currentmeth.getString("return-type");
-					else
-						errors.add("Retun type not found in method");
-					
-					String namemeth = "";
-					if(currentmeth.has("name"))
-						namemeth = currentmeth.getString("name");
-					else
-						errors.add("Name not found in method");
-					if(!returntype.equals("")&&!namemeth.equals("")){
-						
-						String visibility = (currentmeth.has("visibility")?currentmeth.getString("visibility"):null);
-						boolean isstatic = (currentmeth.has("static")?currentmeth.getBoolean("static"):false);
-						boolean isabstract = (currentmeth.has("abstract")?currentmeth.getBoolean("abstract"):false);
-						
-						try{pt.addMethod(new ParsedMethod(visibility , isstatic, isabstract, returntype, namemeth, args, meth.get(currentmeth.getString("id"))));}
+					ParsedMethod pm = methBuilder(currentmeth, meth);
+					if(pm!=null){
+						try{pt.addMethod(pm);}
 						catch(ParsedException e){errors.add(e.getError());}
 					}
-					
 				}
-				
+		
 				//inserisco il pt nell'array di classi
 				alltypes.put(id, pt);
 			}//fine if
-		}//fine for
+		}//fine for//********fine seconda funzione
+		return alltypes;
+	}
+	
+	//****terza funzione***
+	private ParsedAttribute attrBuilder(JSONObject currentattr) throws Exception{
+			String varname = "";
+			if(currentattr.has("name"))
+				varname = currentattr.getString("name");
+			else
+				errors.add("Cannot find name of attribute");
+			
+			if(!varname.equals("")){
+				//occorre controllare che ci siano tutti i campi prima di creare l'attributo
+				boolean isstatic = (currentattr.has("static")?currentattr.getBoolean("static"):false);
+				String visibility = (currentattr.has("visibility")?currentattr.getString("visibility"):null);
+				String varvaldef = (currentattr.has("defaultvalue")?currentattr.getString("defaultvalue"):null);
+				String vartype = (currentattr.has("type") ? currentattr.getString("type") : null);
+				
+				return new ParsedAttribute(isstatic, visibility, vartype, varname, varvaldef);
+			}
+			else
+				return null;
+	}
+	//****quarta funzione***
+	private ParsedMethod methBuilder(JSONObject currentmeth, HashMap<String, List<ParsedInstruction>> meth) throws Exception{
+		JSONArray params = (currentmeth.has("parameters")?currentmeth.getJSONArray("parameters"):new JSONArray());
+		List<ParsedAttribute> args = new ArrayList<ParsedAttribute>();
 		
+		for(int p=0; p<params.length(); p++){
+			String arginfo = params.getString(p);
+			if(arginfo.contains(":")){
+				String[] infos = arginfo.split(":");
+				args.add(new ParsedAttribute(false, null, infos[1], infos[0], null));
+			}
+			else
+				errors.add("JSON format error: parameter "+(p+1)+" of method");
+		}
+		
+		String returntype = "";//vincolo del nostro programma
+		if(currentmeth.has("returntype"))
+			returntype = currentmeth.getString("returntype");
+		else
+			errors.add("Retun type not found in method");
+		
+		String namemeth = "";
+		if(currentmeth.has("name"))
+			namemeth = currentmeth.getString("name");
+		else
+			errors.add("Name not found in method");
+		if(!returntype.equals("")&&!namemeth.equals("")){
+			
+			String visibility = (currentmeth.has("visibility")?currentmeth.getString("visibility"):null);
+			boolean isstatic = (currentmeth.has("static")?currentmeth.getBoolean("static"):false);
+			boolean isabstract = (currentmeth.has("abstract")?currentmeth.getBoolean("abstract"):false);
+			String id = (currentmeth.has("id")?currentmeth.getString("id"):"");
+			return new ParsedMethod(visibility , isstatic, isabstract, returntype, namemeth, args, meth.get(id));
+		}
+		else
+			return null;
+	}
+	
+	//****quinta funzione***
+	private void relBuilder(JSONArray rels, HashMap<String, ParsedType> alltypes)throws Exception{
 		int attNoName = 0; //***attributi senza nome creati da relazioni "reference"
 		//Inserimento relazioni
 		for(int i = 0; i<rels.length();i++){
@@ -181,8 +224,13 @@ public class Parser {
 			
 			//source della relazione
 			String sourcestring = "";
-			if(rel.has("source"))
-				sourcestring = rel.getString("source");
+			if(rel.has("source")){
+				JSONObject source = rel.getJSONObject("source");
+				if(source.has("id"))
+					sourcestring = source.getString("id");
+				else
+					errors.add("JSON format error: cannot find id of source of relationship");
+			}	
 			else
 				errors.add("JSON format error: cannot find source of relationship");
 			ParsedType source = alltypes.get(sourcestring); 							//null se non esiste la chiave corrispondente alla sorgente
@@ -196,10 +244,16 @@ public class Parser {
 			
 			//target della relazione
 			String targetstring = "";
-			if(rel.has("target"))
-				targetstring = rel.getString("target");
+			if(rel.has("target")){
+				JSONObject target = rel.getJSONObject("target");
+				if(target.has("id"))
+					targetstring = target.getString("id");
+				else
+					errors.add("JSON format error: cannot find id of target of relationship");
+			}	
 			else
 				errors.add("JSON format error: cannot find target of relationship");
+			
 			ParsedType targettype = alltypes.get(targetstring);
 			String target = ""; 														//"" se non esiste il target della relazione
 			if(targettype!=null)
@@ -207,17 +261,17 @@ public class Parser {
 			
 			if(source!=null && !type.equals("") && !target.equals("")){					//controllo valori accettabili
 				switch(type){
-						case "uml.generalization" : {
+						case "class.HxGeneralization" : {
 							try{source.addSupertype(target, "class");}
 							catch(ParsedException e){errors.add(e.getError());}
 							break;
 						}
-						case "uml.implementation" : {
+						case "class.HxImplementation" : {
 							try{source.addSupertype(target, "interface");}
 							catch(ParsedException e){errors.add(e.getError());}
 							break;
 						}
-						case "uml.reference" : {
+						case "class.HxReference" : {
 							int molt = 1; //molteplicita di default
 							if(rel.has("molteplicity"))
 								molt = rel.getInt("molteplicity");
@@ -240,17 +294,8 @@ public class Parser {
 						default : errors.add("JSON format error: type of relationship is not correct"); 
 				}//fine switch
 			}//fine if
-		}//fine ciclo for
-		Iterator<Entry<String, ParsedType>> it = alltypes.entrySet().iterator();
-		while(it.hasNext()){
-			Map.Entry<String, ParsedType> entry = (Map.Entry<String, ParsedType>)it.next();
-			pp.addType(entry.getValue());
-		}
-		
-		for(int err = 0; err < errors.size(); err++)
-			System.out.println("***"+errors.get(err)+"\n");
-		return pp;
-	};
+		}//fine ciclo for //******fine quinta funzione
+	}
 		
 
 	//la funzione ritorna null nel caso in cui i JSONObject e JSONArray passati come parametri non abbiano le informazioni necessarie
@@ -271,7 +316,7 @@ public class Parser {
 			
 			if(!type.equals("")&&values!=null){//se nel JSON non sono inseriti il tipo e i valori delle istruzioni, non ha senso inserirle!
 				switch(type){//I VINCOLI IMPOSTI ALLE DIVERSE ISTRUZIONI SONO CARATTERIZZANTI PER IL NOSTRO PROGRAMMA
-					case "uml.assignment" : {
+					case "activity.HxAssignment" : {
 						String name = (values.has("name") ? values.getString("name") : "");
 						String value = (values.has("value") ? values.getString("value") : "");
 						
@@ -282,7 +327,7 @@ public class Parser {
 						
 						break;
 					}
-					case "uml.custom" : {
+					case "activity.HxCustom" : {
 						String value = (values.has("value") ? values.getString("value") : "");
 						
 						if(!value.equals(""))
@@ -291,23 +336,27 @@ public class Parser {
 							errors.add("JSON format error: missing information for custom instruction");
 						break;
 					}
-					case "uml.for" : {//nessun controllo, il for può avere tutte le informazioni mancanti!
-						String init = (values.has("init")?values.getString("init"):null);
-						String condition = (values.has("condition")?values.getString("condition"):null);
-						String step = (values.has("step")?values.getString("step"):null);
+					case "activity.HxFor" : {//nessun controllo, il for può avere tutte le informazioni mancanti!
+						String init = (values.has("initialization")?values.getString("initialization"):null);
+						String condition = (values.has("termination")?values.getString("termination"):null);
+						String step = (values.has("increment")?values.getString("increment"):null);
 						//da vedere se init e step sono stringhe oppure ParsedInit/ParsedAssign
 						currentinst = new ParsedFor(init, condition, step, null);	
 						break;
 					}
-					case "uml.if" : {
+					case "activity.HxIf" : {
 						String condition = (values.has("condition") ? values.getString("condition") : "");;
 						if(!condition.equals(""))
-							currentinst = new ParsedIf(condition, null, null);
+							currentinst = new ParsedIf(condition, null);
 						else
 							errors.add("JSON format error: missing information for if instruction");
 						break;
 					}
-					case "uml.initialization" : {//*******non servirebbe in effetti richiedere la presenza del tipo (indipendenza dal linguaggio)
+					case "activity.HxElse" : {
+							currentinst = new ParsedElse(null);
+						break;
+					}
+					case "activity.HxInitialization" : {//*******non servirebbe in effetti richiedere la presenza del tipo (indipendenza dal linguaggio)
 						String value = (values.has("value")?values.getString("value"):null);
 						String typei = (values.has("type") ? values.getString("type") : null);
 						String name = (values.has("name") ? values.getString("name") : "");
@@ -317,12 +366,12 @@ public class Parser {
 							errors.add("JSON format error: missing name of value for initialization instruction");
 						break;
 					}
-					case "uml.return" : {//nessun controllo, il return può essere anche implicito;
+					case "activity.HxReturn" : {//nessun controllo, il return può essere anche implicito;
 						String value = (values.has("value")?values.getString("value"):null);
 						currentinst = new ParsedReturn(value);
 						break;
 					}
-					case "uml.while" : {
+					case "activity.HxWhile" : {
 						String condition = (values.has("condition") ? values.getString("condition") : "");;
 						if(!condition.equals(""))
 							currentinst = new ParsedWhile(condition, null);
@@ -332,8 +381,6 @@ public class Parser {
 					}
 					default : errors.add("JSON fromat error: type of instruction is not correct");
 				}
-			
-			
 			
 			if(!instruction.has("embeds")){
 				return currentinst;
@@ -360,11 +407,15 @@ public class Parser {
 						otherinstruction = block;
 						found = true;
 						found_at = f;
-						pi.add(recursiveBuilder(otherinstruction, jblocks, found_at+1));
+						ParsedInstruction instr = recursiveBuilder(otherinstruction, jblocks, found_at+1);
+						if(instr!=null){
+							pi.add(instr);
+						}	
 					}
 				}
 			}
-			currentinst.setBody(pi); //chiamata polimorfa
+			if(currentinst!=null)
+				currentinst.setBody(pi); //chiamata polimorfa
 		  }//fine if esterno che controlla la presenza di type e values dell'istruzione
 			
 			//se non ci sono le informazioni necessarie per creare l'istruzione, essa risulta vuota.

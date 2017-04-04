@@ -10,30 +10,30 @@ import server.template.Template;
 
 public class ParsedClass extends ParsedType {
 	private List<String> implemented = new ArrayList<String>();
-		private boolean isAbstract = false;
-		
-		public ParsedClass(String name, boolean isAbstract){
-			super(name);
-			this.isAbstract = isAbstract;
-		}
+	private boolean isAbstract = false;
+	
+	public ParsedClass(String name, boolean isAbstract){
+		super(name);
+		this.isAbstract = isAbstract;
+	}
 
-		public boolean getIsAbstract(){ return isAbstract;}
-		
-		public void addField(ParsedAttribute pa) throws ParsedException{
-			getAttributes().add(pa);
-		}
-		public void addMethod(ParsedMethod pm) throws ParsedException{
-			getMethods().add(pm);
-		}
-		public void addSupertype(String name, String type) throws ParsedException{
-			if(name!=null&&type!=null){
-				if(type.equals("class"))
-					getExtended().add(name);
-				else if(type.equals("interface"))
-					implemented.add(name);
-				else throw new ParsedException("ParsedClass error: class "+getName()+" cannot implement or extend "+type);
-			}else throw new ParsedException("ParsedClass error: missing information of supertype like name or type");
-		}
+	public boolean getIsAbstract(){ return isAbstract;}
+	
+	public void addField(ParsedAttribute pa) throws ParsedException{
+		getAttributes().add(pa);
+	}
+	public void addMethod(ParsedMethod pm) throws ParsedException{
+		getMethods().add(pm);
+	}
+	public void addSupertype(String name, String type) throws ParsedException{
+		if(name!=null&&type!=null){
+			if(type.equals("class"))
+				getExtended().add(name);
+			else if(type.equals("interface"))
+				implemented.add(name);
+			else throw new ParsedException("ParsedClass error: class "+getName()+" cannot implement or extend "+type);
+		}else throw new ParsedException("ParsedClass error: missing information of supertype like name or type");
+	}
 	
 	public String renderTemplate(Template t) {
 		ST template = t.getClassTemplate();

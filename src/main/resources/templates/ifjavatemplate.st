@@ -1,7 +1,5 @@
-ifjavatemplate(if1, ifbody, elsebody)::=<<
+ifjavatemplate(if1, ifbody)::=<<
 if (<if1.condition>) {
 	<ifbody>
-	}<if(elsebody)>else{
-	<elsebody>	
-}<endif>
+}
 >>

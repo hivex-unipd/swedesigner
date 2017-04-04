@@ -1,0 +1,5 @@
+elsejavatemplate(elsebody)::=<<
+else{
+	<elsebody>
+}
+>>
