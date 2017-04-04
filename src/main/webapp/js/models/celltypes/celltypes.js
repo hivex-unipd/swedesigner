@@ -276,14 +276,22 @@ define([
 
             values: {
                 name: "classedefault",
+                abstract:"false",
+                static:"false",
                 attributes: [
                     {
                         name: "variabileDefault",
-                        type: "TipoDefault"
+                        type: "TipoDefault",
+                        defaultValue:"",
+                        visibility:"public",
+                        static:"false"
                     },
                     {
                         name: "variabileDefault2",
-                        type: "TipoDefault2"
+                        type: "TipoDefault2",
+                        defaultValue:"",
+                        visibility:"public",
+                        static:"false"
                     }
                 ],
                 methods: [
@@ -292,7 +300,15 @@ define([
                         visibility: "public",
                         id: joint.util.uuid(),
                         returntype: "tipoRitorno",
-                        parameters: ["param1:int"]
+                        abstract:"false",
+                        static:"false",
+                        parameters: [
+                            {
+                                name:"param1",
+                                type:"int",
+                                defaultValue:"0"
+                            }
+                        ]
                     }
                 ]
             }
@@ -350,7 +366,22 @@ define([
             rectHeight = _.isArray(rects[1].text) ? rects[1].text.length * 15 + 1 : 1 * 15 + 1;
             console.log(rects[1].text);
             attrs['.uml-class-attrs-text'].text = _.isArray(rects[1].text) ? rects[1].text.map(function (e) {
-                    return e.name + ":" + e.type;
+                    var vis = "";
+                    switch (e.visibility) {
+                        case "public":
+                            vis = "+";
+                            break;
+                        case "private":
+                            vis = "-";
+                            break;
+                        case "protected":
+                            vis = "~";
+                            break;
+                        case "package":
+                            vis = "#";
+                            break;
+                    }
+                    return vis+ " "+ e.name + ":" + e.type;
                 }).join('\n') : rects[1].text;
             attrs['.uml-class-attrs-rect'].height = rectHeight;
             attrs['.uml-class-attrs-rect'].transform = 'translate(0,' + offsetY + ')';
@@ -367,8 +398,15 @@ define([
                         case "private":
                             vis = "-";
                             break;
+                        case "protected":
+                            vis = "~";
+                            break;
+                        case "package":
+                            vis = "#";
+                            break;
                     }
-                    return vis + " " + e.name + ":" + e.returntype;
+                    var params = e.parameters.map(function(f){return f.name;}).join(",");
+                    return vis + " " + e.name + "(" + params+")" + ":" + e.returntype;
                 }).join('\n') : rects[2].text;
             attrs['.uml-class-methods-rect'].height = rectHeight;
             attrs['.uml-class-methods-rect'].transform = 'translate(0,' + offsetY + ')';
@@ -387,6 +425,8 @@ define([
                 visibility: "",
                 id: joint.util.uuid(),
                 returntype: "",
+                static:"false",
+                abstract:"false",
                 parameters: []
             });
         },
@@ -399,7 +439,10 @@ define([
         addattribute: function () {
             this.getValues().attributes.push({
                 name: "",
-                type: ""
+                type: "",
+                defaultValue:"",
+                visibility:"",
+                static:"false"
             });
         },
 
@@ -411,7 +454,11 @@ define([
          * @param {number} ind the method's position
          */
         addparameter: function (ind) {
-            this.getValues().methods[ind].parameters.push("");
+            this.getValues().methods[ind].parameters.push({
+                name:"",
+                type:"",
+                defaultValue:""
+            });
         }
     });
 
@@ -470,7 +517,11 @@ define([
                         visibility: "public",
                         id: joint.util.uuid(),
                         returntype: "tipoRitorno",
-                        parameters: ["param1:int"]
+                        parameters: [{
+                            name:"param1",
+                            type:"int",
+                            defaultValue:"0"
+                        }]
                     }
                 ]
 
@@ -527,8 +578,15 @@ define([
                         case "private":
                             vis = "-";
                             break;
+                        case "protected":
+                            vis = "~";
+                            break;
+                        case "package":
+                            vis = "#";
+                            break;
                     }
-                    return vis + " " + e.name + ":" + e.returntype;
+                    var params = e.parameters.map(function(f){return f.name;}).join(",");
+                    return vis + " " + e.name + "(" + params+")" + ":" + e.returntype;
                 }).join('\n') : rects[1].text;
             attrs['.uml-class-methods-rect'].height = rectHeight;
             attrs['.uml-class-methods-rect'].transform = 'translate(0,' + offsetY + ')';
@@ -540,12 +598,18 @@ define([
                 name: "",
                 visibility: "",
                 id: joint.util.uuid(),
+                static:"false",
+                abstract:"false",
                 returntype: "",
                 parameters: []
             });
         },
         addparameter: function (ind) {
-            this.getValues().methods[ind].parameters.push("");
+            this.getValues().methods[ind].parameters.push({
+                name:"",
+                type:"",
+                defaultValue:""
+            });
         }
     });
 
@@ -619,7 +683,7 @@ define([
             type: 'class.HxAssociation',
             labels: [
                 {
-                    position: 25,
+                    position: 0.5,
                     attrs: {
                         text: {
                             text: ''
@@ -628,14 +692,15 @@ define([
                 }
             ],
             values: {
-                pos: "destra",
-                card: "default"
+
+                card: "default",
+                attribute:""
             }
         },celltypes.class.ClassDiagramLink.prototype.defaults),
         updatelabel: function () {
 
             this.label(0, {
-                position:this.getpos(),
+
                 attrs:
                     {
 
@@ -649,7 +714,8 @@ define([
         getcard: function () {
             return this.get('values').card;
         },
-        getpos: function(){
+
+        /*getpos: function(){
             if(this.get("values").pos=="target"){
                 return -25;
             }
@@ -657,7 +723,7 @@ define([
                 return 25;
             }
             //return Number(this.get("values").pos);
-        },
+        },*/
         initialize: function () {
             this.updatelabel();
             celltypes.class.ClassDiagramLink.prototype.initialize.apply(this,arguments);

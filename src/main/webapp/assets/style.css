@@ -122,3 +122,6 @@ input[type="file"] {
     margin-bottom: 40px;
     z-index: 900;
 }
+input[type=checkbox]:checked ~ .switch{
+    display: none;
+}

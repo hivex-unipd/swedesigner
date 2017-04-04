@@ -214,11 +214,20 @@ define([
             if ((e.type=="keypress" && e.which == 13) || e.type=="change") {
                 // fai controllo di dati corretti e aggiorna il graph
                 //this.model.set("",this.$('#'));
+
                 console.log(e.target.id);
                 console.log(e.target.value);
                 console.log(ProjectView.paper.selectedCell);
+                if(e.target.type=="checkbox"){
+                    console.log(e.target.checked);
+                    ProjectView.paper.selectedCell.setToValue(e.target.checked?"true":"false", e.target.name);
 
-                ProjectView.paper.selectedCell.setToValue(e.target.value, e.target.name);
+                }
+                else{
+                    ProjectView.paper.selectedCell.setToValue(e.target.value, e.target.name);
+                }
+
+
 
                 //ProjectView.paper.selectedCell.set();
             }
