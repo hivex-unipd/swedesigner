@@ -1,4 +1,4 @@
-package swedesigner.server;
+package project;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -16,8 +16,7 @@ public class ParsedIfTest {
 	public void ifContainsBasicInfo() {
 		String condition = "x == 10";
 		List<ParsedInstruction> body = Arrays.asList();
-		List<ParsedInstruction> elseBody = Arrays.asList();
-		ParsedIf test = new ParsedIf(condition, body, elseBody);
+		ParsedIf test = new ParsedIf(condition, body);
 		JavaTemplate template = new JavaTemplate();
 		String result = test.renderTemplate(template);
 		assertThat(result, containsString("if (x == 10)"));

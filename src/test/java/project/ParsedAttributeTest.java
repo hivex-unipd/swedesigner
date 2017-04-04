@@ -1,8 +1,9 @@
-package swedesigner.server;
+package project;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.Test;
+import util.Monkey;
 
 import server.project.ParsedAttribute;
 import server.template.java.JavaTemplate;
@@ -10,10 +11,11 @@ import server.template.java.JavaTemplate;
 public class ParsedAttributeTest {
 	@Test
 	public void attributeContainsTypeAndName() {
-		ParsedAttribute instruction = new ParsedAttribute(false, "private", "String", "pippo", "test");
+		String name = Monkey.varName();
+		ParsedAttribute instruction = new ParsedAttribute(false, "private", "String", name, "test");
 		JavaTemplate template = new JavaTemplate();
 		String result = instruction.renderTemplate(template);
-		assertThat(result, containsString("String pippo"));
+		assertThat(result, containsString("String " + name));
 	}
 
 //	da lanciare quando sarà implementato bene: <<<<<<
