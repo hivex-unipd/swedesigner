@@ -27,7 +27,7 @@ define([
          * @name AppView#el
          * @type {jQuery}
          */
-        el: $('#navbar'),
+        el: $('main'),
 
         /**
          * Links each page view to an appropriate object
@@ -60,9 +60,15 @@ define([
          * @type {Object}
          */
         events: {
+            'click #switchtoclass':'switchToClass',
             'click #switch': 'switchgraph',
             'click #savefile': 'save',
             'change #files': 'load'
+        },
+
+        switchToClass:function (e) {
+            console.log("appviewwwwwwwwww");
+            this.views.project.switch("class");
         },
 
         /**

@@ -370,7 +370,7 @@ define([
             this.saveCurrentDiagram();
             if (id == "class") {
                 this.options.currentindex = id;
-                this.graph.resetCells(this.options.graphs.classes.classesArray.concat(this.options.graph.classes.relationshipsArray));
+                this.graph.resetCells(this.options.graphs.classes.classesArray.concat(this.options.graphs.classes.relationshipsArray));
             }
             else {
                 var index = this.getIndexFromId(id);
@@ -394,7 +394,7 @@ define([
             else {
                 var index = this.getIndexFromId(this.options.currentindex);
                 if (index != -1) {
-                    this.options.graphs.methods[index].cells = graph.getCells();
+                    this.options.graphs.methods[index].cells = this.graph.getCells();
                 }
                 else {
                     this.options.graphs.methods.push({
