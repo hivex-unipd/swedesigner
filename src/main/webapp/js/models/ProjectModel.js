@@ -116,6 +116,7 @@ define([
             //meglio aggiungere sia a current graph o solo al graph e poi fare export in json?
             //this.options.graphs[this.options.currentindex].push(cell);
             this.graph.addCell(cell);
+			this.trigger('addcell');
         },
         addCellFromType: function (type) {
             var newClass;
@@ -420,6 +421,7 @@ define([
             console.log(this.options.graphs);
             this.options.currentindex = "class";
             this.graph.resetCells(this.options.graphs.classes.classesArray.concat(this.options.graphs.classes.relationshipsArray));
+			this.trigger("renderActivity");
 
         },
         getIndexFromId: function (id) {

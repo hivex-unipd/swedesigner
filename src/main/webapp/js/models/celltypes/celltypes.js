@@ -148,9 +148,7 @@ define([
          */
         toggleattributes: function () { //non so se sia giusto tenerli qua...boh vedremo
             this.model.set("attributesexpanded", !this.model.get("attributesexpanded"));
-            _.each(this.model.graph.getConnectedLinks(this.model),function(){
-                this.reparent();
-            });
+            
             this.model.updateRectangles();
             this.update(); // ecco cosa dovevi fare, le cose funzionavano già
         },

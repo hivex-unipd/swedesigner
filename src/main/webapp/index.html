@@ -169,9 +169,14 @@
                                        name="methods.<%=met%>.name">
                             </div>
                             <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <label class="mdl-textfield__label" for="<%=methods[met].name%>">Valore</label>
-                                <input class="edit mdl-textfield__input" value="<%= methods[met].value %>"
-                                       name="methods.<%=met%>.value">
+                                <label class="mdl-textfield__label" for="<%=methods[met].returntype%>">Valore</label>
+                                <input class="edit mdl-textfield__input" value="<%= methods[met].returntype %>"
+                                       name="methods.<%=met%>.returntype">
+                            </div>
+							<div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <label class="mdl-textfield__label" for="<%=methods[met].visibility%>">Valore</label>
+                                <input class="edit mdl-textfield__input" value="<%= methods[met].visibility %>"
+                                       name="methods.<%=met%>.visibility">
                             </div>
 
                             <div id="parameters">
