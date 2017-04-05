@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 public class ParsedMethodTest {
 	@Test
-	public void classContainsBasicInfo() {
+	public void methodContainsBasicInfo() {
 		String visibility = "public";
 		boolean is_static = false;
 		boolean is_abstract = false;
@@ -31,6 +31,7 @@ public class ParsedMethodTest {
 		JavaTemplate template = new JavaTemplate();
 		String result = method.renderTemplate(template);
 		assertThat(result, containsString("public int getInteger()"));
+		// TODO errore: metodo vuoto dovrebbe avere le graffe: {}
 		assertThat(result, containsString("Object tmp = new Object();"));
 	}
 }
