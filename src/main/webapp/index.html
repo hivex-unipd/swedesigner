@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-light_blue.min.css">
     <link rel="stylesheet" type="text/css" href="assets/style.css">
+    <link rel="stylesheet" type="text/css" href="assets/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="assets/joint.css">
 
     <script data-main="js/main" src="js/libs/require/require.js"></script>
@@ -138,20 +139,23 @@
                         </div>
                         <div class="prop_inputs" id="abstract">
                             <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-1">
-                                <input type="checkbox"  name="abstract" class="mdl-checkbox__input edit" <% if(abstract=="true"){ %>checked <% } %>>
+                                <input type="checkbox" name="abstract" class="mdl-checkbox__input edit" <%
+                                if(abstract=="true"){ %>checked <% } %>>
                                 <span class="mdl-checkbox__label">Astratta</span>
                             </label>
                         </div>
                         <div class="prop_inputs" id="static">
                             <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-1">
-                                <input type="checkbox" name="static" class="mdl-checkbox__input edit" <% if(static=="true"){ %>checked <% } %>>
+                                <input type="checkbox" name="static" class="mdl-checkbox__input edit" <%
+                                if(static=="true"){ %>checked <% } %>>
                                 <span class="mdl-checkbox__label">Static</span>
                             </label>
                         </div>
-                        <div class=""
+                        <a class="togglable">Attributi</a>
+                        <div class="toggle"
                              id="attributes">
                             <% for(var attr in attributes) { %>
-                            <div>
+                            <div class="propcontainer">
                                 <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                     <label class="mdl-textfield__label" for="attributes.<%=attr%>.name">Nome
                                         variabile</label>
@@ -166,18 +170,28 @@
                                 <div class="visibility">
                                     <label class="">Visibilità</label>
                                     <select class="edit" name="attributes.<%=attr%>.visibility">
-                                        <option value="private"   <%if(attributes[attr].visibility=="private"){%> selected <% } %>>Private</option>
-                                        <option value="protected" <%if(attributes[attr].visibility=="protected"){%> selected <% } %>>Protected</option>
-                                        <option value="package"   <%if(attributes[attr].visibility=="package"){%> selected <% } %>>Package</option>
-                                        <option value="public"    <%if(attributes[attr].visibility=="public"){%> selected <% } %>>Public</option>
+                                        <option value="private"
+                                        <%if(attributes[attr].visibility=="private"){%> selected <% }
+                                        %>>Private</option>
+                                        <option value="protected"
+                                        <%if(attributes[attr].visibility=="protected"){%> selected <% }
+                                        %>>Protected</option>
+                                        <option value="package"
+                                        <%if(attributes[attr].visibility=="package"){%> selected <% }
+                                        %>>Package</option>
+                                        <option value="public"
+                                        <%if(attributes[attr].visibility=="public"){%> selected <% } %>>Public</option>
 
                                     </select>
                                 </div>
                                 <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <label class="mdl-textfield__label" for="attributes.<%=attr%>.defaultValue">Valore di default</label>
-                                    <input class="edit mdl-textfield__input" value="<%= attributes[attr].defaultValue %>"
+                                    <label class="mdl-textfield__label" for="attributes.<%=attr%>.defaultValue">Valore
+                                        di default</label>
+                                    <input class="edit mdl-textfield__input"
+                                           value="<%= attributes[attr].defaultValue %>"
                                            name="attributes.<%=attr%>.defaultValue">
                                 </div>
+                                <button class="add" name="deleteattribute.<%= attr %>">Cancella</button>
                             </div>
 
 
@@ -187,79 +201,113 @@
                             </button>
 
                         </div>
-                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        <a class="togglable">Metodi</a>
+                        <div class="prop_inputs toggle"
                              id="methods">
                             <% for(var met in methods) { %>
-                            <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <label class="mdl-textfield__label" for="<%=methods[met].name%>">Nome metodo</label>
-                                <input class="edit mdl-textfield__input" value="<%= methods[met].name %>"
-                                       name="methods.<%=met%>.name">
-                            </div>
-                            <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <label class="mdl-textfield__label" for="<%=methods[met].returntype%>">Tipo di ritorno</label>
-                                <input class="edit mdl-textfield__input" value="<%= methods[met].returntype %>"
-                                       name="methods.<%=met%>.returntype">
-                            </div>
-							<!--<div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <label class="mdl-textfield__label" for="<%=methods[met].visibility%>">Visibilità</label>
-                                <input class="edit mdl-textfield__input" value="<%= methods[met].visibility %>"
-                                       name="methods.<%=met%>.visibility">
-                            </div>-->
-                            <div class="visibility">
-                                <label class="">Visibilità</label>
-                                <select class="edit" name="methods.<%=met%>.visibility">
-                                    <option value="private"   <%if(methods[met].visibility=="private"){%> selected <% } %>>Private</option>
-                                    <option value="protected" <%if(methods[met].visibility=="protected"){%> selected <% } %>>Protected</option>
-                                    <option value="package"   <%if(methods[met].visibility=="package"){%> selected <% } %>>Package</option>
-                                    <option value="public"    <%if(methods[met].visibility=="public"){%> selected <% } %>>Public</option>
-
-                                </select>
-                            </div>
-                            <div class="prop_inputs" id="staticmet">
-                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" >
-                                    <input type="checkbox" name="methods.<%=met%>.static" class="mdl-checkbox__input edit" <% if(methods[met].static=="true"){ %>checked <% } %>>
-                                    <span class="mdl-checkbox__label">Static</span>
-                                </label>
-                            </div>
-                            <div class="prop_inputs" id="abstractmet">
-                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" >
-                                    <input type="checkbox" name="methods.<%=met%>.abstract" class="mdl-checkbox__input edit" <% if(methods[met].abstract=="true"){ %>checked <% } %>>
-                                    <span class="mdl-checkbox__label">Astratto</span>
-                                </label>
-                            </div>
-
-                            <div id="parameters">
-                                <% for(var par in methods[met].parameters)
-                                {%>
+                            <!--<a class="togglable"><%= methods[met].name %></a>-->
+                            <div class="propcontainer">
                                 <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <label class="mdl-textfield__label" for="methods.<%=met%>.parameters.<%=par%>.name">Nome parametro</label>
-                                    <input class="edit mdl-textfield__input" value="<%=methods[met].parameters[par].name%>"
-                                           name="methods.<%=met%>.parameters.<%=par%>.name">
-
+                                    <label class="mdl-textfield__label" for="<%=methods[met].name%>">Nome metodo</label>
+                                    <input class="edit mdl-textfield__input" value="<%= methods[met].name %>"
+                                           name="methods.<%=met%>.name">
                                 </div>
                                 <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <label class="mdl-textfield__label" for="methods.<%=met%>.parameters.<%=par%>.type">Tipo parametro</label>
-                                    <input class="edit mdl-textfield__input" value="<%=methods[met].parameters[par].type%>"
-                                           name="methods.<%=met%>.parameters.<%=par%>.type">
-
+                                    <label class="mdl-textfield__label" for="<%=methods[met].returntype%>">Tipo di
+                                        ritorno</label>
+                                    <input class="edit mdl-textfield__input" value="<%= methods[met].returntype %>"
+                                           name="methods.<%=met%>.returntype">
                                 </div>
-                                <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <label class="mdl-textfield__label" for="methods.<%=met%>.parameters.<%=par%>.defaultValue">Valore di default</label>
-                                    <input class="edit mdl-textfield__input" value="<%=methods[met].parameters[par].defaultValue%>"
-                                           name="methods.<%=met%>.parameters.<%=par%>.defaultValue">
+                                <!--<div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <label class="mdl-textfield__label" for="<%=methods[met].visibility%>">Visibilità</label>
+                                    <input class="edit mdl-textfield__input" value="<%= methods[met].visibility %>"
+                                           name="methods.<%=met%>.visibility">
+                                </div>-->
+                                <div class="visibility">
+                                    <label class="">Visibilità</label>
+                                    <select class="edit" name="methods.<%=met%>.visibility">
+                                        <option value="private"
+                                        <%if(methods[met].visibility=="private"){%> selected <% } %>>Private</option>
+                                        <option value="protected"
+                                        <%if(methods[met].visibility=="protected"){%> selected <% }
+                                        %>>Protected</option>
+                                        <option value="package"
+                                        <%if(methods[met].visibility=="package"){%> selected <% } %>>Package</option>
+                                        <option value="public"
+                                        <%if(methods[met].visibility=="public"){%> selected <% } %>>Public</option>
 
+                                    </select>
                                 </div>
-                                <% } %>
-                                <button class="add"
-                                        name="addparameter.<%=met%>">Aggiungi Parametro
+                                <div class="prop_inputs" id="staticmet">
+                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                                        <input type="checkbox" name="methods.<%=met%>.static"
+                                               class="mdl-checkbox__input edit" <% if(methods[met].static=="true"){
+                                        %>checked <% } %>>
+                                        <span class="mdl-checkbox__label">Static</span>
+                                    </label>
+                                </div>
+                                <div class="prop_inputs" id="abstractmet">
+                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                                        <input type="checkbox" name="methods.<%=met%>.abstract"
+                                               class="mdl-checkbox__input edit" <% if(methods[met].abstract=="true"){
+                                        %>checked <% } %>>
+                                        <span class="mdl-checkbox__label">Astratto</span>
+                                    </label>
+                                </div>
+
+                                <div id="parameters">
+                                    <% for(var par in methods[met].parameters)
+                                    {%>
+                                    <div>
+                                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <label class="mdl-textfield__label"
+                                                   for="methods.<%=met%>.parameters.<%=par%>.name">Nome
+                                                parametro</label>
+                                            <input class="edit mdl-textfield__input"
+                                                   value="<%=methods[met].parameters[par].name%>"
+                                                   name="methods.<%=met%>.parameters.<%=par%>.name">
+
+                                        </div>
+                                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <label class="mdl-textfield__label"
+                                                   for="methods.<%=met%>.parameters.<%=par%>.type">Tipo
+                                                parametro</label>
+                                            <input class="edit mdl-textfield__input"
+                                                   value="<%=methods[met].parameters[par].type%>"
+                                                   name="methods.<%=met%>.parameters.<%=par%>.type">
+
+                                        </div>
+                                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <label class="mdl-textfield__label"
+                                                   for="methods.<%=met%>.parameters.<%=par%>.defaultValue">Valore di
+                                                default</label>
+                                            <input class="edit mdl-textfield__input"
+                                                   value="<%=methods[met].parameters[par].defaultValue%>"
+                                                   name="methods.<%=met%>.parameters.<%=par%>.defaultValue">
+
+                                        </div>
+                                        <button class="add"
+                                                name="deleteparameter.<%=met%>.<%=par%>">Cancella parametro
+                                        </button>
+                                    </div>
+
+                                    <% } %>
+                                    <button class="add"
+                                            name="addparameter.<%=met%>">Aggiungi Parametro
+                                    </button>
+                                </div>
+                                <button class="switch" name="switch" value="<%= methods[met].id %>">Vai al diagramma
+                                    delle
+                                    attività
                                 </button>
+
                             </div>
+                            <% } %>
+
 
                             <button class="add" name="addmethod">Aggiungi
                                 Metodo
                             </button>
-                            <button class="switch" name="switch" value="<%= methods[met].id %>">Vai al diagramma delle attività</button>
-                            <% } %>
                         </div>
                     </script>
 
@@ -285,10 +333,14 @@
                             <div class="visibility">
                                 <label class="">Visibilità</label>
                                 <select class="edit" name="methods.<%=met%>.visibility">
-                                    <option value="private"   <%if(methods[met].visibility=="private"){%> selected <% } %>>Private</option>
-                                    <option value="protected" <%if(methods[met].visibility=="protected"){%> selected <% } %>>Protected</option>
-                                    <option value="package"   <%if(methods[met].visibility=="package"){%> selected <% } %>>Package</option>
-                                    <option value="public"    <%if(methods[met].visibility=="public"){%> selected <% } %>>Public</option>
+                                    <option value="private"
+                                    <%if(methods[met].visibility=="private"){%> selected <% } %>>Private</option>
+                                    <option value="protected"
+                                    <%if(methods[met].visibility=="protected"){%> selected <% } %>>Protected</option>
+                                    <option value="package"
+                                    <%if(methods[met].visibility=="package"){%> selected <% } %>>Package</option>
+                                    <option value="public"
+                                    <%if(methods[met].visibility=="public"){%> selected <% } %>>Public</option>
 
                                 </select>
                             </div>
@@ -497,7 +549,10 @@
 
                 </div>
             </div>
-            <button id="switchtoclass" value="class" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color-text--white">Torna al diagramma delle classi</button>
+            <button id="switchtoclass" value="class"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color-text--white">Torna
+                al diagramma delle classi
+            </button>
         </div>
     </main>
 

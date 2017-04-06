@@ -32,6 +32,7 @@ define([
          * @type {joint.dia.Paper}
          */
         paper: {},
+        visibleElements:[],
 
         /**
          * Initializes `model` with a new `ProjectModel`;
@@ -704,11 +705,17 @@ define([
          */
         switch: function (id) {
             this.model.switchToGraph(id);
+            this.visibleElements = this.model.getClassVisibileElements(this.paper.selectedCell);
+            console.log("elementi: ",this.visibleElements);
             this.paper.selectedCell= null;
             //console.log("ah oh perchè non triggeri");
             this.paper.trigger("changed-cell");
             this.trigger("Switchgraph");
+        },
+        getCurrentDiagramType: function () {
+            return this.model.getCurrentDiagramType();
         }
+
     });
     return new ProjectView;
 });

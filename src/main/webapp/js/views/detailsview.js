@@ -4,7 +4,8 @@ define([
     'backbone',
     'joint',
     'views/ProjectView',
-    'material'
+    'material',
+    'jqueryui'
 ], function ($, _, Backbone, joint, ProjectView, componentHandler) {
 
     /**
@@ -77,6 +78,8 @@ define([
             //'blur .edit': 'confirmEdit'
         },
 
+        visibleElements: [],
+
         /**
          * Initializes `el` with a jQuery object that handles the `#details`
          * div and starts listening to the `ProjectView` events
@@ -109,7 +112,7 @@ define([
             //this.$el.html(ProjectView.paper.selectedCell.getClassName());
             //console.log("sele", _.template($('#'+ProjectView.paper.selectedCell.get("type").replace(/\./g, "\\.")).html()));
             //this.$el.html(this.mytemplate({title: "titolo molto divino", val:"valore molto animale"}));
-            if(ProjectView.paper.selectedCell) {
+            if (ProjectView.paper.selectedCell) {
                 this.mytemplate = _.template($('#' + ProjectView.paper.selectedCell.get("type").replace(/\./g, "\\.")).html());
                 //this.mytemplate = _.template($('#uml\\.ClassDiagramElement').html()),
                 //console.log(this.mytemplate);
@@ -152,11 +155,46 @@ define([
                         'keypress .edit': 'confirmEdit',
                         'change .edit': 'confirmEdit',
                         'click .add': 'execmod',
-                        'click .switch': 'switch'
+                        'click .switch': 'switch',
+                        'click .togglable': 'toggle'
                     }
                 ));
+                console.log("currentdiag ",ProjectView.getCurrentDiagramType());
+                if (ProjectView.getCurrentDiagramType() == "activity") {
+                    console.log("sto facendo qualcosa");
+                    var split = function (val) {
+                        return val.split(/(,\s* | \s*)/);
+                    };
+                    var extractLast = function (term) {
+                        return split(term).pop();
+                    };
+                    $('input.edit').autocomplete({
+                            minLength: 0,
+                            source: function (request, response) {
+                                console.log( ProjectView.visibleElements);
+                                response($.ui.autocomplete.filter(
+                                    ProjectView.visibleElements, extractLast(request.term)));
+                            },
+                            focus: function () {
+                                return false;
+                            },
+
+                            select: function (event, ui) {
+                                var terms = split(this.value);
+                                // remove the current input
+                                terms.pop();
+                                // add the selected item
+                                terms.push(ui.item.value);
+                                // add placeholder to get the comma-and-space at the end
+                                terms.push("");
+                                this.value = terms.join("");
+                                return false;
+                            }
+                        }
+                    );
+                }
             }
-            else{
+            else {
                 this.$el.html("");
             }
 
@@ -164,8 +202,17 @@ define([
             return this;
 
         },
-        switch:function (e) {
-          ProjectView.switch(e.target.value);
+        toggle:function (e) {
+            //console.log("sto togglolando");
+            e.preventDefault();
+            console.log($(e.target).next());
+            var elem = $(e.target).next();
+            console.log(elem);
+            //$('.toggle').not(elem).hide('slow');
+            elem.toggle('slow');
+        },
+        switch: function (e) {
+            ProjectView.switch(e.target.value);
         },
 
         /**
@@ -184,7 +231,8 @@ define([
          */
         execmod: function (e) {
             var tmp = e.target.name.split(".");
-            ProjectView.paper.selectedCell.executemethod(tmp[0], tmp[1]);
+            ProjectView.paper.selectedCell.executemethod(tmp[0], Array.prototype.slice.call(tmp, 1));
+            //ProjectView.paper.selectedCell.executemethod.apply(this,[].slice.call(tmp));
             this.render();
         },
 
@@ -211,22 +259,21 @@ define([
          * @private
          */
         confirmEdit: function (e) {
-            if ((e.type=="keypress" && e.which == 13) || e.type=="change") {
+            if ((e.type == "keypress" && e.which == 13) || e.type == "change") {
                 // fai controllo di dati corretti e aggiorna il graph
                 //this.model.set("",this.$('#'));
 
                 console.log(e.target.id);
                 console.log(e.target.value);
                 console.log(ProjectView.paper.selectedCell);
-                if(e.target.type=="checkbox"){
+                if (e.target.type == "checkbox") {
                     console.log(e.target.checked);
-                    ProjectView.paper.selectedCell.setToValue(e.target.checked?"true":"false", e.target.name);
+                    ProjectView.paper.selectedCell.setToValue(e.target.checked ? "true" : "false", e.target.name);
 
                 }
-                else{
+                else {
                     ProjectView.paper.selectedCell.setToValue(e.target.value, e.target.name);
                 }
-
 
 
                 //ProjectView.paper.selectedCell.set();

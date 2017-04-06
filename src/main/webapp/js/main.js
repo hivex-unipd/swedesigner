@@ -6,7 +6,8 @@ require.config({
         backbone: 'libs/backbone/backbone',
         text: 'libs/require/text',
         joint: 'libs/jointjs/joint',
-        material: 'libs/mdl/material'
+        material: 'libs/mdl/material',
+        jqueryui: 'libs/jqueryui/jquery-ui'
     },
     shim: {
         'material': {

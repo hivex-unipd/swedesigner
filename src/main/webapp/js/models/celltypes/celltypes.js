@@ -97,6 +97,7 @@ define([
          * @param {function} met the method to be executed
          */
         executemethod: function (met) {
+            console.log(met,arguments);
             return this[met] && this[met].apply(this, [].slice.call(arguments, 1));
         }
     });
@@ -459,6 +460,14 @@ define([
                 type:"",
                 defaultValue:""
             });
+        },
+        deleteparameter:function (met) {
+            console.log(met[1]);
+          this.getValues().methods[met[0]].parameters.splice(met[1],1);
+          console.log(this.getValues());
+        },
+        deleteattribute: function(ind){
+            this.getValues().attributes.splice(ind,1);
         }
     });
 

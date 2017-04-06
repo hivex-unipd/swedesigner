@@ -427,17 +427,28 @@ define([
         getIndexFromId: function (id) {
             return this.options.graphs.methods.findIndex((x) => x.id == id);
         },
-        getClassVisibileElements:function(cell){
+        getClassVisibileElements: function (cell) {
             var elems = [];
-            for(var attr in cell.getValues().attributes){
-                elems.push(cell.getValues().attributes[attr].name);
+            for (var attr in cell.getValues().attributes) {
+                elems.push(
+                    {
+                        label: cell.getValues().attributes[attr].name+":"+cell.getValues().attributes[attr].type,
+                        value: cell.getValues().attributes[attr].name
+                    });
             }
-            for(var met in cell.getValues().methods){
-                elems.push(cell.getValues().methods[met].name);
+            for (var met in cell.getValues().methods) {
+                elems.push(
+                    {
+                        label: cell.getValues().methods[met].name+"("+cell.getValues().methods[met].parameters.map(function (e) {
+                            return e.name;
+                        }).join(',')+")",
+                        value: cell.getValues().methods[met].name+"("
+                    });
             }
+            return elems;
         },
-        getCurrentDiagramType:function () {
-          return this.options.currentindex=="class"?"class":"activity";
+        getCurrentDiagramType: function () {
+            return this.options.currentindex == "class" ? "class" : "activity";
         },
         getCurrentGraph: function () {
             return this.get("graph");
