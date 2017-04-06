@@ -35,11 +35,11 @@ public class JavaGenerator implements Generator {
 			
 			program += p.getType(i).renderTemplate(template);
 			String type = p.getType(i).renderTemplate(template);
-			String path = "src/main/resources/ContentFile/"+p.getType(i).getName()+".java";
+			/*String path = "src/main/resources/ContentFile/"+p.getType(i).getName()+".java";
 			File tipo = new File(path);
 		    PrintWriter writer = new PrintWriter(tipo);
 		    writer.println(type);
-		    writer.close();
+		    writer.close();*/
 		}
 		System.out.println(program);
 	};
