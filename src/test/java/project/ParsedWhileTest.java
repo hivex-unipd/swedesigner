@@ -6,8 +6,7 @@ import org.junit.Test;
 
 import server.project.ParsedWhile;
 import server.project.ParsedInstruction;
-import server.project.ParsedInitialization;
-import server.project.ParsedAssignment;
+import server.project.ParsedReturn;
 import server.template.java.JavaTemplate;
 
 import java.util.List;
@@ -17,14 +16,12 @@ public class ParsedWhileTest {
 	@Test
 	public void whileContainsBasicInfo() {
 		String condition = "i < 10";
-		ParsedInstruction inst1 = new ParsedInitialization("String", "s", "\"pippo\"");
-		ParsedInstruction inst2 = new ParsedAssignment("i",  "i + 1");
-		List<ParsedInstruction> body = Arrays.asList(inst1, inst2);
+		ParsedInstruction inst1 = new ParsedReturn("1");
+		List<ParsedInstruction> body = Arrays.asList(inst1);
 		ParsedWhile cycle = new ParsedWhile(condition, body);
 		JavaTemplate template = new JavaTemplate();
 		String result = cycle.renderTemplate(template);
 		assertThat(result, containsString("while (i < 10)"));
-		assertThat(result, containsString("String s = \"pippo\";"));
-		assertThat(result, containsString("i = i + 1;"));
+		assertThat(result, containsString("return 1;"));
 	}
 }

@@ -4,6 +4,7 @@ var requirejs = require('requirejs');
 requirejs.config({
 	baseUrl: '../',
 	paths: {
+		cheerio: 'libs/cheerio/cheerio',
 		jquery: 'libs/jquery/jquery',
 		lodash: 'libs/lodash/lodash',
 		backbone: 'libs/backbone/backbone',
@@ -23,11 +24,11 @@ requirejs.config({
 	}
 });
 
-describe('AppView', function(done) {
-	describe('views', function() {
+describe('AppView', function (done) {
+	describe('views', function () {
 		var app_view;
 		/*before(function (done) {
-			requirejs(['../node_modules/cheerio/lib/cheerio.js'], function (window) {
+			requirejs(['cheerio'], function (window) {
 				requirejs(['../views/AppView.js'], function (AppView) {
 					app_view = new AppView;
 					done();

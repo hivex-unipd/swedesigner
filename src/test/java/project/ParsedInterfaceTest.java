@@ -69,9 +69,8 @@ public class ParsedInterfaceTest {
 	public void interfaceRejectsConcreteMethods() throws ParsedException {
 		ParsedInterface type = new ParsedInterface("MyInterface");
 		List<ParsedAttribute> arguments = Arrays.asList();
-		ParsedInstruction inst2 = new ParsedInitialization("boolean", "x", "true");
-		ParsedInstruction inst1 = new ParsedAssignment("x", "false");
-		List<ParsedInstruction> body = Arrays.asList(inst1, inst2);
+		ParsedInstruction inst1 = new ParsedReturn("false");
+		List<ParsedInstruction> body = Arrays.asList(inst1);
 		ParsedMethod method = new ParsedMethod("public", false, false, "int", "privateMethod", arguments, body);
 		type.addMethod(method);
 	}
