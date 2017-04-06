@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 
 import org.json.*;
 
-import server.project.ParsedAssignment;
 import server.project.ParsedAttribute;
 import server.project.ParsedClass;
 import server.project.ParsedCustom;
@@ -18,7 +17,6 @@ import server.project.ParsedElse;
 import server.project.ParsedException;
 import server.project.ParsedFor;
 import server.project.ParsedIf;
-import server.project.ParsedInitialization;
 import server.project.ParsedInstruction;
 import server.project.ParsedInterface;
 import server.project.ParsedMethod;
@@ -210,7 +208,7 @@ public class Parser {
 				String varvaldef = (currentattr.has("defaultvalue")?currentattr.getString("defaultvalue"):null);
 				String vartype = (currentattr.has("type") ? currentattr.getString("type") : null);
 
-				return new ParsedAttribute(isstatic, visibility, vartype, varname, varvaldef);
+				return new ParsedAttribute(isstatic, visibility, vartype, varname, "=", varvaldef);
 			}
 			else
 				return null;
@@ -230,13 +228,16 @@ public class Parser {
 		List<ParsedAttribute> args = new ArrayList<ParsedAttribute>();
 
 		for (int p=0; p<params.length(); p++) {
-			String arginfo = params.getString(p);
-			if (arginfo.contains(":")) {
-				String[] infos = arginfo.split(":");
-				args.add(new ParsedAttribute(false, null, infos[1], infos[0], null));
+			JSONObject param = params.getJSONObject(p);
+			String name = (param.has("name") ? param.getString("name"):"");
+			String type = (param.has("type") ? param.getString("type"):null);
+			String defaultvalue = (param.has("defaultvalue") ? param.getString("defaultvalue"):null);
+			
+			if (name!="") {
+				args.add(new ParsedAttribute(false, null, type, name, "=", defaultvalue));
 			}
 			else
-				errors.add("JSON format error: parameter "+(p+1)+" of method");
+				errors.add("JSON format error: missing name of parameter "+(p+1)+" of method");
 		}
 
 		String returntype = "";//vincolo del nostro programma
@@ -343,7 +344,7 @@ public class Parser {
 						String value = (molt>1 ? "new "+target+"["+molt+"]" : null);//non esistono valori di default per i riferimenti singoli!!!
 
 						//***non si può indicare se un attributo è statico o la particolare visibilità
-						try{source.addField(new ParsedAttribute(false, null, typeatt, nameatt, value));}
+						try{source.addField(new ParsedAttribute(false, null, typeatt, nameatt, "=", value));}
 						catch(ParsedException e) {errors.add(e.getError());}
 						break;
 					}
@@ -361,81 +362,18 @@ public class Parser {
 			type = instruction.getString("type");
 		else
 			errors.add("JSON format error: cannot find type of instruction");
-		ParsedInstruction currentinst = null;
+		
 		JSONObject values = null;
 		if (instruction.has("values")) {
 			values = instruction.getJSONObject("values");
 		}
 		else
 			errors.add("JSON format error: cannot find values of instruction");
+		
+		ParsedInstruction currentinst = null;
 
 		if (!type.equals("")&&values!=null) {//se nel JSON non sono inseriti il tipo e i valori delle istruzioni, non ha senso inserirle!
-			switch(type) {//I VINCOLI IMPOSTI ALLE DIVERSE ISTRUZIONI SONO CARATTERIZZANTI PER IL NOSTRO PROGRAMMA
-				case "activity.HxAssignment" : {
-					String name = (values.has("name") ? values.getString("name") : "");
-					String value = (values.has("value") ? values.getString("value") : "");
-
-					if (!name.equals("")&&!value.equals(""))
-						currentinst = new ParsedAssignment(name, value);
-					else
-						errors.add("JSON format error: missing information for assignment instruction");
-
-					break;
-				}
-				case "activity.HxCustom" : {
-					String value = (values.has("value") ? values.getString("value") : "");
-
-					if (!value.equals(""))
-						currentinst = new ParsedCustom(value);
-					else
-						errors.add("JSON format error: missing information for custom instruction");
-					break;
-				}
-				case "activity.HxFor" : {//nessun controllo, il for può avere tutte le informazioni mancanti!
-					String init = (values.has("initialization")?values.getString("initialization"):null);
-					String condition = (values.has("termination")?values.getString("termination"):null);
-					String step = (values.has("increment")?values.getString("increment"):null);
-					//da vedere se init e step sono stringhe oppure ParsedInit/ParsedAssign
-
-					break;
-				}
-				case "activity.HxIf" : {
-					String condition = (values.has("condition") ? values.getString("condition") : "");;
-					if (!condition.equals(""))
-						currentinst = new ParsedIf (condition, null);
-					else
-						errors.add("JSON format error: missing information for if instruction");
-					break;
-				}
-				case "activity.HxElse" : {
-						currentinst = new ParsedElse(null);
-					break;
-				}
-				case "activity.HxInitialization" : {//*******non servirebbe in effetti richiedere la presenza del tipo (indipendenza dal linguaggio)
-					String value = (values.has("value")?values.getString("value"):null);
-					String typei = (values.has("type") ? values.getString("type") : null);
-					String name = (values.has("name") ? values.getString("name") : "");
-					if (!name.equals(""))
-						currentinst = new ParsedInitialization(typei, name, value);
-					else
-						errors.add("JSON format error: missing name of value for initialization instruction");
-					break;
-				}
-				case "activity.HxReturn" : {//nessun controllo, il return può essere anche implicito;
-					String value = (values.has("value")?values.getString("value"):null);
-					currentinst = new ParsedReturn(value);
-					break;
-				}
-				case "activity.HxWhile" : {
-					String condition = (values.has("condition") ? values.getString("condition") : "");;
-					if (!condition.equals(""))
-						currentinst = new ParsedWhile (condition, null);
-					else
-						errors.add("JSON format error: missing information for while instruction");
-					break;
-				}
-				default : errors.add("JSON fromat error: type of instruction is not correct");
-			}
+			currentinst = createActivity(values, type);
 		}
 		if (!instruction.has("embeds")) {
 			return currentinst;
@@ -476,6 +414,70 @@ public class Parser {
 		//se non ci sono le informazioni necessarie per creare l'istruzione, essa risulta vuota.
 		return currentinst;
 	}
+	
+	private ParsedInstruction createActivity(JSONObject values, String type) throws JSONException{
+		ParsedInstruction activity = null;
+		switch(type) {//I VINCOLI IMPOSTI ALLE DIVERSE ISTRUZIONI SONO CARATTERIZZANTI PER IL NOSTRO PROGRAMMA
+		case "activity.HxCustom" : {
+			String value = (values.has("value") ? values.getString("value") : "");
+
+			if (!value.equals(""))
+				activity = new ParsedCustom(value);
+			else
+				errors.add("JSON format error: missing information for custom instruction");
+			break;
+		}
+		case "activity.HxFor" : {//nessun controllo, il for può avere tutte le informazioni mancanti!
+			String init = (values.has("initialization")?values.getString("initialization"):null);
+			String condition = (values.has("termination")?values.getString("termination"):null);
+			String step = (values.has("increment")?values.getString("increment"):null);
+			//da vedere se init e step sono stringhe oppure ParsedInit/ParsedAssign
+			activity = new ParsedFor(init, condition, step, null);
+
+			break;
+		}
+		case "activity.HxIf" : {
+			String condition = (values.has("condition") ? values.getString("condition") : "");;
+			if (!condition.equals(""))
+				activity = new ParsedIf (condition, null);
+			else
+				errors.add("JSON format error: missing information for if instruction");
+			break;
+		}
+		case "activity.HxElse" : {
+				activity = new ParsedElse(null);
+			break;
+		}
+		case "activity.HxVariable" : {//*******non servirebbe in effetti richiedere la presenza del tipo (indipendenza dal linguaggio)
+			String value = (values.has("value")?values.getString("value"):null);
+			String typei = (values.has("type") ? values.getString("type") : null);
+			String operation = (values.has("operation") ? values.getString("operation") : null);
+			String name = (values.has("name") ? values.getString("name") : "");
+			if (!name.equals(""))
+				activity = new ParsedAttribute(false, null, typei, name, operation, value);
+			else
+				errors.add("JSON format error: missing name of value for initialization instruction");
+			break;
+		}
+		case "activity.HxReturn" : {//nessun controllo, il return può essere anche implicito;
+			String value = (values.has("value")?values.getString("value"):null);
+			activity = new ParsedReturn(value);
+			break;
+		}
+		case "activity.HxWhile" : {
+			String condition = (values.has("condition") ? values.getString("condition") : "");;
+			if (!condition.equals(""))
+				activity = new ParsedWhile (condition, null);
+			else
+				errors.add("JSON format error: missing information for while instruction");
+			break;
+		}
+		default : errors.add("JSON fromat error: type of instruction is not correct");	
+	}
+		return activity;
+	}
 
 	public void saveToDisk(String IdReq) {}
+	
+	
 }

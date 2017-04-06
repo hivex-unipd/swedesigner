@@ -33,7 +33,11 @@
                      "id":"1d634803-f39d-4a55-a565-b941776b9281",
                      "returntype":"tipoRitorno",
                      "parameters":[
-                        "param1:int"
+                        {
+                        	"name":"pippo",
+                        	"type":"String",
+                        	"defaultvalue":"'paperino'"
+                        }
                      ]
                   }
                ]
@@ -95,8 +99,10 @@
                      "visibility":"public",
                      "id":"92b1872f-5ad7-44ab-8bc1-2d6305589591",
                      "returntype":"tipoRitorno",
-                     "parameters":[
-                        "param1:int"
+                     "parameters":[{
+                     	"name":"param1",
+                     	"type":"int"
+                     }
                      ],
                      "value":"abc"
                   }
@@ -250,12 +256,12 @@
                }
             },
             {
-               "type":"activity.HxInitialization",
+               "type":"activity.HxVariable",
                "values":{
                   "xtype":"Inizializzazione",
-                  "name":"",
-                  "type":"",
-                  "value":"",
+                  "name":"pippo",
+                  "operation":"+=",
+                  "value":"paperino",
                   "comment":"[new block]",
                   "body":[
 
@@ -344,12 +350,13 @@
                }
             },
             {
-               "type":"activity.HxInitialization",
+               "type":"activity.HxVariable",
                "values":{
                   "xtype":"Inizializzazione",
-                  "name":"",
-                  "type":"",
-                  "value":"",
+                  "name":"asd",
+                  "type":"int",
+                  "operation":"=",
+                  "value":"46",
                   "comment":"[new block]",
                   "body":[
 

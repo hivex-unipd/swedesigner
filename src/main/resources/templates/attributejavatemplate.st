@@ -1,1 +1,1 @@
-attributejavatemplate(att) ::= "<if(att.isFinal)>final <endif><att.type> <att.name>"
+attributejavatemplate(att) ::= "<if(att.visibility)><att.visibility> <endif><if(att.isStatic)>static <endif><if(att.isFinal)>final <endif><if(att.type)><att.type> <endif><att.name><if(att.value)> <att.operation> <att.value><endif>"
