@@ -32,6 +32,10 @@ import server.project.ParsedWhile;
  */
 public class Parser {
 	List<String> errors = new ArrayList<String>();
+	
+	public List<String> getErrors(){
+		return errors;
+	}
 
 	/**
 	 * Given a string containing a JSON object
@@ -67,9 +71,7 @@ public class Parser {
 			Map.Entry<String, ParsedType> entry = (Map.Entry<String, ParsedType>)it.next();
 			pp.addType(entry.getValue());
 		}
-
-		for (int err = 0; err < errors.size(); err++)
-			System.out.println("***"+errors.get(err)+"\n");
+		
 		return pp;
 	}//*****fine Parser
 

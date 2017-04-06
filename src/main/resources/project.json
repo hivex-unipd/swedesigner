@@ -31,12 +31,11 @@
                      "name":"metodo1",
                      "visibility":"public",
                      "id":"1d634803-f39d-4a55-a565-b941776b9281",
-                     "returntype":"tipoRitorno",
+                     "returntype":"void",
                      "parameters":[
                         {
                         	"name":"pippo",
-                        	"type":"String",
-                        	"defaultvalue":"'paperino'"
+                        	"type":"String"
                         }
                      ]
                   }
@@ -90,21 +89,22 @@
                   },
                   {
                      "name":"var4",
-                     "type":"bool"
+                     "type":"boolean"
                   }
                ],
                "methods":[
                   {
                      "name":"metodo2",
                      "visibility":"public",
-                     "id":"92b1872f-5ad7-44ab-8bc1-2d6305589591",
-                     "returntype":"tipoRitorno",
+                     "id":"1d634803-f39d-4a55-a565-b941776b9281",
+                     "returntype":"void",
                      "parameters":[{
                      	"name":"param1",
                      	"type":"int"
                      }
                      ],
-                     "value":"abc"
+                     "value":"abc",
+                     "abstract":"false"
                   }
                ]
             },
@@ -303,10 +303,11 @@
                }
             },
             {
-               "type":"activity.HxElse",
+               "type":"activity.HxIf",
                "values":{
                   "xtype":"Else",
                   "comment":"[new block]",
+                  "condition":"true",
                   "body":[
 
                   ]
