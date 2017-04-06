@@ -472,7 +472,7 @@ public class Parser {
 				errors.add("JSON format error: missing information for while instruction");
 			break;
 		}
-		default : errors.add("JSON fromat error: type of instruction is not correct");	
+		default : errors.add("JSON format error: type of instruction is not correct");	
 	}
 		return activity;
 	}
