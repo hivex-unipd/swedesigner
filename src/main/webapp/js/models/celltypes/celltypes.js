@@ -917,7 +917,7 @@ define([
         }
     });
 
-    celltypes.activity.HxAssignement = celltypes.activity.ActivityDiagramElement.extend({
+    /*celltypes.activity.HxAssignement = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
             type: 'activity.HxAssignement',
@@ -957,7 +957,7 @@ define([
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
         }
-    });
+    });*/
     celltypes.activity.HxCustom = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
@@ -1119,10 +1119,10 @@ define([
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
         }
     });
-    celltypes.activity.HxInitialization = celltypes.activity.ActivityDiagramElement.extend({
+    celltypes.activity.HxVariable = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
-            type: 'activity.HxInitialization',
+            type: 'activity.HxVariable',
 
             attrs: {
                 rect: {'width': 200},
@@ -1148,9 +1148,10 @@ define([
             },
 
             values: {
-                xtype: 'Inizializzazione',
+                xtype: 'Variabile',
                 name: "",
                 type: "",
+                operation:"",
                 value: ""
 
             }
