@@ -1,5 +1,8 @@
-public class ClasseB extends ClasseA{
+public class ClasseB{
 int var1;
 float var2;
-public tipoRitorno metodo1(int param1);
+public void metodo1(String pippo) {
+for (;;) {if (true) {
+}}
+}
 };

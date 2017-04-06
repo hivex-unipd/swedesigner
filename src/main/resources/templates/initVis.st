@@ -1,1 +1,1 @@
-initVis(v) ::= "<if(v)><v> <endif>"
+initVis(v)::="<if(v)><v> <endif>"

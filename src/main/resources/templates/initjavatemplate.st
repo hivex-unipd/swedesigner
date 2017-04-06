@@ -1,1 +1,0 @@
-initjavatemplate(att) ::= "<initVis(att.visibility)><if(att.isStatic)>static <endif><attributejavatemplate(att)><initVal(att.value)>;"
