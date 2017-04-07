@@ -1,0 +1,1 @@
+statementjavatemplate(att) ::= "<if(att.isFinal)>final <endif><if(att.type)><att.type> <endif><att.name><if(att.value)> <att.operation> <att.value><else><if(att.operation)><att.operation><endif><endif>;"

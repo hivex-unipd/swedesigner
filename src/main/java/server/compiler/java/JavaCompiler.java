@@ -15,7 +15,7 @@ import java.util.List;
 public class JavaCompiler implements Compiler {
 	
 	public List<String> compile(String fileName) throws IOException {
-	    /*List<String> errors = new ArrayList<String>(); 
+	    List<String> errors = new ArrayList<String>(); /*
 	    javax.tools.JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 	    DiagnosticCollector<JavaFileObject> diagnosticsCollector = new DiagnosticCollector<JavaFileObject>();
 	    StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnosticsCollector, null, null);
@@ -29,7 +29,7 @@ public class JavaCompiler implements Compiler {
 	            errors.add(diagnostic.getMessage(null));
 	        }
 	    }
-	    fileManager.close();
-	    return errors;*/
+	    fileManager.close();*/
+	    return errors;
 	    }
 }

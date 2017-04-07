@@ -24,4 +24,6 @@ public interface Template {
 	public ST getInterfaceTemplate();
 
 	public ST getElseTemplate();
+
+	public ST getStatementTemplate();
 }

@@ -75,4 +75,10 @@ public class JavaTemplate implements Template {
 		ST st = group.getInstanceOf("elsejavatemplate");
 		return st;
 	}
+
+	@Override
+	public ST getStatementTemplate() {
+		ST st = group.getInstanceOf("statementjavatemplate");
+		return st;
+	}
 }

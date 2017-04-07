@@ -22,6 +22,7 @@ import server.project.ParsedInterface;
 import server.project.ParsedMethod;
 import server.project.ParsedProgram;
 import server.project.ParsedReturn;
+import server.project.ParsedStatement;
 import server.project.ParsedType;
 import server.project.ParsedWhile;
 
@@ -456,9 +457,9 @@ public class Parser {
 			String operation = (values.has("operation") ? values.getString("operation") : null);
 			String name = (values.has("name") ? values.getString("name") : "");
 			if (!name.equals(""))
-				activity = new ParsedAttribute(false, null, typei, name, operation, value);
+				activity = new ParsedStatement(typei, name, operation, value);
 			else
-				errors.add("JSON format error: missing name of value for initialization instruction");
+				errors.add("JSON format error: missing name of value for statement");
 			break;
 		}
 		case "activity.HxReturn" : {//nessun controllo, il return può essere anche implicito;
