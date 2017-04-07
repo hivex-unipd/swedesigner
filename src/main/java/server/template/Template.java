@@ -4,10 +4,10 @@ import org.stringtemplate.v4.ST;
 
 public interface Template {
 	public ST getAttributeTemplate();
-
+/*
 	public ST getAssignmentTemplate();
 
-	public ST getInitializationTemplate();
+	public ST getInitializationTemplate();*/
 
 	public ST getForTemplate();
 

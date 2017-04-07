@@ -1,16 +1,13 @@
-var assert = require('assert');
-var requirejs = require('requirejs');
-
-requirejs.config({
-	baseUrl: '../',
+require.config({
+	baseUrl: 'js/',
 	paths: {
-		cheerio: 'libs/cheerio/cheerio',
 		jquery: 'libs/jquery/jquery',
-		lodash: 'libs/lodash/lodash',
-		backbone: 'libs/backbone/backbone',
-		text: 'libs/require/text',
-		joint: 'libs/jointjs/joint',
-		material: 'libs/mdl/material'
+        lodash: 'libs/lodash/lodash',
+        backbone: 'libs/backbone/backbone',
+        text: 'libs/require/text',
+        joint: 'libs/jointjs/joint',
+        material: 'libs/mdl/material',
+        jqueryui: 'libs/jqueryui/jquery-ui'
 	},
 	shim: {
 		'material': {
@@ -24,19 +21,9 @@ requirejs.config({
 	}
 });
 
-describe('AppView', function (done) {
-	describe('views', function () {
-		var app_view;
-		/*before(function (done) {
-			requirejs(['cheerio'], function (window) {
-				requirejs(['../views/AppView.js'], function (AppView) {
-					app_view = new AppView;
-					done();
-				});
-			});
-		});
-		it('should be correct...', function() {
-			assert.equal(app_view, {});
-		});*/
-	});
+require(['js/views/AppView.js'], function (AppView) {
+	var app_view = new AppView;
+	var x = app_view.views;
+	throw "bla bla";
+	console.log(x);
 });

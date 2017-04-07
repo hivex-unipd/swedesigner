@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SWEDesigner</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Generate executable code drawing a UML diagram.">
+    <meta name="author" content="Hivex">
+    <meta name="keywords" content="SWEDesigner, UML, code, generation">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <!--<link rel="icon" sizes="192x192" href="static/images/android-desktop.png">-->
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Material Design Lite">
+    <!--<link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">-->
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <!--<meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">-->
+    <meta name="msapplication-TileColor" content="#3372DF">
+
+    <!--<link rel="shortcut icon" href="static/images/favicon.png">-->
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-light_blue.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/style.css">
+    <link rel="stylesheet" type="text/css" href="assets/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="assets/joint.css">
+
+    <script data-main="js/test/AppViewTest" src="js/libs/require/require.js"></script>
+</head>
+
+<body>
+<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
+        <div class="mdl-layout__header-row">
+            <span class="mdl-layout-title">SWEDesigner</span>
+            <div class="mdl-layout-spacer"></div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+                <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
+                    <i class="material-icons">search</i>
+                </label>
+                <div class="mdl-textfield__expandable-holder">
+                    <input class="mdl-textfield__input" type="text" id="search">
+                    <label class="mdl-textfield__label" for="search">Enter your query...</label>
+                </div>
+            </div>
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
+                <i class="material-icons">more_vert</i>
+            </button>
+            <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right">
+                <li class="mdl-menu__item">About</li>
+                <li class="mdl-menu__item">Contact</li>
+                <li class="mdl-menu__item">Legal information</li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+        <header class="demo-drawer-header">
+            <img src="images/user.jpg" class="demo-avatar">
+            <!--<div class="demo-avatar-dropdown">
+              <span>hello@example.com</span>
+              <div class="mdl-layout-spacer"></div>
+              <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+                <i class="material-icons" role="presentation">arrow_drop_down</i>
+                <span class="visuallyhidden">Accounts</span>
+              </button>
+              <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
+                <li class="mdl-menu__item">hello@example.com</li>
+                <li class="mdl-menu__item">info@example.com</li>
+                <li class="mdl-menu__item"><i class="material-icons">add</i>Add another account...</li>
+              </ul>
+            </div>-->
+        </header>
+        <nav id="navbar" class="mdl-navigation mdl-color--blue-grey-800">
+            <a class="mdl-navigation__link" href="#"><i class="mdl-color-text--blue-grey-400 material-icons"
+                                                        role="presentation">home</i> Home</a>
+            <a class="mdl-navigation__link" href="#"><i class="mdl-color-text--blue-grey-400 material-icons"
+                                                        role="presentation">create</i> New</a>
+            <input type="file" id="files" name="files[]"/><label class=" upload mdl-navigation__link" for="files"><i
+                class="mdl-color-text--blue-grey-400 material-icons"
+                role="presentation">open_in_browser</i> Open</label>
+            <a id="savefile" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
+                                                             role="presentation">save</i> Save</a>
+            <a class="mdl-navigation__link" href="#"><i class="mdl-color-text--blue-grey-400 material-icons"
+                                                        role="presentation">cloud_download</i> Download</a>
+            <a class="mdl-navigation__link" href="#"><i class="mdl-color-text--blue-grey-400 material-icons"
+                                                        role="presentation">donut_large</i> Compile</a>
+            <a class="mdl-navigation__link" href="doc/index.html"><i
+                    class="mdl-color-text--blue-grey-400 material-icons" role="presentation">local_offer</i>
+                Documentation</a>
+            <div class="mdl-layout-spacer"></div>
+            <a class="mdl-navigation__link" href="#"><i class="mdl-color-text--blue-grey-400 material-icons"
+                                                        role="presentation">help_outline</i> <span
+                    class="visuallyhidden">Help</span></a>
+        </nav>
+    </div>
+
+
+    <main class="mdl-color--grey-100 main">
+        <div class=" demo-content">
+            <div class="components">
+                <div class="mdl-shadow--2dp comp">
+                    <div class="mdl-card__title mdl-card--expand mdl-color--teal-300">
+                        <h2 class="mdl-card__title-text mdl-color-text--white">Elements</h2>
+                    </div>
+                    <div id="components" class="mdl-card__actions mdl-card--border">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect mdl-button--colored mdl-color-text--white">
+                            Nuova classe
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="paper" class="demo-graph mdl-shadow--2dp "></div>
+
+
+            <div class="demo-cards ">
+                <div class="mdl-shadow--2dp prop">
+                    <div class="mdl-card__title mdl-card--expand mdl-color--teal-300">
+                        <h2 class="mdl-card__title-text mdl-color-text--white">Properties</h2>
+                    </div>
+                    <div id="details" class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <!--<input class="mdl-textfield__input" type="text" id="classname">
+                        <label class="mdl-textfield__label" for="classname">Nome classe</label>
+                   --> </div>
+
+
+                    <script type="text/template" id="class.HxClass">
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="name">
+                            <label class="mdl-textfield__label" for="classname">Nome classe</label>
+                            <input class="edit mdl-textfield__input" value="<%= name %>" name="name" id="classname">
+                        </div>
+                        <div class="prop_inputs" id="abstract">
+                            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-1">
+                                <input type="checkbox" name="abstract" class="mdl-checkbox__input edit" <%
+                                if(abstract=="true"){ %>checked <% } %>>
+                                <span class="mdl-checkbox__label">Astratta</span>
+                            </label>
+                        </div>
+                        <div class="prop_inputs" id="static">
+                            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-1">
+                                <input type="checkbox" name="static" class="mdl-checkbox__input edit" <%
+                                if(static=="true"){ %>checked <% } %>>
+                                <span class="mdl-checkbox__label">Static</span>
+                            </label>
+                        </div>
+                        <a class="togglable">Attributi</a>
+                        <div class="toggle"
+                             id="attributes">
+                            <% for(var attr in attributes) { %>
+                            <div class="propcontainer">
+                                <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <label class="mdl-textfield__label" for="attributes.<%=attr%>.name">Nome
+                                        variabile</label>
+                                    <input class="edit mdl-textfield__input" value="<%= attributes[attr].name %>"
+                                           name="attributes.<%=attr%>.name">
+                                </div>
+                                <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <label class="mdl-textfield__label" for="attributes.<%=attr%>.value">Tipo</label>
+                                    <input class="edit mdl-textfield__input" value="<%= attributes[attr].type %>"
+                                           name="attributes.<%=attr%>.type">
+                                </div>
+                                <div class="visibility">
+                                    <label class="">Visibilità</label>
+                                    <select class="edit" name="attributes.<%=attr%>.visibility">
+                                        <option value="private"
+                                        <%if(attributes[attr].visibility=="private"){%> selected <% }
+                                        %>>Private</option>
+                                        <option value="protected"
+                                        <%if(attributes[attr].visibility=="protected"){%> selected <% }
+                                        %>>Protected</option>
+                                        <option value="package"
+                                        <%if(attributes[attr].visibility=="package"){%> selected <% }
+                                        %>>Package</option>
+                                        <option value="public"
+                                        <%if(attributes[attr].visibility=="public"){%> selected <% } %>>Public</option>
+
+                                    </select>
+                                </div>
+                                <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <label class="mdl-textfield__label" for="attributes.<%=attr%>.defaultValue">Valore
+                                        di default</label>
+                                    <input class="edit mdl-textfield__input"
+                                           value="<%= attributes[attr].defaultValue %>"
+                                           name="attributes.<%=attr%>.defaultValue">
+                                </div>
+                                <button class="add" name="deleteattribute.<%= attr %>">Cancella</button>
+                            </div>
+
+
+                            <% } %>
+                            <button class="add" name="addattribute">Aggiungi
+                                attributo
+                            </button>
+
+                        </div>
+                        <a class="togglable">Metodi</a>
+                        <div class="prop_inputs toggle"
+                             id="methods">
+                            <% for(var met in methods) { %>
+                            <!--<a class="togglable"><%= methods[met].name %></a>-->
+                            <div class="propcontainer">
+                                <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <label class="mdl-textfield__label" for="<%=methods[met].name%>">Nome metodo</label>
+                                    <input class="edit mdl-textfield__input" value="<%= methods[met].name %>"
+                                           name="methods.<%=met%>.name">
+                                </div>
+                                <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <label class="mdl-textfield__label" for="<%=methods[met].returntype%>">Tipo di
+                                        ritorno</label>
+                                    <input class="edit mdl-textfield__input" value="<%= methods[met].returntype %>"
+                                           name="methods.<%=met%>.returntype">
+                                </div>
+                                <!--<div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <label class="mdl-textfield__label" for="<%=methods[met].visibility%>">Visibilità</label>
+                                    <input class="edit mdl-textfield__input" value="<%= methods[met].visibility %>"
+                                           name="methods.<%=met%>.visibility">
+                                </div>-->
+                                <div class="visibility">
+                                    <label class="">Visibilità</label>
+                                    <select class="edit" name="methods.<%=met%>.visibility">
+                                        <option value="private"
+                                        <%if(methods[met].visibility=="private"){%> selected <% } %>>Private</option>
+                                        <option value="protected"
+                                        <%if(methods[met].visibility=="protected"){%> selected <% }
+                                        %>>Protected</option>
+                                        <option value="package"
+                                        <%if(methods[met].visibility=="package"){%> selected <% } %>>Package</option>
+                                        <option value="public"
+                                        <%if(methods[met].visibility=="public"){%> selected <% } %>>Public</option>
+
+                                    </select>
+                                </div>
+                                <div class="prop_inputs" id="staticmet">
+                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                                        <input type="checkbox" name="methods.<%=met%>.static"
+                                               class="mdl-checkbox__input edit" <% if(methods[met].static=="true"){
+                                        %>checked <% } %>>
+                                        <span class="mdl-checkbox__label">Static</span>
+                                    </label>
+                                </div>
+                                <div class="prop_inputs" id="abstractmet">
+                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                                        <input type="checkbox" name="methods.<%=met%>.abstract"
+                                               class="mdl-checkbox__input edit" <% if(methods[met].abstract=="true"){
+                                        %>checked <% } %>>
+                                        <span class="mdl-checkbox__label">Astratto</span>
+                                    </label>
+                                </div>
+
+                                <div id="parameters">
+                                    <% for(var par in methods[met].parameters)
+                                    {%>
+                                    <div>
+                                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <label class="mdl-textfield__label"
+                                                   for="methods.<%=met%>.parameters.<%=par%>.name">Nome
+                                                parametro</label>
+                                            <input class="edit mdl-textfield__input"
+                                                   value="<%=methods[met].parameters[par].name%>"
+                                                   name="methods.<%=met%>.parameters.<%=par%>.name">
+
+                                        </div>
+                                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <label class="mdl-textfield__label"
+                                                   for="methods.<%=met%>.parameters.<%=par%>.type">Tipo
+                                                parametro</label>
+                                            <input class="edit mdl-textfield__input"
+                                                   value="<%=methods[met].parameters[par].type%>"
+                                                   name="methods.<%=met%>.parameters.<%=par%>.type">
+
+                                        </div>
+                                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <label class="mdl-textfield__label"
+                                                   for="methods.<%=met%>.parameters.<%=par%>.defaultValue">Valore di
+                                                default</label>
+                                            <input class="edit mdl-textfield__input"
+                                                   value="<%=methods[met].parameters[par].defaultValue%>"
+                                                   name="methods.<%=met%>.parameters.<%=par%>.defaultValue">
+
+                                        </div>
+                                        <button class="add"
+                                                name="deleteparameter.<%=met%>.<%=par%>">Cancella parametro
+                                        </button>
+                                    </div>
+
+                                    <% } %>
+                                    <button class="add"
+                                            name="addparameter.<%=met%>">Aggiungi Parametro
+                                    </button>
+                                </div>
+                                <button class="switch" name="switch" value="<%= methods[met].id %>">Vai al diagramma
+                                    delle
+                                    attività
+                                </button>
+
+                            </div>
+                            <% } %>
+
+
+                            <button class="add" name="addmethod">Aggiungi
+                                Metodo
+                            </button>
+                        </div>
+                    </script>
+
+                    <script type="text/template" id="class.HxInterface">
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="name">
+                            <label class="mdl-textfield__label" for="classname">Nome classe</label>
+                            <input class="edit mdl-textfield__input" value="<%= name %>" name="name" id="classname">
+                        </div>
+
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                             id="methods">
+                            <% for(var met in methods) { %>
+                            <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <label class="mdl-textfield__label" for="<%=methods[met].name%>">Nome metodo</label>
+                                <input class="edit mdl-textfield__input" value="<%= methods[met].name %>"
+                                       name="methods.<%=met%>.name">
+                            </div>
+                            <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <label class="mdl-textfield__label" for="<%=methods[met].name%>">Valore</label>
+                                <input class="edit mdl-textfield__input" value="<%= methods[met].value %>"
+                                       name="methods.<%=met%>.value">
+                            </div>
+                            <div class="visibility">
+                                <label class="">Visibilità</label>
+                                <select class="edit" name="methods.<%=met%>.visibility">
+                                    <option value="private"
+                                    <%if(methods[met].visibility=="private"){%> selected <% } %>>Private</option>
+                                    <option value="protected"
+                                    <%if(methods[met].visibility=="protected"){%> selected <% } %>>Protected</option>
+                                    <option value="package"
+                                    <%if(methods[met].visibility=="package"){%> selected <% } %>>Package</option>
+                                    <option value="public"
+                                    <%if(methods[met].visibility=="public"){%> selected <% } %>>Public</option>
+
+                                </select>
+                            </div>
+
+                            <div id="parameters">
+                                <% for(var par in methods[met].parameters)
+                                {%>
+                                <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <label class="mdl-textfield__label" for="methods.<%=met%>.parameters.<%=par%>">Parametro</label>
+                                    <input class="edit mdl-textfield__input" value="<%=methods[met].parameters[par]%>"
+                                           name="methods.<%=met%>.parameters.<%=par%>">
+
+                                </div>
+                                <% } %>
+                                <button class="add"
+                                        name="addparameter.<%=met%>">Aggiungi Parametro
+                                </button>
+                            </div>
+
+                            <button class="add" name="addmethod">Aggiungi
+                                Metodo
+                            </button>
+                            <!--<button class="switch" name="switch" value="<%= methods[met].id %>">Vai al diagramma delle attività</button>-->
+                            <% } %>
+                        </div>
+                    </script>
+
+                    <script type="text/template" id="uml.ActivityDiagramElement">
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="xtype">Nome classe</label>
+                            <input class="edit mdl-textfield__input" value="<%= xtype %>" name="xtype" id="xtype">
+                        </div>
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="comment">Nome classe</label>
+                            <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment" id="comment">
+                        </div>
+
+                    </script>
+
+                    <!--<script type="text/template" id="activity.HxAssignement">
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="name">Variabile</label>
+                            <input class="edit mdl-textfield__input" value="<%= name %>" name="name">
+                        </div>
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="operation">Operazione</label>
+                            <input class="edit mdl-textfield__input" value="<%= operation %>" name="operation">
+                        </div>
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="value">Valore</label>
+                            <input class="edit mdl-textfield__input" value="<%= value %>" name="value">
+                        </div>
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="comment">Commento</label>
+                            <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment">
+                        </div>
+
+                    </script>-->
+
+                    <script type="text/template" id="activity.HxCustom">
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="name">Codice</label>
+                            <input class="edit mdl-textfield__input" value="<%= code %>" name="code">
+                        </div>
+
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="comment">Commento</label>
+                            <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment">
+                        </div>
+
+                    </script>
+
+                    <script type="text/template" id="activity.HxElse">
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="comment">Commento</label>
+                            <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment">
+                        </div>
+
+                    </script>
+
+                    <script type="text/template" id="activity.HxFor">
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="initialization">Inizializzazione</label>
+                            <input class="edit mdl-textfield__input" value="<%= initialization %>"
+                                   name="initialization">
+                        </div>
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="termination">Fine</label>
+                            <input class="edit mdl-textfield__input" value="<%= termination %>" name="termination">
+                        </div>
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="increment">Incremento</label>
+                            <input class="edit mdl-textfield__input" value="<%= increment %>" name="increment">
+                        </div>
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="comment">Commento</label>
+                            <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment">
+                        </div>
+
+                    </script>
+
+                    <script type="text/template" id="activity.HxIf">
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="condition">Variabile</label>
+                            <input class="edit mdl-textfield__input" value="<%= condition %>" name="condition">
+                        </div>
+
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="comment">Commento</label>
+                            <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment">
+                        </div>
+
+                    </script>
+
+                    <script type="text/template" id="activity.HxVariable">
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="name">Nome</label>
+                            <input class="edit mdl-textfield__input" value="<%= name %>" name="name">
+                        </div>
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="type">Tipo</label>
+                            <input class="edit mdl-textfield__input" value="<%= type %>" name="type">
+                        </div>
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="operation">Operazione</label>
+                            <input class="edit mdl-textfield__input" value="<%= operation %>" name="operation">
+                        </div>
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="value">Valore</label>
+                            <input class="edit mdl-textfield__input" value="<%= value %>" name="value">
+                        </div>
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="comment">Commento</label>
+                            <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment">
+                        </div>
+
+                    </script>
+
+                    <script type="text/template" id="activity.HxReturn">
+
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="value">Valore</label>
+                            <input class="edit mdl-textfield__input" value="<%= value %>" name="value">
+                        </div>
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="comment">Commento</label>
+                            <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment">
+                        </div>
+
+                    </script>
+
+                    <script type="text/template" id="activity.HxWhile">
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                             id="vardiv">
+                            <label class="mdl-textfield__label" for="condition">Variabile</label>
+                            <input class="edit mdl-textfield__input" value="<%= condition %>" name="condition">
+                        </div>
+
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                             id="commentdiv">
+                            <label class="mdl-textfield__label" for="comment">Commento</label>
+                            <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment">
+                        </div>
+
+                    </script>
+
+                    <script type="text/template" id="class.HxAssociation">
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="card">Cardinalità</label>
+                            <input class="edit mdl-textfield__input" value="<%= card %>" name="card">
+                        </div>
+                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        >
+                            <label class="mdl-textfield__label" for="card">Attributo</label>
+                            <input class="edit mdl-textfield__input" value="<%= attribute %>" name="attribute">
+                        </div>
+                        <!--<div class="">
+                            <label class="">Posizione</label>
+                            <select class="edit" name="pos">
+                                <option value="source">Sinistra</option>
+                                <option value="target">Destra</option>
+                            </select>
+                        </div>-->
+
+
+                    </script>
+
+
+                </div>
+            </div>
+            <button id="switchtoclass" value="class"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color-text--white">Torna
+                al diagramma delle classi
+            </button>
+        </div>
+    </main>
+
+
+    <!--<div id="content">-->
+    <!--<div id="newcell"></div>-->
+    <!--<div id="paper"></div>-->
+    <!--<div id="details"></div>-->
+    <!--<button id="switch">switcha</button>-->
+    <!--<button id="add">salva</button>-->
+    <!--<input type="file" id="files" name="files[]"/>-->
+    <!--</div>-->
+
+</div>
+<script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+</body>
+</html>

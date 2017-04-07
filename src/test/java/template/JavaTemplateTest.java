@@ -16,16 +16,6 @@ public class JavaTemplateTest {
 	private Template factory = new JavaTemplate();
 
 	@Test
-	public void assignmentTemplateWorks() {
-		ParsedElement element = new ParsedAttribute(false, "", "", "tmp", "=", "1");
-		ST template = factory.getAssignmentTemplate();
-
-		template.add("assignment", element);
-		String result = template.render();
-		assertEquals("tmp = 1;", result);
-	}
-
-	@Test
 	public void attributeTemplateWorks() {
 		ParsedElement element = new ParsedAttribute(false, "private", "int", "pippo", "=", "2");
 		ST template = factory.getAttributeTemplate();
@@ -92,9 +82,9 @@ public class JavaTemplateTest {
 	}
 
 	@Test
-	public void initTemplateWorks() {
-		ParsedElement element = new ParsedAttribute(false, "", "Float", "fl", "=", "0.2");
-		ST template = factory.getInitializationTemplate();
+	public void statementTemplateWorks() {
+		ParsedElement element = new ParsedStatement("Float", "fl", "=", "0.2");
+		ST template = factory.getStatementTemplate();
 
 		template.add("att", element);
 		String result = template.render();
@@ -119,7 +109,7 @@ public class JavaTemplateTest {
 	@Test
 	public void methodTemplateWorks() {
 		List<ParsedAttribute> arguments = Arrays.asList();
-		ParsedInstruction inst1 = new ParsedAttribute(false, "", "", "x", "=", "23.2f");
+		ParsedInstruction inst1 = new ParsedStatement("", "x", "=", "23.2f");
 		List<ParsedInstruction> body = Arrays.asList(inst1);
 		ParsedElement element = new ParsedMethod("protected", false, false, "double", "getDouble", arguments, body);
 		ST template = factory.getMethodTemplate();
