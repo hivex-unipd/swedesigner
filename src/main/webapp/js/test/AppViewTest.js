@@ -1,4 +1,4 @@
-require.config({
+/*require.config({
 	baseUrl: 'js/',
 	paths: {
 		jquery: 'libs/jquery/jquery',
@@ -27,3 +27,4 @@ require(['js/views/AppView.js'], function (AppView) {
 	throw "bla bla";
 	console.log(x);
 });
+*/
