@@ -468,6 +468,9 @@ define([
         },
         deleteattribute: function(ind){
             this.getValues().attributes.splice(ind,1);
+        },
+        deleteMethod:function (ind) {
+            this.getValues().methods.splice(ind,1);
         }
     });
 
@@ -619,6 +622,14 @@ define([
                 type:"",
                 defaultValue:""
             });
+        },
+        deleteparameter:function (met) {
+            console.log(met[1]);
+            this.getValues().methods[met[0]].parameters.splice(met[1],1);
+            console.log(this.getValues());
+        },
+        deleteMethod:function (ind) {
+            this.getValues().methods.splice(ind,1);
         }
     });
 

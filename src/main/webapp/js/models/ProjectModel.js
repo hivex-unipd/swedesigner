@@ -472,7 +472,9 @@ define([
         getCurrentGraph: function () {
             return this.get("graph");
         },
-
+        deleteMethodDiagram:function(id){
+            this.options.graphs.methods.splice(this.getIndexFromId(id),1);
+        }
 
     });
     return new ProjectModel;
