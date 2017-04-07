@@ -1,6 +1,5 @@
 package server.project;
 
-import server.check.Check;
 import server.template.Template;
 
 public interface ParsedElement {

@@ -2,7 +2,6 @@ package server.project;
 
 import org.stringtemplate.v4.ST;
 
-import server.check.Check;
 import server.template.Template;
 
 public class ParsedAttribute extends ParsedInstruction implements ParsedElement{

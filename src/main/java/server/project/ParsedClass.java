@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.stringtemplate.v4.ST;
 
-import server.check.Check;
 import server.template.Template;
 
 public class ParsedClass extends ParsedType {
