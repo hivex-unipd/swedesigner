@@ -727,7 +727,13 @@ define([
          */
         switch: function (id) {
             this.model.switchToGraph(id);
-            this.visibleElements = this.model.getClassVisibileElements(this.paper.selectedCell);
+            if(id!="class"){
+                this.visibleElements = this.model.getClassVisibileElements(this.paper.selectedCell);
+            }
+            else{
+                this.visibleElements=[];
+            }
+
             console.log("elementi: ",this.visibleElements);
             this.paper.selectedCell= null;
             //console.log("ah oh perchè non triggeri");
@@ -742,6 +748,9 @@ define([
          */
         getCurrentDiagramType: function () {
             return this.model.getCurrentDiagramType();
+        },
+        deleteMethodAt:function(ind){
+            this.model.deleteMethodDiagram(this.paper.selectedCell.getValues().methods[ind].id);
         }
 
     });

@@ -27,7 +27,7 @@ define([
          * @name AppView#el
          * @type {jQuery}
          */
-        el: $('main'),
+        el: $('#all'),
 
         /**
          * Links each page view to an appropriate object

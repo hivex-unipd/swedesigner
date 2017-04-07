@@ -37,7 +37,7 @@
 </head>
 
 <body>
-<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+<div id="all" class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
         <div class="mdl-layout__header-row">
             <span class="mdl-layout-title">SWEDesigner</span>
@@ -300,8 +300,9 @@
                                     delle
                                     attività
                                 </button>
-
+                                <button class="add" name="deleteMethod.<%=met%>">Cancella metodo</button>
                             </div>
+
                             <% } %>
 
 
@@ -316,55 +317,95 @@
                             <label class="mdl-textfield__label" for="classname">Nome classe</label>
                             <input class="edit mdl-textfield__input" value="<%= name %>" name="name" id="classname">
                         </div>
-
-                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                        <a class="togglable">Metodi</a>
+                        <div class="prop_inputs toggle"
                              id="methods">
                             <% for(var met in methods) { %>
-                            <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <label class="mdl-textfield__label" for="<%=methods[met].name%>">Nome metodo</label>
-                                <input class="edit mdl-textfield__input" value="<%= methods[met].name %>"
-                                       name="methods.<%=met%>.name">
-                            </div>
-                            <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <label class="mdl-textfield__label" for="<%=methods[met].name%>">Valore</label>
-                                <input class="edit mdl-textfield__input" value="<%= methods[met].value %>"
-                                       name="methods.<%=met%>.value">
-                            </div>
-                            <div class="visibility">
-                                <label class="">Visibilità</label>
-                                <select class="edit" name="methods.<%=met%>.visibility">
-                                    <option value="private"
-                                    <%if(methods[met].visibility=="private"){%> selected <% } %>>Private</option>
-                                    <option value="protected"
-                                    <%if(methods[met].visibility=="protected"){%> selected <% } %>>Protected</option>
-                                    <option value="package"
-                                    <%if(methods[met].visibility=="package"){%> selected <% } %>>Package</option>
-                                    <option value="public"
-                                    <%if(methods[met].visibility=="public"){%> selected <% } %>>Public</option>
-
-                                </select>
-                            </div>
-
-                            <div id="parameters">
-                                <% for(var par in methods[met].parameters)
-                                {%>
+                            <!--<a class="togglable"><%= methods[met].name %></a>-->
+                            <div class="propcontainer">
                                 <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <label class="mdl-textfield__label" for="methods.<%=met%>.parameters.<%=par%>">Parametro</label>
-                                    <input class="edit mdl-textfield__input" value="<%=methods[met].parameters[par]%>"
-                                           name="methods.<%=met%>.parameters.<%=par%>">
-
+                                    <label class="mdl-textfield__label" for="<%=methods[met].name%>">Nome metodo</label>
+                                    <input class="edit mdl-textfield__input" value="<%= methods[met].name %>"
+                                           name="methods.<%=met%>.name">
                                 </div>
-                                <% } %>
-                                <button class="add"
-                                        name="addparameter.<%=met%>">Aggiungi Parametro
-                                </button>
+                                <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <label class="mdl-textfield__label" for="<%=methods[met].returntype%>">Tipo di
+                                        ritorno</label>
+                                    <input class="edit mdl-textfield__input" value="<%= methods[met].returntype %>"
+                                           name="methods.<%=met%>.returntype">
+                                </div>
+                                <!--<div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <label class="mdl-textfield__label" for="<%=methods[met].visibility%>">Visibilità</label>
+                                    <input class="edit mdl-textfield__input" value="<%= methods[met].visibility %>"
+                                           name="methods.<%=met%>.visibility">
+                                </div>-->
+                                <div class="visibility">
+                                    <label class="">Visibilità</label>
+                                    <select class="edit" name="methods.<%=met%>.visibility">
+                                        <option value="private"
+                                        <%if(methods[met].visibility=="private"){%> selected <% } %>>Private</option>
+                                        <option value="protected"
+                                        <%if(methods[met].visibility=="protected"){%> selected <% }
+                                        %>>Protected</option>
+                                        <option value="package"
+                                        <%if(methods[met].visibility=="package"){%> selected <% } %>>Package</option>
+                                        <option value="public"
+                                        <%if(methods[met].visibility=="public"){%> selected <% } %>>Public</option>
+
+                                    </select>
+                                </div>
+
+
+                                <div id="parameters">
+                                    <% for(var par in methods[met].parameters)
+                                    {%>
+                                    <div>
+                                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <label class="mdl-textfield__label"
+                                                   for="methods.<%=met%>.parameters.<%=par%>.name">Nome
+                                                parametro</label>
+                                            <input class="edit mdl-textfield__input"
+                                                   value="<%=methods[met].parameters[par].name%>"
+                                                   name="methods.<%=met%>.parameters.<%=par%>.name">
+
+                                        </div>
+                                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <label class="mdl-textfield__label"
+                                                   for="methods.<%=met%>.parameters.<%=par%>.type">Tipo
+                                                parametro</label>
+                                            <input class="edit mdl-textfield__input"
+                                                   value="<%=methods[met].parameters[par].type%>"
+                                                   name="methods.<%=met%>.parameters.<%=par%>.type">
+
+                                        </div>
+                                        <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <label class="mdl-textfield__label"
+                                                   for="methods.<%=met%>.parameters.<%=par%>.defaultValue">Valore di
+                                                default</label>
+                                            <input class="edit mdl-textfield__input"
+                                                   value="<%=methods[met].parameters[par].defaultValue%>"
+                                                   name="methods.<%=met%>.parameters.<%=par%>.defaultValue">
+
+                                        </div>
+                                        <button class="add"
+                                                name="deleteparameter.<%=met%>.<%=par%>">Cancella parametro
+                                        </button>
+                                    </div>
+
+                                    <% } %>
+                                    <button class="add"
+                                            name="addparameter.<%=met%>">Aggiungi Parametro
+                                    </button>
+                                </div>
+                                <button class="add" name="deleteMethod.<%=met%>">Cancella metodo</button>
                             </div>
+
+                            <% } %>
+
 
                             <button class="add" name="addmethod">Aggiungi
                                 Metodo
                             </button>
-                            <!--<button class="switch" name="switch" value="<%= methods[met].id %>">Vai al diagramma delle attività</button>-->
-                            <% } %>
                         </div>
                     </script>
 

@@ -231,6 +231,9 @@ define([
          */
         execmod: function (e) {
             var tmp = e.target.name.split(".");
+            if(tmp[0]=="deleteMethod"){
+                ProjectView.deleteMethodAt(tmp[1]);
+            }
             ProjectView.paper.selectedCell.executemethod(tmp[0], Array.prototype.slice.call(tmp, 1));
             //ProjectView.paper.selectedCell.executemethod.apply(this,[].slice.call(tmp));
             this.render();

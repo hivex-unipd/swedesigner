@@ -10,6 +10,7 @@ import java.util.List;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import server.compiler.java.JavaCompiler;
 import server.generator.Generator;
@@ -27,7 +28,8 @@ public class RequestHandlerController {
 	public RequestHandlerController(String json){
 		this.json = json;
 	}
-	public void HandleGeneratorRequest(){
+	@RequestMapping("/generate")
+	public String HandleGeneratorRequest(/*@RequestParam(value="json") String json*/){
 		List<String> errors = new ArrayList<String>();
 		Parser parser = new Parser();
 		ParsedProgram program = null;
@@ -55,6 +57,7 @@ public class RequestHandlerController {
 			Compressor c = new Compressor();
 			c.zip();*/
 		//}
+			return "ciao";
 		
 	}
 	public void HandleStereotypesRequest(){};
