@@ -8,14 +8,13 @@ import server.project.*;
 import server.template.java.JavaTemplate;
 
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ParsedInterfaceTest {
 	@Test
 	public void interfaceContainsBasicInfo() throws ParsedException {
 		ParsedInterface type = new ParsedInterface("MyInterface");
-		ParsedAttribute field = new ParsedAttribute(true, "public", "String", "DATA", "test");
+		ParsedAttribute field = new ParsedAttribute(true, "public", "String", "DATA", "=", "2");
 		List<ParsedAttribute> arguments = Arrays.asList();
 		List<ParsedInstruction> body = Arrays.asList();
 		ParsedMethod method = new ParsedMethod("public", false, false, "boolean", "isGood", arguments, body);
@@ -38,21 +37,21 @@ public class ParsedInterfaceTest {
 	@Test(expected = ParsedException.class)
 	public void interfaceRejectsPrivateFields() throws ParsedException {
 		ParsedInterface type = new ParsedInterface("MyInterface");
-		ParsedAttribute field = new ParsedAttribute(true, "private", "String", "PRIVATE_DATA", "test");
+		ParsedAttribute field = new ParsedAttribute(true, "private", "String", "PRIVATE_DATA", "=", "test");
 		type.addField(field);
 	}
 
 	@Test(expected = ParsedException.class)
 	public void interfaceRejectsNonStaticFields() throws ParsedException {
 		ParsedInterface type = new ParsedInterface("MyInterface");
-		ParsedAttribute field = new ParsedAttribute(false, "public", "int", "DATA", "42");
+		ParsedAttribute field = new ParsedAttribute(false, "public", "int", "DATA", "=", "42");
 		type.addField(field);
 	}
 
 	@Test(expected = ParsedException.class)
 	public void interfaceRejectsNonFinalFields() throws ParsedException {
 		ParsedInterface type = new ParsedInterface("MyInterface");
-		ParsedAttribute field = new ParsedAttribute(true, "public", "double", "instanceMember", "1.2");
+		ParsedAttribute field = new ParsedAttribute(true, "public", "double", "instanceMember", "=", "1.2");
 		type.addField(field);
 	}
 

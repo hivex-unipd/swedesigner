@@ -17,7 +17,7 @@ public class ParsedClassTest {
 	@Test
 	public void classContainsBasicInfo() throws ParsedException {
 		ParsedClass type = new ParsedClass("MyClass", true);
-		ParsedAttribute field = new ParsedAttribute(false, "private", "String", "pippo", "\"test\"");
+		ParsedAttribute field = new ParsedAttribute(false, "private", "String", "pippo", "=", "\"test\"");
 		type.addField(field);
 		JavaTemplate template = new JavaTemplate();
 		String result = type.renderTemplate(template);

@@ -23,9 +23,9 @@ public class GeneratorTest {
 		ParsedProgram program = new ParsedProgram();
 
 		ParsedType type1 = new ParsedClass("FirstClass", false);
-		ParsedAttribute field = new ParsedAttribute(false, "private", "double", "pippo", "3.14");
+		ParsedAttribute field = new ParsedAttribute(false, "private", "double", "pippo", "", "");
 		type1.addField(field);
-		ParsedInstruction inst1 = new ParsedInitialization("Object", "s", "new String()");
+		ParsedInstruction inst1 = new ParsedAttribute(false, "", "Object", "s", "=", "new String()");
 		List<ParsedAttribute> args1 = Arrays.asList();
 		ParsedMethod meth1 = new ParsedMethod("package", false, false, "int", "getEverything()", args1, Arrays.asList(inst1));
 		program.addType(type1);

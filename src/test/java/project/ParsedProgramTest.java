@@ -17,9 +17,9 @@ public class ParsedProgramTest {
 		ParsedProgram program = new ParsedProgram();
 
 		ParsedType type1 = new ParsedClass("FirstClass", false);
-		ParsedAttribute field = new ParsedAttribute(false, "private", "String", "pippo", "\"test\"");
+		ParsedAttribute field = new ParsedAttribute(false, "private", "String", "pippo", "=", "\"test\"");
 		type1.addField(field);
-		ParsedInstruction inst1 = new ParsedInitialization("String", "s", "new String()");
+		ParsedInstruction inst1 = new ParsedAttribute(false, "", "String", "s", "=", "new String()");
 		List<ParsedAttribute> args1 = Arrays.asList();
 		ParsedMethod meth1 = new ParsedMethod("package", false, false, "int", "getSomething()", args1, Arrays.asList(inst1));
 

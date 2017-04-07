@@ -17,7 +17,7 @@ public class JavaTemplateTest {
 
 	@Test
 	public void assignmentTemplateWorks() {
-		ParsedElement element = new ParsedAssignment("tmp", "1");
+		ParsedElement element = new ParsedAttribute(false, "", "", "tmp", "=", "1");
 		ST template = factory.getAssignmentTemplate();
 
 		template.add("assignment", element);
@@ -27,12 +27,12 @@ public class JavaTemplateTest {
 
 	@Test
 	public void attributeTemplateWorks() {
-		ParsedElement element = new ParsedAttribute(false, "private", "String", "pippo", "test");
+		ParsedElement element = new ParsedAttribute(false, "private", "int", "pippo", "=", "2");
 		ST template = factory.getAttributeTemplate();
 
 		template.add("att", element);
 		String result = template.render();
-		assertEquals("String pippo", result);
+		assertEquals("private int pippo = 2", result);
 	}
 
 	@Test
@@ -93,7 +93,7 @@ public class JavaTemplateTest {
 
 	@Test
 	public void initTemplateWorks() {
-		ParsedElement element = new ParsedInitialization("Float", "fl", "0.2");
+		ParsedElement element = new ParsedAttribute(false, "", "Float", "fl", "=", "0.2");
 		ST template = factory.getInitializationTemplate();
 
 		template.add("att", element);
@@ -119,7 +119,7 @@ public class JavaTemplateTest {
 	@Test
 	public void methodTemplateWorks() {
 		List<ParsedAttribute> arguments = Arrays.asList();
-		ParsedInstruction inst1 = new ParsedAssignment("x", "23.2f");
+		ParsedInstruction inst1 = new ParsedAttribute(false, "", "", "x", "=", "23.2f");
 		List<ParsedInstruction> body = Arrays.asList(inst1);
 		ParsedElement element = new ParsedMethod("protected", false, false, "double", "getDouble", arguments, body);
 		ST template = factory.getMethodTemplate();
