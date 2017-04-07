@@ -206,6 +206,52 @@
                      "text":"For\n[new block]"
                   }
                }
+            }
+            ,
+             {
+               "type":"activity.HxVariable",
+               "values":{
+                  "xtype":"Inizializzazione",
+                  "name":"asc",
+                  "operation":"++",
+                  "comment":"[new block]",
+                  "body":[
+
+                  ]
+               },
+               "index":0,
+               "expanded":true,
+               "hidden":false,
+               "offsetY":450,
+               "position":{
+                  "x":100,
+                  "y":450
+               },
+               "size":{
+                  "width":1,
+                  "height":1
+               },
+               "angle":0,
+               "id":"567a92df6-3edf-46ef-bbaf-0bafdd28b5b1",
+               "z":4,
+               "attrs":{
+                  ".activity-toggle":{
+                     "transform":"translate(180,0)",
+                     "height":35,
+                     "width":20
+                  },
+                  ".activity-element-name-rect":{
+                     "height":35,
+                     "transform":"translate(0,0)"
+                  },
+                  ".activity-element-body-rect":{
+                     "height":55,
+                     "transform":"translate(0,35)"
+                  },
+                  ".activity-element-name-text":{
+                     "text":"Inizializzazione\n[new block]"
+                  }
+               }
             },
             {
                "type":"activity.HxIf",
@@ -378,9 +424,6 @@
                "angle":0,
                "id":"d7a92df6-3edf-46ef-bbaf-0bafdd28b5b1",
                "z":4,
-               "embeds":[
-
-               ],
                "parent":"ab120ab9-3359-4d52-b339-5e39c3e9e46d",
                "attrs":{
                   ".activity-toggle":{

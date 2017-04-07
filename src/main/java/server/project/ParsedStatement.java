@@ -4,7 +4,7 @@ import org.stringtemplate.v4.ST;
 
 import server.template.Template;
 
-public class ParsedStatement extends ParsedInstruction implements ParsedElement{
+public class ParsedStatement extends ParsedInstruction{
     private String type;
     private String name;
     private String operation;
