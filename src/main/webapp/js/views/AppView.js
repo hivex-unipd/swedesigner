@@ -65,7 +65,8 @@ define([
             'click #switchtoclass':'switchToClass',
             'click #switch': 'switchgraph',
             'click #savefile': 'save',
-            'change #files': 'load'
+            'change #files': 'load',
+			'click #generate': 'generate',
         },
 
         toggleVisib:function () {
@@ -113,7 +114,11 @@ define([
          */
         load: function (event) {
             Command.execute("loadDiagram", event);
-        }
+        },
+		
+		generate: function(event) {
+			Command.execute("sendDiagram");
+		}
     });
     return AppView;
 });
