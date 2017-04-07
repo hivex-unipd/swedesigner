@@ -4,7 +4,7 @@ import org.stringtemplate.v4.ST;
 
 import server.template.Template;
 
-public class ParsedAttribute extends ParsedInstruction implements ParsedElement{
+public class ParsedAttribute implements ParsedElement{
 	private boolean isStatic;
 	private String visibility;
     private String type;
