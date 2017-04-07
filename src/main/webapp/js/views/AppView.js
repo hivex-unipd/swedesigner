@@ -53,7 +53,7 @@ define([
             this.views.details = new DetailsView;
             this.views.newCell = new NewCellView;
 
-            this.listenTo(this.views.project,"Switchgraph",this.toggleVisib);
+            this.listenTo(this.views.project, 'Switchgraph', this.toggleVisib);
         },
 
         /**
@@ -62,20 +62,31 @@ define([
          * @type {Object}
          */
         events: {
-            'click #switchtoclass':'switchToClass',
+            'click #switchtoclass': 'switchToClass',
             'click #switch': 'switchgraph',
             'click #savefile': 'save',
             'change #files': 'load',
-			'click #generate': 'generate',
+			'click #generate': 'generate'
         },
 
-        toggleVisib:function () {
-          $("#switchtoclass").toggle();
+        /**
+         * Toggles the visibility of the 'Back to Class
+         * Diagram' button.
+         * @name AppView#toggleVisib
+         * @function
+         */
+        toggleVisib: function () {
+          $('#switchtoclass').toggle();
         },
 
-        switchToClass:function (e) {
+        /**
+         * Shows the class diagram.
+         * @name AppView#switchToClass
+         * @function
+         */
+        switchToClass: function (e) {
             //console.log("appviewwwwwwwwww");
-            this.views.project.switch("class");
+            this.views.project.switch('class');
         },
 
         /**
@@ -87,8 +98,7 @@ define([
             if (this.views.index == 0) {
                 this.views.project.switch(1);
                 this.views.index = 1;
-            }
-            else {
+            } else {
                 this.views.project.switch(0);
                 this.views.index = 0;
             }
@@ -102,7 +112,7 @@ define([
          * @param {event} event the action event
          */
         save: function (event) {
-            Command.execute("saveDiagram");
+            Command.execute('saveDiagram');
         },
 
         /**
@@ -113,11 +123,18 @@ define([
          * @param {event} event the action event
          */
         load: function (event) {
-            Command.execute("loadDiagram", event);
+            Command.execute('loadDiagram', event);
         },
-		
+
+        /**
+         * Sends a request to the server for generating
+         * an executable from the user diagrams.
+         * @name AppView#generate
+         * @function
+         * @param {event} event the action event
+         */
 		generate: function(event) {
-			Command.execute("sendDiagram");
+			Command.execute('sendDiagram');
 		}
     });
     return AppView;

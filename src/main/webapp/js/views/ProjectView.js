@@ -7,7 +7,6 @@ define([
     'models/celltypes/celltypes'
 ], function ($, _, Backbone, joint, ProjectModel, celltypes) {
 
-
     /**
      * @classdesc `ProjectView` represents the drawing area.
      * It can be the main class diagram or a specific method diagram.
@@ -20,30 +19,24 @@ define([
     var ProjectView = Backbone.View.extend({
 
         /**
-         * details (?)
-         * @name ProjectView#det
-         * @type {Object}
-         */
-        det: {},
-
-        /**
          * The main drawing area, contained in the HTML `#paper` div.
          * @name ProjectView#paper
          * @type {joint.dia.Paper}
          */
         paper: {},
-        visibleElements:[],
 
         /**
-         * Initializes `model` with a new `ProjectModel`;
-         * initializes `paper` with a new `joint.dia.Paper` object;
-         * links mouse events to the right actions
-         * [...]
-         * @name ProjectView#initialize
+         * ...
+         * @name ProjectView#visibleElements
+         * @type {Array}
+         */
+        visibleElements: [],
+
+        /**
+         * ...
+         * @name ProjectView#renderActivity
          * @function
          */
-
-
         renderActivity: function () {
             // CODICE OK
             //console.log(this);
@@ -106,13 +99,21 @@ define([
                         console.log(g[ii]);
                         console.log("questo no :(");
                     }
-
                 }
             }
-
         },
 
-
+        /**
+         * Manages the moment when the user is attempting
+         * to drag the cell with the pointer; this is a callback
+         * to the 'pointerdown' event on the view.
+         * @name ProjectView#pointerUpFunction
+         * @function
+         * @param {joint.dia.ElementView} cellView the dragged cell's view
+         * @param {event} evt the action event
+         * @param {number} x the horizontal position of the cell (?)
+         * @param {number} y the vertical position of the cell (?)
+         */
         pointerDownFunction: function (cellView, evt, x, y) {
 
             if (cellView) {
@@ -124,10 +125,10 @@ define([
                         this.trigger("changed-cell");
                         console.log("ho cambiato la selectedcell");
                         console.log(this.selectedCell);
-
                     }
                 }
             }
+
             console.log(ProjectModel.options.currentindex);
             if (cellView.model.get("type").startsWith("activity")) {
                 var cell = cellView.model;
@@ -185,6 +186,17 @@ define([
 
         },
 
+        /**
+         * Manages the release of the pointer from a cell
+         * (i.e. when the user has finished dragging the cell);
+         * this is a callback to the 'pointerup' event on the view.
+         * @name ProjectView#pointerUpFunction
+         * @function
+         * @param {joint.dia.ElementView} cellView the dragged cell's view
+         * @param {event} evt the action event
+         * @param {number} x the horizontal position of the cell (?)
+         * @param {number} y the vertical position of the cell (?)
+         */
         pointerUpFunction: function (cellView, evt, x, y) {
             if (cellView.model.get("type").startsWith("activity")) {
                 var changed = false;
@@ -541,7 +553,14 @@ define([
             }
         },
 
-
+        /**
+         * Manages the movement of the pointer when
+         * the user is dragging the cell; this is a
+         * callback to the 'pointermove' event on the view.
+         * @name ProjectView#pointerMoveFunction
+         * @function
+         * @param {joint.dia.ElementView} cellView the dragged cell's view
+         */
         pointerMoveFunction: function (cellView) {
             var cell = cellView.model;
             if (cell.get("type").startsWith("activity")) {
@@ -588,8 +607,16 @@ define([
 
         },
 
-
         // if this.model.currentIndex != 'class'
+
+        /**
+         * Initializes `model` with a new `ProjectModel`;
+         * initializes `paper` with a new `joint.dia.Paper` object;
+         * links mouse events to the right actions
+         * [...]
+         * @name ProjectView#initialize
+         * @function
+         */
         initialize: function () {
             this.model = ProjectModel;//new ProjectModel();
             this.paper = new joint.dia.Paper({
@@ -601,17 +628,15 @@ define([
                 drawGrid: true,
                 background: {
                     color: '#6764A7'
-
                 },
+
                 elementView: function (element) {
                     if (element.get("type").startsWith("class")) {
                         return celltypes.class.ClassDiagramElementView;
-                    }
-                    else {
+                    } else {
                         return celltypes.activity.ActivityDiagramElementView;
                     }
                 },
-
 
                 highlighting: {
                     'default': {
@@ -619,8 +644,7 @@ define([
                         options: {
                             padding: 3
                         }
-                    },
-
+                    }
                 },
 
                 //clickThreshold: 1,
@@ -647,9 +671,7 @@ define([
 
 
                     return true;
-                },
-
-
+                }
             });
 
 
@@ -712,6 +734,12 @@ define([
             this.paper.trigger("changed-cell");
             this.trigger("Switchgraph");
         },
+
+        /**
+         * ...
+         * @name ProjectView#getCurrentDiagramType
+         * @function
+         */
         getCurrentDiagramType: function () {
             return this.model.getCurrentDiagramType();
         }

@@ -31,8 +31,10 @@
     'underscore',
     'backbone',
     'joint',
-    'views/ProjectView'
-], function ($, _, Backbone, joint, ProjectView) {
+    'views/ProjectView',
+    'material',
+    'jqueryui'
+], function ($, _, Backbone, joint, ProjectView, componentHandler) {
 
     /**
      * @classdesc `DetailsView` shows the details of an element in one diagram.
@@ -76,7 +78,7 @@
          * @name DetailsView#mytemplate
          * @function
          */
-        mytemplate: _.template($('#item-template').html()),
+        mytemplate: {},
 
         /**
          * ?
@@ -104,6 +106,8 @@
             //'blur .edit': 'confirmEdit'
         },
 
+        visibleElements: [],
+
         /**
          * Initializes `el` with a jQuery object that handles the `#details`
          * div and starts listening to the `ProjectView` events
@@ -116,11 +120,11 @@
             this.$el = $("#details");
             console.log(ProjectView.paper);
             //this.listenTo(paper, "cellChanged", this.changeModel);
-
+            //this.mytemplate = _.template($('#uml.ClassDiagramElement').html());
 
             // occhio
-            // this.listenTo(ProjectView.paper, "changed-cell", this.render);
-            this.listenTo(ProjectView, "Switchgraph", this.visib);
+            this.listenTo(ProjectView.paper, "changed-cell", this.render);
+            //this.listenTo(ProjectView, "Switchgraph", this.visib);
             // si riesce a passare paper come parametro?
         },
 
@@ -134,47 +138,109 @@
         render: function () {
             console.log("i'm detailsview and i saw your change");
             //this.$el.html(ProjectView.paper.selectedCell.getClassName());
-
+            //console.log("sele", _.template($('#'+ProjectView.paper.selectedCell.get("type").replace(/\./g, "\\.")).html()));
             //this.$el.html(this.mytemplate({title: "titolo molto divino", val:"valore molto animale"}));
-
-            console.log(ProjectView.paper.selectedCell);
-            console.log(ProjectView.paper.selectedCell.attributes.keyvalues);
-            var c = ProjectView.paper.selectedCell;
-
-
-            var output = "";
-
-
-
-
-            var fn = function (element) {
-                //console.log("no lazy?");
-                if(_.isArray(element)) {console.log(element); console.log("è array"); _.each(element, fn, this) }
-                else  {console.log(element); output += this.mytemplate(element);}
-            };
-
-            console.log("ripperoni");
-            //c.attributes.keyvalues.forEach(fn);
-            _.each(c.attributes.keyvalues, fn, this);
-
-            console.log("finironi");
+            if (ProjectView.paper.selectedCell) {
+                this.mytemplate = _.template($('#' + ProjectView.paper.selectedCell.get("type").replace(/\./g, "\\.")).html());
+                //this.mytemplate = _.template($('#uml\\.ClassDiagramElement').html()),
+                //console.log(this.mytemplate);
+                // console.log(ProjectView.paper.selectedCell.get("type"));
+                //   console.log(ProjectView.paper.selectedCell);
+                //console.log(ProjectView.paper.selectedCell.attributes.keyvalues);
+                var c = ProjectView.paper.selectedCell;
 
 
-
-            // this.$el.html(this.mytemplate({title: "titolo molto divino", val:"valore molto animale"}));
-            this.$el.html(output);
+                var output = "";
 
 
+                /*var fn = function (element) {
+                 //console.log("no lazy?");
+                 if(_.isArray(element)) {console.log(element); console.log("è array"); _.each(element, fn, this) }
+                 else  {console.log(element); output += this.mytemplate(element);}
+                 };*/
 
-            // idee per il binding a due vie: salvarsi in un array inputs i vari input e in qualche modo confirmedit si prende
-            // solo quello che gli serve... mi sembra comunque terribilmente inefficiente... che facciamo?
-            // bb
-            this.delegateEvents(_.extend(this.events, {'keypress .edit': 'confirmEdit'}));
+                //console.log("ripperoni");
+                //c.attributes.keyvalues.forEach(fn);
+                // _.each(c.attributes.keyvalues, fn, this);
 
+                //console.log("finironi");
+
+                console.log(c);
+
+
+                output = this.mytemplate(c.getValues());
+
+                // this.$el.html(this.mytemplate({title: "titolo molto divino", val:"valore molto animale"}));
+                this.$el.html(output);
+
+                componentHandler.upgradeDom(); //refresh material design
+
+                // idee per il binding a due vie: salvarsi in un array inputs i vari input e in qualche modo confirmedit si prende
+                // solo quello che gli serve... mi sembra comunque terribilmente inefficiente... che facciamo?
+                // bb
+                this.delegateEvents(_.extend(this.events,
+                    {
+                        'keypress .edit': 'confirmEdit',
+                        'change .edit': 'confirmEdit',
+                        'click .add': 'execmod',
+                        'click .switch': 'switch',
+                        'click .togglable': 'toggle'
+                    }
+                ));
+                console.log("currentdiag ",ProjectView.getCurrentDiagramType());
+                if (ProjectView.getCurrentDiagramType() == "activity") {
+                    console.log("sto facendo qualcosa");
+                    var split = function (val) {
+                        return val.split(/(,\s* | \s*)/);
+                    };
+                    var extractLast = function (term) {
+                        return split(term).pop();
+                    };
+                    $('input.edit').autocomplete({
+                            minLength: 0,
+                            source: function (request, response) {
+                                console.log( ProjectView.visibleElements);
+                                response($.ui.autocomplete.filter(
+                                    ProjectView.visibleElements, extractLast(request.term)));
+                            },
+                            focus: function () {
+                                return false;
+                            },
+
+                            select: function (event, ui) {
+                                var terms = split(this.value);
+                                // remove the current input
+                                terms.pop();
+                                // add the selected item
+                                terms.push(ui.item.value);
+                                // add placeholder to get the comma-and-space at the end
+                                terms.push("");
+                                this.value = terms.join("");
+                                return false;
+                            }
+                        }
+                    );
+                }
+            }
+            else {
+                this.$el.html("");
+            }
 
 
             return this;
 
+        },
+        toggle:function (e) {
+            //console.log("sto togglolando");
+            e.preventDefault();
+            console.log($(e.target).next());
+            var elem = $(e.target).next();
+            console.log(elem);
+            //$('.toggle').not(elem).hide('slow');
+            elem.toggle('slow');
+        },
+        switch: function (e) {
+            ProjectView.switch(e.target.value);
         },
 
         /**
@@ -187,6 +253,16 @@
             if (ProjectView.paper.selectedCell)
                 this.$el.html(ProjectView.paper.selectedCell.getMethods());
         },
+        /**
+         * Execute a method of the model passing its name as string
+         * @param e The method name
+         */
+        execmod: function (e) {
+            var tmp = e.target.name.split(".");
+            ProjectView.paper.selectedCell.executemethod(tmp[0], Array.prototype.slice.call(tmp, 1));
+            //ProjectView.paper.selectedCell.executemethod.apply(this,[].slice.call(tmp));
+            this.render();
+        },
 
         /**
          * ?
@@ -195,26 +271,39 @@
          * @param {Object} obj ?
          * @param {Object} desc ?
          */
-        getDescendantProp: function(obj, desc) {
+        getDescendantProp: function (obj, desc) {
             var arr = desc.split(".");
             while (arr.length &amp;&amp; (obj = obj[arr.shift()]));
             return obj;
         },
 
         /**
-         * Logs some event details (?).
-         * @name DetailsView#visib
+         * Confirms the edits performed in a given field
+         * inside the `#details` div and updates the
+         * corresponding cell of the diagram.
+         * @name DetailsView#confirmEdit
          * @function
          * @param {event} e the action event
          * @private
          */
         confirmEdit: function (e) {
-            if (e.which == 13) {
-             // fai controllo di dati corretti e aggiorna il graph
-             //this.model.set("",this.$('#'));
+            if ((e.type == "keypress" &amp;&amp; e.which == 13) || e.type == "change") {
+                // fai controllo di dati corretti e aggiorna il graph
+                //this.model.set("",this.$('#'));
+
                 console.log(e.target.id);
                 console.log(e.target.value);
                 console.log(ProjectView.paper.selectedCell);
+                if (e.target.type == "checkbox") {
+                    console.log(e.target.checked);
+                    ProjectView.paper.selectedCell.setToValue(e.target.checked ? "true" : "false", e.target.name);
+
+                }
+                else {
+                    ProjectView.paper.selectedCell.setToValue(e.target.value, e.target.name);
+                }
+
+
                 //ProjectView.paper.selectedCell.set();
             }
         }
@@ -231,13 +320,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ActivityDiagramElement.html">ActivityDiagramElement</a></li><li><a href="AppView.html">AppView</a></li><li><a href="Commands.html">Commands</a></li><li><a href="DetailsView.html">DetailsView</a></li><li><a href="DiagramsCollection.html">DiagramsCollection</a></li><li><a href="NewCellModel.html">NewCellModel</a></li><li><a href="NewCellView.html">NewCellView</a></li><li><a href="ProjectView.html">ProjectView</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AppView.html">AppView</a></li><li><a href="ClassDiagramElement.html">ClassDiagramElement</a></li><li><a href="ClassDiagramElementView.html">ClassDiagramElementView</a></li><li><a href="Commands.html">Commands</a></li><li><a href="DetailsView.html">DetailsView</a></li><li><a href="DiagramsCollection.html">DiagramsCollection</a></li><li><a href="HxClass.html">HxClass</a></li><li><a href="NewCellModel.html">NewCellModel</a></li><li><a href="NewCellView.html">NewCellView</a></li><li><a href="ProjectView.html">ProjectView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#execmod">execmod</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Mar 29 2017 17:53:45 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Apr 07 2017 17:43:51 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: collection/DiagramsCollection.js</title>
+    <title>JSDoc: Source: views/ClassDiagramElementView.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: collection/DiagramsCollection.js</h1>
+    <h1 class="page-title">Source: views/ClassDiagramElementView.js</h1>
 
     
 
@@ -31,21 +31,52 @@
     'underscore',
     'backbone',
     'joint'
-],function ($, _, Backbone, joint) {
+], function ($, _, Backbone, joint) {
 
-	/**
-     * @classdesc `DiagramsCollection` is a collection of
-     * `joint.dia.Graph` objects, which are drawable diagrams.
+    /**
+     * @classdesc [...]
      *
-     * @module client.collection
-     * @name DiagramsCollection
-     * @class DiagramsCollection
-     * @extends {Backbone.Collection}
+     * @module client.views
+     * @name ClassDiagramElementView
+     * @class ClassDiagramElementView
+     * @extends {joint.dia.ElementView}
      */
-    var DiagramsCollection = Backbone.Collection.extend({
-        model: joint.dia.Graph
+    var ClassDiagramElementView = joint.dia.ElementView.extend({
+
+        initialize: function () {
+            joint.dia.ElementView.prototype.initialize.apply(this, arguments);
+
+            this.listenTo(this.model, 'uml-update', function () {
+                console.log("update interfaccia");
+                this.update();
+                this.resize();
+            });
+            ///this.listenTo(this.model, 'click', toggl);
+
+        },
+
+        events: {
+            'click .togglemethods': 'togglemethods',
+            'click .toggleattributes': 'toggleattributes',
+        },
+
+        toggleattributes: function () {
+
+            this.model.set("attributesexpanded", !this.model.get("attributesexpanded"));
+            this.model.updateRectangles();
+            this.update(); // ecco cosa dovevi fare, le cose funzionavano già
+
+        },
+
+        togglemethods: function () {
+
+            this.model.set("methodsexpanded", !this.model.get("methodsexpanded"));
+            this.model.updateRectangles();
+            this.update(); // ecco cosa dovevi fare, le cose funzionavano già
+
+        }
     });
-    return DiagramsCollection;
+    return ClassDiagramElementView;
 });
 </code></pre>
         </article>
