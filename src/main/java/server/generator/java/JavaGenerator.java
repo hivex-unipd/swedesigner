@@ -18,15 +18,17 @@ public class JavaGenerator implements Generator {
 	private Template template = new JavaTemplate();
 	public String renderAllTemplates(Template t){return null;};
 	public void generate(String IdReq, ParsedProgram p){
+		String program = ""; //da togliere (solo per la stampa)
 		for(int i=0; i<p.nClasses(); i++){
-			//program += p.getType(i).renderTemplate(template);
-			String type = p.getType(i).renderTemplate(template);
+			program += p.getType(i).renderTemplate(template); //da togliere (solo per la stampa)
+			/*String type = p.getType(i).renderTemplate(template);
 			String path = "src/main/resources/ContentFile/"+p.getType(i).getName()+".java";
 			File tipo = new File(path);
 			PrintWriter writer = null;
 		    try{writer = new PrintWriter(tipo);}catch(Exception e){System.out.println("Eccezione writer su JavaGenerato");}
 		    writer.println(type);
-		    writer.close();
+		    writer.close();*/
 		}
+		System.out.println(program); //da togliere (solo per la stampa)
 	};
 }

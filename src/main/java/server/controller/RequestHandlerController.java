@@ -41,7 +41,7 @@ public class RequestHandlerController {
 		}
 		else{*/
 			generator.generate("1234", program);
-			server.compiler.Compiler compiler = new JavaCompiler();
+			/*server.compiler.Compiler compiler = new JavaCompiler();
 			String path = "src/main/resources/ContentFile";
 			File folder = new File(path); 
 			File[] files = folder.listFiles(new FilenameFilter() { @Override public boolean accept(File dir, String name) { return name.endsWith(".java"); } });
@@ -53,7 +53,7 @@ public class RequestHandlerController {
 			}
 			System.out.println(errors);
 			Compressor c = new Compressor();
-			c.zip();
+			c.zip();*/
 		//}
 		
 	}

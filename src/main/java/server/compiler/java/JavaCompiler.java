@@ -15,8 +15,7 @@ import java.util.List;
 public class JavaCompiler implements Compiler {
 	
 	public List<String> compile(String fileName) throws IOException {
-	    List<String> errors = new ArrayList<String>(); 
-	    System.setProperty("java.home", "C:\\Program Files (x86)\\Java\\jdk1.7.0_79");
+	    /*List<String> errors = new ArrayList<String>(); 
 	    javax.tools.JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 	    DiagnosticCollector<JavaFileObject> diagnosticsCollector = new DiagnosticCollector<JavaFileObject>();
 	    StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnosticsCollector, null, null);
@@ -31,7 +30,6 @@ public class JavaCompiler implements Compiler {
 	        }
 	    }
 	    fileManager.close();
-	    return errors;
+	    return errors;*/
 	    }
-	
 }
