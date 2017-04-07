@@ -56,7 +56,27 @@ define([
                 ProjectModel.loadDiagram(JsonObj);
             };
             reader.readAsText(f);
-        }
+        },
+		
+		
+		sendDiagram: function () {
+			var data = {};
+			
+			
+			// construct an HTTP request
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", "/generate", true);
+			xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+			
+			// send the collected data as JSON
+			xhr.send(saveDiagram());
+			
+			xhr.onloadend = function () {
+				// done
+				alert("fatto!");
+			};
+
+		},
     };
 
     /**
