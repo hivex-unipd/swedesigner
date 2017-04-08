@@ -39,7 +39,7 @@ public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 		String testo = new String(Files.readAllBytes(Paths.get("src/main/resources/project.json")));
 		
 		//ApplicationContext context = new AnnotationConfigApplicationContext(GeneratorAssembler.class);
-		RequestHandlerController rhc = new RequestHandlerController(testo);
+		RequestHandlerController rhc = new RequestHandlerController();
 		rhc.HandleGeneratorRequest();
 		
 		
