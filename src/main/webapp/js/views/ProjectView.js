@@ -26,14 +26,14 @@ define([
         paper: {},
 
         /**
-         * ...
+         * It contains variables and methods visible inside the selected method scope.
          * @name ProjectView#visibleElements
-         * @type {Array}
+         * @type {String, String}[]
          */
         visibleElements: [],
 
         /**
-         * ...
+         * Updates the drawing area by placing the activity blocks.
          * @name ProjectView#renderActivity
          * @function
          */
@@ -463,7 +463,8 @@ define([
 
         /**
          * Manages the movement of the pointer when
-         * the user is dragging the cell; this is a
+         * the user is dragging the cell, highlighting the cell
+         * under the pointer; this is a
          * callback to the 'pointermove' event on the view.
          * @name ProjectView#pointerMoveFunction
          * @function
@@ -518,8 +519,8 @@ define([
         /**
          * Initializes `model` with a new `ProjectModel`;
          * initializes `paper` with a new `joint.dia.Paper` object;
-         * links mouse events to the right actions
-         * [...]
+         * link mouse events to the correct callbacks.
+         * Updates the paper with any existing cells.
          * @name ProjectView#initialize
          * @function
          */
@@ -605,7 +606,7 @@ define([
          * ...
          * @name ProjectView#switch
          * @function
-         * @param {number} index which graph to swith to
+         * @param {number} index which graph to switch to
          * @param {?} selectedCell ?
          */
         switch: function (id) {
