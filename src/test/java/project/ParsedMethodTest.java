@@ -19,6 +19,7 @@ public class ParsedMethodTest {
 	// Costruito un ParsedMethod, questo è in grado di generare una stringa Java contenente la segnatura passatagli nel costruttore.
 	@Test
 	public void methodContainsBasicInfo() {
+		List<ParsedAttribute> arguments = Arrays.asList();
 		List<ParsedInstruction> body = Arrays.asList();
 		ParsedMethod method = new ParsedMethod("public", false, false, "int", "getInteger", arguments, body);
 

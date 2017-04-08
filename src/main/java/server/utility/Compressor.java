@@ -1,7 +1,10 @@
 package server.utility;
 
+import java.io.*;
+import java.util.zip.*;
+
 public class Compressor {
-	public void zip(){
+	public void zip() throws FileNotFoundException, IOException {
 		/*parte zip*/
 		byte[] buffer = new byte[1024];
 		FileOutputStream fos = new FileOutputStream("src/main/resources/ContentFile/prova.zip");
@@ -24,5 +27,5 @@ public class Compressor {
 		in.close();
 		zos.closeEntry();
 		zos.close();//importante chiudere!!!
-	};
+	}
 }
