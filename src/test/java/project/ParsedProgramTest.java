@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Arrays;
 
 public class ParsedProgramTest {
+
+	// Costruito un ParsedProgram e aggiuntigli dei ParsedType, un JavaGenerator è in grado di generare una stringa Java contenente i tipi aggiunti al ParsedProgram.
 	@Test
 	public void programContainsBasicInfo() throws ParsedException {
 		ParsedProgram program = new ParsedProgram();
