@@ -1,7 +1,12 @@
 package server.utility;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
 public class Compressor {
-	public void zip(){
+	public void zip(String IdReq) throws Exception{
 		/*parte zip*/
 		byte[] buffer = new byte[1024];
 		FileOutputStream fos = new FileOutputStream("src/main/resources/ContentFile/prova.zip");

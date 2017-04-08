@@ -17,7 +17,7 @@ public class ParsedClass extends ParsedType {
 	}
 
 	public boolean getIsAbstract(){ return isAbstract;}
-	
+	public List<String> getImplemented(){return implemented;}
 	public void addField(ParsedAttribute pa) throws ParsedException{
 		getAttributes().add(pa);
 	}

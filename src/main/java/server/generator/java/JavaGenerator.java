@@ -15,6 +15,7 @@ import server.template.Template;
 import server.template.java.JavaTemplate;
 
 public class JavaGenerator implements Generator {
+	
 	private Template template = new JavaTemplate();
 	public String renderAllTemplates(Template t){return null;};
 	public void generate(String IdReq, ParsedProgram p){
@@ -25,7 +26,7 @@ public class JavaGenerator implements Generator {
 			String path = "src/main/resources/ContentFile/"+p.getType(i).getName()+".java";
 			File tipo = new File(path);
 			PrintWriter writer = null;
-		    try{writer = new PrintWriter(tipo);}catch(Exception e){System.out.println("Eccezione writer su JavaGenerato");}
+		    try{writer = new PrintWriter(tipo);}catch(Exception e){System.out.println("Eccezione writer su JavaGenerator");}
 		    writer.println(type);
 		    writer.close();*/
 		}

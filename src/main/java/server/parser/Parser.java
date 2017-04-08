@@ -1,4 +1,4 @@
-package server.parser;
+Parspackage server.parser;
 
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ import server.project.ParsedWhile;
  * translating JSON into Java.
  */
 public class Parser {
-	List<String> errors = new ArrayList<String>();
+	private List<String> errors = new ArrayList<String>();
 	
 	public List<String> getErrors(){
 		return errors;
@@ -479,8 +479,6 @@ public class Parser {
 	}
 		return activity;
 	}
-
-	public void saveToDisk(String IdReq) {}
 	
 	
 }

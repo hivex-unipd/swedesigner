@@ -15,18 +15,6 @@ public class JavaTemplate implements Template {
 		ST st = group.getInstanceOf("attributejavatemplate");
 		return st;
 	}
-/*
-	@Override
-	public ST getAssignmentTemplate() {
-		ST st = group.getInstanceOf("assignmentjavatemplate");
-		return st;
-	}
-
-	@Override
-	public ST getInitializationTemplate() {
-		ST st = group.getInstanceOf("initjavatemplate");
-		return st;
-	}*/
 
 	@Override
 	public ST getForTemplate() {

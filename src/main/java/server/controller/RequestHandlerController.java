@@ -43,8 +43,8 @@ public class RequestHandlerController {
 	String json;
 	/*@Autowired
 	@Qualifier("javagenerator")*/
-	Generator generator = new JavaGenerator();
-	
+	private Generator generator = new JavaGenerator();
+	private server.compiler.Compiler compiler = new JavaCompiler();
 	@ResponseBody
 	public Resource HandleGeneratorRequest(/*@RequestParam(value="json") String json*/){
 		List<String> errors = new ArrayList<String>();
