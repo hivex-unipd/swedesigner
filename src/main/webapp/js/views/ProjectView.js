@@ -209,7 +209,6 @@ define([
          */
         pointerUpFunction: function (cellView, evt, x, y) {
             if (cellView.model.get("type").startsWith("activity")) {
-                var changed = false;
                 var parentCell = null;
                 var embedded = false;
                 // EMBED e selectedcell
@@ -260,7 +259,7 @@ define([
                 };
 
                 // indice cella corrente
-                var currentIndex = g.indexOf(curr);//curr.get("index"); // è necessario cercare a che indice vorrebbe mettere la cosa
+                var currentIndex = g.indexOf(curr); // è necessario cercare a che indice vorrebbe mettere la cosa
 
                 // funzione di debug
                 var debug = function () {
@@ -272,127 +271,39 @@ define([
                     console.log(x);
                 };
 
-                var getNextIndex = function (g, c) {
-                    var l = g[c].getEmbeddedCells({deep: true}).length;
-                    return c + l + 1;
-                };
-                var getNextIndexByID = function (graph, g, c) {
-                    var l = graph.getCell(g[c]).getEmbeddedCells({deep: true}).length;
-                    return c + l + 1;
-                };
-
-                var getNext = function (g, c) {
-                    var l = g[c].getEmbeddedCells({deep: true}).length;
-                    return g[c + l + 1];
-                };
-
-                var getPrev = function (m, g, c) {
-                    var p = g[c].get("parent");
-                    // se non esiste?
-                    if (p) {
-                        p = m.getCell(p);
-
-                        for (var i = 0; i < p.getEmbeddedCells().length; i++) {
-                            if (getNext(g, c + i + 1) == g[c]) {
-                                return g[c + i + 1];
-                            }
-                        }
-                    }
-                    else {
-                        var i = c - 1;
-                        while (g[i] && g[i].get("parent")) {
-                            i--;
-                        }
-                        //if(!g[i]) return g[0];
-                        return g[i];
-                    }
-                };
-                var getPrevIndex = function (m, g, c) {
-                    var p = g[c].get("parent");
-                    // se non esiste?
-                    if (p) {
-                        p = m.getCell(p);
-                        for (var i = 0; i < p.getEmbeddedCells().length; i++) {
-                            if (getNext(g, c + i + 1) == g[c]) {
-                                return c + i + 1;
-                            }
-                        }
-                    }
-                    else {
-                        var i = c - 1;
-                        while (g[i] && g[i].get("parent")) {
-                            i--;
-                        }
-                        //if(!g[i]) return undefined;
-
-                        console.log("previndex: ", i);
-                        return i;
-                    }
-                };
-
-
+                // necessaria per fixare problemi di ordine
                 var correctEmbedding = function (index, parent, cell) {
                     var embcells = parent.getEmbeddedCells();
 
-                    console.log("correggo embed");
-                    var deba = parent.get("embeds");
+                    //console.log("correggo embed");
 
-                    var deb = [];
-                    for (var i = 0; i < embcells.length; i++) {
-                        deb.push(embcells[i].get("values").comment[0]);
-                    }
-                    console.log(deb);
-
-
+                    // deeembeddo ogni cella
                     parent.unembed(embcells.pop(cell));
+
                     for (var i = 0; i < embcells.length; i++) {
                         parent.unembed(embcells[i]);
-                        console.log(embcells[i].id, "deembedded");
+                        //console.log(embcells[i].id, "deembedded");
                     }
-                    console.log(parent, "parent");
+                    //console.log(parent, "parent");
 
-
-                    //if(index==0)
-                    //{
-                    //	console.log("c", cell.get("keyvalues").comment[0]);
-                    //	parent.embed(cell);
-                    //	for (var i=index+1;i<embcells.length;i++)
-                    //	{
-                    //		console.log("e2", embcells[i].get("keyvalues").comment[0]);
-                    //		parent.embed(embcells[i]);
-                    //	}
-                    //	console.log("corretti embed");
-                    //
-                    //}
-                    //else
-                    //{
-
-
+                    // embeddo celle da i ad index
                     for (var i = 0; i < index && i < embcells.length; i++) {
-                        console.log("e1", embcells[i].get("values").comment[0]);
+                        //console.log("e1", embcells[i].get("values").comment[0]);
                         parent.embed(embcells[i]);
-                        console.log(parent);
+                        //console.log(parent);
                     }
-                    console.log("c", cell.get("values").comment[0]);
+
+                    // embeddo la cella in input
+                    //console.log("c", cell.get("values").comment[0]);
                     parent.embed(cell);
-                    console.log(parent);
 
+
+                    // embeddo le celle rimanenti
                     for (var i = index; i < embcells.length; i++) {
-                        console.log("e2", embcells[i].get("values").comment[0]);
+                        //console.log("e2", embcells[i].get("values").comment[0]);
                         parent.embed(embcells[i]);
                     }
-                    console.log("corretti embed");
-
-                    //}
-
-                    embcells = parent.getEmbeddedCells();
-                    deb = [];
-                    for (var i = 0; i < embcells.length; i++) {
-                        deb.push(embcells[i].get("values").comment[0]);
-                    }
-                    console.log(deb);
-
-
+                    //console.log("corretti embed");
                 };
 
                 // se parentCell esiste
@@ -413,50 +324,38 @@ define([
                     // altrimenti: sono disponibili più di un posto e dobbiamo trovare quello migliore.
                     else {
 
-                        console.log(g);
-                        console.log("i miei fratelli sono:");
+                        //console.log(g);
+                        //console.log("i miei fratelli sono:");
                         var ff = parentCell.get("embeds");
-                        console.log(ff);
-                        console.log(this.model.getCell(ff[0]));
+                        //console.log(ff);
+                        ///console.log(this.model.getCell(ff[0]));
                         var found = false;
 
                         fratelli = [];
-                        var frad = [];
+                        //var frad = [];
                         for (var i = 0; i < ff.length; i++) {
                             if (ff[i] != curr.id) {
                                 fratelli.push(ff[i]);
-                                frad.push(this.model.getCell(ff[i]).get("values").comment[0]);
+                                //frad.push(this.model.getCell(ff[i]).get("values").comment[0]);
                             }
                         }
-                        console.log(frad);
-                        /*
-                         var fratelliOrdinati = [];
-                         for(var i=0;i < g.length;i++)
-                         {
-                         if(fratelli.indexOf(g[i])!=-1)
-                         {
-                         fratelliOrdinati.push(g[i]);
-                         }
-                         }
-                         fratelli = fratelliOrdinati;
-                         */
+                        //console.log(frad);
+
                         for (var i = 0; i < fratelli.length && !found; i++) {
                             // i miei fratelli sono in ordine di y crescente.
                             // il primo fratello che mi supera in y è quello che mi seguirà
-                            console.log(y, " < ", this.model.getCell(fratelli[i]).get("position").y);
+                            //console.log(y, " < ", this.model.getCell(fratelli[i]).get("position").y);
                             if (y < this.model.getCell(fratelli[i]).get("position").y) {
 
                                 found = true;
                                 if (i != 0) {
-                                    console.log("pezzo buggato?");
+                                    // console.log("pezzo buggato?");
                                     // bad
                                     // se non è il primo dentro il blocco
                                     var dest = g.indexOf(this.model.getCell(fratelli[i - 1]));
                                     dest += this.model.getCell(fratelli[i - 1]).getEmbeddedCells({deep: true}).length;
                                     //dest = dest + this.model.getCell(fratelli[i]).getEmbeddedCells({deep: true}).length;
                                     //dest--;
-
-
                                     // correctEmbedding(i-1,parentCell,curr);
                                     for (var j = 0; j <= figli.length; j++) {
                                         move(g, g.length - 1 - figli.length + j, dest + j + 1);
@@ -464,7 +363,7 @@ define([
                                     }
                                 }
                                 else {
-                                    console.log("i=0");
+                                    //console.log("i=0");
                                     var dest = g.indexOf(parentCell);
                                     dest++;
 
@@ -480,7 +379,7 @@ define([
                         }
                         // non ho trovato posto perché ho la y più grande di tutti i miei fratelli
                         if (!found) {
-                            console.log("y grande");
+                            //console.log("y grande");
                             //var dest = getNextIndexByID(this.model, fratelli,fratelli.length-1);
                             //dest--;
                             var index = 0;
@@ -489,7 +388,7 @@ define([
                             }
                             else {
                                 // bad
-                                //console.log("non dovrebbe mai accadere");
+                                //console.log("non dovrebbe mai accadere?");
                                 index = fratelli.length - 1;
                             }
 
@@ -511,14 +410,13 @@ define([
                 }
                 // è a livello 0
                 else {
-                    console.log("caso livello 0");
+                    //console.log("caso livello 0");
                     var fratelli = [];
                     for (var i = 0; i < g.length; i++) {
                         if (!g[i].get("parent")) {
                             fratelli.push(g[i]);
                         }
                     }
-                    console.log(fratelli.length);
 
                     var found2 = false;
                     for (var i = 0; i < fratelli.length && !found2; i++) {
@@ -526,25 +424,25 @@ define([
                             console.log("trovato");
                             found2 = true;
                             var dest = g.indexOf(this.model.getCell(fratelli[i]));
-                            console.log(dest);
+                            //console.log(dest);
 
-                            console.log(figli);
-                            console.log(figli.length);
+                            //console.log(figli);
+                            //console.log(figli.length);
                             var k = 0;
                             //correctEmbedding(i,parentCell,curr);
 
                             for (k = 0; k <= figli.length; k++) {
-                                console.log("ciclo", k);
+                                //console.log("ciclo", k);
                                 move(g, g.length - 1 - figli.length + k, dest + k);
                                 debug();
                             }
-                            console.log(k, "<=", figli.length, k <= figli.length);
-                            console.log(figli.length);
+                            //console.log(k, "<=", figli.length, k <= figli.length);
+                            //console.log(figli.length);
 
-                            console.log(figli);
+                           //console.log(figli);
 
                         } else {
-                            console.log("avanti");
+                           // console.log("avanti");
                         }
                     }
 
@@ -610,8 +508,6 @@ define([
                     else {
                         this.isHighlighted = false;
                     }
-
-
                 }
             }
 
@@ -687,8 +583,6 @@ define([
 
             this.paper.on('cell:pointerup', this.pointerUpFunction);
             this.paper.on('cell:pointermove', this.pointerMoveFunction);
-
-
             this.paper.on('cell:pointerdown', this.pointerDownFunction);
 
             console.log(this);
@@ -696,58 +590,15 @@ define([
 
             this.renderActivity();
 
-
             this.listenTo(this.paper, 'renderActivity', this.renderActivity);
             this.listenTo(this.model, 'renderActivity', function () {
                 this.pointerDownFunction(this.paper.findView(this.graph.get("cells").models[0]), {}, 0, 0);
-                this.pointerUpFunction({}, {},  0, 0);
+                this.pointerUpFunction({}, {}, 0, 0);
                 //this.renderActivity();
             });
-            this.listenTo(this.model, 'addcell', function (cell) {
-
-
-                //this.pointerDownFunction({}, {}, 0, 0);
-                //this.pointerUpFunction({}, {},  0, 0);
-
+            this.listenTo(this.model, 'addcell', function () {
                 this.renderActivity();
-
-
-                    //this.pointerDownFunction(this.paper.findView(cell));//, {}, 0, 0);
-                    ///this.pointerUpFunction({}, {},  9999, 9999);
-
-                    this.renderActivity();
-
-
-
-                //this.paper.trigger("renderActivity");
             });
-
-
-            //this.on('change:z', function() {console.log("z cambiata");});
-            //pointerDownFunction();
-
-
-
-            //zoom in futuro
-            /*graphscale =1;
-             this.paper.on('blank:mousewheel',function (evt, x, y, delta) {
-             console.log(delta);
-             graphscale+=delta*0.1;
-             this.scale(graphscale,graphscale);
-             });*/
-
-            /*
-             this.paper.on('blank:pointerdown', function (evt, x, y) {
-             //console.log(evt);
-             //console.log(x,y);
-             });*/
-
-            //this.model.addInitialsCells();
-            //this.trigger("cell:pointerup"); // come faccio a triggerare la cosa che ho definito sopra?
-
-            // console.log(this);
-            // pointerUpFunction();
-
         },
 
         /**
@@ -759,15 +610,15 @@ define([
          */
         switch: function (id) {
             this.model.switchToGraph(id);
-            if(id!="class"){
+            if (id != "class") {
                 this.visibleElements = this.model.getClassVisibileElements(this.paper.selectedCell);
             }
-            else{
-                this.visibleElements=[];
+            else {
+                this.visibleElements = [];
             }
 
-            console.log("elementi: ",this.visibleElements);
-            this.paper.selectedCell= null;
+            console.log("elementi: ", this.visibleElements);
+            this.paper.selectedCell = null;
             //console.log("ah oh perchè non triggeri");
             this.paper.trigger("changed-cell");
             this.trigger("Switchgraph");
@@ -781,7 +632,7 @@ define([
         getCurrentDiagramType: function () {
             return this.model.getCurrentDiagramType();
         },
-        deleteMethodAt:function(ind){
+        deleteMethodAt: function (ind) {
             this.model.deleteMethodDiagram(this.paper.selectedCell.getValues().methods[ind].id);
         }
 

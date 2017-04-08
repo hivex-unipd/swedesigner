@@ -59,7 +59,7 @@
                }
             },
             {
-               "type":"uml.interface";
+               "type":"uml.interface",
                "id":"f2c00232-2ac0-4ad3-969e-12caf8caa7dd",
                "values":{
                   "name":"PrimaInterfaccia",
