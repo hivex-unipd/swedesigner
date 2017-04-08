@@ -24,8 +24,8 @@ public class ParsedForTest {
 		ParsedFor cycle = new ParsedFor(init, condition, step, body);
 		JavaTemplate template = new JavaTemplate();
 		String result = cycle.renderTemplate(template);
-		// TODO (TMP DEPLOY):
-//		assertThat(result, containsString("for (int i = 0; i < 10; i++)"));
+		// non funziona:
+		assertThat(result, containsString("for (int i = 0; i < 10; i++)"));
 	}
 
 	// Costruito un ParsedFor, questo è in grado di generare una stringa Java contenente l'insieme di istruzioni passatogli nel costruttore.
@@ -39,7 +39,7 @@ public class ParsedForTest {
 		ParsedFor cycle = new ParsedFor(init, condition, step, body);
 		JavaTemplate template = new JavaTemplate();
 		String result = cycle.renderTemplate(template);
-		// TODO (TMP DEPLOY):
-//		assertThat(result, containsString("obj.render();"));
+		// non funziona:
+		assertThat(result, containsString("obj.render();"));
 	}
 }

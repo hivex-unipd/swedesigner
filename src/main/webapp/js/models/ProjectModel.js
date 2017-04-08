@@ -6,9 +6,8 @@ define([
     'underscore',
     'backbone',
     'joint',
-    'collection/DiagramsCollection',
     'models/celltypes/celltypes'
-], function ($, _, Backbone, joint, DiagramsCollection, celltypes) {
+], function ($, _, Backbone, joint, celltypes) {
 
     var ProjectModel = Backbone.Model.extend({
 
@@ -114,6 +113,16 @@ define([
 
 
         },
+        deleteCell:function (cell) {
+            if(cell.getValues().hasOwnProperty("methods")){
+                for(var met in cell.getValues().methods){
+                    this.deleteMethodDiagram(cell.getValues().methods[met].id);
+                }
+            }
+            this.graph.removeCells([cell]);
+            //console.log("ohi perché non rimmuovi");
+            this.trigger('addcell');
+        },
         addCell: function (cell) {
             //meglio aggiungere sia a current graph o solo al graph e poi fare export in json?
 
@@ -125,6 +134,7 @@ define([
             this.graph.addCell(cell);
 
             this.trigger('addcell', cell);
+            
         },
 
         switchToGraph: function (id) {

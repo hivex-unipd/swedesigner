@@ -35,13 +35,11 @@ public class ParsedAttributeTest {
 		assertThat(result, containsString("final Integer ANSWER"));
 	}
 
-//	da lanciare quando sarà implementato bene: <<<<<<
-
 	// Costruito un ParsedAttribute, questo è in grado di generare una stringa Java contenente visibilità, tipo, nome e valore iniziale passatigli nel costruttore.
-//	@Test
-//	public void attributeIsParsed() {
-//		ParsedAttribute attribute = new ParsedAttribute(false, "private", "String", "pippo", "=", "test");
-//		String result = attribute.renderTemplate(javaTemplate);
-//		assertEquals("private String pippo = \"test\";", result);
-//	}
+	@Test
+	public void attributeIsParsed() {
+		ParsedAttribute attribute = new ParsedAttribute(false, "private", "String", "pippo", "=", "\"test\"");
+		String result = attribute.renderTemplate(javaTemplate);
+		assertEquals("private String pippo = \"test\"", result);
+	}
 }

@@ -32,6 +32,17 @@ define([
          */
         visibleElements: [],
 
+
+
+        deleteCell: function(e){
+          //console.log(e.which==46);
+            if(e.which==46){//ha premuto tasto canc
+                if(this.paper.selectedCell){
+                    this.model.deleteCell(this.paper.selectedCell);
+                }
+            }
+        },
+
         /**
          * Updates the drawing area by placing the activity blocks.
          * @name ProjectView#renderActivity
@@ -539,7 +550,13 @@ define([
 
                 elementView: function (element) {
                     if (element.get("type").startsWith("class")) {
-                        return celltypes.class.ClassDiagramElementView;
+                        if(element.get("type")=="class.HxComment"){
+                            return joint.shapes.basic.TextBlockView;
+                        }
+                        else{
+                            return celltypes.class.ClassDiagramElementView;
+                        }
+
                     } else {
                         return celltypes.activity.ActivityDiagramElementView;
                     }
@@ -590,6 +607,8 @@ define([
             var m = this.model;
 
             this.renderActivity();
+
+            $(document).on('keydown',$.proxy(this.deleteCell,this));
 
             this.listenTo(this.paper, 'renderActivity', this.renderActivity);
             this.listenTo(this.model, 'renderActivity', function () {

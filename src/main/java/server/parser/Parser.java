@@ -1,4 +1,4 @@
-Parspackage server.parser;
+package server.parser;
 
 
 import java.util.ArrayList;
