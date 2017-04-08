@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Arrays;
 
 public class ParsedElseTest {
+
+	// Costruito un ParsedElse, questo è in grado di generare una stringa Java contenente la keyword ``else'' e l'insieme di istruzioni passatogli nel costruttore.
 	@Test
 	public void elseContainsBasicInfo() {
 		ParsedInstruction inst1 = new ParsedReturn("tmp");

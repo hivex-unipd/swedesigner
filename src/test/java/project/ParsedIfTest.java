@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Arrays;
 
 public class ParsedIfTest {
+
+	// Costruito un ParsedIf, questo è in grado di generare una stringa Java contenente la keyword ``if'' con la condizione e l'insieme di istruzioni passatigli nel costruttore.
 	@Test
 	public void ifContainsBasicInfo() {
 		ParsedInstruction inst1 = new ParsedStatement("", "x", "+=", "1");
