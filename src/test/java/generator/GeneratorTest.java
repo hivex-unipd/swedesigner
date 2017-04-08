@@ -7,7 +7,6 @@ import org.junit.Test;
 import server.generator.Generator;
 import server.generator.java.JavaGenerator;
 import server.project.*;
-import server.template.java.JavaTemplate;
 
 import org.json.*;
 import java.io.FileNotFoundException;
