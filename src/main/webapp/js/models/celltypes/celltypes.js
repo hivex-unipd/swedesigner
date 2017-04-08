@@ -1268,6 +1268,7 @@ define([
 
         defaults: _.defaultsDeep({
 
+            z: 1,
             type: 'uml.ActivityDiagramElement',
 
             attrs: {

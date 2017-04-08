@@ -40,13 +40,23 @@ define([
         renderActivity: function () {
             // CODICE OK
             //console.log(this);
+            var debug = function () {
+                var x = "";
+
+                for (var d = 0; d < g.length; d++) {
+                    x += "|" + g[d].get("values").comment[0] + "|";
+                }
+                console.log(x);
+            };
             //var g = this.paper.attributes.cells.models;
             var m = this.model;
             var p = this.paper;
-            console.log(m);
+            //console.log(m);
             var g = m.graph.get("cells").models;
-            console.log(g);
+            console.log("RENDER");
             if (g && m.options.currentindex != 'class') {
+                debug();
+
                 var offsetY = 50;
 
                 for (i = 0; i < g.length; i++) {
@@ -690,10 +700,32 @@ define([
             this.listenTo(this.paper, 'renderActivity', this.renderActivity);
             this.listenTo(this.model, 'renderActivity', function () {
                 this.pointerDownFunction(this.paper.findView(this.graph.get("cells").models[0]), {}, 0, 0);
-                this.pointerUpFunction({}, {}, 0, 0);
+                this.pointerUpFunction({}, {},  0, 0);
+                //this.renderActivity();
             });
-            this.listenTo(this.model, 'addcell', this.renderActivity);
+            this.listenTo(this.model, 'addcell', function (cell) {
+
+
+                //this.pointerDownFunction({}, {}, 0, 0);
+                //this.pointerUpFunction({}, {},  0, 0);
+
+                this.renderActivity();
+
+
+                    //this.pointerDownFunction(this.paper.findView(cell));//, {}, 0, 0);
+                    ///this.pointerUpFunction({}, {},  9999, 9999);
+
+                    this.renderActivity();
+
+
+
+                //this.paper.trigger("renderActivity");
+            });
+
+
+            //this.on('change:z', function() {console.log("z cambiata");});
             //pointerDownFunction();
+
 
 
             //zoom in futuro
