@@ -32,6 +32,17 @@ define([
          */
         visibleElements: [],
 
+
+
+        deleteCell: function(e){
+          //console.log(e.which==46);
+            if(e.which==46){//ha premuto tasto canc
+                if(this.paper.selectedCell){
+                    this.model.deleteCell(this.paper.selectedCell);
+                }
+            }
+        },
+
         /**
          * ...
          * @name ProjectView#renderActivity
@@ -632,7 +643,13 @@ define([
 
                 elementView: function (element) {
                     if (element.get("type").startsWith("class")) {
-                        return celltypes.class.ClassDiagramElementView;
+                        if(element.get("type")=="class.HxComment"){
+                            return joint.shapes.basic.TextBlockView;
+                        }
+                        else{
+                            return celltypes.class.ClassDiagramElementView;
+                        }
+
                     } else {
                         return celltypes.activity.ActivityDiagramElementView;
                     }
@@ -677,7 +694,7 @@ define([
 
             this.paper.on('cell:pointerup', this.pointerUpFunction);
             this.paper.on('cell:pointermove', this.pointerMoveFunction);
-
+            this.paper.on('cell:')
 
             this.paper.on('cell:pointerdown', this.pointerDownFunction);
 
@@ -686,6 +703,7 @@ define([
 
             this.renderActivity();
 
+            $(document).on('keydown',$.proxy(this.deleteCell,this));
 
             this.listenTo(this.paper, 'renderActivity', this.renderActivity);
             this.listenTo(this.model, 'renderActivity', function () {

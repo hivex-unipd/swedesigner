@@ -120,6 +120,16 @@ define([
             this.graph.addCell(cell);
             this.trigger('addcell');
         },
+        deleteCell:function (cell) {
+            if(cell.getValues().hasOwnProperty("methods")){
+                for(var met in cell.getValues().methods){
+                    this.deleteMethodDiagram(cell.getValues().methods[met].id);
+                }
+            }
+            this.graph.removeCells([cell]);
+            //console.log("ohi perché non rimmuovi");
+            this.trigger('addcell');
+        },
         addCellFromType: function (type) {
             var newClass;
             var newPosition = {x: 200, y: 200};

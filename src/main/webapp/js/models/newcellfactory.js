@@ -38,6 +38,7 @@ define([
      */
     abstractCellFactory.registerCell("HxInterface",celltypes.class.HxInterface);
     abstractCellFactory.registerCell("HxClass",celltypes.class.HxClass);
+    abstractCellFactory.registerCell("HxComment",celltypes.class.HxComment);
     abstractCellFactory.registerCell("HxGeneralization",celltypes.class.HxGeneralization);
     abstractCellFactory.registerCell("HxAssociation",celltypes.class.HxAssociation);
     abstractCellFactory.registerCell("HxImplementation",celltypes.class.HxImplementation);

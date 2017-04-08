@@ -14,7 +14,6 @@ define([
     celltypes.class = {};
 
 
-
     /**
      * @classdesc `ClassDiagramElement` is the base class for every
      * element of the class diagram. Elements can be classes,
@@ -97,11 +96,10 @@ define([
          * @param {function} met the method to be executed
          */
         executemethod: function (met) {
-            console.log(met,arguments);
+            console.log(met, arguments);
             return this[met] && this[met].apply(this, [].slice.call(arguments, 1));
         }
     });
-
 
 
     /**
@@ -149,7 +147,7 @@ define([
          */
         toggleattributes: function () { //non so se sia giusto tenerli qua...boh vedremo
             this.model.set("attributesexpanded", !this.model.get("attributesexpanded"));
-            
+
             this.model.updateRectangles();
             this.update(); // ecco cosa dovevi fare, le cose funzionavano già
         },
@@ -165,7 +163,6 @@ define([
             this.update(); // ecco cosa dovevi fare, le cose funzionavano già
         }
     });
-
 
 
     /**
@@ -228,8 +225,8 @@ define([
                 '.uml-class-attrs-rect': {
                     'stroke': 'black',
                     'stroke-width': 0,
-                    'fill': '#ffffff', 
-                'expanded': 'false'
+                    'fill': '#ffffff',
+                    'expanded': 'false'
                 },
                 '.uml-class-methods-rect': {
                     'stroke': 'black',
@@ -277,22 +274,22 @@ define([
 
             values: {
                 name: "classedefault",
-                abstract:"false",
-                static:"false",
+                abstract: "false",
+                static: "false",
                 attributes: [
                     {
                         name: "variabileDefault",
                         type: "TipoDefault",
-                        defaultValue:"",
-                        visibility:"public",
-                        static:"false"
+                        defaultValue: "",
+                        visibility: "public",
+                        static: "false"
                     },
                     {
                         name: "variabileDefault2",
                         type: "TipoDefault2",
-                        defaultValue:"",
-                        visibility:"public",
-                        static:"false"
+                        defaultValue: "",
+                        visibility: "public",
+                        static: "false"
                     }
                 ],
                 methods: [
@@ -301,13 +298,13 @@ define([
                         visibility: "public",
                         id: joint.util.uuid(),
                         returntype: "tipoRitorno",
-                        abstract:"false",
-                        static:"false",
+                        abstract: "false",
+                        static: "false",
                         parameters: [
                             {
-                                name:"param1",
-                                type:"int",
-                                defaultValue:"0"
+                                name: "param1",
+                                type: "int",
+                                defaultValue: "0"
                             }
                         ]
                     }
@@ -382,7 +379,7 @@ define([
                             vis = "#";
                             break;
                     }
-                    return vis+ " "+ e.name + ":" + e.type;
+                    return vis + " " + e.name + ":" + e.type;
                 }).join('\n') : rects[1].text;
             attrs['.uml-class-attrs-rect'].height = rectHeight;
             attrs['.uml-class-attrs-rect'].transform = 'translate(0,' + offsetY + ')';
@@ -406,8 +403,10 @@ define([
                             vis = "#";
                             break;
                     }
-                    var params = e.parameters.map(function(f){return f.name;}).join(",");
-                    return vis + " " + e.name + "(" + params+")" + ":" + e.returntype;
+                    var params = e.parameters.map(function (f) {
+                        return f.name;
+                    }).join(",");
+                    return vis + " " + e.name + "(" + params + ")" + ":" + e.returntype;
                 }).join('\n') : rects[2].text;
             attrs['.uml-class-methods-rect'].height = rectHeight;
             attrs['.uml-class-methods-rect'].transform = 'translate(0,' + offsetY + ')';
@@ -426,8 +425,8 @@ define([
                 visibility: "",
                 id: joint.util.uuid(),
                 returntype: "",
-                static:"false",
-                abstract:"false",
+                static: "false",
+                abstract: "false",
                 parameters: []
             });
         },
@@ -441,9 +440,9 @@ define([
             this.getValues().attributes.push({
                 name: "",
                 type: "",
-                defaultValue:"",
-                visibility:"",
-                static:"false"
+                defaultValue: "",
+                visibility: "",
+                static: "false"
             });
         },
 
@@ -456,24 +455,23 @@ define([
          */
         addparameter: function (ind) {
             this.getValues().methods[ind].parameters.push({
-                name:"",
-                type:"",
-                defaultValue:""
+                name: "",
+                type: "",
+                defaultValue: ""
             });
         },
-        deleteparameter:function (met) {
+        deleteparameter: function (met) {
             console.log(met[1]);
-          this.getValues().methods[met[0]].parameters.splice(met[1],1);
-          console.log(this.getValues());
+            this.getValues().methods[met[0]].parameters.splice(met[1], 1);
+            console.log(this.getValues());
         },
-        deleteattribute: function(ind){
-            this.getValues().attributes.splice(ind,1);
+        deleteattribute: function (ind) {
+            this.getValues().attributes.splice(ind, 1);
         },
-        deleteMethod:function (ind) {
-            this.getValues().methods.splice(ind,1);
+        deleteMethod: function (ind) {
+            this.getValues().methods.splice(ind, 1);
         }
     });
-
 
 
     celltypes.class.HxInterface = celltypes.class.ClassDiagramElement.extend({
@@ -489,7 +487,7 @@ define([
 
             type: 'class.HxInterface',
             position: {x: 200, y: 200},
-            size:{width: 100, height: 100},
+            size: {width: 100, height: 100},
             attrs: {
                 rect: {'width': 200},
 
@@ -530,9 +528,9 @@ define([
                         id: joint.util.uuid(),
                         returntype: "tipoRitorno",
                         parameters: [{
-                            name:"param1",
-                            type:"int",
-                            defaultValue:"0"
+                            name: "param1",
+                            type: "int",
+                            defaultValue: "0"
                         }]
                     }
                 ]
@@ -597,8 +595,10 @@ define([
                             vis = "#";
                             break;
                     }
-                    var params = e.parameters.map(function(f){return f.name;}).join(",");
-                    return vis + " " + e.name + "(" + params+")" + ":" + e.returntype;
+                    var params = e.parameters.map(function (f) {
+                        return f.name;
+                    }).join(",");
+                    return vis + " " + e.name + "(" + params + ")" + ":" + e.returntype;
                 }).join('\n') : rects[1].text;
             attrs['.uml-class-methods-rect'].height = rectHeight;
             attrs['.uml-class-methods-rect'].transform = 'translate(0,' + offsetY + ')';
@@ -610,37 +610,88 @@ define([
                 name: "",
                 visibility: "",
                 id: joint.util.uuid(),
-                static:"false",
-                abstract:"false",
+                static: "false",
+                abstract: "false",
                 returntype: "",
                 parameters: []
             });
         },
         addparameter: function (ind) {
             this.getValues().methods[ind].parameters.push({
-                name:"",
-                type:"",
-                defaultValue:""
+                name: "",
+                type: "",
+                defaultValue: ""
             });
         },
-        deleteparameter:function (met) {
+        deleteparameter: function (met) {
             console.log(met[1]);
-            this.getValues().methods[met[0]].parameters.splice(met[1],1);
+            this.getValues().methods[met[0]].parameters.splice(met[1], 1);
             console.log(this.getValues());
         },
-        deleteMethod:function (ind) {
-            this.getValues().methods.splice(ind,1);
+        deleteMethod: function (ind) {
+            this.getValues().methods.splice(ind, 1);
         }
+    });
+
+    celltypes.class.HxComment = joint.shapes.basic.TextBlock.extend({
+        defaults: _.defaultsDeep({
+            type:"class.HxComment",
+            position: {x: 200, y: 200},
+            size: {width: 100, height: 100},
+            values:{
+                comment:""
+            }
+        },joint.shapes.basic.TextBlock.prototype.defaults),
+        initialize:function () {
+            joint.shapes.basic.TextBlock.prototype.initialize.apply(this,arguments);
+        },
+        getValues: function () {
+            return this.get("values");
+        },
+        setToValue: function (value, path) {
+            obj = this.getValues();
+            path = path.split('.');
+            for (i = 0; i < path.length - 1; i++) {
+                obj = obj[path[i]];
+            }
+            obj[path[i]] = value;
+            this.updateContent();
+            //this.get('content')=value;
+            //this.updateRectangles();
+            //this.trigger("uml-update");
+        },
+        updateContent:function(){
+            if (joint.env.test('svgforeignobject')) {
+
+                // Content element is a <div> element.
+                this.attr({
+                    '.content': {
+                        html: joint.util.breakText(this.getValues().comment,this.get('size'),this.get('attrs')['.content'])
+                    }
+                });
+
+            } else {
+
+                // Content element is a <text> element.
+                // SVG elements don't have innerHTML attribute.
+                this.attr({
+                    '.content': {
+                        text: joint.util.breakText(this.getValues().comment,cell.get('size'), this.get('attrs')['.content'])
+                    }
+                });
+            }
+        }
+
     });
 
     celltypes.class.ClassDiagramLink = joint.dia.Link.extend({
         defaults: _.defaultsDeep({
             type: 'class.ClassDiagramLink',
-            source:{x:30,y:30},
-            target:{x:150,y:120}
-        },joint.dia.Link.prototype.defaults),
-        initialize:function(){
-            joint.dia.Link.prototype.initialize.apply(this,arguments);
+            source: {x: 30, y: 30},
+            target: {x: 150, y: 120}
+        }, joint.dia.Link.prototype.defaults),
+        initialize: function () {
+            joint.dia.Link.prototype.initialize.apply(this, arguments);
         },
         getValues: function () {
             return this.get("values");
@@ -664,7 +715,7 @@ define([
         defaults: _.defaultsDeep({
             type: 'class.HxGeneralization',
             attrs: {'.marker-target': {d: 'M 20 0 L 0 10 L 20 20 z', fill: 'white'}}
-        },celltypes.class.ClassDiagramLink.prototype.defaults)
+        }, celltypes.class.ClassDiagramLink.prototype.defaults)
     });
 
     celltypes.class.HxImplementation = celltypes.class.ClassDiagramLink.extend({
@@ -674,7 +725,7 @@ define([
                 '.marker-target': {d: 'M 20 0 L 0 10 L 20 20 z', fill: 'white'},
                 '.connection': {'stroke-dasharray': '3,3'}
             }
-        },celltypes.class.ClassDiagramLink.prototype.defaults)
+        }, celltypes.class.ClassDiagramLink.prototype.defaults)
     });
 
     /*
@@ -699,7 +750,7 @@ define([
 
     celltypes.class.HxAssociation = celltypes.class.ClassDiagramLink.extend({
 
-        defaults:_.defaultsDeep({
+        defaults: _.defaultsDeep({
             type: 'class.HxAssociation',
             labels: [
                 {
@@ -714,21 +765,19 @@ define([
             values: {
 
                 card: "default",
-                attribute:""
+                attribute: ""
             }
-        },celltypes.class.ClassDiagramLink.prototype.defaults),
+        }, celltypes.class.ClassDiagramLink.prototype.defaults),
         updatelabel: function () {
 
             this.label(0, {
 
-                attrs:
-                    {
+                attrs: {
 
-                        text:
-                            {
-                                text: this.getcard()
-                            }
+                    text: {
+                        text: this.getcard()
                     }
+                }
             });
         },
         getcard: function () {
@@ -736,17 +785,17 @@ define([
         },
 
         /*getpos: function(){
-            if(this.get("values").pos=="target"){
-                return -25;
-            }
-            else{
-                return 25;
-            }
-            //return Number(this.get("values").pos);
-        },*/
+         if(this.get("values").pos=="target"){
+         return -25;
+         }
+         else{
+         return 25;
+         }
+         //return Number(this.get("values").pos);
+         },*/
         initialize: function () {
             this.updatelabel();
-            celltypes.class.ClassDiagramLink.prototype.initialize.apply(this,arguments);
+            celltypes.class.ClassDiagramLink.prototype.initialize.apply(this, arguments);
 
         },
         setToValue: function (value, path) {
@@ -929,46 +978,46 @@ define([
     });
 
     /*celltypes.activity.HxAssignement = celltypes.activity.ActivityDiagramElement.extend({
-        defaults: _.defaultsDeep({
+     defaults: _.defaultsDeep({
 
-            type: 'activity.HxAssignement',
+     type: 'activity.HxAssignement',
 
-            attrs: {
-                rect: {'width': 200},
-
-
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
-
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
-
-                '.activity-element-name-text': {
-                    'ref': '.activity-element-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
-                },
-
-            },
-
-            values: {
-                xtype: "Assegnazione",
-                name: "",
-                operation: "",
-                value: ""
-            }
+     attrs: {
+     rect: {'width': 200},
 
 
-        }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
-        initialize: function () {
-            celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
-        }
-    });*/
+     '.activity-toggle': {'fill': '#eedd99'},
+     '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
+     '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
+
+     '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
+
+     '.activity-element-name-text': {
+     'ref': '.activity-element-name-rect',
+     'ref-y': .5,
+     'ref-x': .5,
+     'text-anchor': 'middle',
+     'y-alignment': 'middle',
+     'fill': 'white',
+     'font-size': 16,
+     'font-family': 'Roboto'
+     },
+
+     },
+
+     values: {
+     xtype: "Assegnazione",
+     name: "",
+     operation: "",
+     value: ""
+     }
+
+
+     }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
+     initialize: function () {
+     celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
+     }
+     });*/
     celltypes.activity.HxCustom = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
@@ -1162,7 +1211,7 @@ define([
                 xtype: 'Variabile',
                 name: "",
                 type: "",
-                operation:"",
+                operation: "",
                 value: ""
 
             }
@@ -1338,7 +1387,7 @@ define([
             return this.get('keyvalues');
         },
 
-        getValues:function(){
+        getValues: function () {
             return this.get('keyvalues');
         },
 

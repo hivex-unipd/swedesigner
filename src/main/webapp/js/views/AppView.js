@@ -66,9 +66,12 @@ define([
             'click #switch': 'switchgraph',
             'click #savefile': 'save',
             'change #files': 'load',
-			'click #generate': 'generate'
+			'click #generate': 'generate',
+            'keypress document':"sss"
         },
-
+        sss:function(e){
+          console.log(e.which);
+        },
         /**
          * Toggles the visibility of the 'Back to Class
          * Diagram' button.
