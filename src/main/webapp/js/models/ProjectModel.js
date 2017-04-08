@@ -117,8 +117,38 @@ define([
         addCell: function (cell) {
             //meglio aggiungere sia a current graph o solo al graph e poi fare export in json?
             //this.options.graphs[this.options.currentindex].push(cell);
+console.log("PRIMA");
+console.log(this.graph);
+            var x = "";
+
+            for (var d = 0; d < this.graph.get("cells").models.length; d++) {
+                x += "|" + this.graph.get("cells").models[d].get("values").comment[0] + "|";
+            }
+            console.log(x);
+
+
+            _.each(this.graph.get("cells").models, function (el) {
+               el.set("z",1);
+            });
             this.graph.addCell(cell);
-            this.trigger('addcell');
+
+            //this.graph.attributes.cells.push(cell);
+            console.log("DOPO ADD");
+            var x = "";
+
+            for (var d = 0; d < this.graph.get("cells").models.length; d++) {
+                x += "|" + this.graph.get("cells").models[d].get("values").comment[0] + "|";
+            }
+            console.log(x);
+            console.log("cella aggiunta!", this.graph);
+            this.trigger('addcell', cell);
+            console.log("DOPO TRIGGER");
+            var x = "";
+
+            for (var d = 0; d < this.graph.get("cells").models.length; d++) {
+                x += "|" + this.graph.get("cells").models[d].get("values").comment[0] + "|";
+            }
+            console.log(x);
         },
         deleteCell:function (cell) {
             if(cell.getValues().hasOwnProperty("methods")){
@@ -398,7 +428,7 @@ define([
 
 
         },
-        saveCurrentDiagram(){
+        saveCurrentDiagram : function () {
 
             if (this.options.currentindex == "class") {
                 this.options.graphs.classes.classesArray = (this.graph.getElements());
