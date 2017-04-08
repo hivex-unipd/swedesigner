@@ -134,7 +134,7 @@ define([
             this.graph.addCell(cell);
 
             this.trigger('addcell', cell);
-            
+
         },
 
         switchToGraph: function (id) {

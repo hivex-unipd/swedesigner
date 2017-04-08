@@ -28,7 +28,7 @@ define([
         /**
          * It contains variables and methods visible inside the selected method scope.
          * @name ProjectView#visibleElements
-         * @type {String, String}[]
+         *
          */
         visibleElements: [],
 
@@ -475,8 +475,8 @@ define([
         /**
          * Manages the movement of the pointer when
          * the user is dragging the cell, highlighting the cell
-         * under the pointer; this is a
-         * callback to the 'pointermove' event on the view.
+         * under the pointer;
+         * this is a callback to the 'pointermove' event on the view.
          * @name ProjectView#pointerMoveFunction
          * @function
          * @param {joint.dia.ElementView} cellView the dragged cell's view
