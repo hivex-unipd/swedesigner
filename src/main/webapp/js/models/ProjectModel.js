@@ -6,9 +6,8 @@ define([
     'underscore',
     'backbone',
     'joint',
-    'collection/DiagramsCollection',
     'models/celltypes/celltypes'
-], function ($, _, Backbone, joint, DiagramsCollection, celltypes) {
+], function ($, _, Backbone, joint, celltypes) {
 
     var ProjectModel = Backbone.Model.extend({
 
