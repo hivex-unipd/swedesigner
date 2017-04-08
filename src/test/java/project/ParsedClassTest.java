@@ -28,8 +28,6 @@ public class ParsedClassTest {
 	@Test
 	public void classCanBeAbstract() throws ParsedException {
 		ParsedClass type = new ParsedClass("MyClass", true);
-		ParsedAttribute field = new ParsedAttribute(false, "private", "String", "pippo", "=", "\"test\"");
-		type.addField(field);
 		JavaTemplate template = new JavaTemplate();
 		String result = type.renderTemplate(template);
 		assertThat(result, containsString("abstract class MyClass"));
@@ -69,7 +67,7 @@ public class ParsedClassTest {
 //		type.addSupertype("OtherBaseClass", "class");
 //	}
 
-	// Costruita una ParsedClass, l'aggiunta di un supertipo che non sia classe né interfaccia lancia una ParsedException.
+	// Costruita una ParsedClass, l'aggiunta di un supertipo che non sia né classe né interfaccia lancia una ParsedException.
 	@Test(expected = ParsedException.class)
 	public void baseClassNeedsType() throws ParsedException {
 		ParsedClass type = new ParsedClass("MyClass", false);

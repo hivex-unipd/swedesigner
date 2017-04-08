@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 public class ParsedInterfaceTest {
 
-	// Costruita una ParsedInterface, questa è in grado di generare una stringa Java contenente contenente la keyword ``interface'' seguita dal nome della ParsedInterface.
+	// Costruita una ParsedInterface, questa è in grado di generare una stringa Java contenente la keyword ``interface'' seguita dal nome della ParsedInterface.
 	@Test
 	public void interfaceContainsBasicInfo() throws ParsedException {
 		ParsedInterface type = new ParsedInterface("MyInterface");
@@ -21,7 +21,7 @@ public class ParsedInterfaceTest {
 		assertThat(result, containsString("interface MyInterface"));
 	}
 
-	// Costruita una ParsedInterface e aggiuntole un attributo finale, statico e pubblico, questa è in grado di generare una stringa Java contenente contenente la dichiarazione dell'attributo aggiunto.
+	// Costruita una ParsedInterface e aggiuntole un attributo finale, statico e pubblico, questa è in grado di generare una stringa Java contenente la dichiarazione dell'attributo aggiunto.
 	@Test
 	public void interfaceCanHaveStaticAttribute() throws ParsedException {
 		ParsedInterface type = new ParsedInterface("MyInterface");
@@ -33,7 +33,7 @@ public class ParsedInterfaceTest {
 		assertThat(result, containsString("final static public String DATA = 2;"));
 	}
 
-	// Costruita una ParsedInterface e aggiuntole un metodo non implementato, questa è in grado di generare una stringa Java contenente contenente la dichiarazione del metodo aggiunto.
+	// Costruita una ParsedInterface e aggiuntole un metodo non implementato, questa è in grado di generare una stringa Java contenente la dichiarazione del metodo aggiunto.
 	@Test
 	public void interfaceCanHaveMethod() throws ParsedException {
 		ParsedInterface type = new ParsedInterface("MyInterface");
@@ -46,7 +46,7 @@ public class ParsedInterfaceTest {
 		assertThat(result, containsString("public boolean isGood();"));
 	}
 
-	// Costruita una ParsedInterface e aggiuntole un metodo, questa è in grado di generare una stringa Java contenente contenente la dichiarazione del metodo aggiunto.
+	// Costruita una ParsedInterface e aggiuntole un supertipo, questa è in grado di generare una stringa Java contenente la keyword ``interface'' seguita dal nome della ParsedInterface, poi dalla keyword ``extends'' e infine dal nome del supertipo.
 	@Test
 	public void interfaceCanExtendInterface() throws ParsedException {
 		ParsedInterface type = new ParsedInterface("MyInterface");
