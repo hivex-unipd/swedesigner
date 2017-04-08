@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Arrays;
 
 public class ParsedWhileTest {
+
+	// Costruito un ParsedWhile, questo è in grado di generare una stringa Java contenente la keyword ``while'' seguita dalla condizione e dalla sequenza di istruzioni passategli nel costruttore.
 	@Test
 	public void whileContainsBasicInfo() {
 		String condition = "i < 10";

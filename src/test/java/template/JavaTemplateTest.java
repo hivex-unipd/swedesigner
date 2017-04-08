@@ -15,6 +15,7 @@ import java.util.Arrays;
 public class JavaTemplateTest {
 	private Template factory = new JavaTemplate();
 
+	// Costruito un JavaTemplate per attributi, questo è in grado di generare una stringa Java contenente la dichiarazione di un attributo.
 	@Test
 	public void attributeTemplateWorks() {
 		ParsedElement element = new ParsedAttribute(false, "private", "int", "pippo", "=", "2");
@@ -25,6 +26,7 @@ public class JavaTemplateTest {
 		assertEquals("private int pippo = 2", result);
 	}
 
+	// Costruito un JavaTemplate per classi, questo è in grado di generare una stringa Java contenente la dichiarazione di una classe.
 	@Test
 	public void classTemplateWorks() throws ParsedException {
 		ParsedElement element = new ParsedClass("MyClass", true);
@@ -40,6 +42,7 @@ public class JavaTemplateTest {
 		assertThat(result, containsString(methodStub));
 	}
 
+	// Costruito un JavaTemplate per rami else, questo è in grado di generare una stringa Java contenente la keyword ``else'' e il corpo del ramo else.
 	@Test
 	public void elseTemplateWorks() {
 		ST template = factory.getElseTemplate();
@@ -50,6 +53,7 @@ public class JavaTemplateTest {
 		assertThat(result, containsString("x = 23.2f;"));
 	}
 
+	// Costruito un JavaTemplate per cicli for, questo è in grado di generare una stringa Java contenente la dichiarazione di un ciclo for e il corpo del ciclo.
 	@Test
 	public void forTemplateWorks() {
 		List<ParsedInstruction> body = Arrays.asList();
@@ -58,7 +62,7 @@ public class JavaTemplateTest {
 
 		template.add("for", element);
 		String result = template.render();
-		// TODO!
+		// TODO (TMP DEPLOY):
 //		assertThat(result, containsString("for (int i = 10; i > 0; i++)"));
 
 		template.add("body", "y = 23.2f;");
@@ -66,6 +70,7 @@ public class JavaTemplateTest {
 		assertThat(result, containsString("y = 23.2f;"));
 	}
 
+	// Costruito un JavaTemplate per blocchi if, questo è in grado di generare una stringa Java contenente la dichiarazione di un blocco if e il corpo del blocco.
 	@Test
 	public void ifTemplateWorks() {
 		List<ParsedInstruction> body = Arrays.asList();
@@ -81,6 +86,7 @@ public class JavaTemplateTest {
 		assertThat(result, containsString("x = 23.2f;"));
 	}
 
+	// Costruito un JavaTemplate per istruzioni, questo è in grado di generare una stringa Java corrispondente a un'istruzione.
 	@Test
 	public void statementTemplateWorks() {
 		ParsedElement element = new ParsedStatement("Float", "fl", "=", "0.2");
@@ -91,6 +97,7 @@ public class JavaTemplateTest {
 		assertEquals("Float fl = 0.2;", result);
 	}
 
+	// Costruito un JavaTemplate per interfacce, questo è in grado di generare una stringa Java contenente la dichiarazione di un'interfaccia.
 	@Test
 	public void interfaceTemplateWorks() throws ParsedException {
 		ParsedElement element = new ParsedInterface("MyInterface");
@@ -106,6 +113,7 @@ public class JavaTemplateTest {
 		assertThat(result, containsString(methodStub));
 	}
 
+	// Costruito un JavaTemplate per metodi, questo è in grado di generare una stringa Java contenente la dichiarazione di un metodo.
 	@Test
 	public void methodTemplateWorks() {
 		List<ParsedAttribute> arguments = Arrays.asList();
@@ -124,6 +132,7 @@ public class JavaTemplateTest {
 		assertThat(result, containsString("x = 0.0f;"));
 	}
 
+	// Costruito un JavaTemplate per istruzioni return, questo è in grado di generare una stringa Java contenente la keyword ``return'' seguita dal valore da ritornare e da un punto e virgola.
 	@Test
 	public void returnTemplateWorks() {
 		ParsedElement element = new ParsedReturn("myValue");
@@ -134,6 +143,7 @@ public class JavaTemplateTest {
 		assertEquals("return myValue;", result);
 	}
 
+	// Costruito un JavaTemplate per cicli while, questo è in grado di generare una stringa Java contenente la dichiarazione di un ciclo while e il corpo del ciclo.
 	@Test
 	public void whileTemplateWorks() {
 		List<ParsedInstruction> body = Arrays.asList();

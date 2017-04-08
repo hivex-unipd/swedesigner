@@ -14,8 +14,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class ParserTest {
+
+	// Dato un file JSON contenente informazioni per generare un programma (quindi un array di tipi), Parser è in grado di ricavare un ParsedProgram con tanti tipi quanti dichiarati nel file JSON.
 	@Test
-	public void parserYieldsBasicInfo() throws JSONException, IOException {
+	public void parserParsesAllClasses() throws JSONException, IOException {
 		Parser parser = new Parser();
 		String diagrams = new String(Files.readAllBytes(Paths.get("src/main/resources/project.json")));
 

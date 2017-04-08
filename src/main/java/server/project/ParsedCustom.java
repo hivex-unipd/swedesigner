@@ -3,7 +3,7 @@ package server.project;
 import server.template.Template;
 
 public class ParsedCustom extends ParsedInstruction {
-	String instruction;
+	private String instruction;
 	public ParsedCustom(String instruction){
 		this.instruction = instruction;
 	}

@@ -29,5 +29,5 @@ public class Compressor {
 		in.close();
 		zos.closeEntry();
 		zos.close();//importante chiudere!!!
-	};
+	}
 }

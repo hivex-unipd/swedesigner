@@ -21,7 +21,7 @@ deploy:
     secure: jYvrsKj6by903vCGqZKiUSls66PNeuv74zqteeW6xnQmb2iM8NtjCL0V9szsLhe3ym4RA3lXIqn1SiidTJLdgxAfVF8D1P0cRD67/IoMmpm/E//R+K8mXsc9yLLTYW6L3vQGivaSNowb89rsvzpHCzDuxr3YkIQlguofMrKXpzYUh+d+RSg/uQOjbnYaTbeZuoMSw2n24tocfBwsVxGCAqbqi0aFOeEJfOEXqNAar+1iEr6hXf5HEC3Cbx4JeaMmrH/SE4AsGupyLlCBRVkeTslH9Ijgu2iyVmQUCtPhcvlOfrt1+q2iO56b5sKJ/NmPuWWRasP6i8Rl3nSgIS+SCS11IfYBV/BClyO6fvUZGxRNEKvVG1VeoK4nc/1pNjDbFbxwqjPKnhNArsHYSmGlZJzuzEobHZlIMKZZYTQ45Dh9KmmYYov0wbXHDxyBiGQUxSCWBK78yX9tY0t/VEy3E/5Pp0z7upQt2ijK8X69qUGnicB8EJLnQ5cUYuNG8fI/ge5BkAv6weA+nzs86L8kzuvYbYXrNDyQ6MdnGaGjjxP27D7uzvsBeCoqKU3nKBJ5MIFfHrO/CKaY+TIiayqpbSov8HqPa/BCoYGGTLAKYfBf+5ijPvs8UppmtgVWxiLD0KULnqC4oRYrzTmHdXFChM7/+oBg/JM5YMEMkYsiInU=
   skip_cleanup: true
   app: swedesigner
-  env: LowCost-env
+  env: Custom-env
   region: eu-central-1
   zip_file: target/swedesigner.war
   bucket_name: elasticbeanstalk-eu-central-1-538360443246

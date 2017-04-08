@@ -17,8 +17,16 @@ import server.template.java.JavaTemplate;
 public class JavaGenerator implements Generator {
 	
 	private Template template = new JavaTemplate();
-	public String renderAllTemplates(Template t){return null;};
-	public void generate(String IdReq, ParsedProgram p){
+
+	public String renderAllTemplates(Template t) {return null;}
+
+	/**
+	 * Given a {@code ParsedProgram} object, converts the object
+	 * into Java source code and writes the output to .java files.
+	 * @param IdReq ?
+	 * @param p     a valid ParsedProgram object
+	 */
+	public void generate(String IdReq, ParsedProgram p) {
 		String program = ""; //da togliere (solo per la stampa)
 		for(int i=0; i<p.nClasses(); i++){
 			program += p.getType(i).renderTemplate(template); //da togliere (solo per la stampa)
@@ -31,5 +39,5 @@ public class JavaGenerator implements Generator {
 		    writer.close();*/
 		}
 		System.out.println(program); //da togliere (solo per la stampa)
-	};
+	}
 }

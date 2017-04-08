@@ -15,23 +15,30 @@ import java.util.List;
 import java.util.Arrays;
 
 public class ParsedMethodTest {
+
+	// Costruito un ParsedMethod, questo è in grado di generare una stringa Java contenente la segnatura passatagli nel costruttore.
 	@Test
 	public void methodContainsBasicInfo() {
-		String visibility = "public";
-		boolean is_static = false;
-		boolean is_abstract = false;
-		String return_type = "int";
-		String name = "getInteger";
 		List<ParsedAttribute> arguments = Arrays.asList();
-		ParsedInstruction inst1 = new ParsedReturn("new Object()");
-		List<ParsedInstruction> body = Arrays.asList(inst1);
-
-		ParsedMethod method = new ParsedMethod(visibility, is_static, is_abstract, return_type, name, arguments, body);
+		List<ParsedInstruction> body = Arrays.asList();
+		ParsedMethod method = new ParsedMethod("public", false, false, "int", "getInteger", arguments, body);
 
 		JavaTemplate template = new JavaTemplate();
 		String result = method.renderTemplate(template);
 		assertThat(result, containsString("public int getInteger()"));
-		// TODO errore: metodo vuoto dovrebbe avere le graffe: {}
+	}
+
+	// Costruito un ParsedMethod, questo è in grado di generare una stringa Java contenente la sequenza di istruzioni passatagli nel costruttore.
+	@Test
+	public void methodContainsBody() {
+		List<ParsedAttribute> arguments = Arrays.asList();
+		ParsedInstruction inst1 = new ParsedReturn("new Object()");
+		List<ParsedInstruction> body = Arrays.asList(inst1);
+		ParsedMethod method = new ParsedMethod("public", false, false, "int", "getInteger", arguments, body);
+
+		JavaTemplate template = new JavaTemplate();
+		String result = method.renderTemplate(template);
 		assertThat(result, containsString("return new Object();"));
+		// TODO errore: metodo vuoto dovrebbe avere le graffe? {}
 	}
 }
