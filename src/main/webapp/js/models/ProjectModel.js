@@ -221,7 +221,7 @@ define([
         getIndexFromId: function (id) {
             return this.options.graphs.methods.findIndex((x) => x.id == id);
         },
-        getClassVisibileElements: function (cell) {
+        getClassVisibleElements: function (cell) {
             var elems = [];
             for (var attr in cell.getValues().attributes) {
                 elems.push(

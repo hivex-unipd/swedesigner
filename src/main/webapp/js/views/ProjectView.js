@@ -631,7 +631,7 @@ define([
         switch: function (id) {
             this.model.switchToGraph(id);
             if (id != "class") {
-                this.visibleElements = this.model.getClassVisibileElements(this.paper.selectedCell);
+                this.visibleElements = this.model.getClassVisibleElements(this.paper.selectedCell);
             }
             else {
                 this.visibleElements = [];
