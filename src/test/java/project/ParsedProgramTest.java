@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import server.project.*;
 import server.generator.java.JavaGenerator;
-import server.template.java.JavaTemplate;
 
 import java.util.List;
 import java.util.Arrays;
