@@ -52,7 +52,7 @@ public class RequestHandlerController {
 		ParsedProgram program = null;
 		try{program = parser.createParsedProgram(json);}
 		catch(JSONException e){
-			errors.add("Impossible to parse JSONFile");
+			errors.add("Unable to parse JSON file");
 		}
 		List<String> parserErrors = parser.getErrors();
 		/*if(!parserErrors.isEmpty()){
