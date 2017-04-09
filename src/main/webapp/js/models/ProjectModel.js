@@ -182,11 +182,13 @@ define([
                 }
             }
         },
+        //saveProject
         saveDiagram: function () {
             this.saveCurrentDiagram();
             //this.options.graphs[this.options.currentindex] = this.graph.toJSON();
             return JSON.stringify(this.options.graphs);
         },
+        //loadProject
         loadDiagram: function (diag) {
             /*console.log("switch");
              this.options.graphs = JSON.parse(diag);

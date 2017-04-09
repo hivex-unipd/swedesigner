@@ -35,6 +35,7 @@ define([
          * @name DetailsView#className
          * @type {string}
          */
+        //da eliminare
         className: "details-view", // inutile?
 
         /**
@@ -50,6 +51,7 @@ define([
          * @name DetailsView#mytemplate
          * @function
          */
+        //currentTemplate
         mytemplate: {},
 
         /**
@@ -57,6 +59,7 @@ define([
          * @name DetailsView#inputs
          * @type {Object}
          */
+        //da eliminare
         inputs: {},
 
         /*events: {
@@ -77,7 +80,7 @@ define([
         events: {
             //'blur .edit': 'confirmEdit'
         },
-
+        //da eliminare
         visibleElements: [],
 
         /**
@@ -229,6 +232,7 @@ define([
          * Execute a method of the model passing its name as string
          * @param e The method name
          */
+        //execCommand
         execmod: function (e) {
             var tmp = e.target.name.split(".");
             if(tmp[0]=="deleteMethod"){

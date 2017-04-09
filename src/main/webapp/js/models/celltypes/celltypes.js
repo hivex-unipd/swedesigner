@@ -783,7 +783,6 @@ define([
         getcard: function () {
             return this.get('values').card;
         },
-
         /*getpos: function(){
          if(this.get("values").pos=="target"){
          return -25;
