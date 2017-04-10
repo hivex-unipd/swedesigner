@@ -24,7 +24,6 @@ public class ParsedForTest {
 		ParsedFor cycle = new ParsedFor(init, condition, step, body);
 		JavaTemplate template = new JavaTemplate();
 		String result = cycle.renderTemplate(template);
-		// non funziona:
 		assertThat(result, containsString("for (int i = 0; i < 10; i++)"));
 	}
 
@@ -39,7 +38,6 @@ public class ParsedForTest {
 		ParsedFor cycle = new ParsedFor(init, condition, step, body);
 		JavaTemplate template = new JavaTemplate();
 		String result = cycle.renderTemplate(template);
-		// non funziona:
 		assertThat(result, containsString("obj.render();"));
 	}
 }
