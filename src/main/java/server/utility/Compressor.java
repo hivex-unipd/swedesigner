@@ -12,13 +12,13 @@ import java.io.ObjectInputStream;
 
 
 public class Compressor {
-	public void zip(String path) throws IOException{
+	public void zip(String pathFolder) throws IOException{
 		/*parte zip*/
 		byte[] buffer = new byte[1024];
-		File zip = new File(path+"/projectzip.zip");
+		File zip = new File(pathFolder+"/projectzip.zip");
 		FileOutputStream fos = new FileOutputStream(zip);
 		ZipOutputStream zos = new ZipOutputStream(fos);
-		File folder = new File(path); 
+		File folder = new File(pathFolder); 
 		File[] files = folder.listFiles();		
 		for(File file : files){
 			  if(file.isFile()){

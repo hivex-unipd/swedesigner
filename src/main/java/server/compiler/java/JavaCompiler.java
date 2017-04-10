@@ -25,9 +25,9 @@ public class JavaCompiler implements Compiler {
 	 * @throws IOException a file I/O exception
 	 */
 	@Override
-	public List<String> compile(String path) throws IOException {
+	public List<String> compile(String pathFolder) throws IOException {
 		List<String> errors = new ArrayList<String>(); 
-		File folder = new File(path);
+		File folder = new File(pathFolder);
 		folder.mkdir();
 		
 		File[] files = folder.listFiles(

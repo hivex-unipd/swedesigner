@@ -43,14 +43,14 @@ public class Parser {
 	 * which complies with the system requirements,
 	 * returns a {@code ParsedProgram} built from
 	 * the information present in the JSON object.
-	 * @param  jsonstring    a JSON object
+	 * @param  jsonString    a JSON object
 	 * @return               a {@code ParsedProgram}
 	 * @throws JSONException a JSON parsing exception
 	 */
-	public ParsedProgram createParsedProgram(String jsonstring) throws JSONException {
+	public ParsedProgram createParsedProgram(String jsonString) throws JSONException {
 
 		ParsedProgram parsedProgram = new ParsedProgram();
-		JSONObject program = new JSONObject(jsonstring);
+		JSONObject program = new JSONObject(jsonString);
 		//First level JSONObject containing the JSON description of classes and relationships.
 		JSONObject JSONGroup = (program.has("classes")? program.getJSONObject("classes"):new JSONObject());
 		//Classes' array
@@ -359,7 +359,7 @@ public class Parser {
 
 	//la funzione ritorna null nel caso in cui i JSONObject e JSONArray passati come parametri non abbiano le informazioni necessarie
 	//per creare l'istruzione stessa!
-	private ParsedInstruction recursiveBuilder(JSONObject instruction, JSONArray jblocks, int i) throws JSONException {
+	private ParsedInstruction recursiveBuilder(JSONObject instruction, JSONArray jblocks, int position) throws JSONException {
 		String type = "";
 		if (instruction.has("type"))
 			type = instruction.getString("type");
@@ -391,7 +391,7 @@ public class Parser {
 			JSONObject otherinstruction = null;
 			boolean found = false;
 			int found_at = 0;
-			for (int f = i; f<jblocks.length()&&!found; f++) {
+			for (int f = position; f<jblocks.length()&&!found; f++) {
 				JSONObject block = jblocks.getJSONObject(f);
 				String idblock = "";
 				if (block.has("id"))
