@@ -20,18 +20,17 @@ public class ParsedFor extends ParsedInstruction {
 		
 	}
 	
-	public String renderTemplate(Template t) {
-		ST template = t.getForTemplate();
-		String body_string ="";
+	public String renderTemplate(Template template) {
+		ST STtemplate = template.getForTemplate();
+		String bodyString ="";
 		if(body!=null){
 			for(int i=0; i<body.size(); i++){
-			body_string += body.get(i).renderTemplate(t);
+				bodyString += body.get(i).renderTemplate(template);
 			}
 		}
-		
-		template.add("for", this);
-		template.add("body", (body_string==""?null:body_string));
-		return template.render();
+		STtemplate.add("for", this);
+		STtemplate.add("body", (bodyString.equals("")?null:bodyString));
+		return STtemplate.render();
 		}
 
 	public String getInit() {
@@ -51,7 +50,7 @@ public class ParsedFor extends ParsedInstruction {
 		return body;
 	}
 	
-	public void setBody(List<ParsedInstruction> pi){
-		this.body = pi;
+	public void setBody(List<ParsedInstruction> parsedInstructions){
+		this.body = parsedInstructions;
 	}
 }

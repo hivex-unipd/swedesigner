@@ -7,28 +7,28 @@ import org.stringtemplate.v4.ST;
 import server.template.Template;
 
 public class ParsedElse extends ParsedInstruction {
-	private List<ParsedInstruction> elsebody;
+	private List<ParsedInstruction> body;
 	
-	public ParsedElse(List<ParsedInstruction> elsebody){
-		this.elsebody = elsebody;
+	public ParsedElse(List<ParsedInstruction> body){
+		this.body = body;
 	}
 
 	@Override
-	public String renderTemplate(Template t) {
-		ST template = t.getElseTemplate();
+	public String renderTemplate(Template template) {
+		ST STtemplate = template.getElseTemplate();
 		
-		String elsebody_string ="";
-		if(elsebody!=null){
-			for(int i=0; i<elsebody.size(); i++){
-				elsebody_string += elsebody.get(i).renderTemplate(t);
+		String bodyString ="";
+		if(body!=null){
+			for(int i=0; i<body.size(); i++){
+				bodyString += body.get(i).renderTemplate(template);
 			}
 		}
-		template.add("elsebody", elsebody_string);
-		return template.render();
+		STtemplate.add("body", bodyString);
+		return STtemplate.render();
 	}
 	
-	public List<ParsedInstruction> getElsebody() {
-		return elsebody;
+	public List<ParsedInstruction> getBody() {
+		return body;
 	}
 
 }

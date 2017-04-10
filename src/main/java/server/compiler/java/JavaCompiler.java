@@ -2,6 +2,8 @@ package server.compiler.java;
 
 import server.compiler.Compiler;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import javax.tools.ToolProvider;
 import javax.tools.JavaFileObject;
@@ -22,13 +24,35 @@ public class JavaCompiler implements Compiler {
 	 * @return             the list of compilation errors
 	 * @throws IOException a file I/O exception
 	 */
-	public List<String> compile(String fileName) throws IOException {
+	@Override
+	public List<String> compile(String path) throws IOException {
 		List<String> errors = new ArrayList<String>(); 
-		//System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.8.0_121");
-		//System.out.println(System.getProperty("java.home"));
+		File folder = new File(path);
+		folder.mkdir();
+		
+		File[] files = folder.listFiles(
+				   new FilenameFilter() { 
+					   @Override 
+					   public boolean accept(File dir, String name) { 
+						   return name.endsWith(".java"); 
+						   } 
+					   });
+	
+		for(File file : files){
+			  if(file.isFile()){
+			    try{
+			    	errors.addAll(compileFile(file.getAbsolutePath()));}
+			    catch(IOException e){errors.add("Error when compiling file "+file.getName());}
+			  }
+		}
+		
+		return errors;
+	}
+	
+	private List<String> compileFile(String fileName) throws IOException {
+		List<String> errors = new ArrayList<String>(); 
 		javax.tools.JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		DiagnosticCollector<JavaFileObject> diagnosticsCollector = new DiagnosticCollector<JavaFileObject>();
-		System.out.println(System.getProperty("java.home"));
 		StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnosticsCollector, null, null);
 		Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromStrings(Arrays.asList(fileName));
 		javax.tools.JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnosticsCollector, null, null, compilationUnits);
@@ -36,11 +60,12 @@ public class JavaCompiler implements Compiler {
 		if (!success) {
 			List<Diagnostic<? extends JavaFileObject>> diagnostics = diagnosticsCollector.getDiagnostics();
 			for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics) {
-				// read error details from the diagnostic object
 				errors.add(diagnostic.getMessage(null));
 			}
 		}
 		fileManager.close();
 		return errors;
 		}
+
+	
 }

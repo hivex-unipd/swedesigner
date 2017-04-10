@@ -11,10 +11,10 @@ public class ParsedReturn extends ParsedInstruction {
 		this.value = value;
 	}
 	
-	public String renderTemplate(Template t) {
-		ST template = t.getReturnTemplate();
-		template.add("return", this);
-		return template.render();
+	public String renderTemplate(Template template) {
+		ST STtemplate = template.getReturnTemplate();
+		STtemplate.add("return", this);
+		return STtemplate.render();
 	}
 
 	public String getValue() {

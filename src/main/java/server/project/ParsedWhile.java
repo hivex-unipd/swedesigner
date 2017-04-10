@@ -15,18 +15,18 @@ public class ParsedWhile extends ParsedInstruction {
 		this.body = body;
 	}
 	
-	public String renderTemplate(Template t) {
-		ST template = t.getWhileTemplate();
-		template.add("while", this);
-		String body_string = "";
+	public String renderTemplate(Template template){
+		ST STtemplate = template.getWhileTemplate();
+		STtemplate.add("while", this);
+		String bodyString = "";
 		if(body!=null){
 			for(int i=0; i<body.size(); i++){
-			body_string+=body.get(i).renderTemplate(t);
+			bodyString+=body.get(i).renderTemplate(template);
 			}
 		}
 		
-		template.add("body", (body_string==""?null:body_string));
-		return template.render();
+		STtemplate.add("body", (bodyString.equals("")?null:bodyString));
+		return STtemplate.render();
 	}
 
 	public String getCondition() {
@@ -37,8 +37,8 @@ public class ParsedWhile extends ParsedInstruction {
 		return body;
 	}
 	
-	public void setBody(List<ParsedInstruction> pi){
-		this.body = pi;
+	public void setBody(List<ParsedInstruction> parsedInstructions){
+		this.body = parsedInstructions;
 	}
 
 }

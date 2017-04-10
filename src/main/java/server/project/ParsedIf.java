@@ -8,25 +8,25 @@ import server.template.Template;
 
 public class ParsedIf extends ParsedInstruction {
 	private String condition;
-	private List<ParsedInstruction> ifbody;
+	private List<ParsedInstruction> body;
 	
 	
-	public ParsedIf(String condition, List<ParsedInstruction> ifbody){
+	public ParsedIf(String condition, List<ParsedInstruction> body){
 		this.condition = condition;
-		this.ifbody = ifbody;
+		this.body = body;
 	}
 	
 	public String renderTemplate(Template t) {
 		ST template = t.getIfTemplate();
-		String ifbody_string ="";
-		if(ifbody!=null){
-			for(int i=0; i<ifbody.size(); i++){
-			ifbody_string += ifbody.get(i).renderTemplate(t);
+		String bodyString ="";
+		if(body!=null){
+			for(int i=0; i<body.size(); i++){
+			bodyString += body.get(i).renderTemplate(t);
 			}
 		}
 		
 		template.add("if1", this);
-		template.add("ifbody", (ifbody_string==""?null:ifbody_string));
+		template.add("body", (bodyString.equals("")?null:bodyString));
 		return template.render();
 	}
 
@@ -34,8 +34,8 @@ public class ParsedIf extends ParsedInstruction {
 		return condition;
 	}
 
-	public List<ParsedInstruction> getIfbody() {
-		return ifbody;
+	public List<ParsedInstruction> getBody() {
+		return body;
 	}
 
 }

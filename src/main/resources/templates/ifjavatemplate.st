@@ -1,5 +1,5 @@
-ifjavatemplate(if1, ifbody)::=<<
+ifjavatemplate(if1, body)::=<<
 if (<if1.condition>) {
-	<ifbody>
+	<body>
 }
 >>

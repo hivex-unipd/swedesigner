@@ -18,11 +18,11 @@ public class ParsedClass extends ParsedType {
 
 	public boolean getIsAbstract(){ return isAbstract;}
 	public List<String> getImplemented(){return implemented;}
-	public void addField(ParsedAttribute pa) throws ParsedException{
-		getAttributes().add(pa);
+	public void addField(ParsedAttribute parsedAttribute) throws ParsedException{
+		getAttributes().add(parsedAttribute);
 	}
-	public void addMethod(ParsedMethod pm) throws ParsedException{
-		getMethods().add(pm);
+	public void addMethod(ParsedMethod parsedMethod) throws ParsedException{
+		getMethods().add(parsedMethod);
 	}
 	public void addSupertype(String name, String type) throws ParsedException{
 		if(name!=null&&type!=null){
@@ -34,14 +34,14 @@ public class ParsedClass extends ParsedType {
 		}else throw new ParsedException("ParsedClass error: missing information of supertype like name or type");
 	}
 	
-	public String renderTemplate(Template t) {
-		ST template = t.getClassTemplate();
-		template.add("class", this);
+	public String renderTemplate(Template template) {
+		ST STtemplate = template.getClassTemplate();
+		STtemplate.add("class", this);
 		String methods_string = "";
 		for(int i=0; i<getMethods().size(); i++){
-			methods_string += getMethods().get(i).renderTemplate(t);
+			methods_string += getMethods().get(i).renderTemplate(template);
 		}
-		template.add("methods", methods_string);
-		return template.render();
+		STtemplate.add("methods", methods_string);
+		return STtemplate.render();
 	}
 }

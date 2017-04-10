@@ -18,24 +18,20 @@ public class JavaGenerator implements Generator {
 	
 	private Template template = new JavaTemplate();
 
-	public String renderAllTemplates(Template t) {return null;}
-
 	/**
 	 * Given a {@code ParsedProgram} object, converts the object
 	 * into Java source code and writes the output to .java files.
-	 * @param IdReq ?
+	 * @param IdReq string representing the id of the Client request
 	 * @param p     a valid ParsedProgram object
 	 */
-	public void generate(String IdReq, ParsedProgram p) {
-		for(int i=0; i<p.nClasses(); i++){
-			String type = p.getType(i).renderTemplate(template);
-			String path = "src/main/resources/ContentFile/"+IdReq+"/"+p.getType(i).getName()+".java";
-			File tipo = new File(path);
-			PrintWriter writer = null;
-		    try{writer = new PrintWriter(tipo);
-		     	writer.println(type);
-		     	writer.close();
-		    }catch(Exception e){System.out.println("Eccezione writer su JavaGenerator");}  
+	public void generate(String IdReq, ParsedProgram parsedProgram) throws IOException {
+		for(int i=0; i<parsedProgram.nClasses(); i++){
+			String codeType = parsedProgram.getType(i).renderTemplate(template);
+			String filePath = "src/main/resources/ContentFile/"+IdReq+"/"+parsedProgram.getType(i).getName()+".java";
+			File fileType = new File(filePath);
+		    PrintWriter writer = new PrintWriter(fileType);
+		    writer.println(codeType);
+		    writer.close();
 		}
 	}
 }

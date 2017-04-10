@@ -12,5 +12,5 @@ public interface Compiler {
 	 * @return             the list of compilation errors
 	 * @throws IOException a file I/O exception
 	 */
-	List<String> compile(String fileName) throws IOException;
+	List<String> compile(String path) throws IOException;
 }

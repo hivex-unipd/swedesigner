@@ -31,9 +31,9 @@ public class ParsedStatement extends ParsedInstruction{
 	public String getOperation() {return operation;}
 	public String getValue() {return value;}
 	
-	public String renderTemplate(Template t) {
-		ST template = t.getStatementTemplate();
-		template.add("att", this);
-		return template.render();
+	public String renderTemplate(Template template) {
+		ST STtemplate = template.getStatementTemplate();
+		STtemplate.add("att", this);
+		return STtemplate.render();
 	}
 }

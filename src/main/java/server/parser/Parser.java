@@ -49,32 +49,32 @@ public class Parser {
 	 */
 	public ParsedProgram createParsedProgram(String jsonstring) throws JSONException {
 
-		ParsedProgram pp = new ParsedProgram();
+		ParsedProgram parsedProgram = new ParsedProgram();
 		JSONObject program = new JSONObject(jsonstring);
-		//JSONObject di primo livello
-		JSONObject unity = (program.has("classes")? program.getJSONObject("classes"):new JSONObject());
-		//Array delle classi
-		JSONArray clas = (unity.has("classesArray")?unity.getJSONArray("classesArray"):new JSONArray());
-		//Array delle relazioni
-		JSONArray rels = (unity.has("relationshipsArray")?unity.getJSONArray("relationshipsArray"):new JSONArray());
-		//Array dei metodi (fuori da cells)
-		JSONArray meths = (program.has("methods")?program.getJSONArray("methods"):new JSONArray());
+		//First level JSONObject containing the JSON description of classes and relationships.
+		JSONObject JSONGroup = (program.has("classes")? program.getJSONObject("classes"):new JSONObject());
+		//Classes' array
+		JSONArray classArray = (JSONGroup.has("classesArray")?JSONGroup.getJSONArray("classesArray"):new JSONArray());
+		//Relationships' array
+		JSONArray relsArray = (JSONGroup.has("relationshipsArray")?JSONGroup.getJSONArray("relationshipsArray"):new JSONArray());
+		//Methods' array
+		JSONArray methArray = (program.has("methods")?program.getJSONArray("methods"):new JSONArray());
+		
+		//HashMap containing as (key , value) the id and the body of the different methods.
+		HashMap<String, List<ParsedInstruction>> methBodies = methBodies(methArray);
+		//HashMap containing as (key , value) the id and a ParsedType representing one of the classes/interfaces of the program.
+		HashMap<String, ParsedType> allTypes = typeBuilder(classArray, methBodies);
+		
+		relBuilder(relsArray, allTypes);
 
-		HashMap<String, List<ParsedInstruction>> meth = methBodies(meths);
-		HashMap<String, ParsedType> alltypes = typeBuilder(clas, meth);
-
-
-		//inserisco le giuste relazioni all'interno dei tipi della hash map 
-		relBuilder(rels, alltypes);
-
-		Iterator<Entry<String, ParsedType>> it = alltypes.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry<String, ParsedType> entry = (Map.Entry<String, ParsedType>)it.next();
-			pp.addType(entry.getValue());
+		Iterator<Entry<String, ParsedType>> iterator = allTypes.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Map.Entry<String, ParsedType> entry = (Map.Entry<String, ParsedType>)iterator.next();
+			parsedProgram.addType(entry.getValue());
 		}
 		
-		return pp;
-	}//*****fine Parser
+		return parsedProgram;
+	}
 
 	/**
 	 * Given a JSON array of activity diagrams, returns a map
@@ -85,30 +85,30 @@ public class Parser {
 	 * @return               a structure mapping each method to its class
 	 * @throws JSONException a JSON parsing exception
 	 */
-	private HashMap<String, List<ParsedInstruction>> methBodies(JSONArray meths) throws JSONException { //***prima funzione***
-		HashMap<String, List<ParsedInstruction>> meth = new HashMap<String, List<ParsedInstruction>>();
-		for (int i = 0; i < meths.length(); i++) { //ciclo diagrammi delle attività (metodo)
-			JSONObject jmeth = meths.getJSONObject(i);
-			String id = null;
-			if (jmeth.has("id"))
-				id = jmeth.getString("id");
+	private HashMap<String, List<ParsedInstruction>> methBodies(JSONArray JSONMethods) throws JSONException {
+		HashMap<String, List<ParsedInstruction>> methBodies = new HashMap<String, List<ParsedInstruction>>();
+		for (int i = 0; i < JSONMethods.length(); i++) { 
+			JSONObject JSONMethod = JSONMethods.getJSONObject(i);
+			String idMethod = null;
+			if (JSONMethod.has("id"))
+				idMethod = JSONMethod.getString("id");
 			else
 				errors.add("JSON format error: Cannot find id in body of method");
 
-			JSONArray jblocks = (jmeth.has("cells") ? jmeth.getJSONArray("cells") : new JSONArray());
-			List<ParsedInstruction> value = new ArrayList<ParsedInstruction>();
-			for (int j = 0; j < jblocks.length(); j++) { //ciclo blocchi esterni del particolare diagramma (metodo)
-				JSONObject external = jblocks.getJSONObject(j);
-				if (!external.has("parent")) {
-					//inizio ricorsione
-					ParsedInstruction k = recursiveBuilder(external, jblocks, j+1);
-					if (k!=null)
-						value.add(k);
+			JSONArray JSONBlocks = (JSONMethod.has("cells") ? JSONMethod.getJSONArray("cells") : new JSONArray());
+			List<ParsedInstruction> methodBody = new ArrayList<ParsedInstruction>();
+			for (int j = 0; j < JSONBlocks.length(); j++) { 
+				//topInstruction is an instruction not nested in any other instruction inside the body of the method.
+				JSONObject topInstruction = JSONBlocks.getJSONObject(j);
+				if (!topInstruction.has("parent")) {
+					ParsedInstruction parsedInstruction = recursiveBuilder(topInstruction, JSONBlocks, j+1);
+					if (parsedInstruction!=null)
+						methodBody.add(parsedInstruction);
 				}
 			}
-			meth.put(id, value);
+			methBodies.put(idMethod, methodBody);
 		}
-		return meth;
+		return methBodies;
 	}
 
 	/**

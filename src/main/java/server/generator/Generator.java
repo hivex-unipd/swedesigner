@@ -1,6 +1,7 @@
 package server.generator;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import server.project.ParsedProgram;
 
@@ -13,5 +14,5 @@ public interface Generator {
 	 * @param IdReq ?
 	 * @param p     a valid ParsedProgram object
 	 */
-	void generate(String IdReq, ParsedProgram p);
+	void generate(String IdReq, ParsedProgram p) throws IOException;
 }

@@ -8,26 +8,25 @@ import server.template.Template;
 
 public class ParsedInterface extends ParsedType{
 	
-	
 	public ParsedInterface(String name){
 		super(name);
 	}
 	
-	public void addField(ParsedAttribute pa) throws ParsedException{
-		String vis = pa.getVisibility();
-		if(pa.getIsStatic()&&pa.getIsFinal()&&(vis==null||vis.equals("public")))
-			getAttributes().add(pa);
+	public void addField(ParsedAttribute parsedAttrinbute) throws ParsedException{
+		String attVisibility = parsedAttrinbute.getVisibility();
+		if(parsedAttrinbute.getIsStatic()&&parsedAttrinbute.getIsFinal()&&(attVisibility==null||attVisibility.equals("public")))
+			getAttributes().add(parsedAttrinbute);
 		else
-			throw new ParsedException("ParsedInterface error: cannot add non public static final field "+pa.getName()+" to interface "+getName());
+			throw new ParsedException("ParsedInterface error: cannot add non public static final field "+parsedAttrinbute.getName()+" to interface "+getName());
 	}
 	
-	public void addMethod(ParsedMethod pm) throws ParsedException{
-		String vis = pm.getVisibility();
-		List<ParsedInstruction> body = pm.getBody();
-		if((vis==null||vis.equals("public")||vis.equals("package"))&&body.size()==0)
-			getMethods().add(pm);
+	public void addMethod(ParsedMethod parsedMethod) throws ParsedException{
+		String metVisibility = parsedMethod.getVisibility();
+		List<ParsedInstruction> metBody = parsedMethod.getBody();
+		if((metVisibility==null||metVisibility.equals("public")||metVisibility.equals("package"))&&metBody.size()==0)
+			getMethods().add(parsedMethod);
 		else
-			throw new ParsedException("ParsedInterface error: cannot add non public or implemented method "+pm.getName()+" to interface "+getName());
+			throw new ParsedException("ParsedInterface error: cannot add non public or implemented method "+parsedMethod.getName()+" to interface "+getName());
 			
 	}
 
@@ -41,15 +40,15 @@ public class ParsedInterface extends ParsedType{
 	}
 
 	@Override
-	public String renderTemplate(Template t) {
-		ST template = t.getInterfaceTemplate();
-		template.add("interface", this);
-		String methods_string = "";
+	public String renderTemplate(Template template) {
+		ST STtemplate = template.getInterfaceTemplate();
+		STtemplate.add("interface", this);
+		String methodsString = "";
 		for(int i=0; i<getMethods().size(); i++){
-			methods_string += getMethods().get(i).renderTemplate(t);
+			methodsString += getMethods().get(i).renderTemplate(template);
 		}
-		template.add("methods", methods_string);
-		return template.render();
+		STtemplate.add("methods", methodsString);
+		return STtemplate.render();
 	}
 }
 

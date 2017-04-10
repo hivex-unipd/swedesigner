@@ -14,6 +14,7 @@ import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,56 +41,50 @@ import server.project.ParsedProgram;
 import server.utility.Compressor;
 @RestController
 public class RequestHandlerController {
-	String json;
 	/*@Autowired
 	@Qualifier("javagenerator")*/
 	private Generator generator = new JavaGenerator();
 	private server.compiler.Compiler compiler = new JavaCompiler();
-	@ResponseBody
-	public Resource HandleGeneratorRequest(@RequestParam(value="json") String json, String IdReq){
+
+	public Resource HandleGeneratorRequest(String json, String IdReq){
 		//Lista per la memorizzazione degli errori
 		List<String> errors = new ArrayList<String>();
+		String folderPath = "src/main/resources/ContentFile/"+IdReq;
+		createDirectory(folderPath);
 		
 		Parser parser = new Parser();
-		ParsedProgram program = null;
-		try{program = parser.createParsedProgram(json);}
-		catch(JSONException e){
-			errors.add("Unable to parse JSON file");
+		ParsedProgram parsedProgram = null;
+		
+		try{parsedProgram = parser.createParsedProgram(json);}
+		catch(JSONException exception){
+			errors.add(exception.getMessage());
 		}
 		List<String> parserErrors = parser.getErrors();
 		if(!parserErrors.isEmpty()){
 			errors.addAll(parserErrors);
-			System.out.println(errors); //soluzione momentanea per la visualizzazione degli errori
 		}
 		else{
-			String path = "src/main/resources/ContentFile/"+IdReq;
-			File folder = new File(path); 
-			folder.mkdir();
-			generator.generate(IdReq, program);
-			server.compiler.Compiler compiler = new JavaCompiler(); 
-			File[] files = folder.listFiles(
-						   new FilenameFilter() { 
-							   @Override 
-							   public boolean accept(File dir, String name) { 
-								   return name.endsWith(".java"); 
-								   } 
-							   });
-			
-			for(File file : files){
-				  if(file.isFile()){
-				    try{
-				    	errors.addAll(compiler.compile(file.getAbsolutePath()));}
-				    catch(IOException e){errors.add("Error when compiling file "+file.getName());}
-				  }
+			try{
+				generator.generate(IdReq, parsedProgram);
+			    errors.addAll(compiler.compile(folderPath));
 			}
-			Compressor c = new Compressor();
-			try{ c.zip(path);}
-			catch(IOException e){errors.add("Error when zipping files");}
+			catch(IOException exception){errors.add(exception.getMessage());}
+			Compressor compressor = new Compressor();
+			try{ compressor.zip(folderPath);}
+			catch(IOException exception){errors.add(exception.getMessage());}
 		}
+		//It should return a Request object containing the zip just created. This will be implemented later.
 		return null;
-		
 	}
-	public void HandleStereotypesRequest(){};
-		    
+	
+	private void createDirectory(String pathFolder){
+		File folder = new File(pathFolder); 
+		boolean isDirectoryCreated = folder.mkdir();
+		   if (!isDirectoryCreated){ 
+			   try{ FileUtils.forceDelete(folder); }
+			   catch(IOException e){}
+	           folder.mkdir();
+		   }
 	}
+}
 	

@@ -15,7 +15,8 @@ public class Compressor {
 	public void zip(String path) throws IOException{
 		/*parte zip*/
 		byte[] buffer = new byte[1024];
-		FileOutputStream fos = new FileOutputStream(path);
+		File zip = new File(path+"/projectzip.zip");
+		FileOutputStream fos = new FileOutputStream(zip);
 		ZipOutputStream zos = new ZipOutputStream(fos);
 		File folder = new File(path); 
 		File[] files = folder.listFiles();		
@@ -24,7 +25,6 @@ public class Compressor {
 				  ZipEntry ze= new ZipEntry(file.getName());
 				  zos.putNextEntry(ze);
 		            FileInputStream in = new FileInputStream(file);
-
 		    		int len;
 		    		while ((len = in.read(buffer)) > 0) {
 		    			zos.write(buffer, 0, len);

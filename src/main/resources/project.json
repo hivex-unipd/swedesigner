@@ -6,72 +6,6 @@
             "type":"class.HxClass",
             "position":{
                "x":174,
-               "y":312
-            },
-            "size":{
-               "width":100,
-               "height":100
-            },
-            "attributesexpanded":true,
-            "methodsexpanded":true,
-            "values":{
-               "name":"ClasseB",
-               "attributes":[
-                  {
-                     "name":"var1",
-                     "type":"int"
-                  },
-                  {
-                     "name":"var2",
-                     "type":"float"
-                  }
-               ],
-               "methods":[
-                  {
-                     "name":"metodo1",
-                     "visibility":"public",
-                     "id":"1d634803-f39d-4a55-a565-b941776b9281",
-                     "returntype":"void",
-                     "parameters":[
-                        {
-                        	"name":"pippo",
-                        	"type":"String"
-                        }
-                     ]
-                  }
-               ]
-            },
-            "angle":0,
-            "id":"f43cd93b-f04f-48ed-8545-b71009f99067",
-            "z":1,
-            "attrs":{
-               ".uml-class-name-rect":{
-                  "height":16,
-                  "transform":"translate(0,0)"
-               },
-               ".uml-class-attrs-rect":{
-                  "height":31,
-                  "transform":"translate(0,17)"
-               },
-               ".uml-class-methods-rect":{
-                  "height":16,
-                  "transform":"translate(0,49)"
-               },
-               ".uml-class-name-text":{
-                  "text":"ClasseB"
-               },
-               ".uml-class-attrs-text":{
-                  "text":"var1:int\nvar2:float"
-               },
-               ".uml-class-methods-text":{
-                  "text":"+ metodo1:tipoRitorno"
-               }
-            }
-         },
-         {
-            "type":"class.HxClass",
-            "position":{
-               "x":174,
                "y":114
             },
             "size":{
@@ -209,51 +143,6 @@
                }
             }
             ,
-             {
-               "type":"activity.HxVariable",
-               "values":{
-                  "xtype":"Inizializzazione",
-                  "name":"asc",
-                  "operation":"++",
-                  "comment":"[new block]",
-                  "body":[
-
-                  ]
-               },
-               "index":0,
-               "expanded":true,
-               "hidden":false,
-               "offsetY":450,
-               "position":{
-                  "x":100,
-                  "y":450
-               },
-               "size":{
-                  "width":1,
-                  "height":1
-               },
-               "angle":0,
-               "id":"567a92df6-3edf-46ef-bbaf-0bafdd28b5b1",
-               "z":4,
-               "attrs":{
-                  ".activity-toggle":{
-                     "transform":"translate(180,0)",
-                     "height":35,
-                     "width":20
-                  },
-                  ".activity-element-name-rect":{
-                     "height":35,
-                     "transform":"translate(0,0)"
-                  },
-                  ".activity-element-body-rect":{
-                     "height":55,
-                     "transform":"translate(0,35)"
-                  },
-                  ".activity-element-name-text":{
-                     "text":"Inizializzazione\n[new block]"
-                  }
-               }
-            },
             {
                "type":"activity.HxIf",
                "values":{
@@ -306,9 +195,10 @@
                "type":"activity.HxVariable",
                "values":{
                   "xtype":"Inizializzazione",
+                  "type": "int",
                   "name":"pippo",
-                  "operation":"+=",
-                  "value":"paperino",
+                  "operation":"=",
+                  "value":"5",
                   "comment":"[new block]",
                   "body":[
 

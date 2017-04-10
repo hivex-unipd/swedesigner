@@ -32,14 +32,14 @@ import server.project.ParsedProgram;
 import server.template.Template;
 import server.template.java.JavaTemplate;
 
-public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
-	RequestHandlerController controller;
-	public static void main(String[] args) throws Exception{
+public class ProvaMain {
+	public static void main(String[] args){
 		
-		String testo = new String(Files.readAllBytes(Paths.get("src/main/resources/project.json")));
-		
-		//ApplicationContext context = new AnnotationConfigApplicationContext(GeneratorAssembler.class);
-		RequestHandlerController rhc = new RequestHandlerController();
-		rhc.HandleGeneratorRequest(testo, "1234");	
+		try{
+			String testo = new String(Files.readAllBytes(Paths.get("src/main/resources/project.json")));
+			RequestHandlerController rhc = new RequestHandlerController();
+			rhc.HandleGeneratorRequest(testo, "1234");	
+		}
+		catch(IOException exception){System.out.println(exception.getMessage());}	
 	}
 }
