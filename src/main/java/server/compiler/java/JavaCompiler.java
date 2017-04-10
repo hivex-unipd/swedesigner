@@ -23,9 +23,12 @@ public class JavaCompiler implements Compiler {
 	 * @throws IOException a file I/O exception
 	 */
 	public List<String> compile(String fileName) throws IOException {
-		List<String> errors = new ArrayList<String>(); /*
+		List<String> errors = new ArrayList<String>(); 
+		//System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.8.0_121");
+		//System.out.println(System.getProperty("java.home"));
 		javax.tools.JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		DiagnosticCollector<JavaFileObject> diagnosticsCollector = new DiagnosticCollector<JavaFileObject>();
+		System.out.println(System.getProperty("java.home"));
 		StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnosticsCollector, null, null);
 		Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromStrings(Arrays.asList(fileName));
 		javax.tools.JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnosticsCollector, null, null, compilationUnits);
@@ -37,7 +40,7 @@ public class JavaCompiler implements Compiler {
 				errors.add(diagnostic.getMessage(null));
 			}
 		}
-		fileManager.close();*/
+		fileManager.close();
 		return errors;
 		}
 }

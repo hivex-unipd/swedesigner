@@ -52,10 +52,8 @@ define([
             this.views.project = ProjectView;
             this.views.details = new DetailsView;
             this.views.newCell = new NewCellView;
-
             this.listenTo(this.views.project, 'Switchgraph', this.toggleVisib);
         },
-
         /**
          * The page events, each one linked to the desired action.
          * @name AppView#events
@@ -63,14 +61,10 @@ define([
          */
         events: {
             'click #switchtoclass': 'switchToClass',
-            'click #switch': 'switchgraph',
+            'click #switch': 'switchGraph',
             'click #savefile': 'save',
             'change #files': 'load',
-			'click #generate': 'generate',
-            'keypress document':"sss"
-        },
-        sss:function(e){
-          console.log(e.which);
+            'click #generate': 'generate',
         },
         /**
          * Toggles the visibility of the 'Back to Class
@@ -79,7 +73,7 @@ define([
          * @function
          */
         toggleVisib: function () {
-          $('#switchtoclass').toggle();
+            $('#switchtoclass').toggle();
         },
 
         /**
@@ -88,16 +82,14 @@ define([
          * @function
          */
         switchToClass: function (e) {
-            //console.log("appviewwwwwwwwww");
             this.views.project.switch('class');
         },
-
         /**
          * Switches between different diagram elements.
-         * @name AppView#switchgraph
+         * @name AppView#switchGraph
          * @function
          */
-        switchgraph: function () {
+        switchGraph: function () {
             if (this.views.index == 0) {
                 this.views.project.switch(1);
                 this.views.index = 1;
@@ -106,7 +98,6 @@ define([
                 this.views.index = 0;
             }
         },
-
         /**
          * Saves the entire project diagram to a JSON file
          * and gives it back to the user.
@@ -115,9 +106,8 @@ define([
          * @param {event} event the action event
          */
         save: function (event) {
-            Command.execute('saveDiagram');
+            Command.execute('saveProject');
         },
-
         /**
          * Loads an entire project from a JSON file
          * uploaded by the user.
@@ -126,9 +116,8 @@ define([
          * @param {event} event the action event
          */
         load: function (event) {
-            Command.execute('loadDiagram', event);
+            Command.execute('loadProject', event);
         },
-
         /**
          * Sends a request to the server for generating
          * an executable from the user diagrams.
@@ -136,9 +125,9 @@ define([
          * @function
          * @param {event} event the action event
          */
-		generate: function(event) {
-			Command.execute('sendDiagram');
-		}
+        generate: function (event) {
+            Command.execute('sendDiagram');
+        }
     });
     return AppView;
 });

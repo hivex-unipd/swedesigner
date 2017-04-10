@@ -21,8 +21,8 @@ define([
          * @name Commands#saveDiagram
          * @function
          */
-        saveDiagram: function () {
-            var blob = new Blob([ProjectModel.saveDiagram()], {type: "application/json"});
+        saveProject: function () {
+            var blob = new Blob([ProjectModel.saveProject()], {type: "application/json"});
             var url = window.URL.createObjectURL(blob);
 
             //hacky things
@@ -43,7 +43,7 @@ define([
          * @function
          * @param {event} evt the action event
          */
-        loadDiagram: function (evt) {
+        loadProject: function (evt) {
             var files = evt.target.files; // FileList object
             f = files[0];
             var reader = new FileReader();
@@ -53,30 +53,30 @@ define([
                 // Render thumbnail.
                 JsonObj = e.target.result;
                 //console.log(JsonObj);
-                ProjectModel.loadDiagram(JsonObj);
+                ProjectModel.loadProject(JsonObj);
             };
             reader.readAsText(f);
         },
-		
-		
-		sendDiagram: function () {
-			var data = {};
-			
-			
-			// construct an HTTP request
-			var xhr = new XMLHttpRequest();
-			xhr.open("POST", "/generate", true);
-			xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-			
-			// send the collected data as JSON
-			xhr.send(saveDiagram());
-			
-			xhr.onloadend = function () {
-				// done
-				alert("fatto!");
-			};
 
-		},
+
+        sendDiagram: function () {
+            var data = {};
+
+
+            // construct an HTTP request
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/generate", true);
+            xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+
+            // send the collected data as JSON
+            xhr.send(saveDiagram());
+
+            xhr.onloadend = function () {
+                // done
+                alert("fatto!");
+            };
+
+        },
     };
 
     /**

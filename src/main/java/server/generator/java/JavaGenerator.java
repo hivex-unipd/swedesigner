@@ -27,17 +27,15 @@ public class JavaGenerator implements Generator {
 	 * @param p     a valid ParsedProgram object
 	 */
 	public void generate(String IdReq, ParsedProgram p) {
-		String program = ""; //da togliere (solo per la stampa)
 		for(int i=0; i<p.nClasses(); i++){
-			program += p.getType(i).renderTemplate(template); //da togliere (solo per la stampa)
-			/*String type = p.getType(i).renderTemplate(template);
-			String path = "src/main/resources/ContentFile/"+p.getType(i).getName()+".java";
+			String type = p.getType(i).renderTemplate(template);
+			String path = "src/main/resources/ContentFile/"+IdReq+"/"+p.getType(i).getName()+".java";
 			File tipo = new File(path);
 			PrintWriter writer = null;
-		    try{writer = new PrintWriter(tipo);}catch(Exception e){System.out.println("Eccezione writer su JavaGenerator");}
-		    writer.println(type);
-		    writer.close();*/
+		    try{writer = new PrintWriter(tipo);
+		     	writer.println(type);
+		     	writer.close();
+		    }catch(Exception e){System.out.println("Eccezione writer su JavaGenerator");}  
 		}
-		System.out.println(program); //da togliere (solo per la stampa)
 	}
 }

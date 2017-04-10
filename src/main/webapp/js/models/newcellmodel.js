@@ -6,7 +6,7 @@ define([
     'models/ProjectModel',
     'models/newcellfactory',
     'models/celltypes/celltypes'
-], function ($, _, Backbone, joint, ProjectModel,abstractCellFactory,celltypes) {
+], function ($, _, Backbone, joint, ProjectModel, abstractCellFactory, celltypes) {
 
     /**
      * @classdesc `NewCellModel` stores all the available
@@ -36,20 +36,17 @@ define([
          */
         initialize: function () {
 
-            console.log(this.str);
             this.registerCells("class");
-           // this.listenTo(ProjectModel,"Switchgraph",this.switchComponents());
         },
-        switchComponents:function () {
-            console.log("ehi sto provando a cambiare");
-          if(ProjectModel.options.currentindex=="class")
-              this.registerCells("class");
-          else
-              this.registerCells("activity");
-        },
+        switchComponents: function () {
 
-        registerCells: function(diag){
-            this.str.length=0;
+            if (ProjectModel.options.currentindex == "class")
+                this.registerCells("class");
+            else
+                this.registerCells("activity");
+        },
+        registerCells: function (diag) {
+            this.str.length = 0;
             for (var property in celltypes[diag]) {
                 if (celltypes[diag].hasOwnProperty(property) && property.startsWith("Hx")) {
                     console.log(property);
@@ -58,7 +55,6 @@ define([
             }
             this.trigger("change:str");
         },
-
         /**
          * Adds a new cell to the current diagram, based on which
          * type of cell the user has selected.
@@ -67,11 +63,8 @@ define([
          * @param {event} event the action event
          */
         addCell: function (type) {
-
             var cell = abstractCellFactory.getCell(type);
-            //console.log(type);
             ProjectModel.addCell(cell);
-            //ProjectModel.addCellFromType(type);
         }
     });
     return NewCellModel;
