@@ -42,5 +42,4 @@ public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 		RequestHandlerController rhc = new RequestHandlerController();
 		rhc.HandleGeneratorRequest(testo, "1234");	
 	}
-
 }
