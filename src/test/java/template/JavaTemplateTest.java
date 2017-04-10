@@ -47,7 +47,7 @@ public class JavaTemplateTest {
 	public void elseTemplateWorks() {
 		ST template = factory.getElseTemplate();
 
-		template.add("elsebody", "x = 23.2f;");
+		template.add("body", "x = 23.2f;");
 		String result = template.render();
 		assertThat(result, containsString("else"));
 		assertThat(result, containsString("x = 23.2f;"));
@@ -81,7 +81,7 @@ public class JavaTemplateTest {
 		String result = template.render();
 		assertThat(result, containsString("if (i <= 2)"));
 
-		template.add("ifbody", "x = 23.2f;");
+		template.add("body", "x = 23.2f;");
 		result = template.render();
 		assertThat(result, containsString("x = 23.2f;"));
 	}
