@@ -46,8 +46,10 @@ public class RequestHandlerController {
 	private Generator generator = new JavaGenerator();
 	private server.compiler.Compiler compiler = new JavaCompiler();
 	@ResponseBody
-	public Resource HandleGeneratorRequest(/*@RequestParam(value="json") String json*/){
+	public Resource HandleGeneratorRequest(@RequestParam(value="json") String json, String IdReq){
+		//Lista per la memorizzazione degli errori
 		List<String> errors = new ArrayList<String>();
+		
 		Parser parser = new Parser();
 		ParsedProgram program = null;
 		try{program = parser.createParsedProgram(json);}
@@ -55,68 +57,39 @@ public class RequestHandlerController {
 			errors.add("Unable to parse JSON file");
 		}
 		List<String> parserErrors = parser.getErrors();
-		/*if(!parserErrors.isEmpty()){
+		if(!parserErrors.isEmpty()){
 			errors.addAll(parserErrors);
+			System.out.println(errors); //soluzione momentanea per la visualizzazione degli errori
 		}
-		else{*/
-			generator.generate("1234", program);
-			/*server.compiler.Compiler compiler = new JavaCompiler();
-			String path = "src/main/resources/ContentFile";
+		else{
+			String path = "src/main/resources/ContentFile/"+IdReq;
 			File folder = new File(path); 
-			File[] files = folder.listFiles(new FilenameFilter() { @Override public boolean accept(File dir, String name) { return name.endsWith(".java"); } });
+			folder.mkdir();
+			generator.generate(IdReq, program);
+			server.compiler.Compiler compiler = new JavaCompiler(); 
+			File[] files = folder.listFiles(
+						   new FilenameFilter() { 
+							   @Override 
+							   public boolean accept(File dir, String name) { 
+								   return name.endsWith(".java"); 
+								   } 
+							   });
+			
 			for(File file : files){
 				  if(file.isFile()){
-				    try{errors.addAll(compiler.compile(file.getAbsolutePath()));}
+				    try{
+				    	errors.addAll(compiler.compile(file.getAbsolutePath()));}
 				    catch(IOException e){errors.add("Error when compiling file "+file.getName());}
 				  }
 			}
-			System.out.println(errors);
 			Compressor c = new Compressor();
-			c.zip();
-		}*/
-		return new FileSystemResource("/src/main/resources/ContentFile");
+			try{ c.zip(path);}
+			catch(IOException e){errors.add("Error when zipping files");}
+		}
+		return null;
 		
 	}
 	public void HandleStereotypesRequest(){};
-	
-	/*@RequestMapping(value = "/generate", produces="application/zip")
-	public byte[] prova(HttpServletResponse response) throws Exception{
-	    //setting headers
-        response.setContentType("application/zip");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.addHeader("Content-Disposition", "attachment; filename=\"code.zip\"");
-
-        //creating byteArray stream, make it bufforable and passing this buffor to ZipOutputStream
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);
-        ZipOutputStream zipOutputStream = new ZipOutputStream(bufferedOutputStream);
-
-        //simple file list, just for tests
-        ArrayList<File> files = new ArrayList<>();
-        files.add(new File("README.md"));
-
-        //packing files
-        for (File file : files) {
-            //new zip entry and copying inputstream with file to zipOutputStream, after all closing streams
-            zipOutputStream.putNextEntry(new ZipEntry(file.getName()));
-            FileInputStream fileInputStream = new FileInputStream(file);
-
-            IOUtils.copy(fileInputStream, zipOutputStream);
-
-            fileInputStream.close();
-            zipOutputStream.closeEntry();
-        }
-
-        if (zipOutputStream != null) {
-            zipOutputStream.finish();
-            zipOutputStream.flush();
-            IOUtils.closeQuietly(zipOutputStream);
-        }
-        IOUtils.closeQuietly(bufferedOutputStream);
-        IOUtils.closeQuietly(byteArrayOutputStream);
-        return byteArrayOutputStream.toByteArray();
-    }*/
-
 		    
 	}
 	

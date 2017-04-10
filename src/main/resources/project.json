@@ -258,7 +258,7 @@
                "type":"activity.HxIf",
                "values":{
                   "xtype":"If",
-                  "condition":"",
+                  "condition":"false",
                   "comment":"[new block]",
                   "body":[
 

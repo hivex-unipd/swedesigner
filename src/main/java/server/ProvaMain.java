@@ -40,10 +40,7 @@ public class ProvaMain {//SIMULO IL PROGRAMMA PRINCIPALE
 		
 		//ApplicationContext context = new AnnotationConfigApplicationContext(GeneratorAssembler.class);
 		RequestHandlerController rhc = new RequestHandlerController();
-		rhc.HandleGeneratorRequest();
-		
-		
-		
+		rhc.HandleGeneratorRequest(testo, "1234");	
 	}
 
 }
