@@ -216,8 +216,8 @@ define([
         },
 
         /**
-         * Re-paints the `#details` div after a 'Switchgraph' event was
-         * fired by the `ProjectView` object.
+         * Re-paints the `#details` div after a 'Switchgraph' event
+         * has been fired by the `ProjectView` object.
          * @name DetailsView#visib
          * @function
          */
@@ -225,9 +225,11 @@ define([
             if (ProjectView.paper.selectedCell)
                 this.$el.html(ProjectView.paper.selectedCell.getMethods());
         },
+
         /**
-         * Execute a method of the model passing its name as string
-         * @param e The method name
+         * Execute a method of the model passing its
+         * name as a string.
+         * @param e the method name
          */
         execmod: function (e) {
             var tmp = e.target.name.split(".");
