@@ -22,8 +22,8 @@ require.config({
 });
 
 require([
-    'backbone',
-    'joint',
+	'backbone',
+	'joint',
 	'views/AppView',
 	'models/newcellfactory'
 ], function (backbone, joint, AppView, NewCellFactory) {

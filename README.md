@@ -14,28 +14,137 @@ Structure of this repository:
     ├── src
     │   ├── main
     │   │   ├── java
-    │   │   │   └── org
-    │   │   │       └── hivex
-    │   │   │           └── swedesigner
-    │   │   │               └── [.java source files...]
+    │   │   │   └── server
+    │   │   │       ├── Application.java
+    │   │   │       ├── compiler
+    │   │   │       │   ├── Compiler.java
+    │   │   │       │   └── java
+    │   │   │       │       └── JavaCompiler.java
+    │   │   │       ├── controller
+    │   │   │       │   └── RequestHandlerController.java
+    │   │   │       ├── generator
+    │   │   │       │   ├── Generator.java
+    │   │   │       │   ├── GeneratorAssembler.java
+    │   │   │       │   └── java
+    │   │   │       │       └── JavaGenerator.java
+    │   │   │       ├── parser
+    │   │   │       │   └── Parser.java
+    │   │   │       ├── project
+    │   │   │       │   ├── ParsedAttribute.java
+    │   │   │       │   ├── ParsedClass.java
+    │   │   │       │   ├── ParsedCustom.java
+    │   │   │       │   ├── ParsedElement.java
+    │   │   │       │   ├── ParsedElse.java
+    │   │   │       │   ├── ParsedException.java
+    │   │   │       │   ├── ParsedFor.java
+    │   │   │       │   ├── ParsedIf.java
+    │   │   │       │   ├── ParsedInstruction.java
+    │   │   │       │   ├── ParsedInterface.java
+    │   │   │       │   ├── ParsedMethod.java
+    │   │   │       │   ├── ParsedProgram.java
+    │   │   │       │   ├── ParsedReturn.java
+    │   │   │       │   ├── ParsedStatement.java
+    │   │   │       │   ├── ParsedType.java
+    │   │   │       │   └── ParsedWhile.java
+    │   │   │       ├── stereotype
+    │   │   │       │   └── Stereotype.java
+    │   │   │       ├── template
+    │   │   │       │   ├── Template.java
+    │   │   │       │   ├── TemplateAssembler.java
+    │   │   │       │   └── java
+    │   │   │       │       └── JavaTemplate.java
+    │   │   │       └── utility
+    │   │   │           └── Compressor.java
     │   │   ├── resources
+    │   │   │   ├── ContentFile
+    │   │   │   │   └── [generated code]
     │   │   │   └── templates
-    │   │   │       └── [StringTemplate templates...]
+    │   │   │       ├── attributejavatemplate.st
+    │   │   │       ├── classjavatemplate.st
+    │   │   │       ├── elsejavatemplate.st
+    │   │   │       ├── forjavatemplate.st
+    │   │   │       ├── ifjavatemplate.st
+    │   │   │       ├── initVis.st
+    │   │   │       ├── interfacejavatemplate.st
+    │   │   │       ├── methodjavatemplate.st
+    │   │   │       ├── returnjavatemplate.st
+    │   │   │       ├── statementjavatemplate.st
+    │   │   │       └── whilejavatemplate.st
     │   │   └── webapp
     │   │       ├── WEB-INF
-    │   │       │   ├── web.xml
-    │   │       │   └── [Java applets...]
+    │   │       │   └── web.xml
     │   │       ├── assets
     │   │       │   ├── joint.css
+    │   │       │   ├── jquery-ui.css
     │   │       │   └── style.css
+    │   │       ├── doc
+    │   │       │   ├── [HTML docs for the front end]
     │   │       ├── images
-    │   │       │   ├── [client images...]
+    │   │       │   ├── android-desktop.png
+    │   │       │   ├── dog.png
+    │   │       │   ├── favicon.png
+    │   │       │   ├── ios-desktop.png
+    │   │       │   └── user.jpg
     │   │       ├── index.html
-    │   │       └── js
-    │   │           └── [.js source files...]
+    │   │       ├── js
+    │   │       │   ├── collection
+    │   │       │   │   └── DiagramsCollection.js
+    │   │       │   ├── libs
+    │   │       │   │   ├── backbone
+    │   │       │   │   │   └── backbone.js
+    │   │       │   │   ├── jointjs
+    │   │       │   │   │   └── joint.js
+    │   │       │   │   ├── jquery
+    │   │       │   │   │   └── jquery.js
+    │   │       │   │   ├── jqueryui
+    │   │       │   │   │   └── jquery-ui.js
+    │   │       │   │   ├── lodash
+    │   │       │   │   │   └── lodash.js
+    │   │       │   │   ├── mdl
+    │   │       │   │   │   └── material.js
+    │   │       │   │   └── require
+    │   │       │   │       ├── require.js
+    │   │       │   │       └── text.js
+    │   │       │   ├── main.js
+    │   │       │   ├── models
+    │   │       │   │   ├── Command.js
+    │   │       │   │   ├── ProjectModel.js
+    │   │       │   │   ├── celltypes
+    │   │       │   │   │   └── celltypes.js
+    │   │       │   │   ├── newcellfactory.js
+    │   │       │   │   └── newcellmodel.js
+    │   │       │   ├── test.js
+    │   │       │   └── views
+    │   │       │       ├── AppView.js
+    │   │       │       ├── ProjectView.js
+    │   │       │       ├── detailsview.js
+    │   │       │       └── newcellview.js
+    │   │       └── test.html
     │   └── test
     │       └── java
-    │           └── [.java test files...]
+    │           ├── compiler
+    │           │   └── CompilerTest.java
+    │           ├── controller
+    │           │   └── RequestHandlerControllerTest.java
+    │           ├── generator
+    │           │   └── GeneratorTest.java
+    │           ├── parser
+    │           │   └── ParserTest.java
+    │           ├── project
+    │           │   ├── ParsedAttributeTest.java
+    │           │   ├── ParsedClassTest.java
+    │           │   ├── ParsedCustomTest.java
+    │           │   ├── ParsedElseTest.java
+    │           │   ├── ParsedForTest.java
+    │           │   ├── ParsedIfTest.java
+    │           │   ├── ParsedInterfaceTest.java
+    │           │   ├── ParsedMethodTest.java
+    │           │   ├── ParsedProgramTest.java
+    │           │   ├── ParsedReturnTest.java
+    │           │   └── ParsedWhileTest.java
+    │           ├── template
+    │           │   └── JavaTemplateTest.java
+    │           └── utility
+    │               └── CompressorTest.java
     └── target
-        └── classes
-            └── [.class files...]
+        └── [.class files...]
