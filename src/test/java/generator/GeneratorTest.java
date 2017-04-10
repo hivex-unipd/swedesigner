@@ -9,7 +9,7 @@ import server.generator.java.JavaGenerator;
 import server.project.*;
 
 import org.json.*;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -21,7 +21,7 @@ public class GeneratorTest {
 
 	// Dato un ParsedProgram valido, JavaGenerator esegue senza lanciare eccezioni.
 	@Test
-	public void generatorYieldsBasicInfo() throws ParsedException, FileNotFoundException {
+	public void generatorYieldsBasicInfo() throws IOException, ParsedException {
 		ParsedProgram program = new ParsedProgram();
 
 		// ParsedType stub:
@@ -37,12 +37,12 @@ public class GeneratorTest {
 		ParsedType type2 = new ParsedClass("SecondClass", true);
 		program.addType(type2);
 
-		generator.generate("stub", program);
+		generator.generate("1234", program);
 	}
 
 	// Dato un ParsedProgram vuoto, JavaGenerator esegue senza lanciare eccezioni.
 	@Test
-	public void generatorHandlesEmptyProgram() throws ParsedException, FileNotFoundException {
+	public void generatorHandlesEmptyProgram() throws IOException {
 		ParsedProgram program = new ParsedProgram();
 		generator.generate("stub", program);
 	}
