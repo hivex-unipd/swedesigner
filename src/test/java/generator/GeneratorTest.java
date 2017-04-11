@@ -37,6 +37,7 @@ public class GeneratorTest {
 		ParsedType type2 = new ParsedClass("SecondClass", true);
 		program.addType(type2);
 
+		// TODO
 //		generator.generate("1234", program);
 	}
 
