@@ -19,7 +19,8 @@ public class ParsedElseTest {
 	public void elseContainsBasicInfo() {
 		ParsedInstruction inst1 = new ParsedReturn("tmp");
 		List<ParsedInstruction> body = Arrays.asList(inst1);
-		ParsedElse fallback = new ParsedElse(body);
+		ParsedElse fallback = new ParsedElse();
+		fallback.setBody(body);
 		JavaTemplate template = new JavaTemplate();
 		String result = fallback.renderTemplate(template);
 		assertThat(result, containsString("else"));

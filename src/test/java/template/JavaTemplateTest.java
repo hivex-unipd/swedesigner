@@ -73,8 +73,7 @@ public class JavaTemplateTest {
 	// Costruito un JavaTemplate per blocchi if, questo è in grado di generare una stringa Java contenente la dichiarazione di un blocco if e il corpo del blocco.
 	@Test
 	public void ifTemplateWorks() {
-		List<ParsedInstruction> body = Arrays.asList();
-		ParsedElement element = new ParsedIf("i <= 2", body);
+		ParsedElement element = new ParsedIf("i <= 2");
 		ST template = factory.getIfTemplate();
 
 		template.add("if1", element);

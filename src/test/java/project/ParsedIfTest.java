@@ -20,7 +20,8 @@ public class ParsedIfTest {
 		ParsedInstruction inst1 = new ParsedStatement("", "x", "+=", "1");
 		List<ParsedInstruction> body = Arrays.asList(inst1);
 		String condition = "x == 10";
-		ParsedIf test = new ParsedIf(condition, body);
+		ParsedIf test = new ParsedIf(condition);
+		test.setBody(body);
 		JavaTemplate template = new JavaTemplate();
 		String result = test.renderTemplate(template);
 		assertThat(result, containsString("if (x == 10)"));
