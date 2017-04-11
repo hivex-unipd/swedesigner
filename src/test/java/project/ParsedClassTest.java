@@ -41,7 +41,7 @@ public class ParsedClassTest {
 		type.addField(field);
 		JavaTemplate template = new JavaTemplate();
 		String result = type.renderTemplate(template);
-		assertThat(result, containsString("private String pippo = \"test\""));
+		assertThat(result, containsString("private String pippo = \"test\";"));
 		// TODO gestire le virgolette?
 	}
 

@@ -62,7 +62,6 @@ public class JavaTemplateTest {
 
 		template.add("for", element);
 		String result = template.render();
-		// non funziona:
 		assertThat(result, containsString("for (int i = 10; i > 0; i++)"));
 
 		template.add("body", "y = 23.2f;");

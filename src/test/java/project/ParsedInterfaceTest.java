@@ -29,8 +29,7 @@ public class ParsedInterfaceTest {
 		type.addField(field);
 		JavaTemplate template = new JavaTemplate();
 		String result = type.renderTemplate(template);
-		// TODO non funziona:
-//		assertThat(result, containsString("final static public String DATA = 2;"));
+		assertThat(result, containsString("static final String DATA = 2;"));
 	}
 
 	// Costruita una ParsedInterface e aggiuntole un metodo non implementato, questa è in grado di generare una stringa Java contenente la dichiarazione del metodo aggiunto.
