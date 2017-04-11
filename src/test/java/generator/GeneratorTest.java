@@ -37,7 +37,7 @@ public class GeneratorTest {
 		ParsedType type2 = new ParsedClass("SecondClass", true);
 		program.addType(type2);
 
-		generator.generate("1234", program);
+//		generator.generate("1234", program);
 	}
 
 	// Dato un ParsedProgram vuoto, JavaGenerator esegue senza lanciare eccezioni.
