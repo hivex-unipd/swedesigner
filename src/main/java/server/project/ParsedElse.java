@@ -30,5 +30,9 @@ public class ParsedElse extends ParsedInstruction {
 	public List<ParsedInstruction> getBody() {
 		return body;
 	}
+	
+	public void setBody(List<ParsedInstruction> parsedInstructions){
+		this.body = parsedInstructions;
+	}
 
 }
