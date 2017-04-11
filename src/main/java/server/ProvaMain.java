@@ -19,7 +19,6 @@ import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupDir;
 
 import server.controller.RequestHandlerController;
-import server.generator.GeneratorAssembler;
 import server.parser.Parser;
 import server.project.ParsedAttribute;
 import server.project.ParsedClass;
