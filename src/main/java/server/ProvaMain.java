@@ -6,7 +6,6 @@ import java.nio.file.Paths;
 
 import server.controller.RequestHandlerController;
 
-
 public class ProvaMain {
 	public static void main(String[] args){
 		
