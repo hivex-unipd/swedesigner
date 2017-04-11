@@ -291,31 +291,31 @@ public class Parser {
 			JSONObject JSONRel = JSONRels.getJSONObject(i);
 
 			//extracting the source class of the relationship
-			String sourceName = "";
+			String sourceId = "";
 			if (JSONRel.has("source")) {
-				JSONObject source = JSONRel.getJSONObject("source");
-				if (source.has("id"))
-					sourceName = source.getString("id");
+				JSONObject jsonSource = JSONRel.getJSONObject("source");
+				if (jsonSource.has("id"))
+					sourceId = jsonSource.getString("id");
 				else
 					errors.add("JSON format error: cannot find id of source of relationship");
 			}
 			else
 				errors.add("JSON format error: cannot find source of relationship");
-			ParsedType source = allTypes.get(sourceName); 							
+			ParsedType sourceParsedType = allTypes.get(sourceId); 							
 
 			//extracting the type of the relationship
-			String relType = "";															
+			String relationshipType = "";															
 			if (JSONRel.has("type"))
-				relType = JSONRel.getString("type");
+				relationshipType = JSONRel.getString("type");
 			else
 				errors.add("JSON format error: cannot find type of relationship");
 
-			//extracting the target class of the relationship
-			String targetName = "";
+			//extracting the id of the target class of the relationship
+			String targetId = "";
 			if (JSONRel.has("target")) {
-				JSONObject targetType = JSONRel.getJSONObject("target");
-				if (targetType.has("id"))
-					targetName = targetType.getString("id");
+				JSONObject jsonTarget = JSONRel.getJSONObject("target");
+				if (jsonTarget.has("id"))
+					targetId = jsonTarget.getString("id");
 				else
 					errors.add("JSON format error: cannot find id of target of relationship");
 			}
@@ -323,170 +323,177 @@ public class Parser {
 				errors.add("JSON format error: cannot find target of relationship");
 			
 			//extracting the ParsedType that corresponds to the source type of the relationship
-			ParsedType targetType = allTypes.get(targetName);
-			String target = ""; 														//"" se non esiste il target della relazione
+			ParsedType targetType = allTypes.get(targetId);
+			String targetTypeName = ""; 														
 			if (targetType!=null)
-				target = targetType.getName();
-
-			if (source!=null && !relType.equals("") && !target.equals("")) {					//controllo valori accettabili
-				switch(relType) {
+				targetTypeName = targetType.getName();
+			//inserting the relationship information only if source type, target type and source of relationship have legal values
+			if (sourceParsedType!=null && !relationshipType.equals("") && !targetTypeName.equals("")) {	
+				//this switch creates a different kind of relationship based the type specified in the json file
+				switch(relationshipType) {
 					case "class.HxGeneralization" : {
-						try{source.addSupertype(target, "class");}
+						try{sourceParsedType.addSupertype(targetTypeName, "class");}
 						catch(ParsedException e) {errors.add(e.getError());}
 						break;
 					}
 					case "class.HxImplementation" : {
-						try{source.addSupertype(target, "interface");}
+						try{sourceParsedType.addSupertype(targetTypeName, "interface");}
 						catch(ParsedException e) {errors.add(e.getError());}
 						break;
 					}
 					case "class.HxReference" : {
-						int molt = 1; //molteplicita di default
+						int molteplicity = 1; 
 						if (JSONRel.has("molteplicity"))
-							molt = JSONRel.getInt("molteplicity");
+							molteplicity = JSONRel.getInt("molteplicity");
 
-						String typeatt = target+(molt>1 ? "[]" : "");
+						String attributeType = targetTypeName+(molteplicity>1 ? "[]" : "");
 
-						String nameatt = "";
+						String attributeName = "";
 						if (JSONRel.has("name"))
-							nameatt = JSONRel.getString("name");
+							attributeName = JSONRel.getString("name");
 						else
-							nameatt = target+source+"reference"+(attNoName++);
+							attributeName = targetTypeName+sourceParsedType+"reference"+(attNoName++);
 
-						String value = (molt>1 ? "new "+target+"["+molt+"]" : null);//non esistono valori di default per i riferimenti singoli!!!
-
-						//***non si può indicare se un attributo è statico o la particolare visibilità
-						try{source.addField(new ParsedAttribute(false, null, typeatt, nameatt, "=", value));}
+						String value = (molteplicity>1 ? "new "+targetTypeName+"["+molteplicity+"]" : null);
+						
+						try{sourceParsedType.addField(new ParsedAttribute(false, null, attributeType, attributeName, "=", value));}
 						catch(ParsedException e) {errors.add(e.getError());}
 						break;
 					}
 					default : errors.add("JSON format error: type of relationship is not correct"); 
-				}//fine switch
-			}//fine if
-		}//fine ciclo for //******fine quinta funzione
+				}
+			}
+		}
 	}
 
-	//la funzione ritorna null nel caso in cui i JSONObject e JSONArray passati come parametri non abbiano le informazioni necessarie
-	//per creare l'istruzione stessa!
+	
 	private ParsedInstruction recursiveBuilder(JSONObject instruction, JSONArray jsonBlock, int position) throws JSONException {
-		String type = "";
+		
+		ParsedInstruction currentInstruction = null;
+		
+		//extracting the type of the instruction
+		String instructionType = "";
 		if (instruction.has("type"))
-			type = instruction.getString("type");
+			instructionType = instruction.getString("type");
 		else
 			errors.add("JSON format error: cannot find type of instruction");
 		
-		JSONObject values = null;
+		//extracting all the values of the instruction
+		JSONObject instructionValues = null;
 		if (instruction.has("values")) {
-			values = instruction.getJSONObject("values");
+			instructionValues = instruction.getJSONObject("values");
 		}
 		else
 			errors.add("JSON format error: cannot find values of instruction");
 		
-		ParsedInstruction currentinst = null;
-
-		if (!type.equals("")&&values!=null) {//se nel JSON non sono inseriti il tipo e i valori delle istruzioni, non ha senso inserirle!
-			currentinst = createActivity(values, type);
+		//calling createActivity in order to create the instruction without inserting the blovks of its body
+		if (!instructionType.equals("")&&instructionValues!=null) {
+			currentInstruction = createActivity(instructionValues, instructionType);
 		}
+		
+		//if the instruction has an empty body or has no body we can directly return it
 		if (!instruction.has("embeds")) {
-			return currentinst;
+			return currentInstruction;
 		}
 
-		//se invece ha figli
-		JSONArray embeds = instruction.getJSONArray("embeds");//esiste sicuramente
-		int embedslength = embeds.length();
-		List<ParsedInstruction> pi = new ArrayList<ParsedInstruction>();
-		for (int y = 0; y<embedslength; y++) { //ciclo i figli, se entro in embeds vuol dire che almeno una stringa c'è!
-			String id = embeds.getString(y);
+		//extracting the list of embedded instructions of the method body
+		JSONArray embeddedInstructions = instruction.getJSONArray("embeds");
+		int embedslength = embeddedInstructions.length();
+		List<ParsedInstruction> parsedInstructions = new ArrayList<ParsedInstruction>();
+		for (int y = 0; y<embedslength; y++) { 
+			String id = embeddedInstructions.getString(y);
 			JSONObject otherinstruction = null;
 			boolean found = false;
 			int found_at = 0;
+			//searching for the right instruction matching the id value
 			for (int f = position; f<jsonBlock.length()&&!found; f++) {
-				JSONObject block = jsonBlock.getJSONObject(f);
-				String idblock = "";
-				if (block.has("id"))
-					idblock = block.getString("id");
+				JSONObject singleBlock = jsonBlock.getJSONObject(f);
+				String idSingleBlock = "";
+				if (singleBlock.has("id"))
+					idSingleBlock = singleBlock.getString("id");
 				else
 					errors.add("JSON format error: cannot find id in block");
 
-				if (idblock.equals(id)) {
-					otherinstruction = block;
+				if (idSingleBlock.equals(id)) {
+					otherinstruction = singleBlock;
 					found = true;
 					found_at = f;
-					ParsedInstruction instr = recursiveBuilder(otherinstruction, jsonBlock, found_at+1);
-					if (instr!=null) {
-						pi.add(instr);
+					ParsedInstruction parsedInstruction = recursiveBuilder(otherinstruction, jsonBlock, found_at+1);
+					if (parsedInstruction!=null) {
+						parsedInstructions.add(parsedInstruction);
 
 				}
 			}
 		}
-		if (currentinst!=null)
-			currentinst.setBody(pi); //chiamata polimorfa
-	  }//fine if esterno che controlla la presenza di type e values dell'istruzione
+		//setting the body of the currentInstruction
+		if (currentInstruction!=null)
+			currentInstruction.setBody(parsedInstructions); 
+	  }
 
-		//se non ci sono le informazioni necessarie per creare l'istruzione, essa risulta vuota.
-		return currentinst;
+		//if the necessary information for creating the currentInstruction is missing the method returns a null value
+		return currentInstruction;
 	}
 	
 	private ParsedInstruction createActivity(JSONObject values, String type) throws JSONException{
-		ParsedInstruction activity = null;
-		switch(type) {//I VINCOLI IMPOSTI ALLE DIVERSE ISTRUZIONI SONO CARATTERIZZANTI PER IL NOSTRO PROGRAMMA
+		ParsedInstruction parsedInstruction = null;
+		switch(type) {
+		//this switch creates a different kind of instruction based the type specified in the json file
 		case "activity.HxCustom" : {
 			String value = (values.has("value") ? values.getString("value") : "");
 
 			if (!value.equals(""))
-				activity = new ParsedCustom(value);
+				parsedInstruction = new ParsedCustom(value);
 			else
 				errors.add("JSON format error: missing information for custom instruction");
 			break;
 		}
-		case "activity.HxFor" : {//nessun controllo, il for può avere tutte le informazioni mancanti!
+		case "activity.HxFor" : {
 			String init = (values.has("initialization")?values.getString("initialization"):null);
 			String condition = (values.has("termination")?values.getString("termination"):null);
 			String step = (values.has("increment")?values.getString("increment"):null);
-			//da vedere se init e step sono stringhe oppure ParsedInit/ParsedAssign
-			activity = new ParsedFor(init, condition, step, null);
+			parsedInstruction = new ParsedFor(init, condition, step, null);
 
 			break;
 		}
 		case "activity.HxIf" : {
 			String condition = (values.has("condition") ? values.getString("condition") : "");;
 			if (!condition.equals(""))
-				activity = new ParsedIf(condition);
+				parsedInstruction = new ParsedIf(condition);
 			else
 				errors.add("JSON format error: missing information for if instruction");
 			break;
 		}
 		case "activity.HxElse" : {
-				activity = new ParsedElse();
+				parsedInstruction = new ParsedElse();
 			break;
 		}
-		case "activity.HxVariable" : {//*******non servirebbe in effetti richiedere la presenza del tipo (indipendenza dal linguaggio)
+		case "activity.HxVariable" : {
 			String value = (values.has("value")?values.getString("value"):null);
-			String typei = (values.has("type") ? values.getString("type") : null);
+			String instructionType = (values.has("type") ? values.getString("type") : null);
 			String operation = (values.has("operation") ? values.getString("operation") : null);
 			String name = (values.has("name") ? values.getString("name") : "");
 			if (!name.equals(""))
-				activity = new ParsedStatement(typei, name, operation, value);
+				parsedInstruction = new ParsedStatement(instructionType, name, operation, value);
 			else
 				errors.add("JSON format error: missing name of value for statement");
 			break;
 		}
-		case "activity.HxReturn" : {//nessun controllo, il return può essere anche implicito;
+		case "activity.HxReturn" : {
 			String value = (values.has("value")?values.getString("value"):null);
-			activity = new ParsedReturn(value);
+			parsedInstruction = new ParsedReturn(value);
 			break;
 		}
 		case "activity.HxWhile" : {
 			String condition = (values.has("condition") ? values.getString("condition") : "");;
 			if (!condition.equals(""))
-				activity = new ParsedWhile (condition, null);
+				parsedInstruction = new ParsedWhile (condition, null);
 			else
 				errors.add("JSON format error: missing information for while instruction");
 			break;
 		}
 		default : errors.add("JSON format error: type of instruction is not correct");	
 	}
-		return activity;
+		return parsedInstruction;
 	}
 	
 	
