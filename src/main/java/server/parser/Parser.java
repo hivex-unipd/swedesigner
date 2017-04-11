@@ -85,10 +85,10 @@ public class Parser {
 	 * @return               a structure mapping each method to its class
 	 * @throws JSONException a JSON parsing exception
 	 */
-	private HashMap<String, List<ParsedInstruction>> methBodies(JSONArray JSONMethods) throws JSONException {
+	private HashMap<String, List<ParsedInstruction>> methBodies(JSONArray jsonMethods) throws JSONException {
 		HashMap<String, List<ParsedInstruction>> methBodies = new HashMap<String, List<ParsedInstruction>>();
-		for (int i = 0; i < JSONMethods.length(); i++) { 
-			JSONObject JSONMethod = JSONMethods.getJSONObject(i);
+		for (int i = 0; i < jsonMethods.length(); i++) { 
+			JSONObject JSONMethod = jsonMethods.getJSONObject(i);
 			String idMethod = null;
 			if (JSONMethod.has("id"))
 				idMethod = JSONMethod.getString("id");
@@ -117,103 +117,103 @@ public class Parser {
 	 * returns a structure mapping each class diagram element to
 	 * a correspondent {@code ParsedType} object; each class diagram
 	 * element is represented by a string containing its id.
-	 * @param  clas          a JSON array of classes
-	 * @param  meth          a map from each method to its class/interface
+	 * @param  jsonClasses          a JSON array of classes
+	 * @param  methBodies          a map from each method to its class/interface
 	 * @return               a map from each class/interface to a ParsedType
 	 * @throws JSONException a JSON parsing exception
 	 */
-	private HashMap<String, ParsedType> typeBuilder(JSONArray clas, HashMap<String, List<ParsedInstruction>> meth) throws JSONException { //***seconda funzione***
-		HashMap<String, ParsedType> alltypes = new HashMap<String, ParsedType>();
-		for (int i = 0; i<clas.length(); i++) {
-			JSONObject jclass = clas.getJSONObject(i);
+	private HashMap<String, ParsedType> typeBuilder(JSONArray jsonClasses, HashMap<String, List<ParsedInstruction>> methBodies) throws JSONException { 
+		HashMap<String, ParsedType> allTypes = new HashMap<String, ParsedType>();
+		for (int i = 0; i<jsonClasses.length(); i++) {
+			JSONObject jsonClass = jsonClasses.getJSONObject(i);
 
-			//classes.put(clas.getJSONObject(i));
-			JSONObject classvalues = (jclass.has("values")?jclass.getJSONObject("values"):new JSONObject());
+			//check if jsonClass has classvalues
+			JSONObject classValues = (jsonClass.has("values")?jsonClass.getJSONObject("values"):new JSONObject());
 
-			//creo array per attributi JSON
-			JSONArray jattributes = (classvalues.has("attributes")?classvalues.getJSONArray("attributes"):new JSONArray());
+			//extracting attributes for jsonClass
+			JSONArray jsonAttributes = (classValues.has("attributes")?classValues.getJSONArray("attributes"):new JSONArray());
 
-			//creo array per metodi JSON
-			JSONArray jmethods = (classvalues.has("methods")?classvalues.getJSONArray("methods"):new JSONArray());
+			//extracting methods for jsonClass
+			JSONArray jsonMethods = (classValues.has("methods")?classValues.getJSONArray("methods"):new JSONArray());
 
-			//ricavo il tipo
-			String s = "";
-			if (jclass.has("type"))
-				s = jclass.getString("type");
+			//extracting type for jsonClass
+			String jClassType = "";
+			if (jsonClass.has("type"))
+				jClassType = jsonClass.getString("type");
 			else
 				errors.add("JSON format error: cannot find type of type: this type is not inserted in the list of type");
 
-			//ricavo l'id
-			String id = "";
-			if (jclass.has("id"))
-				id = jclass.getString("id");
+			//extracting id for jsonClass
+			String jClassId = "";
+			if (jsonClass.has("id"))
+				jClassId = jsonClass.getString("id");
 			else
 				errors.add("JSON format error: cannot find id of type: this type is not inserted in the list of type");
 
-			//inserisco il tipo solamente se ha id e type definiti
-			if ((s.equals("class.HxClass") || s.equals("class.HxInterface")) && !id.equals("")) {
-				boolean isInterface = (s.equals("class.HxInterface") ? true : false);
-				String name = (classvalues.has("name") ? classvalues.getString("name") : id);
-				ParsedType pt;
+			//checking if jsonClass has all the information needed in order to be parsed correctly
+			if ((jClassType.equals("class.HxClass") || jClassType.equals("class.HxInterface")) && !jClassId.equals("")) {
+				boolean isInterface = (jClassType.equals("class.HxInterface") ? true : false);
+				String name = (classValues.has("name") ? classValues.getString("name") : jClassId);
+				ParsedType parsedType;
 				if (isInterface)
-					pt = new ParsedInterface(name);
+					parsedType = new ParsedInterface(name);
 				else {
-					boolean isAbstract = (classvalues.has("abstract") ? classvalues.getBoolean("abstract") : false);
-					pt = new ParsedClass(name, isAbstract);
+					boolean isAbstract = (classValues.has("abstract") ? classValues.getBoolean("abstract") : false);
+					parsedType = new ParsedClass(name, isAbstract);
 				}
 			 
-				//aggiungo al parsedtype gli attributi
-				for (int r = 0; r < jattributes.length(); r++) {
-					JSONObject currentattr = jattributes.getJSONObject(r);
-					ParsedAttribute pa = attrBuilder(currentattr);
-					if (pa != null) {
-						try { pt.addField(pa);}
-						catch(ParsedException e) {errors.add(e.getError());}
+				//adding to the newly created parsedType all the legal attributes
+				for (int r = 0; r < jsonAttributes.length(); r++) {
+					JSONObject currentattr = jsonAttributes.getJSONObject(r);
+					ParsedAttribute parsedAttribute = attrBuilder(currentattr);
+					if (parsedAttribute != null) {
+						try { parsedType.addField(parsedAttribute);}
+						catch(ParsedException exception) {errors.add(exception.getError());}
 					}
 				}
 
-				//aggiungo i metodi al parsed type
-				for (int r = 0; r < jmethods.length(); r++) {
-					JSONObject currentmeth = jmethods.getJSONObject(r);
-					ParsedMethod pm = methBuilder(currentmeth, meth);
-					if (pm != null) {
-						try{pt.addMethod(pm);}
-						catch(ParsedException e) {errors.add(e.getError());}
+				//adding to the newly created parsedType all the legal methods
+				for (int r = 0; r < jsonMethods.length(); r++) {
+					JSONObject currentmeth = jsonMethods.getJSONObject(r);
+					ParsedMethod parsedMethod = methBuilder(currentmeth, methBodies);
+					if (parsedMethod != null) {
+						try{parsedType.addMethod(parsedMethod);}
+						catch(ParsedException exception) {errors.add(exception.getError());}
 					}
 				}
 
-				//inserisco il pt nell'array di classi
-				alltypes.put(id, pt);
-			}//fine if
-		}//fine for//********fine seconda funzione
-		return alltypes;
+				//inserting the parsedType in the  alltypes array
+				allTypes.put(jClassId, parsedType);
+			}
+		}
+		return allTypes;
 	}
 
 	/**
 	 * Given a JSON object containing a class member (an attribute),
 	 * builds the corresponding {@code ParsedAttribute} object and
 	 * returns it.
-	 * @param  currentattr   a JSON object with a class member
+	 * @param  currentAttr   a JSON object with a class member
 	 * @return               the {@code ParsedAttribute} corresponding to {@code currentattr}
 	 * @throws JSONException a JSON parsing exception
 	 */
-	private ParsedAttribute attrBuilder(JSONObject currentattr) throws JSONException { //***terza funzione***
-			String varname = "";
-			if (currentattr.has("name"))
-				varname = currentattr.getString("name");
+	private ParsedAttribute attrBuilder(JSONObject currentAttr) throws JSONException {
+			//extracting the name of the attribute
+			String attrName = "";
+			if (currentAttr.has("name"))
+				attrName = currentAttr.getString("name");
 			else
 				errors.add("Cannot find name of attribute");
+			//creating the attribute only if it has a legal name value.
+			if (!attrName.equals("")) {
+				boolean isstatic = (currentAttr.has("static")?currentAttr.getBoolean("static"):false);
+				String visibility = (currentAttr.has("visibility")?currentAttr.getString("visibility"):null);
+				String varvaldef = (currentAttr.has("defaultvalue")?currentAttr.getString("defaultvalue"):null);
+				String vartype = (currentAttr.has("type") ? currentAttr.getString("type") : null);
 
-			if (!varname.equals("")) {
-				//occorre controllare che ci siano tutti i campi prima di creare l'attributo
-				boolean isstatic = (currentattr.has("static")?currentattr.getBoolean("static"):false);
-				String visibility = (currentattr.has("visibility")?currentattr.getString("visibility"):null);
-				String varvaldef = (currentattr.has("defaultvalue")?currentattr.getString("defaultvalue"):null);
-				String vartype = (currentattr.has("type") ? currentattr.getString("type") : null);
-
-				return new ParsedAttribute(isstatic, visibility, vartype, varname, "=", varvaldef);
+				return new ParsedAttribute(isstatic, visibility, vartype, attrName, "=", varvaldef);
 			}
-			else
+			else//if the attribute has no name the method returns a null value
 				return null;
 	}
 
@@ -221,48 +221,54 @@ public class Parser {
 	 * Given a JSON object containing an activity diagram (a method),
 	 * and a map from each method to its class or interface,
 	 * builds a {@code ParsedMethod} object and returns it.
-	 * @param  currentmeth   a JSON object containing a method
-	 * @param  meth          a map from each method to its class/interface
+	 * @param  method   a JSON object containing a method
+	 * @param  methBodies          a map from each method to its class/interface
 	 * @return               a {@code ParsedMethod} object
 	 * @throws JSONException a JSON parsing exception
 	 */
-	private ParsedMethod methBuilder(JSONObject currentmeth, HashMap<String, List<ParsedInstruction>> meth) throws JSONException { //***quarta funzione***
-		JSONArray params = (currentmeth.has("parameters")?currentmeth.getJSONArray("parameters"):new JSONArray());
-		List<ParsedAttribute> args = new ArrayList<ParsedAttribute>();
-
-		for (int p=0; p<params.length(); p++) {
-			JSONObject param = params.getJSONObject(p);
-			String name = (param.has("name") ? param.getString("name"):"");
-			String type = (param.has("type") ? param.getString("type"):null);
-			String defaultvalue = (param.has("defaultvalue") ? param.getString("defaultvalue"):null);
-			
+	private ParsedMethod methBuilder(JSONObject method, HashMap<String, List<ParsedInstruction>> methBodies) throws JSONException { 
+		//extracting the parameters of the current method
+		JSONArray methodParams = (method.has("parameters")?method.getJSONArray("parameters"):new JSONArray());
+		List<ParsedAttribute> methodArgs = new ArrayList<ParsedAttribute>();
+		
+		//creating and adding the parameters to the methodArgs list
+		for (int p=0; p<methodParams.length(); p++) {
+			JSONObject methodParam = methodParams.getJSONObject(p);
+			String name = (methodParam.has("name") ? methodParam.getString("name"):"");
+			String type = (methodParam.has("type") ? methodParam.getString("type"):null);
+			String defaultvalue = (methodParam.has("defaultvalue") ? methodParam.getString("defaultvalue"):null);
+			//adding the parameter only if it has a legal name value
 			if (name!="") {
-				args.add(new ParsedAttribute(false, null, type, name, "=", defaultvalue));
+				methodArgs.add(new ParsedAttribute(false, null, type, name, "=", defaultvalue));
 			}
 			else
 				errors.add("JSON format error: missing name of parameter "+(p+1)+" of method");
 		}
-
-		String returntype = "";//vincolo del nostro programma
-		if (currentmeth.has("returntype"))
-			returntype = currentmeth.getString("returntype");
+		
+		//extracting the return type of the current method
+		String returnType = "";
+		if (method.has("returntype"))
+			returnType = method.getString("returntype");
 		else
 			errors.add("Retun type not found in method");
-
-		String namemeth = "";
-		if (currentmeth.has("name"))
-			namemeth = currentmeth.getString("name");
+		
+		//extracting the name of the current method
+		String nameMeth = "";
+		if (method.has("name"))
+			nameMeth = method.getString("name");
 		else
 			errors.add("Name not found in method");
-		if (!returntype.equals("")&&!namemeth.equals("")) {
+		
+		//creating and returning the method only if it has a legal return type value and a legal name value
+		if (!returnType.equals("")&&!nameMeth.equals("")) {
 
-			String visibility = (currentmeth.has("visibility")?currentmeth.getString("visibility"):null);
-			boolean isstatic = (currentmeth.has("static")?currentmeth.getBoolean("static"):false);
-			boolean isabstract = (currentmeth.has("abstract")?currentmeth.getBoolean("abstract"):false);
-			String id = (currentmeth.has("id")?currentmeth.getString("id"):"");
-			return new ParsedMethod(visibility , isstatic, isabstract, returntype, namemeth, args, meth.get(id));
+			String visibility = (method.has("visibility")?method.getString("visibility"):null);
+			boolean isstatic = (method.has("static")?method.getBoolean("static"):false);
+			boolean isabstract = (method.has("abstract")?method.getBoolean("abstract"):false);
+			String id = (method.has("id")?method.getString("id"):"");
+			return new ParsedMethod(visibility , isstatic, isabstract, returnType, nameMeth, methodArgs, methBodies.get(id));
 		}
-		else
+		else//if the method does not have a legal return type value or a legal name value the method returns null
 			return null;
 	}
 
@@ -272,55 +278,58 @@ public class Parser {
 	 * to its correspondent {@code ParsedType} object,
 	 * inserts the appropriate relationship between all the
 	 * {@code ParsedType}s present in the map.
-	 * @param  rels          relationships between all the types
-	 * @param  alltypes      a map from each diagram type to a {@code ParsedType}
+	 * @param  JSONRels          relationships between all the types
+	 * @param  allTypes      a map from each diagram type to a {@code ParsedType}
 	 * @throws JSONException a JSON parsing exception
 	 */
-	private void relBuilder(JSONArray rels, HashMap<String, ParsedType> alltypes)throws JSONException { //***quinta funzione***
-		int attNoName = 0; //***attributi senza nome creati da relazioni "reference"
-		//Inserimento relazioni
-		for (int i = 0; i<rels.length();i++) {
-			JSONObject rel = rels.getJSONObject(i);
+	private void relBuilder(JSONArray JSONRels, HashMap<String, ParsedType> allTypes)throws JSONException { //***quinta funzione***
+		//counter used to generate a default name for reference relationships without name
+		int attNoName = 0; 
+		
+		
+		for (int i = 0; i<JSONRels.length();i++) {
+			JSONObject JSONRel = JSONRels.getJSONObject(i);
 
-			//source della relazione
-			String sourcestring = "";
-			if (rel.has("source")) {
-				JSONObject source = rel.getJSONObject("source");
+			//extracting the source class of the relationship
+			String sourceName = "";
+			if (JSONRel.has("source")) {
+				JSONObject source = JSONRel.getJSONObject("source");
 				if (source.has("id"))
-					sourcestring = source.getString("id");
+					sourceName = source.getString("id");
 				else
 					errors.add("JSON format error: cannot find id of source of relationship");
 			}
 			else
 				errors.add("JSON format error: cannot find source of relationship");
-			ParsedType source = alltypes.get(sourcestring); 							//null se non esiste la chiave corrispondente alla sorgente
+			ParsedType source = allTypes.get(sourceName); 							
 
-			//tipo della relazione
-			String type = "";															//"" se non esiste il tipo della relazione
-			if (rel.has("type"))
-				type = rel.getString("type");
+			//extracting the type of the relationship
+			String relType = "";															
+			if (JSONRel.has("type"))
+				relType = JSONRel.getString("type");
 			else
 				errors.add("JSON format error: cannot find type of relationship");
 
-			//target della relazione
-			String targetstring = "";
-			if (rel.has("target")) {
-				JSONObject target = rel.getJSONObject("target");
-				if (target.has("id"))
-					targetstring = target.getString("id");
+			//extracting the target class of the relationship
+			String targetName = "";
+			if (JSONRel.has("target")) {
+				JSONObject targetType = JSONRel.getJSONObject("target");
+				if (targetType.has("id"))
+					targetName = targetType.getString("id");
 				else
 					errors.add("JSON format error: cannot find id of target of relationship");
 			}
 			else
 				errors.add("JSON format error: cannot find target of relationship");
-
-			ParsedType targettype = alltypes.get(targetstring);
+			
+			//extracting the ParsedType that corresponds to the source type of the relationship
+			ParsedType targetType = allTypes.get(targetName);
 			String target = ""; 														//"" se non esiste il target della relazione
-			if (targettype!=null)
-				target = targettype.getName();
+			if (targetType!=null)
+				target = targetType.getName();
 
-			if (source!=null && !type.equals("") && !target.equals("")) {					//controllo valori accettabili
-				switch(type) {
+			if (source!=null && !relType.equals("") && !target.equals("")) {					//controllo valori accettabili
+				switch(relType) {
 					case "class.HxGeneralization" : {
 						try{source.addSupertype(target, "class");}
 						catch(ParsedException e) {errors.add(e.getError());}
@@ -333,14 +342,14 @@ public class Parser {
 					}
 					case "class.HxReference" : {
 						int molt = 1; //molteplicita di default
-						if (rel.has("molteplicity"))
-							molt = rel.getInt("molteplicity");
+						if (JSONRel.has("molteplicity"))
+							molt = JSONRel.getInt("molteplicity");
 
 						String typeatt = target+(molt>1 ? "[]" : "");
 
 						String nameatt = "";
-						if (rel.has("name"))
-							nameatt = rel.getString("name");
+						if (JSONRel.has("name"))
+							nameatt = JSONRel.getString("name");
 						else
 							nameatt = target+source+"reference"+(attNoName++);
 
@@ -359,7 +368,7 @@ public class Parser {
 
 	//la funzione ritorna null nel caso in cui i JSONObject e JSONArray passati come parametri non abbiano le informazioni necessarie
 	//per creare l'istruzione stessa!
-	private ParsedInstruction recursiveBuilder(JSONObject instruction, JSONArray jblocks, int position) throws JSONException {
+	private ParsedInstruction recursiveBuilder(JSONObject instruction, JSONArray jsonBlock, int position) throws JSONException {
 		String type = "";
 		if (instruction.has("type"))
 			type = instruction.getString("type");
@@ -391,8 +400,8 @@ public class Parser {
 			JSONObject otherinstruction = null;
 			boolean found = false;
 			int found_at = 0;
-			for (int f = position; f<jblocks.length()&&!found; f++) {
-				JSONObject block = jblocks.getJSONObject(f);
+			for (int f = position; f<jsonBlock.length()&&!found; f++) {
+				JSONObject block = jsonBlock.getJSONObject(f);
 				String idblock = "";
 				if (block.has("id"))
 					idblock = block.getString("id");
@@ -403,7 +412,7 @@ public class Parser {
 					otherinstruction = block;
 					found = true;
 					found_at = f;
-					ParsedInstruction instr = recursiveBuilder(otherinstruction, jblocks, found_at+1);
+					ParsedInstruction instr = recursiveBuilder(otherinstruction, jsonBlock, found_at+1);
 					if (instr!=null) {
 						pi.add(instr);
 
@@ -442,13 +451,13 @@ public class Parser {
 		case "activity.HxIf" : {
 			String condition = (values.has("condition") ? values.getString("condition") : "");;
 			if (!condition.equals(""))
-				activity = new ParsedIf (condition, null);
+				activity = new ParsedIf(condition);
 			else
 				errors.add("JSON format error: missing information for if instruction");
 			break;
 		}
 		case "activity.HxElse" : {
-				activity = new ParsedElse(null);
+				activity = new ParsedElse();
 			break;
 		}
 		case "activity.HxVariable" : {//*******non servirebbe in effetti richiedere la presenza del tipo (indipendenza dal linguaggio)

@@ -15,7 +15,9 @@ import server.template.java.JavaTemplate;
 
 public class JavaGenerator implements Generator {
 	
-	private Template template = new JavaTemplate();
+	@Autowired
+	@Qualifier("javatemplate")
+	private Template template;
 
 	/**
 	 * Given a {@code ParsedProgram} object, converts the object

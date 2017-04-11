@@ -14,8 +14,8 @@ public class ParsedProgram {
 		return classes.size();
 	}
 	
-	public ParsedType getType(int i){
-		return classes.get(i);
+	public ParsedType getType(int position){
+		return classes.get(position);
 	}
 
 }

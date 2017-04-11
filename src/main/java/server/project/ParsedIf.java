@@ -10,10 +10,8 @@ public class ParsedIf extends ParsedInstruction {
 	private String condition;
 	private List<ParsedInstruction> body;
 	
-	
-	public ParsedIf(String condition, List<ParsedInstruction> body){
+	public ParsedIf(String condition){
 		this.condition = condition;
-		this.body = body;
 	}
 	
 	public String renderTemplate(Template t) {

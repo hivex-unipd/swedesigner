@@ -32,7 +32,7 @@ public class ParsedInterface extends ParsedType{
 
 	public void addSupertype(String name, String type)throws ParsedException{
 		if(name!=null&&type!=null){
-			if(type=="interface")
+			if(type.equals("interface"))
 				getExtended().add(name);
 			else throw new ParsedException("ParsedInterface error: interface "+getName()+" cannot extend class"+name);
 		}else

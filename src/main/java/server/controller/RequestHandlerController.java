@@ -41,12 +41,15 @@ import server.project.ParsedProgram;
 import server.utility.Compressor;
 @RestController
 public class RequestHandlerController {
-	/*@Autowired
-	@Qualifier("javagenerator")*/
-	private Generator generator = new JavaGenerator();
-	private server.compiler.Compiler compiler = new JavaCompiler();
-
-	public Resource HandleGeneratorRequest(String json, String IdReq){
+	@Autowired
+	@Qualifier("javagenerator")
+	private Generator generator;
+	@Autowired
+	@Qualifier("javacompiler")
+	private server.compiler.Compiler compiler;
+	
+	@RequestMapping("/generate")
+	public Resource HandleGeneratorRequest(@RequestParam(value="json")String json, @RequestParam(value="IdReq")String IdReq){
 		//Lista per la memorizzazione degli errori
 		List<String> errors = new ArrayList<String>();
 		String folderPath = "src/main/resources/ContentFile/"+IdReq;

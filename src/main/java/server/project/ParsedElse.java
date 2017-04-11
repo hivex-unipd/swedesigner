@@ -9,10 +9,6 @@ import server.template.Template;
 public class ParsedElse extends ParsedInstruction {
 	private List<ParsedInstruction> body;
 	
-	public ParsedElse(List<ParsedInstruction> body){
-		this.body = body;
-	}
-
 	@Override
 	public String renderTemplate(Template template) {
 		ST STtemplate = template.getElseTemplate();
