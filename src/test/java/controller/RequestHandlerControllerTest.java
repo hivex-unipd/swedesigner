@@ -1,25 +1,35 @@
-package generator;
+package controller;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+// from    https://spring.io/guides/gs/spring-boot/
+
+import static org.hamcrest.Matchers.equalTo;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import server.controller.RequestHandlerController;
-import server.compiler.java.JavaCompiler;
+import server.Application;
 
-import org.json.*;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import org.springframework.core.io.Resource;
-
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
+//@AutoConfigureMockMvc
 public class RequestHandlerControllerTest {
 
-	// ...
+	@Autowired
+	private MockMvc mvc;
+
+	// Avviato un RequestHandlerController, questo è in grado di rispodere a una richiesta di generazione di codice fornendo un archivio ZIP.
 	@Test
-	public void controllerHandlesRequest() throws IOException {
-		String request = new String(Files.readAllBytes(Paths.get("src/main/resources/project.json")));
-//		RequestHandlerController rhc = new RequestHandlerController();
-//		Resource result = rhc.HandleGeneratorRequest(request);
+	public void controllerHandlesGenerationRequest() throws Exception {
+//		mvc.perform(MockMvcRequestBuilders.get("/generate").accept(MediaType.ALL)).andExpect(status().isOk());
 	}
 }
