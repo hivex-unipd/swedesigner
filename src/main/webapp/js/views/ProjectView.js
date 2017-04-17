@@ -433,7 +433,7 @@ define([
                 el: $('#paper'),
                 model: this.model.graph,
                 width: 1500,
-                height: 1000,
+                height: 2000,
                 gridSize: 6,
                 drawGrid: true,
                 background: {
