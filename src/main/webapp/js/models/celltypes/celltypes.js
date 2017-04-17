@@ -270,42 +270,11 @@ define([
             methodsExpanded: false,
 
             values: {
-                name: "classedefault",
+                name: "ClassName",
                 abstract: "false",
                 static: "false",
-                attributes: [
-                    {
-                        name: "variabileDefault",
-                        type: "TipoDefault",
-                        defaultValue: "",
-                        visibility: "public",
-                        static: "false"
-                    },
-                    {
-                        name: "variabileDefault2",
-                        type: "TipoDefault2",
-                        defaultValue: "",
-                        visibility: "public",
-                        static: "false"
-                    }
-                ],
-                methods: [
-                    {
-                        name: "metodoDefault",
-                        visibility: "public",
-                        id: joint.util.uuid(),
-                        returnType: "tipoRitorno",
-                        abstract: "false",
-                        static: "false",
-                        parameters: [
-                            {
-                                name: "param1",
-                                type: "int",
-                                defaultValue: "0"
-                            }
-                        ]
-                    }
-                ]
+                attributes: [],
+                methods: []
             }
         }, celltypes.class.ClassDiagramElement.prototype.defaults),
 
@@ -491,18 +460,14 @@ define([
 
 
             values: {
-                name: "interfacciadefault",
+                name: "InterfaceName",
                 methods: [
                     {
-                        name: "metodoDefault",
+                        name: "method",
                         visibility: "public",
                         id: joint.util.uuid(),
-                        returnType: "tipoRitorno",
-                        parameters: [{
-                            name: "param1",
-                            type: "int",
-                            defaultValue: "0"
-                        }]
+                        returnType: "",
+                        parameters: []
                     }
                 ]
 
@@ -775,7 +740,7 @@ define([
 
             values: {
                 xType: '[block type]',
-                comment: '[new block]',
+                comment: '',
                 body: [],
 
             }
