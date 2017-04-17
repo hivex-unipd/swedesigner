@@ -247,8 +247,8 @@ public class Parser {
 		
 		//extracting the return type of the current method
 		String returnType = "";
-		if (method.has("returntype"))
-			returnType = method.getString("returntype");
+		if (method.has("returnType"))
+			returnType = method.getString("returnType");
 		else
 			errors.add("Retun type not found in method");
 		

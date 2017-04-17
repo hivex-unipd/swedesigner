@@ -76,6 +76,7 @@ public class RequestHandlerController {
 			try{ compressor.zip(folderPath);}
 			catch(IOException exception){errors.add(exception.getMessage());}
 		}
+		System.out.print(errors);
 		//It should return a Request object containing the zip just created. This will be implemented later.
 		return null;
 	}
