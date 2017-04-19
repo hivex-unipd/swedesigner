@@ -341,16 +341,16 @@ public class Parser {
 						catch(ParsedException e) {errors.add(e.getError());}
 						break;
 					}
-					case "class.HxReference" : {
+					case "class.HxAssociation" : {
 						int molteplicity = 1; 
-						if (JSONRel.has("molteplicity"))
-							molteplicity = JSONRel.getInt("molteplicity");
+						if (JSONRel.has("card"))
+							molteplicity = JSONRel.getInt("card");
 
 						String attributeType = targetTypeName+(molteplicity>1 ? "[]" : "");
 
 						String attributeName = "";
-						if (JSONRel.has("name"))
-							attributeName = JSONRel.getString("name");
+						if (JSONRel.has("attribute"))
+							attributeName = JSONRel.getString("attrbute");
 						else
 							attributeName = targetTypeName+sourceParsedType+"reference"+(attNoName++);
 

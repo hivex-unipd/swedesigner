@@ -28,7 +28,7 @@ public class JavaGenerator implements Generator {
 	public void generate(String IdReq, ParsedProgram parsedProgram) throws IOException {
 		for(int i=0; i<parsedProgram.nClasses(); i++){
 			String codeType = parsedProgram.getType(i).renderTemplate(template);
-			String filePath = "src/main/resources/ContentFile/"+IdReq+"/"+parsedProgram.getType(i).getName()+".java";
+			String filePath = System.getProperty("catalina.base")+"/webapps/Uploads/"+IdReq+"/"+parsedProgram.getType(i).getName()+".java";
 			File fileType = new File(filePath);
 		    PrintWriter writer = new PrintWriter(fileType);
 		    writer.println(codeType);

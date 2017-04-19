@@ -25,8 +25,8 @@ public class Configurator {
 	public server.compiler.Compiler javacompiler(){
 		return new JavaCompiler();
 	}
-	@Bean("rhc")
+	/*@Bean("rhc")
 	public RequestHandlerController requesthandlercontroller(){
 		return new RequestHandlerController();
-	}
+	}*/
 }

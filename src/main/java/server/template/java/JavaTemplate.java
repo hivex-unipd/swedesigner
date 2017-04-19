@@ -8,7 +8,7 @@ import server.template.Template;
 
 public class JavaTemplate implements Template {
 
-	private STGroup group = new STGroupDir("src/main/resources/templates");
+	private STGroup group = new STGroupDir("templates");
 
 	@Override
 	public ST getAttributeTemplate() {

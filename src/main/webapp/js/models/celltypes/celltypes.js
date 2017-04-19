@@ -461,15 +461,7 @@ define([
 
             values: {
                 name: "InterfaceName",
-                methods: [
-                    {
-                        name: "method",
-                        visibility: "public",
-                        id: joint.util.uuid(),
-                        returnType: "",
-                        parameters: []
-                    }
-                ]
+                methods: []
 
             }
         }, celltypes.class.ClassDiagramElement.prototype.defaults),

@@ -29,7 +29,7 @@
     height: 100%;
 }
 
-#savefile{
+#savefile,#generate{
     cursor: pointer;
 }
 
@@ -126,8 +126,12 @@ input[type=checkbox]:checked ~ .switch{
     display: none;
 }
 .togglable{
-    width: 90%;
-    background-color: lightgray;
+    width: 95%;
+    display: inline-block;
+    padding: 0.2em;
+    border-radius: 3px;
+    background-color: #4db6ac;
+    color: white;
     margin: 1em 2em 0em 0em;
     cursor: pointer;
     font-size: 1.5em;
@@ -143,7 +147,7 @@ input[type=checkbox]:checked ~ .switch{
     border: none;
     background-color: #4db6ac;
     display: inline-block;
-    padding: 1em 2em;
+    padding: 0.5em 1em;
     border-radius: 3px;
     cursor: pointer;
     color: white;
@@ -153,6 +157,8 @@ input[type=checkbox]:checked ~ .switch{
     /*display: none;*/
 }
 .propcontainer{
-    background-color: lightgray;
-    margin: 0.3em;
+    border-radius: 3px;
+    background-color: white;
+    border: 1px solid lightgray;
+    margin: 0.1em;
 }
