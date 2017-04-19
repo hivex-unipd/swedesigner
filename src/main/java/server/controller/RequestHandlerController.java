@@ -35,7 +35,7 @@ public class RequestHandlerController {
 	@Qualifier("javacompiler")
 	private server.compiler.Compiler compiler;	
 	
-	private String uploadFolder="/home/ec2-user/Uploads";
+	private String uploadFolder="/home/ec2-user/Uploads/";
 	
 	/**
 	 * Responds to an HTTP request for the "generate" resource.
