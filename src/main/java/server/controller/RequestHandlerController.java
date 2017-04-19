@@ -1,4 +1,4 @@
-package server.controller;
+gpackage server.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,11 +33,10 @@ public class RequestHandlerController {
 
 	@Autowired
 	@Qualifier("javacompiler")
-	private server.compiler.Compiler compiler;
-
-	@Value("${upload.location}")
-	private String uploadFolder;
-
+	private server.compiler.Compiler compiler;	
+	
+	private String uploadFolder="/home/ec2-user/Uploads";
+	
 	/**
 	 * Responds to an HTTP request for the "generate" resource.
 	 * The request must carry a JSON file; the response produces
@@ -51,7 +50,7 @@ public class RequestHandlerController {
 		String json = httpEntity.getBody();
 		// List for recording the errors:
 		List<String> errors = new ArrayList<String>();
-		String folderPath = uploadFolder + idReq; // System.getProperty("catalina.base") + "/webapps/Uploads/" + idReq;
+		String folderPath = uploadFolder + idReq;
 		createDirectory(folderPath);
 
 		Parser parser = new Parser();
