@@ -61,7 +61,7 @@ public class RequestHandlerController {
 		String json = httpEntity.getBody();
 		//Lista per la memorizzazione degli errori
 		List<String> errors = new ArrayList<String>();
-		String folderPath = System.getProperty("catalina.base") + "/webapps/Uploads/" + IdReq;
+		String folderPath = getServletContext().getInitParameter("upload.location")+IdReq;//System.getProperty("catalina.base") + "/webapps/Uploads/" + IdReq;
 		createDirectory(folderPath);
 		
 		Parser parser = new Parser();

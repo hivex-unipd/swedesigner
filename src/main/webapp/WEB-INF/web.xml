@@ -8,4 +8,8 @@
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
+	<context-param>
+        <param-name>uploads.location</param-name>
+        <param-value>/home/ec2-user/Uploads/</param-value>
+    </context-param>
 </web-app>

@@ -5,8 +5,9 @@ define([
     'joint',
     'views/ProjectView',
     'material',
-    'jqueryui'
-], function ($, _, Backbone, joint, ProjectView, componentHandler) {
+    'text!views/templates.html',
+    'jqueryui',
+], function ($, _, Backbone, joint, ProjectView, componentHandler,templates) {
 
     /**
      * @classdesc `DetailsView` shows the details of an element in one diagram.
@@ -29,6 +30,7 @@ define([
          * @type {string}
          */
         tagname: "div",
+
 
         /**
          * The DOM element corresponding to `DetailsView`.
@@ -56,7 +58,7 @@ define([
          * @function
          */
         initialize: function () {
-
+            //this.templates = require('text!views/templates.html');
             this.$el = $("#details");
             console.log(ProjectView.paper);
             this.listenTo(ProjectView.paper, "changed-cell", this.render);
@@ -71,7 +73,9 @@ define([
         render: function () {
             console.log("i'm detailsview and i saw your change");
             if (ProjectView.paper.selectedCell) {
-                this.currentTemplate = _.template($('#' + ProjectView.paper.selectedCell.get("type").replace(/\./g, "\\.")).html());
+                console.log(templates);
+                //this.currentTemplate = _.template($('#' + ProjectView.paper.selectedCell.get("type").replace(/\./g, "\\.")).html());
+                this.currentTemplate = _.template($(templates).filter('#' + ProjectView.paper.selectedCell.get("type").replace(/\./g, "\\.")).html());
                 var c = ProjectView.paper.selectedCell;
                 var output = "";
                 output = this.currentTemplate(c.getValues());
