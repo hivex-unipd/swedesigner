@@ -6,12 +6,13 @@ import java.util.List;
 public interface Compiler {
 
 	/**
-	 * Compiles the source files in the given directory
+	 * Compiles the source file(s) in the given path
 	 * into an executable file, then returns a list of
-	 * compilation errors, if any.
-	 * @param  dirPath     the directory path
+	 * compilation errors, if any. (The path can be a
+	 * single file or a directory containing files.)
+	 * @param  path        the path to the source file(s)
 	 * @return             the list of compilation errors
 	 * @throws IOException a file I/O exception
 	 */
-	List<String> compile(String dirPath) throws IOException;
+	List<String> compile(String path) throws IOException;
 }

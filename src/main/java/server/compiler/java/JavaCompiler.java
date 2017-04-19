@@ -17,7 +17,7 @@ import java.util.List;
 public class JavaCompiler implements Compiler {
 
 	/**
-	 * Compiles the Java source file in the given directory
+	 * Compiles the Java source files in the given directory
 	 * into an executable .class file containing JVM bytecode;
 	 * then returns a list of compilation errors, if any.
 	 * @param  dirPath     the directory path
@@ -28,26 +28,30 @@ public class JavaCompiler implements Compiler {
 	public List<String> compile(String dirPath) throws IOException {
 		List<String> errors = new ArrayList<String>(); 
 		File folder = new File(dirPath);
-		folder.mkdir();
 
-		File[] files = folder.listFiles(
-			new FilenameFilter() {
-				@Override 
-				public boolean accept(File dir, String name) { 
-					return name.endsWith(".java"); 
-				} 
-			}
-		);
+		if (folder.exists() && folder.isDirectory()) {	
+			File[] files = folder.listFiles(
+				new FilenameFilter() {
+					@Override 
+					public boolean accept(File dir, String name) { 
+						return name.endsWith(".java"); 
+					} 
+				}
+			);
 
-		for (File file : files) {
-			if (file.isFile()) {
-				try {
-					errors.addAll(compileFile(file.getAbsolutePath()));
-				} catch (IOException e) {
-					errors.add("Error when compiling file " + file.getName());
+			for (File file : files) {
+				if (file.isFile()) {
+					try {
+						errors.addAll(compileFile(file.getAbsolutePath()));
+					} catch (IOException e) {
+						errors.add("Error when compiling file " + file.getName());
+					}
 				}
 			}
-		}	
+		} else {
+			errors.add(folder.getName() + " is not a valid directory");
+		}
+
 		return errors;
 	}
 
