@@ -47,7 +47,7 @@ import server.project.ParsedProgram;
 import server.utility.Compressor;
 
 @RestController
-public class RequestHandlerController {
+public class RequestHandlerController extend HttpServlet {
 	@Autowired
 	@Qualifier("javagenerator")
 	private Generator generator;
@@ -77,7 +77,7 @@ public class RequestHandlerController {
 		}
 		else{
 			try{
-				generator.generate(IdReq, parsedProgram);
+				generator.generate(folderPath, parsedProgram);
 			    errors.addAll(compiler.compile(folderPath));
 			}
 			catch(IOException exception){errors.add(exception.getMessage());}

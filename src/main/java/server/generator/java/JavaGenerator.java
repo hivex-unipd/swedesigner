@@ -25,10 +25,10 @@ public class JavaGenerator implements Generator {
 	 * @param IdReq string representing the id of the Client request
 	 * @param p     a valid ParsedProgram object
 	 */
-	public void generate(String IdReq, ParsedProgram parsedProgram) throws IOException {
+	public void generate(String FolderPath, ParsedProgram parsedProgram) throws IOException {
 		for(int i=0; i<parsedProgram.nClasses(); i++){
 			String codeType = parsedProgram.getType(i).renderTemplate(template);
-			String filePath = getServletContext().getInitParameter("upload.location")+IdReq+"/"+parsedProgram.getType(i).getName()+".java";
+			String filePath = FolderPath+"/"+parsedProgram.getType(i).getName()+".java";
 			File fileType = new File(filePath);
 		    PrintWriter writer = new PrintWriter(fileType);
 		    writer.println(codeType);

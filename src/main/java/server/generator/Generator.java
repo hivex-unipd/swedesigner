@@ -13,5 +13,5 @@ public interface Generator {
 	 * @param IdReq ?
 	 * @param p     a valid ParsedProgram object
 	 */
-	void generate(String IdReq, ParsedProgram parsedProgram) throws IOException;
+	void generate(String FolderPath, ParsedProgram parsedProgram) throws IOException;
 }
