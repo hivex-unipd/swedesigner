@@ -47,7 +47,7 @@ import server.project.ParsedProgram;
 import server.utility.Compressor;
 
 @RestController
-public class RequestHandlerController extend HttpServlet {
+public class RequestHandlerController extends HttpServlet {
 	@Autowired
 	@Qualifier("javagenerator")
 	private Generator generator;
