@@ -56,8 +56,8 @@ public class RequestHandlerController {
 	@Qualifier("javacompiler")
 	private server.compiler.Compiler compiler;
 	
-	@Value("${upload.location}")
-	private String uploadFolder;
+	
+	private String uploadFolder="/home/ec2-user/Uploads";
 	
 	@RequestMapping(value = "/generate", consumes = "application/json", produces = "application/zip")
 	public ResponseEntity<?> HandleGeneratorRequest(HttpEntity<String> httpEntity) {
