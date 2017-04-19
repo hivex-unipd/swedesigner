@@ -17,38 +17,40 @@ import java.util.List;
 public class JavaCompiler implements Compiler {
 
 	/**
-	 * Compiles the given Java source file into an executable
-	 * .class file containing JVM bytecode;
+	 * Compiles the Java source file in the given directory
+	 * into an executable .class file containing JVM bytecode;
 	 * then returns a list of compilation errors, if any.
-	 * @param  fileName    the path of a Java source file
+	 * @param  dirPath     the directory path
 	 * @return             the list of compilation errors
 	 * @throws IOException a file I/O exception
 	 */
 	@Override
-	public List<String> compile(String pathFolder) throws IOException {
+	public List<String> compile(String dirPath) throws IOException {
 		List<String> errors = new ArrayList<String>(); 
-		File folder = new File(pathFolder);
+		File folder = new File(dirPath);
 		folder.mkdir();
-		
+
 		File[] files = folder.listFiles(
-				   new FilenameFilter() { 
-					   @Override 
-					   public boolean accept(File dir, String name) { 
-						   return name.endsWith(".java"); 
-						   } 
-					   });
-	
-		for(File file : files){
-			  if(file.isFile()){
-			    try{
-			    	errors.addAll(compileFile(file.getAbsolutePath()));}
-			    catch(IOException e){errors.add("Error when compiling file "+file.getName());}
-			  }
-		}
-		
+			new FilenameFilter() {
+				@Override 
+				public boolean accept(File dir, String name) { 
+					return name.endsWith(".java"); 
+				} 
+			}
+		);
+
+		for (File file : files) {
+			if (file.isFile()) {
+				try {
+					errors.addAll(compileFile(file.getAbsolutePath()));
+				} catch (IOException e) {
+					errors.add("Error when compiling file " + file.getName());
+				}
+			}
+		}	
 		return errors;
 	}
-	
+
 	private List<String> compileFile(String fileName) throws IOException {
 		List<String> errors = new ArrayList<String>(); 
 		javax.tools.JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -65,7 +67,5 @@ public class JavaCompiler implements Compiler {
 		}
 		fileManager.close();
 		return errors;
-		}
-
-	
+	}
 }

@@ -12,11 +12,11 @@ import java.io.IOException;
 
 public class CompilerTest {
 
-	// JavaCompiler è in grado di compilare un file sorgente Java in un file eseguibile, senza generare errori di compilazione.
+	// JavaCompiler è in grado di compilare dei file sorgente Java (posti in una stessa directory) in un file eseguibile, senza generare errori di compilazione.
 	@Test
 	public void compilerCanCompile() throws IOException {
 		Compiler compiler = new JavaCompiler();
-		// List<String> results = compiler.compile("file.java");
-		// assertEquals(0, results.size());
+		List<String> results = compiler.compile("src/main/resources/sort");
+		assertEquals(0, results.size());
 	}
 }
