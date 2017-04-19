@@ -48,7 +48,7 @@ import server.project.ParsedProgram;
 import server.utility.Compressor;
 
 @RestController
-public class RequestHandlerController extends HttpServlet {
+public class RequestHandlerController {
 	@Autowired
 	@Qualifier("javagenerator")
 	private Generator generator;
@@ -56,13 +56,16 @@ public class RequestHandlerController extends HttpServlet {
 	@Qualifier("javacompiler")
 	private server.compiler.Compiler compiler;
 	
+	@Value("${upload.location}");
+	private uploadFolder;
+	
 	@RequestMapping(value = "/generate", consumes = "application/json", produces = "application/zip")
 	public ResponseEntity<?> HandleGeneratorRequest(HttpEntity<String> httpEntity) {
 		String IdReq = UUID.randomUUID().toString();
 		String json = httpEntity.getBody();
 		//Lista per la memorizzazione degli errori
 		List<String> errors = new ArrayList<String>();
-		String folderPath = getServletContext().getInitParameter("upload.location")+IdReq;//System.getProperty("catalina.base") + "/webapps/Uploads/" + IdReq;
+		String folderPath = uploadFolder+IdReq;//System.getProperty("catalina.base") + "/webapps/Uploads/" + IdReq;
 		createDirectory(folderPath);
 		
 		Parser parser = new Parser();
