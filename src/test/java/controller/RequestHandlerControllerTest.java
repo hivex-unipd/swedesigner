@@ -20,7 +20,7 @@ import server.controller.RequestHandlerController;
 import server.Configurator;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes=Configurator.class)
+@SpringBootTest(classes = Configurator.class)
 @AutoConfigureMockMvc
 public class RequestHandlerControllerTest {
 

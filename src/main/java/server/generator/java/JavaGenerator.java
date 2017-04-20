@@ -6,13 +6,17 @@ import java.io.PrintWriter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import server.generator.Generator;
 import server.project.ParsedProgram;
 import server.template.Template;
-import server.template.java.JavaTemplate;
 
+/**
+ * A {@code JavaGenerator} object can convert a
+ * {@code ParsedProgram} object into multiple Java
+ * source code strings, one for each type in the
+ * given program.
+ */
 public class JavaGenerator implements Generator {
 	
 	@Autowired
@@ -20,18 +24,21 @@ public class JavaGenerator implements Generator {
 	private Template template;
 
 	/**
-	 * Given a {@code ParsedProgram} object, converts the object
-	 * into Java source code and writes the output to .java files.
-	 * @param IdReq string representing the id of the Client request
-	 * @param p     a valid ParsedProgram object
+	 * Given a path and a {@code ParsedProgram} object, converts
+	 * the object into Java source code and writes the output to
+	 * multiple .class files in the given path, one for each type
+	 * in the given program.
+	 * @param  dirPath     where to generate the source file(s)
+	 * @param  program     a valid ParsedProgram object
+	 * @throws IOException a file I/O exception
 	 */
-	public void generate(String FolderPath, ParsedProgram parsedProgram) throws IOException {
-		for(int i=0; i<parsedProgram.nClasses(); i++){
-			String codeType = parsedProgram.getType(i).renderTemplate(template);
-			String filePath = FolderPath+"/"+parsedProgram.getType(i).getName()+".java";
-			File fileType = new File(filePath);
-		    PrintWriter writer = new PrintWriter(fileType);
-		    writer.println(codeType);
+	public void generate(String dirPath, ParsedProgram program) throws IOException {
+		for (int i = 0; i < program.nClasses(); i++) {
+			String typeCode = program.getType(i).renderTemplate(template);
+			String filePath = dirPath + "/" + program.getType(i).getName() + ".java";
+			File typeFile = new File(filePath);
+		    PrintWriter writer = new PrintWriter(typeFile);
+		    writer.println(typeCode);
 		    writer.close();
 		}
 	}

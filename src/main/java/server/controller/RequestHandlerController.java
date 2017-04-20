@@ -22,8 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 import server.generator.Generator;
 import server.parser.Parser;
 import server.project.ParsedProgram;
+import server.compiler.Compiler;
 import server.utility.Compressor;
 
+/**
+ * A {@code RequestHandlerController} object is the main
+ * entry point for handling HTTP requests from a client.
+ */
 @RestController
 public class RequestHandlerController {
 
@@ -33,9 +38,9 @@ public class RequestHandlerController {
 
 	@Autowired
 	@Qualifier("javacompiler")
-	private server.compiler.Compiler compiler;	
+	private Compiler compiler;
 	
-	private String uploadFolder="/home/tomcat/Uploads/";
+	private String uploadFolder = "/home/tomcat/Uploads/";
 	
 	/**
 	 * Responds to an HTTP request for the "generate" resource.

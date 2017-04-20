@@ -4,14 +4,20 @@ import java.io.IOException;
 
 import server.project.ParsedProgram;
 
+/**
+ * A {@code Generator} object can convert a
+ * {@code ParsedProgram} object into source code.
+ */
 public interface Generator {
 
 	/**
-	 * Given a {@code ParsedProgram} object, converts the object
-	 * into source code and writes the output to one or multiple files,
-	 * depending on the language.
-	 * @param IdReq ?
-	 * @param p     a valid ParsedProgram object
+	 * Given a path and a {@code ParsedProgram} object, converts
+	 * the object into source code and writes the output to one
+	 * or multiple files in the given path, depending on
+	 * the language.
+	 * @param  path        where to generate the source file(s)
+	 * @param  program     a valid ParsedProgram object
+	 * @throws IOException a file I/O exception
 	 */
-	void generate(String FolderPath, ParsedProgram parsedProgram) throws IOException;
+	void generate(String path, ParsedProgram program) throws IOException;
 }
