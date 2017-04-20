@@ -62,7 +62,7 @@ define([
         render: function () {
             this.str = [];
             for (var p in this.model.str) {
-                this.str.push('<button id="' + this.model.str[p] + '"" class="newcompbt ">' + this.model.str[p] + '</button>');
+                this.str.push('<button id="' + this.model.str[p] + '"" class="newcompbt "><i class="' + this.model.str[p] +'icon"></i>' + this.model.str[p].substring(2) +'</button>');
             }
             this.$el.html(_.each(this.str));
         },
