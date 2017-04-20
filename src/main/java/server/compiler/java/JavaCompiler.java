@@ -14,11 +14,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * A {@code JavaCompiler} object can compile Java source
+ * files in a given directory into .class files containing
+ * JVM bytecode.
+ */
 public class JavaCompiler implements Compiler {
 
 	/**
 	 * Compiles the Java source files in the given directory
-	 * into an executable .class file containing JVM bytecode;
+	 * into .class files containing JVM bytecode;
 	 * then returns a list of compilation errors, if any.
 	 * @param  dirPath     the directory path
 	 * @return             the list of compilation errors

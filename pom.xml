@@ -26,44 +26,55 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-    	<groupId>org.springframework.boot</groupId>
-    	<artifactId>spring-boot-starter-tomcat</artifactId>
-    	<scope>provided</scope>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
-    	<groupId>org.springframework.boot</groupId>
-    	<artifactId>spring-boot-starter-web</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
     <dependency>
-    	<groupId>org.springframework.boot</groupId>
-    	<artifactId>spring-boot-starter-test</artifactId>
-    	<scope>test</scope>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
-    	<groupId>com.google.code.gson</groupId>
-    	<artifactId>gson</artifactId>
-    	</dependency>
-      <dependency>
-        	<groupId>org.antlr</groupId>
-        	<artifactId>ST4</artifactId>
-        	<version>4.0.8</version>
-        </dependency>
-      <dependency>
-      	<groupId>org.json</groupId>
-      	<artifactId>json</artifactId>
-      	</dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>ST4</artifactId>
+      <version>4.0.8</version>
+      </dependency>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+    </dependency>
   </dependencies>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.10.4</version>
+      </plugin>
+    </plugins>
+  </reporting>
+
   <build>
     <finalName>swedesigner</finalName>
   </build>
   <name>SWEDesigner</name>
   <description>SWEDesigner is a project by the Hivex team, a team of six students from the University of Padova, Italy.</description>
   <organization>
-  	<name>Hivex</name>
-  	<url>https://hivex-unipd.github.io</url>
+    <name>Hivex</name>
+    <url>https://hivex-unipd.github.io</url>
   </organization>
   <issueManagement>
-  	<url>https://github.com/hivex-unipd/swedesigner/issues</url>
-  	<system>GitHub Issues</system>
+    <url>https://github.com/hivex-unipd/swedesigner/issues</url>
+    <system>GitHub Issues</system>
   </issueManagement>
 </project>

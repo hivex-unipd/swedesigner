@@ -8,10 +8,7 @@ import server.generator.Generator;
 import server.generator.java.JavaGenerator;
 import server.project.*;
 
-import org.json.*;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Arrays;
 
@@ -19,7 +16,7 @@ public class GeneratorTest {
 
 	private Generator generator = new JavaGenerator();
 
-	// Dato un ParsedProgram valido, JavaGenerator esegue senza lanciare eccezioni.
+	// Dato il nome di una directory e un ParsedProgram valido, JavaGenerator esegue senza lanciare eccezioni.
 	@Test
 	public void generatorYieldsBasicInfo() throws IOException, ParsedException {
 		ParsedProgram program = new ParsedProgram();
@@ -38,7 +35,7 @@ public class GeneratorTest {
 		program.addType(type2);
 
 		// TODO
-//		generator.generate("1234", program);
+//		generator.generate("test", program);
 	}
 
 	// Dato un ParsedProgram vuoto, JavaGenerator esegue senza lanciare eccezioni.
