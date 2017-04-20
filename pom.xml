@@ -54,13 +54,18 @@
     </dependency>
   </dependencies>
 
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.10.4</version>
+      </plugin>
+    </plugins>
+  </reporting>
+
   <build>
     <finalName>swedesigner</finalName>
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-javadoc-plugin</artifactId>
-      <version>2.10.4</version>
-    </plugin>
   </build>
   <name>SWEDesigner</name>
   <description>SWEDesigner is a project by the Hivex team, a team of six students from the University of Padova, Italy.</description>
