@@ -78,6 +78,7 @@ define([
          */
         addCell: function (event) {
             type = event.target.id;
+            console.log(event);
             this.model.addCell(type);
         }
     });

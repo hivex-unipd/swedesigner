@@ -4,8 +4,9 @@ define([
     'backbone',
     'joint',
     'models/ProjectModel',
-    'models/celltypes/celltypes'
-], function ($, _, Backbone, joint, ProjectModel, celltypes) {
+    'models/celltypes/celltypes',
+    'svg-pan-zoom'
+], function ($, _, Backbone, joint, ProjectModel, celltypes,svgPanZoom) {
 
     /**
      * @classdesc `ProjectView` represents the drawing area.
@@ -31,6 +32,8 @@ define([
          *
          */
         visibleElements: [],
+
+        panAndZoom:{},
 
 
         deleteCell: function (e) {
@@ -179,6 +182,7 @@ define([
          * @param {number} y the vertical position of the cell (?)
          */
         pointerUpFunction: function (cellView, evt, x, y) {
+            //panAndZoom.disablePan();
             if (cellView.model.get("type").startsWith("activity")) {
                 var parentCell = null;
                 var embedded = false;
@@ -483,7 +487,69 @@ define([
                 }
             });
 
+            var gridsize = 1;
+            var currentScale = 1;
+            var targetElement= $('#paper')[0];
 
+            console.log(svgPanZoom);
+            function setGrid(paper, size, color, offset) {
+                // Set grid size on the JointJS paper object (joint.dia.Paper instance)
+                paper.options.gridSize = gridsize;
+                // Draw a grid into the HTML 5 canvas and convert it to a data URI image
+                var canvas = $('<canvas/>', { width: size, height: size });
+                canvas[0].width = size;
+                canvas[0].height = size;
+                var context = canvas[0].getContext('2d');
+                context.beginPath();
+                context.rect(1, 1, 1, 1);
+                context.fillStyle = color || '#AAAAAA';
+                context.fill();
+                // Finally, set the grid background image of the paper container element.
+                var gridBackgroundImage = canvas[0].toDataURL('image/png');
+                $(paper.el.childNodes[0]).css('background-image', 'url("' + gridBackgroundImage + '")');
+                if(typeof(offset) != 'undefined'){
+                    $(paper.el.childNodes[0]).css('background-position', offset.x + 'px ' + offset.y + 'px');
+                }
+            }
+
+              this.panAndZoom = svgPanZoom(targetElement.childNodes[0],
+                {
+                    viewportSelector: targetElement.childNodes[0].childNodes[0],
+                    minZoom: 0.5,
+                    maxZoom: 10,
+                    fit: false,
+                    center:false,
+                    zoomScaleSensitivity: 0.4,
+                    panEnabled: false,
+                    onZoom: function(scale){
+                        console.log(scale);
+                        currentScale = scale;
+                        //setGrid(this.paper, gridsize*15*currentScale, '#808080');
+                    },
+                    beforePan: function(oldpan, newpan){
+                        $('.joint-paper').css('cursor', '-webkit-grabbing');
+                        //setGrid(this.paper, gridsize*15*currentScale, '#808080', newpan);
+                    }
+                });
+            this.panAndZoom.enableControlIcons();
+
+
+            var pAndZ= this.panAndZoom;
+
+            this.paper.on('blank:pointerdown', function (evt, x, y) {
+                //console.log(this.model);
+
+                pAndZ.enablePan();
+
+
+            });
+            this.paper.on('blank:pointerup', function(cellView, event) {
+                console.log("pointeup");
+
+                pAndZ.disablePan();
+                $('.joint-paper').css('cursor', '-webkit-grab');
+
+            });
             this.paper.on('cell:pointerup', this.pointerUpFunction);
             this.paper.on('cell:pointermove', this.pointerMoveFunction);
             this.paper.on('cell:pointerdown', this.pointerDownFunction);
@@ -512,6 +578,7 @@ define([
          * @param {?} selectedCell ?
          */
         switch: function (id) {
+            this.panAndZoom.reset();
             this.model.switchToGraph(id);
             if (id != "class") {
                 this.visibleElements = this.model.getClassVisibleElements(this.paper.selectedCell);
@@ -519,6 +586,7 @@ define([
             else {
                 this.visibleElements = [];
             }
+
 
             console.log("elementi: ", this.visibleElements);
             this.paper.selectedCell = null;

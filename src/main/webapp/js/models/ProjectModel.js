@@ -43,6 +43,7 @@ define([
             _.each(this.graph.get("cells").models, function (el) {
                 el.set("z", 1);
             });
+
             this.graph.addCell(cell);
             this.trigger('addcell', cell);
 
@@ -105,7 +106,8 @@ define([
                 elems.push(
                     {
                         label: cell.getValues().attributes[attr].name + ":" + cell.getValues().attributes[attr].type,
-                        value: cell.getValues().attributes[attr].name
+                        value: cell.getValues().attributes[attr].name,
+                        icon:"attribute"
                     });
             }
             for (var met in cell.getValues().methods) {
@@ -114,7 +116,8 @@ define([
                         label: cell.getValues().methods[met].name + "(" + cell.getValues().methods[met].parameters.map(function (e) {
                             return e.name;
                         }).join(',') + ")",
-                        value: cell.getValues().methods[met].name + "("
+                        value: cell.getValues().methods[met].name + "(",
+                        icon:"method"
                     });
             }
             return elems;

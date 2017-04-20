@@ -79,6 +79,7 @@ very thin.
 /* Paper */
 .joint-paper {
     position: relative;
+    cursor: -webkit-grab;
 }
 /* Paper */
 

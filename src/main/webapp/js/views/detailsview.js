@@ -60,7 +60,7 @@ define([
         initialize: function () {
             //this.templates = require('text!views/templates.html');
             this.$el = $("#details");
-            console.log(ProjectView.paper);
+            //console.log(ProjectView.paper);
             this.listenTo(ProjectView.paper, "changed-cell", this.render);
         },
         /**
@@ -71,9 +71,9 @@ define([
          * @function
          */
         render: function () {
-            console.log("i'm detailsview and i saw your change");
+           // console.log("i'm detailsview and i saw your change");
             if (ProjectView.paper.selectedCell) {
-                console.log(templates);
+                //console.log(templates);
                 //this.currentTemplate = _.template($('#' + ProjectView.paper.selectedCell.get("type").replace(/\./g, "\\.")).html());
                 this.currentTemplate = _.template($(templates).filter('#' + ProjectView.paper.selectedCell.get("type").replace(/\./g, "\\.")).html());
                 var c = ProjectView.paper.selectedCell;
@@ -116,7 +116,12 @@ define([
                             this.value = terms.join("");
                             return false;
                         }
-                    });
+                    }).data("ui-autocomplete")._renderItem = function (ul, item) {
+                        return $('<li class="ui-menu-item-with-icon"></li>')
+                            .data("item.autocomplete", item)
+                            .append('<a><span class="' + item.icon + '-item-icon"></span>' + item.label + '</a>')
+                            .appendTo(ul);
+                    };;
                 }
             }
             else {
@@ -142,6 +147,7 @@ define([
          * @function
          */
         visib: function () {
+
             if (ProjectView.paper.selectedCell)
                 this.$el.html(ProjectView.paper.selectedCell.getMethods());
         },

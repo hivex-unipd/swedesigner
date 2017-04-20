@@ -10,7 +10,7 @@
     height:calc(100% - 0px);
     max-height: calc(100% - 0px);
     /* margin: auto; */
-    overflow: scroll;
+    overflow: hidden;
     border: #655f64;
     position: relative;
     display: inline-block;
@@ -144,6 +144,7 @@ input[type=checkbox]:checked ~ .switch{
     content: "\02C5";
 }
 .add,.switch{
+    margin-top: 0.3em;
     margin-bottom: 0.3em;
     border: none;
     background-color: #4db6ac;
@@ -207,7 +208,7 @@ input[type=checkbox]:checked ~ .switch{
 }
 .HxGeneralizationicon{
     background: url("generalization.svg");
-    background-size: 24px;
+    background-size: 24px 24px;
     width: 24px;
     height: 24px;
     display: inline-block;
@@ -216,7 +217,7 @@ input[type=checkbox]:checked ~ .switch{
 }
 .HxAssociationicon{
     background: url("association.svg");
-    background-size: 24px;
+    background-size: 24px 24px;
     width: 24px;
     height: 24px;
     display: inline-block;
@@ -225,7 +226,7 @@ input[type=checkbox]:checked ~ .switch{
 }
 .HxImplementationicon{
     background: url("implementation.svg");
-    background-size: 24px;
+    background-size: 24px 24px;
     width: 24px;
     height: 24px;
     display: inline-block;
@@ -234,10 +235,37 @@ input[type=checkbox]:checked ~ .switch{
 }
 .HxCommenticon{
     background: url("comment.svg");
-    background-size: 24px;
+    background-size: 24px 24px;
     width: 24px;
     height: 24px;
     display: inline-block;
     margin-right: 0.3em;
     vertical-align: middle;
 }
+.attributeauto-item-icon{
+    background: url("implementation.svg");
+    background-size: 24px 24px;
+}
+
+
+.ui-menu .ui-menu-item-with-icon a {
+    padding-left: 20px;
+    color: #4d4d4c;
+}
+span.attribute-item-icon,
+span.method-item-icon{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    margin-left: -16px;
+    padding-right: 0.2em;
+}
+span.method-item-icon {
+    background: url("methodicon.png") no-repeat;
+
+}
+span.attribute-item-icon {
+    background: url("attributeicon.png") no-repeat;
+
+}
+
