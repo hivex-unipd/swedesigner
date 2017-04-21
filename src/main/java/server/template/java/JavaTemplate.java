@@ -5,68 +5,63 @@ import org.stringtemplate.v4.*;
 
 import server.template.Template;
 
-
+/**
+ * A {@code JavaTemplate} is a factory object
+ * for obtaining templates for translating a
+ * specific {@code ParsedElement} object into
+ * a Java source code string.
+ */
 public class JavaTemplate implements Template {
 
 	private STGroup group = new STGroupDir("templates");
 
 	@Override
 	public ST getAttributeTemplate() {
-		ST st = group.getInstanceOf("attributejavatemplate");
-		return st;
+		return group.getInstanceOf("attributejavatemplate");
 	}
 
 	@Override
 	public ST getForTemplate() {
-		ST st = group.getInstanceOf("forjavatemplate");
-		return st;
+		return group.getInstanceOf("forjavatemplate");
 	}
 
 	@Override
 	public ST getIfTemplate() {
-		ST st = group.getInstanceOf("ifjavatemplate");
-		return st;
+		return group.getInstanceOf("ifjavatemplate");
 	}
 
 	@Override
 	public ST getReturnTemplate() {
-		ST st = group.getInstanceOf("returnjavatemplate");
-		return st;
+		return group.getInstanceOf("returnjavatemplate");
 	}
 
 	@Override
 	public ST getClassTemplate() {
-		ST st = group.getInstanceOf("classjavatemplate");
-		return st;
+		return group.getInstanceOf("classjavatemplate");
 	}
 
 	@Override
 	public ST getMethodTemplate() {
-		ST st = group.getInstanceOf("methodjavatemplate");
-		return st;
+		return group.getInstanceOf("methodjavatemplate");
 	}
 
 	@Override
 	public ST getWhileTemplate() {
-		ST st = group.getInstanceOf("whilejavatemplate");
-		return st;
+		return group.getInstanceOf("whilejavatemplate");
 	}
 
 	@Override
 	public ST getInterfaceTemplate() {
-		ST st = group.getInstanceOf("interfacejavatemplate");
-		return st;
+		return group.getInstanceOf("interfacejavatemplate");
 	}
 
 	@Override
 	public ST getElseTemplate() {
-		ST st = group.getInstanceOf("elsejavatemplate");
-		return st;
+		return group.getInstanceOf("elsejavatemplate");
 	}
 
 	@Override
 	public ST getStatementTemplate() {
-		ST st = group.getInstanceOf("statementjavatemplate");
-		return st;
+		return group.getInstanceOf("statementjavatemplate");
 	}
 }

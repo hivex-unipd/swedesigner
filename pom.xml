@@ -60,22 +60,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
-        <configuration>
-          <locales>en</locales>
-        </configuration>
-      </plugin>
     </plugins>
   </reporting>
-
-  <distributionManagement>
-    <site>
-      <id>http://52.57.102.7</id>
-      <url>http://52.57.102.7/doc/backend/</url>
-    </site>
-  </distributionManagement>
 
   <build>
     <finalName>swedesigner</finalName>

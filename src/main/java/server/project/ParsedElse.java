@@ -6,6 +6,11 @@ import org.stringtemplate.v4.ST;
 
 import server.template.Template;
 
+/**
+ * A {@code ParsedElse} object represents a set
+ * of instructions to be executed only if the
+ * condition of a {@code ParsedIf} doesn't hold.
+ */
 public class ParsedElse extends ParsedInstruction {
 	private List<ParsedInstruction> body;
 	
@@ -13,9 +18,9 @@ public class ParsedElse extends ParsedInstruction {
 	public String renderTemplate(Template template) {
 		ST STtemplate = template.getElseTemplate();
 		
-		String bodyString ="";
-		if(body!=null){
-			for(int i=0; i<body.size(); i++){
+		String bodyString = "";
+		if (body != null) {
+			for (int i = 0; i < body.size(); i++) {
 				bodyString += body.get(i).renderTemplate(template);
 			}
 		}
@@ -27,8 +32,7 @@ public class ParsedElse extends ParsedInstruction {
 		return body;
 	}
 	
-	public void setBody(List<ParsedInstruction> parsedInstructions){
+	public void setBody(List<ParsedInstruction> parsedInstructions) {
 		this.body = parsedInstructions;
 	}
-
 }

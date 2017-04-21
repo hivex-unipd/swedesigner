@@ -6,6 +6,11 @@ import org.stringtemplate.v4.ST;
 
 import server.template.Template;
 
+/**
+ * A {@code ParsedMethod} object represents an
+ * action which can be performed on the
+ * {@code ParsedType} which owns it.
+ */
 public class ParsedMethod implements ParsedElement {
 	private String visibility;
 	private boolean isStatic;
@@ -14,9 +19,8 @@ public class ParsedMethod implements ParsedElement {
 	private String name;
 	private List<ParsedAttribute> args;
 	private List<ParsedInstruction> body;
-	
-	//costruttore
-	public ParsedMethod(String visibility, boolean isStatic, boolean isAbstract, String returnType, String name, List<ParsedAttribute> args, List<ParsedInstruction> body){
+
+	public ParsedMethod(String visibility, boolean isStatic, boolean isAbstract, String returnType, String name, List<ParsedAttribute> args, List<ParsedInstruction> body) {
 		this.visibility = visibility;
 		this.isStatic = isStatic;
 		this.isAbstract = isAbstract;
@@ -25,44 +29,46 @@ public class ParsedMethod implements ParsedElement {
 		this.args = args;
 		this.body = body;
 	}
-	
+
+	@Override
 	public String renderTemplate(Template template) {
 		ST STtemplate = template.getMethodTemplate();
 		STtemplate.add("method", this); 
 		String bodyString = null;
-		if(body!=null){
+		if (body != null) {
 			bodyString = "";
-			for(int i=0; i<body.size(); i++){
+			for (int i = 0; i < body.size(); i++) {
 				bodyString += body.get(i).renderTemplate(template);
 			}
-		}	
+		}
 		STtemplate.add("body", bodyString);
 		return STtemplate.render();
 	}
-	
+
 	public String getVisibility() {
 		return visibility;
 	}
-	
+
 	public boolean getIsStatic() {
 		return isStatic;
 	}
-	
+
 	public boolean getIsAbstract() {
 		return isAbstract;
 	}
-	
+
 	public String getReturnType() {
 		return returnType;
 	}
-	
-	public String getName(){
+
+	public String getName() {
 		return name;
 	}
+
 	public List<ParsedAttribute> getArgs() {
 		return args;
 	}
-	
+
 	public List<ParsedInstruction> getBody() {
 		return body;
 	}

@@ -12,8 +12,11 @@ before_install:
   # - npm test
   - rm -rf node_modules
   - npm install jsdoc
-  - jsdoc -d ../doc -c ../doc/conf.json -R ../../../../README.md -r models/ views/ collection/
+  - jsdoc -d ../docs/frontend -c ../doc/conf.json -R ../../../../README.md -r models/ views/ collection/
   - cd ../../../..
+  - mvn site
+  - rm -rf src/main/webapp/docs/backend
+  - cp target/site src/main/webapp/docs/backend
 deploy:
   provider: elasticbeanstalk
   access_key_id: AKIAIJQDT6MLH3RIIEAQ

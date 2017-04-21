@@ -2,24 +2,21 @@ package server.template;
 
 import org.stringtemplate.v4.ST;
 
+/**
+ * A {@code Template} is a factory object
+ * for obtaining templates for translating a
+ * specific {@code ParsedElement} object into
+ * a source code string.
+ */
 public interface Template {
-	public ST getAttributeTemplate();
-
-	public ST getForTemplate();
-
-	public ST getIfTemplate();
-
-	public ST getReturnTemplate();
-
-	public ST getClassTemplate();
-
-	public ST getMethodTemplate();
-
-	public ST getWhileTemplate();
-
-	public ST getInterfaceTemplate();
-
-	public ST getElseTemplate();
-
-	public ST getStatementTemplate();
+	ST getAttributeTemplate();
+	ST getForTemplate();
+	ST getIfTemplate();
+	ST getReturnTemplate();
+	ST getClassTemplate();
+	ST getMethodTemplate();
+	ST getWhileTemplate();
+	ST getInterfaceTemplate();
+	ST getElseTemplate();
+	ST getStatementTemplate();
 }
