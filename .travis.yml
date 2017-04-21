@@ -14,9 +14,9 @@ before_install:
   - npm install jsdoc
   - jsdoc -d ../docs/frontend -c ../docs/frontend/conf.json -R ../../../../README.md -r models/ views/ collection/
   - cd ../../../..
-  - mvn site
+  - mvn javadoc:javadoc
   - rm -rf src/main/webapp/docs/backend
-  - cp target/site src/main/webapp/docs/backend
+  - cp target/site/apidocs src/main/webapp/docs/backend
 deploy:
   provider: elasticbeanstalk
   access_key_id: AKIAIJQDT6MLH3RIIEAQ
