@@ -97,6 +97,7 @@ define([
                     var extractLast = function (term) {
                         return split(term).pop();
                     };
+
                     $('input.edit').autocomplete({
                         minLength: 0,
                         source: function (request, response) {
@@ -116,12 +117,22 @@ define([
                             this.value = terms.join("");
                             return false;
                         }
-                    }).data("ui-autocomplete")._renderItem = function (ul, item) {
+                    });/*.data("ui-autocomplete")._renderItem = function (ul, item) {
                         return $('<li class="ui-menu-item-with-icon"></li>')
                             .data("item.autocomplete", item)
                             .append('<a><span class="' + item.icon + '-item-icon"></span>' + item.label + '</a>')
                             .appendTo(ul);
-                    };;
+                    };*/
+
+                    _.each($('input.edit'),function (el) {
+                        $(el).data('ui-autocomplete')._renderItem = function (ul, item)
+                        {
+                            return $('<li class="ui-menu-item-with-icon"></li>')
+                                .data("item.autocomplete", item)
+                                .append('<a><span class="' + item.icon + '-item-icon"></span>' + item.label + '</a>')
+                                .appendTo(ul);
+                        }
+                    });
                 }
             }
             else {

@@ -99,9 +99,23 @@ define([
         },
         getIndexFromId: function (id) {
             return this.options.graphs.methods.findIndex((x) => x.id == id);
+
         },
         getClassVisibleElements: function (cell) {
             var elems = [];
+            var cl=this.options.graphs.classes.classesArray;
+            for(var g in cl){
+                console.log(cl[g]);
+                if(cl[g].get("type")!="class.HxComment") {
+                    elems.push(
+                        {
+                            label: this.options.graphs.classes.classesArray[g].getValues().name,
+                            value: this.options.graphs.classes.classesArray[g].getValues().name,
+                            icon: this.options.graphs.classes.classesArray[g].get("type") == "class.HxClass" ? "class" : "interface"
+                        }
+                    );
+                }
+            }
             for (var attr in cell.getValues().attributes) {
                 elems.push(
                     {

@@ -242,10 +242,6 @@ input[type=checkbox]:checked ~ .switch{
     margin-right: 0.3em;
     vertical-align: middle;
 }
-.attributeauto-item-icon{
-    background: url("implementation.svg");
-    background-size: 24px 24px;
-}
 
 
 .ui-menu .ui-menu-item-with-icon a {
@@ -253,7 +249,9 @@ input[type=checkbox]:checked ~ .switch{
     color: #4d4d4c;
 }
 span.attribute-item-icon,
-span.method-item-icon{
+span.method-item-icon,
+span.class-item-icon,
+span.interface-item-icon{
     display: inline-block;
     height: 16px;
     width: 16px;
@@ -268,4 +266,11 @@ span.attribute-item-icon {
     background: url("attributeicon.png") no-repeat;
 
 }
+span.class-item-icon{
+    background: url("classicon.png") no-repeat;
+}
+span.interface-item-icon{
+    background: url("interfaceicon.png") no-repeat;
+}
+
 
