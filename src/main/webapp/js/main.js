@@ -7,7 +7,8 @@ require.config({
         text: 'libs/require/text',
         joint: 'libs/jointjs/joint',
         material: 'libs/mdl/material',
-        jqueryui: 'libs/jqueryui/jquery-ui'
+        jqueryui: 'libs/jqueryui/jquery-ui',
+        'svg-pan-zoom': 'libs/svgpanzoom/svg-pan-zoom'
     },
     shim: {
         'material': {

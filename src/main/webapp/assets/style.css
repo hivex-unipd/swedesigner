@@ -5,12 +5,12 @@
     border: #655f64;
 }
 #paper{
-    width: 60%;
+    width: 65%;
     margin-left: auto;
     height:calc(100% - 0px);
     max-height: calc(100% - 0px);
     /* margin: auto; */
-    overflow: scroll;
+    overflow: hidden;
     border: #655f64;
     position: relative;
     display: inline-block;
@@ -23,7 +23,7 @@
 .components{
     position: relative;
     display: inline-block;
-    width: 20%;
+    width: 15%;
     float: left;
     border: #655f64;
     height: 100%;
@@ -95,6 +95,7 @@ input[type="file"] {
     height: calc(100% - 64px);
 }
 .newcompbt{
+    width:100%;
     margin-bottom: 0.3em;
     border: none;
     background-color: #4db6ac;
@@ -143,6 +144,7 @@ input[type=checkbox]:checked ~ .switch{
     content: "\02C5";
 }
 .add,.switch{
+    margin-top: 0.3em;
     margin-bottom: 0.3em;
     border: none;
     background-color: #4db6ac;
@@ -162,3 +164,108 @@ input[type=checkbox]:checked ~ .switch{
     border: 1px solid lightgray;
     margin: 0.1em;
 }
+
+
+.HxClassicon,.HxInterfaceicon{
+    background: #4db6ac;
+    border: 2px solid #fff;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    text-indent: -9999em;
+    margin-right: 0.3em;
+    vertical-align: middle;
+}
+.HxInterfaceicon:after
+{
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    /* height: 100%; */
+    /* margin: 65% 0; */
+    margin: auto;
+    background: #fff;
+    /*background: -moz-linear-gradient(top, #888 0, #888 20%, #fff 20%, #fff 40%, #888 40%, #888 60%, #fff 60%, #fff 80%, #888 80%, #888 100%);*/
+    height: 2px;
+}
+.HxClassicon:after{
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    /* top: 50%; */
+    width: 100%;
+    /* height: 100%; */
+    /* margin: 65% 0; */
+    margin: auto;
+    background: #fff;
+    background: -webkit-linear-gradient(top, #4db6ac 0, #4db6ac 32%, #fff 31%, #fff 34%, #4db6ac 35%, #4db6ac 65%, #fff 64%, #fff 67%, #4db6ac 68%, #4db6ac 100%);
+    height: 100%;
+}
+.HxGeneralizationicon{
+    background: url("generalization.svg");
+    background-size: 24px 24px;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: 0.3em;
+    vertical-align: middle;
+}
+.HxAssociationicon{
+    background: url("association.svg");
+    background-size: 24px 24px;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: 0.3em;
+    vertical-align: middle;
+}
+.HxImplementationicon{
+    background: url("implementation.svg");
+    background-size: 24px 24px;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: 0.3em;
+    vertical-align: middle;
+}
+.HxCommenticon{
+    background: url("comment.svg");
+    background-size: 24px 24px;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: 0.3em;
+    vertical-align: middle;
+}
+.attributeauto-item-icon{
+    background: url("implementation.svg");
+    background-size: 24px 24px;
+}
+
+
+.ui-menu .ui-menu-item-with-icon a {
+    padding-left: 20px;
+    color: #4d4d4c;
+}
+span.attribute-item-icon,
+span.method-item-icon{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    margin-left: -16px;
+    padding-right: 0.2em;
+}
+span.method-item-icon {
+    background: url("methodicon.png") no-repeat;
+
+}
+span.attribute-item-icon {
+    background: url("attributeicon.png") no-repeat;
+
+}
+
