@@ -16,7 +16,7 @@ before_install:
   - cd ../../../..
   - mvn javadoc:javadoc
   - rm -rf src/main/webapp/docs/backend
-  - cp target/site/apidocs src/main/webapp/docs/backend
+  - cp -r target/site/apidocs src/main/webapp/docs/backend
 deploy:
   provider: elasticbeanstalk
   access_key_id: AKIAIJQDT6MLH3RIIEAQ
