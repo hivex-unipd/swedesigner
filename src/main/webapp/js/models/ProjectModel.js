@@ -18,6 +18,7 @@ define([
         options: {
             currentindex: "class",
             currentgraph: {},
+            cellToBeAdded:{},
             graphs: {
                 classes: {
                     classesArray: [],
@@ -37,16 +38,22 @@ define([
                 }
             }
             this.graph.removeCells([cell]);
+
             this.trigger('addcell');
         },
         addCell: function (cell) {
+            this.options.cellToBeAdded=cell;
+
+
+        },
+        addCellToGraph: function(){
             _.each(this.graph.get("cells").models, function (el) {
                 el.set("z", 1);
             });
 
-            this.graph.addCell(cell);
-            this.trigger('addcell', cell);
-
+            this.graph.addCell(this.options.cellToBeAdded);
+            this.trigger('addcell', this.options.cellToBeAdded);
+            this.options.cellToBeAdded=null;
         },
 
         switchToGraph: function (id) {

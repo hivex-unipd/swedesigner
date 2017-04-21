@@ -77,7 +77,7 @@ define([
          * @param {event} event the action event
          */
         addCell: function (event) {
-            type = event.target.id;
+            type = event.currentTarget.id;
             console.log(event);
             this.model.addCell(type);
         }

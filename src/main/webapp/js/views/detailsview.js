@@ -71,7 +71,7 @@ define([
          * @function
          */
         render: function () {
-           // console.log("i'm detailsview and i saw your change");
+            //console.log("i'm detailsview and i saw your change");
             if (ProjectView.paper.selectedCell) {
                 //console.log(templates);
                 //this.currentTemplate = _.template($('#' + ProjectView.paper.selectedCell.get("type").replace(/\./g, "\\.")).html());
