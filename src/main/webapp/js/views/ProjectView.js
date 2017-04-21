@@ -40,6 +40,9 @@ define([
             if (e.which == 46) {//ha premuto tasto canc
                 if (this.paper.selectedCell) {
                     this.model.deleteCell(this.paper.selectedCell);
+
+                    this.paper.selectedCell=null;
+                    this.paper.trigger("changed-cell");
                 }
             }
         },
@@ -112,6 +115,20 @@ define([
          * @param {number} y the vertical position of the cell (?)
          */
         pointerDownFunction: function (cellView, evt, x, y) {
+
+            if(ProjectModel.options.cellToBeAdded && ProjectModel.options.cellToBeAdded.isLink()){
+                console.log(ProjectModel.options.cellToBeAdded.get("source").id);
+                if(ProjectModel.options.cellToBeAdded.get("source").id!=undefined){
+                    console.log("set target");
+                    ProjectModel.options.cellToBeAdded.set("target",{id:cellView.model.id});
+                    ProjectModel.addCellToGraph();
+                }
+                else{
+                    console.log("set source");
+                    ProjectModel.options.cellToBeAdded.set("source",{id:cellView.model.id});
+                }
+            }
+
 
             if (cellView) {
                 if (this.selectedCell != cellView.model) {
@@ -537,7 +554,12 @@ define([
             var pAndZ= this.panAndZoom;
 
             this.paper.on('blank:pointerdown', function (evt, x, y) {
-                //console.log(this.model);
+                console.log(ProjectModel.options.cellToBeAdded);
+                if(ProjectModel.options.cellToBeAdded && ProjectModel.options.cellToBeAdded.isElement()){
+                    console.log("blank add");
+                    ProjectModel.options.cellToBeAdded.position(x,y);
+                    ProjectModel.addCellToGraph();
+                }
 
                 pAndZ.enablePan();
 

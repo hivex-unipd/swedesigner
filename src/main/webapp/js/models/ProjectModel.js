@@ -18,6 +18,7 @@ define([
         options: {
             currentindex: "class",
             currentgraph: {},
+            cellToBeAdded:{},
             graphs: {
                 classes: {
                     classesArray: [],
@@ -37,16 +38,22 @@ define([
                 }
             }
             this.graph.removeCells([cell]);
+
             this.trigger('addcell');
         },
         addCell: function (cell) {
+            this.options.cellToBeAdded=cell;
+
+
+        },
+        addCellToGraph: function(){
             _.each(this.graph.get("cells").models, function (el) {
                 el.set("z", 1);
             });
 
-            this.graph.addCell(cell);
-            this.trigger('addcell', cell);
-
+            this.graph.addCell(this.options.cellToBeAdded);
+            this.trigger('addcell', this.options.cellToBeAdded);
+            this.options.cellToBeAdded=null;
         },
 
         switchToGraph: function (id) {
@@ -99,9 +106,23 @@ define([
         },
         getIndexFromId: function (id) {
             return this.options.graphs.methods.findIndex((x) => x.id == id);
+
         },
         getClassVisibleElements: function (cell) {
             var elems = [];
+            var cl=this.options.graphs.classes.classesArray;
+            for(var g in cl){
+                console.log(cl[g]);
+                if(cl[g].get("type")!="class.HxComment") {
+                    elems.push(
+                        {
+                            label: this.options.graphs.classes.classesArray[g].getValues().name,
+                            value: this.options.graphs.classes.classesArray[g].getValues().name,
+                            icon: this.options.graphs.classes.classesArray[g].get("type") == "class.HxClass" ? "class" : "interface"
+                        }
+                    );
+                }
+            }
             for (var attr in cell.getValues().attributes) {
                 elems.push(
                     {
