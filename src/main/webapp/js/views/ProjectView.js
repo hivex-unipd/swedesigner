@@ -485,7 +485,7 @@ define([
 
                 linkView: joint.dia.LinkView.extend({
                     pointerdblclick: function (evt, x, y) {
-                        if (V(evt.target).hasClass('connection') || V(evt.target).hasClass('connection-wrap')) {
+                        if (joint.V(evt.target).hasClass('connection') || joint.V(evt.target).hasClass('connection-wrap')) {
                             this.addVertex({x: x, y: y});
                         }
                     },
