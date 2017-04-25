@@ -5,7 +5,6 @@ import static org.hamcrest.CoreMatchers.*;
 import org.junit.Test;
 
 import server.utility.Compressor;
-import server.compiler.java.JavaCompiler;
 
 import org.json.*;
 import java.io.IOException;
@@ -13,11 +12,10 @@ import org.springframework.core.io.Resource;
 
 public class CompressorTest {
 
-	// Un Compressor è in grado di eseguire ZIP su un file nel filesystem
+	// Un Compressor è in grado di eseguire ZIP su un file del filesystem.
 	@Test
 	public void compressorCanZip() throws IOException {
 		Compressor comp = new Compressor();
-		// TODO:
-//		comp.zip("src/main/resources/ContentFile/1234");
+		comp.zip("src/main/resources/sort");
 	}
 }

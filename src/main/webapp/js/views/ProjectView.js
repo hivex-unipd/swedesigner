@@ -53,6 +53,12 @@ define([
          * @function
          */
         renderActivity: function () {
+
+            // piccolo bugfix orribile
+            _.each(this.model.graph.get("cells").models, function (el) {
+                el.set("z", 1);
+            });
+
             // CODICE OK
             var debug = function () {
                 var x = "";
@@ -116,6 +122,9 @@ define([
          * @param {number} y the vertical position of the cell (?)
          */
         pointerDownFunction: function (cellView, evt, x, y) {
+
+
+
 
             if(ProjectModel.options.cellToBeAdded && ProjectModel.options.cellToBeAdded.isLink()){
                 console.log(ProjectModel.options.cellToBeAdded.get("source").id);
@@ -429,7 +438,9 @@ define([
                     for (i = 0; i < v.length; i++) {
                         this.findViewByModel(v[i]).unhighlight();
                     }
-                    if (index != -1) {
+                    
+
+                    if (index != -1 && cellViewsBelow[index].model.get("canHaveChildren")) {
                         cellViewBelow = cellViewsBelow[index];
                         cellViewBelow.highlight();
                         this.isHighlighted = true;

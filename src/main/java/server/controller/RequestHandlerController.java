@@ -39,6 +39,8 @@ public class RequestHandlerController {
 	@Autowired
 	@Qualifier("javacompiler")
 	private Compiler compiler;
+
+	private Parser parser = new Parser();
 	
 	private String uploadFolder = "/home/tomcat/Uploads/";
 	
@@ -50,7 +52,7 @@ public class RequestHandlerController {
 	 * @return            the HTTP response
 	 */
 	@RequestMapping(value = "/generate", consumes = "application/json", produces = "application/zip")
-	public ResponseEntity<?> HandleGeneratorRequest(HttpEntity<String> httpEntity) {
+	public ResponseEntity<?> handleGeneratorRequest(HttpEntity<String> httpEntity) {
 		String idReq = UUID.randomUUID().toString();
 		String json = httpEntity.getBody();
 		// List for recording the errors:
@@ -58,7 +60,6 @@ public class RequestHandlerController {
 		String folderPath = uploadFolder + idReq;
 		createDirectory(folderPath);
 
-		Parser parser = new Parser();
 		ParsedProgram parsedProgram = null;
 
 		try {

@@ -45,21 +45,21 @@ public class JavaCompiler implements Compiler {
 			);
 
 			List<String> filePathsList = new ArrayList<String>();
-		for(File file : files){
-			  if(file.isFile()){
-				  filePathsList.add(file.getAbsolutePath());
-			    /*try{
-			    	errors.addAll(compileFile(file.getAbsolutePath()));}
-			    catch(IOException e){errors.add("Error when compiling file "+file.getName());}*/
-				  
-			  }
-		}
-		try{
-			errors.addAll(compileFile(filePathsList));
-		}
-		catch(IOException e){
-			errors.add(e.getMessage());
-		}
+			for (File file : files) {
+				if(file.isFile()) {
+					filePathsList.add(file.getAbsolutePath());
+					/*try {
+						errors.addAll(compileFile(file.getAbsolutePath()));}
+				    catch(IOException e){errors.add("Error when compiling file "+file.getName());}*/
+				}
+			}
+			try {
+				errors.addAll(compileFile(filePathsList));
+			} catch (IOException e) {
+				errors.add(e.getMessage());
+			}
+		} else {
+			errors.add(folder.getName() + " is not a valid directory");
 		}
 
 		return errors;

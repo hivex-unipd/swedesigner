@@ -1,30 +1,15 @@
 package server.parser;
 
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.HashMap;
 
 import org.json.*;
 
-import server.project.ParsedAttribute;
-import server.project.ParsedClass;
-import server.project.ParsedCustom;
-import server.project.ParsedElse;
-import server.project.ParsedException;
-import server.project.ParsedFor;
-import server.project.ParsedIf;
-import server.project.ParsedInstruction;
-import server.project.ParsedInterface;
-import server.project.ParsedMethod;
-import server.project.ParsedProgram;
-import server.project.ParsedReturn;
-import server.project.ParsedStatement;
-import server.project.ParsedType;
-import server.project.ParsedWhile;
+import server.project.*;
 
 /**
  * The {@code Parser} class parses JSON strings and builds
@@ -33,7 +18,7 @@ import server.project.ParsedWhile;
  */
 public class Parser {
 	private List<String> errors = new ArrayList<String>();
-	
+
 	public List<String> getErrors(){
 		return errors;
 	}
@@ -59,12 +44,12 @@ public class Parser {
 		JSONArray relsArray = (JSONGroup.has("relationshipsArray")?JSONGroup.getJSONArray("relationshipsArray"):new JSONArray());
 		//Methods' array
 		JSONArray methArray = (program.has("methods")?program.getJSONArray("methods"):new JSONArray());
-		
+
 		//HashMap containing as (key , value) the id and the body of the different methods.
 		HashMap<String, List<ParsedInstruction>> methBodies = methBodies(methArray);
 		//HashMap containing as (key , value) the id and a ParsedType representing one of the classes/interfaces of the program.
 		HashMap<String, ParsedType> allTypes = typeBuilder(classArray, methBodies);
-		
+
 		relBuilder(relsArray, allTypes);
 
 		Iterator<Entry<String, ParsedType>> iterator = allTypes.entrySet().iterator();
@@ -72,7 +57,7 @@ public class Parser {
 			Map.Entry<String, ParsedType> entry = (Map.Entry<String, ParsedType>)iterator.next();
 			parsedProgram.addType(entry.getValue());
 		}
-		
+
 		return parsedProgram;
 	}
 
@@ -230,7 +215,7 @@ public class Parser {
 		//extracting the parameters of the current method
 		JSONArray methodParams = (method.has("parameters")?method.getJSONArray("parameters"):new JSONArray());
 		List<ParsedAttribute> methodArgs = new ArrayList<ParsedAttribute>();
-		
+
 		//creating and adding the parameters to the methodArgs list
 		for (int p=0; p<methodParams.length(); p++) {
 			JSONObject methodParam = methodParams.getJSONObject(p);
@@ -244,14 +229,14 @@ public class Parser {
 			else
 				errors.add("JSON format error: missing name of parameter "+(p+1)+" of method");
 		}
-		
+
 		//extracting the return type of the current method
 		String returnType = "";
 		if (method.has("returnType"))
 			returnType = method.getString("returnType");
 		else
 			errors.add("Retun type not found in method");
-		
+
 		//extracting the name of the current method
 		String nameMeth = "";
 		if (method.has("name"))
@@ -285,8 +270,8 @@ public class Parser {
 	private void relBuilder(JSONArray JSONRels, HashMap<String, ParsedType> allTypes)throws JSONException { //***quinta funzione***
 		//counter used to generate a default name for reference relationships without name
 		int attNoName = 0; 
-		
-		
+
+
 		for (int i = 0; i<JSONRels.length();i++) {
 			JSONObject JSONRel = JSONRels.getJSONObject(i);
 
@@ -366,7 +351,7 @@ public class Parser {
 		}
 	}
 
-	
+
 	private ParsedInstruction recursiveBuilder(JSONObject instruction, JSONArray jsonBlock, int position) throws JSONException {
 		
 		ParsedInstruction currentInstruction = null;
@@ -434,7 +419,7 @@ public class Parser {
 		return currentInstruction;
 	}
 	
-	private ParsedInstruction createActivity(JSONObject values, String type) throws JSONException{
+	private ParsedInstruction createActivity(JSONObject values, String type) throws JSONException {
 		ParsedInstruction parsedInstruction = null;
 		switch(type) {
 		//this switch creates a different kind of instruction based the type specified in the json file
@@ -495,6 +480,4 @@ public class Parser {
 	}
 		return parsedInstruction;
 	}
-	
-	
 }
