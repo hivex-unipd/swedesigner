@@ -5,7 +5,8 @@ define([
     'joint',
     'models/ProjectModel',
     'models/celltypes/celltypes',
-    'svg-pan-zoom'
+    'svg-pan-zoom',
+    'jstree'
 ], function ($, _, Backbone, joint, ProjectModel, celltypes,svgPanZoom) {
 
     /**
@@ -609,6 +610,25 @@ define([
                 this.visibleElements = [];
             }
 
+            $('#classtree').jstree({'core':{
+                'data':[
+                    {
+                        'text':"classe1",
+                        'state':{
+                          'opened':true
+                        },
+                        'children':[
+                            {
+                                'text':"metodo1(param1,param2):int"
+                            },
+                            {
+                                'text':"attr1:int"
+                            }
+                        ]
+                    }
+                ]
+
+            }});
 
             console.log("elementi: ", this.visibleElements);
             this.paper.selectedCell = null;
