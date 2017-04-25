@@ -52,6 +52,11 @@ define([
          * @function
          */
         renderActivity: function () {
+
+            _.each(this.model.graph.get("cells").models, function (el) {
+                el.set("z", 1);
+            });
+
             // CODICE OK
             var debug = function () {
                 var x = "";
@@ -115,6 +120,9 @@ define([
          * @param {number} y the vertical position of the cell (?)
          */
         pointerDownFunction: function (cellView, evt, x, y) {
+
+
+
 
             if(ProjectModel.options.cellToBeAdded && ProjectModel.options.cellToBeAdded.isLink()){
                 console.log(ProjectModel.options.cellToBeAdded.get("source").id);
