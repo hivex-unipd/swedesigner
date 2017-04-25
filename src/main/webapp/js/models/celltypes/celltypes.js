@@ -761,6 +761,7 @@ define([
 
             expanded: true,
             hidden: false,
+            canHaveChildren: true,
             offsetY: 0,
 
             values: {
@@ -911,7 +912,8 @@ define([
                 xType: 'Custom',
                 code: ""
 
-            }
+            },
+            canHaveChildren: false,
 
 
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
@@ -1072,7 +1074,8 @@ define([
                 operation: "",
                 value: ""
 
-            }
+            },
+            canHaveChildren: false,
 
 
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
@@ -1113,7 +1116,8 @@ define([
                 value: ""
 
             }
-
+            ,
+            canHaveChildren: false,
 
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
         initialize: function () {

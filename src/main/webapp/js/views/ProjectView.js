@@ -219,7 +219,7 @@ define([
                         });
                         cellViewBelow = cellViewsBelow[index];
                         // Prevent recursive embedding.
-                        if (cellViewBelow && cellViewBelow.model.get('parent') !== cell.id) {
+                        if (cellViewBelow && cellViewBelow.model.get('parent') !== cell.id && cellViewBelow.model.get("canHaveChildren")) {
 
                             cellViewBelow.model.embed(cell);
                             embedded = true;
