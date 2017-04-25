@@ -337,7 +337,7 @@ public class Parser {
 						if (JSONRel.has("attribute"))
 							attributeName = JSONRel.getString("attrbute");
 						else
-							attributeName = targetTypeName+sourceParsedType+"reference"+(attNoName++);
+							attributeName = "reference"+(attNoName++);
 
 						String value = (molteplicity>1 ? "new "+targetTypeName+"["+molteplicity+"]" : null);
 						

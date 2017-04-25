@@ -18,7 +18,7 @@ define([
         options: {
             currentindex: "class",
             currentgraph: {},
-            cellToBeAdded:{},
+            cellToBeAdded:null,
             graphs: {
                 classes: {
                     classesArray: [],

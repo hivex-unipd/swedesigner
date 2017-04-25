@@ -5,7 +5,8 @@ define([
     'joint',
     'models/ProjectModel',
     'models/celltypes/celltypes',
-    'svg-pan-zoom'
+    'svg-pan-zoom',
+    'jstree'
 ], function ($, _, Backbone, joint, ProjectModel, celltypes,svgPanZoom) {
 
     /**
@@ -52,6 +53,11 @@ define([
          * @function
          */
         renderActivity: function () {
+
+            _.each(this.model.graph.get("cells").models, function (el) {
+                el.set("z", 1);
+            });
+
             // CODICE OK
             var debug = function () {
                 var x = "";
@@ -115,6 +121,9 @@ define([
          * @param {number} y the vertical position of the cell (?)
          */
         pointerDownFunction: function (cellView, evt, x, y) {
+
+
+
 
             if(ProjectModel.options.cellToBeAdded && ProjectModel.options.cellToBeAdded.isLink()){
                 console.log(ProjectModel.options.cellToBeAdded.get("source").id);
@@ -218,7 +227,7 @@ define([
                         });
                         cellViewBelow = cellViewsBelow[index];
                         // Prevent recursive embedding.
-                        if (cellViewBelow && cellViewBelow.model.get('parent') !== cell.id) {
+                        if (cellViewBelow && cellViewBelow.model.get('parent') !== cell.id && cellViewBelow.model.get("canHaveChildren")) {
 
                             cellViewBelow.model.embed(cell);
                             embedded = true;
@@ -484,7 +493,7 @@ define([
 
                 linkView: joint.dia.LinkView.extend({
                     pointerdblclick: function (evt, x, y) {
-                        if (V(evt.target).hasClass('connection') || V(evt.target).hasClass('connection-wrap')) {
+                        if (joint.V(evt.target).hasClass('connection') || joint.V(evt.target).hasClass('connection-wrap')) {
                             this.addVertex({x: x, y: y});
                         }
                     },
@@ -536,8 +545,10 @@ define([
                     maxZoom: 10,
                     fit: false,
                     center:false,
+                    dblClickZoomEnabled:false,
                     zoomScaleSensitivity: 0.4,
-                    panEnabled: false,
+                    controlIconsEnabled:true,
+                    panEnabled: true,
                     onZoom: function(scale){
                         console.log(scale);
                         currentScale = scale;
@@ -548,7 +559,9 @@ define([
                         //setGrid(this.paper, gridsize*15*currentScale, '#808080', newpan);
                     }
                 });
-            this.panAndZoom.enableControlIcons();
+            //spostiamo a mano
+            $('#svg-pan-zoom-controls').attr("transform",'translate(' + ( $('#paper').width() - 70 ) + ' ' + ( $('#paper').height() - 76 ) + ') scale(0.75)');
+            //this.panAndZoom.enableControlIcons();
 
 
             var pAndZ= this.panAndZoom;
@@ -565,8 +578,8 @@ define([
 
 
             });
-            this.paper.on('blank:pointerup', function(cellView, event) {
-                console.log("pointeup");
+            this.paper.on('blank:pointerup', function(event,x,y) {
+                console.log("pointeup",x,y);
 
                 pAndZ.disablePan();
                 $('.joint-paper').css('cursor', '-webkit-grab');
@@ -609,6 +622,25 @@ define([
                 this.visibleElements = [];
             }
 
+            $('#classtree').jstree({'core':{
+                'data':[
+                    {
+                        'text':"classe1",
+                        'state':{
+                          'opened':true
+                        },
+                        'children':[
+                            {
+                                'text':"metodo1(param1,param2):int"
+                            },
+                            {
+                                'text':"attr1:int"
+                            }
+                        ]
+                    }
+                ]
+
+            }});
 
             console.log("elementi: ", this.visibleElements);
             this.paper.selectedCell = null;

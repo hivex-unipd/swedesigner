@@ -44,28 +44,32 @@ public class JavaCompiler implements Compiler {
 				}
 			);
 
-			for (File file : files) {
-				if (file.isFile()) {
-					try {
-						errors.addAll(compileFile(file.getAbsolutePath()));
-					} catch (IOException e) {
-						errors.add("Error when compiling file " + file.getName());
-					}
-				}
-			}
-		} else {
-			errors.add(folder.getName() + " is not a valid directory");
+			List<String> filePathsList = new ArrayList<String>();
+		for(File file : files){
+			  if(file.isFile()){
+				  filePathsList.add(file.getAbsolutePath());
+			    /*try{
+			    	errors.addAll(compileFile(file.getAbsolutePath()));}
+			    catch(IOException e){errors.add("Error when compiling file "+file.getName());}*/
+				  
+			  }
+		}
+		try{
+			errors.addAll(compileFile(filePathsList));
+		}
+		catch(IOException e){
+			errors.add(e.getMessage());
+		}
 		}
 
 		return errors;
 	}
-
-	private List<String> compileFile(String fileName) throws IOException {
+	private List<String> compileFile(List<String> fileName) throws IOException {
 		List<String> errors = new ArrayList<String>(); 
 		javax.tools.JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		DiagnosticCollector<JavaFileObject> diagnosticsCollector = new DiagnosticCollector<JavaFileObject>();
 		StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnosticsCollector, null, null);
-		Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromStrings(Arrays.asList(fileName));
+		Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromStrings(fileName);
 		javax.tools.JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnosticsCollector, null, null, compilationUnits);
 		boolean success = task.call();
 		if (!success) {

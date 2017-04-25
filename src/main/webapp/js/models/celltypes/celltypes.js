@@ -132,7 +132,7 @@ define([
          * The events on the view, each one linked to its callback.
          * @name ClassDiagramElementView#events
          * @type {Object}
-         */
+         *///
         events: {
             'mousedown .togglemethods': 'toggleMethods',
             'mousedown .toggleattributes': 'toggleAttributes'
@@ -143,10 +143,11 @@ define([
          * @name ClassDiagramElementView#toggleattributes
          * @function
          */
+        // tolta perché buggata
         toggleAttributes: function () { //non so se sia giusto tenerli qua...boh vedremo
-            this.model.set("attributesExpanded", !this.model.get("attributesExpanded"));
-            this.model.updateRectangles();
-            this.update(); // ecco cosa dovevi fare, le cose funzionavano già
+            // this.model.set("attributesExpanded", !this.model.get("attributesExpanded"));
+            // this.model.updateRectangles();
+            // this.update(); // ecco cosa dovevi fare, le cose funzionavano già
         },
 
         /**
@@ -154,10 +155,11 @@ define([
          * @name ClassDiagramElementView#togglemethods
          * @function
          */
+        // tolta perché buggata
         toggleMethods: function () {
-            this.model.set("methodsExpanded", !this.model.get("methodsExpanded"));
-            this.model.updateRectangles();
-            this.update(); // ecco cosa dovevi fare, le cose funzionavano già
+            // this.model.set("methodsExpanded", !this.model.get("methodsExpanded"));
+            // this.model.updateRectangles();
+            // this.update(); // ecco cosa dovevi fare, le cose funzionavano già
         }
     });
 
@@ -215,21 +217,21 @@ define([
                 rect: {'width': 200},
 
                 '.uml-class-name-rect': {
-                    'stroke': 'black',
-                    'stroke-width': 0,
-                    'fill': '#4db6ac'
+                    'stroke': '#d6b656',
+                    'stroke-width': 1,
+                    'fill': '#fff2cc'
                 },
                 '.uml-class-attrs-rect': {
-                    'stroke': 'black',
-                    'stroke-width': 0,
-                    'fill': '#ffffff',
-                    'expanded': 'false'
+                    'stroke': '#d6b656',
+                    'stroke-width': 1,
+                    'fill': '#fff2cc',
+                    'expanded': 'true'
                 },
                 '.uml-class-methods-rect': {
-                    'stroke': 'black',
-                    'stroke-width': 0,
-                    'fill': '#eeeeee',
-                    'expanded': 'false'
+                    'stroke': '#d6b656',
+                    'stroke-width': 1,
+                    'fill': '#fff2cc',
+                    'expanded': 'true'
                 },
                 '.uml-class-divider-rect': {
                     'stroke': 'black',
@@ -243,7 +245,7 @@ define([
                     'ref-x': .5,
                     'text-anchor': 'middle',
                     'y-alignment': 'middle',
-                    'fill': 'white',
+                    'fill': '#222222',
                     'font-size': 16,
                     'font-family': 'Roboto'
                 },
@@ -265,9 +267,9 @@ define([
                 }
             },
 
-            attributesExpanded: false,
+            attributesExpanded: true,
 
-            methodsExpanded: false,
+            methodsExpanded: true,
 
             values: {
                 name: "ClassName",
@@ -304,8 +306,19 @@ define([
             attrs['.uml-class-name-text'].text = rects[0].text;
             attrs['.uml-class-name-rect'].height = rectHeight;
             attrs['.uml-class-name-rect'].transform = 'translate(0,' + offsetY + ')';
-            offsetY += rectHeight + 1;
-            rectHeight = _.isArray(rects[1].text) ? rects[1].text.length * 15 + 1 : 1 * 15 + 1;
+            offsetY += rectHeight;
+            //rectHeight = _.isArray(rects[1].text) ? rects[1].text.length * 15 + 1 : 1 * 15 + 1;
+            if( _.isArray(rects[1].text)){
+                if(rects[1].text.length>0){
+                    rectHeight = rects[1].text.length * 15 + 1;
+                }
+                else{
+                    rectHeight = 1 * 15 + 1;
+                }
+            }
+            else{
+                rectHeight = 1 * 15 + 1;
+            }
             attrs['.uml-class-attrs-text'].text = _.isArray(rects[1].text) ? rects[1].text.map(function (e) {
                     var vis = "";
                     switch (e.visibility) {
@@ -318,17 +331,27 @@ define([
                         case "protected":
                             vis = "~";
                             break;
-                        case "package":
+                        /*case "package":
                             vis = "#";
-                            break;
+                            break;*/
                     }
                     return vis + " " + e.name + ":" + e.type;
                 }).join('\n') : rects[1].text;
             attrs['.uml-class-attrs-rect'].height = rectHeight;
             attrs['.uml-class-attrs-rect'].transform = 'translate(0,' + offsetY + ')';
-            offsetY += rectHeight + 1;
-            rectHeight = _.isArray(rects[2].text) ? rects[2].text.length * 15 + 1 : 1 * 15 + 1;
-
+            offsetY += rectHeight;
+            //rectHeight = _.isArray(rects[2].text) ? rects[2].text.length * 15 + 1 : 1 * 15 + 1;
+            if( _.isArray(rects[2].text)){
+                if(rects[2].text.length>0){
+                    rectHeight = rects[2].text.length * 15 + 1;
+                }
+                else{
+                    rectHeight = 1 * 15 + 1;
+                }
+            }
+            else{
+                rectHeight = 1 * 15 + 1;
+            }
             attrs['.uml-class-methods-text'].text = _.isArray(rects[2].text) ? rects[2].text.map(function (e) {
                     var vis = "";
                     switch (e.visibility) {
@@ -364,7 +387,7 @@ define([
         addMethod: function () {
             this.getValues().methods.push({
                 name: "",
-                visibility: "",
+                visibility: "private",
                 id: joint.util.uuid(),
                 returnType: "",
                 static: "false",
@@ -383,7 +406,7 @@ define([
                 name: "",
                 type: "",
                 defaultValue: "",
-                visibility: "",
+                visibility: "private",
                 static: "false"
             });
         },
@@ -431,13 +454,13 @@ define([
             attrs: {
                 rect: {'width': 200},
 
-                '.uml-class-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
+                '.uml-class-name-rect': {'stroke': '#d6b656', 'stroke-width': 1, 'fill': '#fff2cc'},
 
                 '.uml-class-methods-rect': {
-                    'stroke': 'black',
-                    'stroke-width': 0,
-                    'fill': '#eeeeee',
-                    'expanded': 'false'
+                    'stroke': '#d6b656',
+                    'stroke-width': 1,
+                    'fill': '#fff2cc',
+                    'expanded': 'true'
                 },
                 '.uml-class-name-text': {
                     'ref': '.uml-class-name-rect',
@@ -445,7 +468,7 @@ define([
                     'ref-x': .5,
                     'text-anchor': 'middle',
                     'y-alignment': 'middle',
-                    'fill': 'white',
+                    'fill': '#222222',
                     'font-size': 16,
                     'font-family': 'Roboto'
                 },
@@ -456,7 +479,7 @@ define([
 
             },
 
-            methodsExpanded: false,
+            methodsExpanded: true,
 
 
             values: {
@@ -483,9 +506,19 @@ define([
             attrs['.uml-class-name-text'].text = ['<<Interface>>', rects[0].text].join('\n');
             attrs['.uml-class-name-rect'].height = rectHeight;
             attrs['.uml-class-name-rect'].transform = 'translate(0,' + offsetY + ')';
-            offsetY += rectHeight + 1;
-            rectHeight = _.isArray(rects[1].text) ? rects[1].text.length * 15 + 1 : 1 * 15 + 1;
-
+            offsetY += rectHeight;
+            //rectHeight = _.isArray(rects[1].text) ? rects[1].text.length * 15 + 1 : 1 * 15 + 1;
+            if( _.isArray(rects[1].text)){
+                if(rects[1].text.length>0){
+                    rectHeight = rects[1].text.length * 15 + 1;
+                }
+                else{
+                    rectHeight = 1 * 15 + 1;
+                }
+            }
+            else{
+                rectHeight = 1 * 15 + 1;
+            }
             attrs['.uml-class-methods-text'].text = _.isArray(rects[1].text) ? rects[1].text.map(function (e) {
                     var vis = "";
                     switch (e.visibility) {
@@ -498,9 +531,9 @@ define([
                         case "protected":
                             vis = "~";
                             break;
-                        case "package":
+                        /*case "package":
                             vis = "#";
-                            break;
+                            break;*/
                     }
                     var params = e.parameters.map(function (f) {
                         return f.name;
@@ -515,7 +548,7 @@ define([
         addMethod: function () {
             this.getValues().methods.push({
                 name: "",
-                visibility: "",
+                visibility: "private",
                 id: joint.util.uuid(),
                 static: "false",
                 abstract: "false",
@@ -728,6 +761,7 @@ define([
 
             expanded: true,
             hidden: false,
+            canHaveChildren: true,
             offsetY: 0,
 
             values: {
@@ -878,7 +912,8 @@ define([
                 xType: 'Custom',
                 code: ""
 
-            }
+            },
+            canHaveChildren: false,
 
 
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
@@ -1039,7 +1074,8 @@ define([
                 operation: "",
                 value: ""
 
-            }
+            },
+            canHaveChildren: false,
 
 
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
@@ -1080,7 +1116,8 @@ define([
                 value: ""
 
             }
-
+            ,
+            canHaveChildren: false,
 
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
         initialize: function () {
