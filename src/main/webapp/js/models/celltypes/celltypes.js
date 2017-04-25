@@ -729,6 +729,8 @@ define([
             '<text class="activity-element-type-text"/>',
             '<text class="activity-element-name-text"/>',
             '<rect class="activity-element-body-rect"/>',
+            '<text class="activity-element-body-text"/>',
+
 
             '<rect class="activity-toggle"/>',
             '<rect class="activity-element-type-rect"/>',
@@ -761,6 +763,19 @@ define([
                     'font-size': 11,
                     'font-family': 'Roboto',
                     'transform': 'translate(4,4)'
+
+                },
+                '.activity-element-body-text': {
+                    'ref': '.activity-element-body-rect',
+                    'ref-y': 5,
+                    'ref-x': 10,
+                    'text-anchor': 'start',
+                    'y-alignment': 'text-before-edge',
+                    'fill': '#000000',
+                    'font-size': 12,
+                    'font-family': 'monospace',
+                    'width': 200
+
 
                 },
                 '.activity-element-name-text': {
@@ -821,6 +836,10 @@ define([
         getHeight: function () {
             return 35;
         },
+
+        getDescription : function () {
+            return this.getValues().xType;
+        },
         updateRectangles: function () {
             var attrs = this.get('attrs');
 
@@ -844,6 +863,18 @@ define([
                 attrs['.activity-toggle'].height = 35;
                 attrs['.activity-toggle'].width = 20;
                 attrs['.activity-element-name-text'].text = text;
+                function chunk(str, n) {
+                    var ret = [];
+                    var i;
+                    var len;
+
+                    for(i = 0, len = str.length; i < len; i += n) {
+                        ret.push(str.substr(i, n))
+                    }
+
+                    return ret;
+                };
+                attrs['.activity-element-body-text'].text =  chunk(this.getDescription().slice(0,100),25).join('\n');
                 attrs['.activity-element-type-text'].text = this.getValues().xType;
                 attrs['.activity-element-type-text'].transform = 'translate(-180,0)';
                 attrs['.activity-element-name-rect'].height = this.getHeight();
@@ -938,7 +969,10 @@ define([
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
-        }
+        },
+        getDescription : function () {
+            return this.getValues().code;
+        },
     });
     celltypes.activity.HxElse = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
@@ -960,7 +994,10 @@ define([
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
-        }
+        },
+        getDescription : function () {
+            return "";
+        },
     });
     celltypes.activity.HxFor = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
@@ -990,7 +1027,10 @@ define([
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
-        }
+        },
+        getDescription : function () {
+            return this.getValues().initialization+";"+this.getValues().termination+";"+this.getValues().increment;
+        },
     });
     celltypes.activity.HxIf = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
@@ -1016,7 +1056,10 @@ define([
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
-        }
+        },
+        getDescription : function () {
+            return "if("+this.getValues().condition+ ")";
+        },
     });
     celltypes.activity.HxVariable = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
@@ -1048,7 +1091,10 @@ define([
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
-        }
+        },
+        getDescription : function () {
+            return this.getValues().type + " " + this.getValues().name + this.getValues().operation + this.getValues().value;
+        },
     });
     celltypes.activity.HxReturn = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
@@ -1076,7 +1122,10 @@ define([
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
-        }
+        },
+        getDescription : function () {
+            return "return " + this.getValues().value;
+        },
     });
     celltypes.activity.HxWhile = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
@@ -1103,7 +1152,10 @@ define([
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
-        }
+        },
+        getDescription : function () {
+            return "while(" + this.getValues().condition + ")";
+        },
     });
     return celltypes;
 });
