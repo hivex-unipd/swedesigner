@@ -132,7 +132,7 @@ define([
          * The events on the view, each one linked to its callback.
          * @name ClassDiagramElementView#events
          * @type {Object}
-         */
+         *///
         events: {
             'mousedown .togglemethods': 'toggleMethods',
             'mousedown .toggleattributes': 'toggleAttributes'
@@ -143,10 +143,11 @@ define([
          * @name ClassDiagramElementView#toggleattributes
          * @function
          */
+        // tolta perché buggata
         toggleAttributes: function () { //non so se sia giusto tenerli qua...boh vedremo
-            this.model.set("attributesExpanded", !this.model.get("attributesExpanded"));
-            this.model.updateRectangles();
-            this.update(); // ecco cosa dovevi fare, le cose funzionavano già
+            // this.model.set("attributesExpanded", !this.model.get("attributesExpanded"));
+            // this.model.updateRectangles();
+            // this.update(); // ecco cosa dovevi fare, le cose funzionavano già
         },
 
         /**
@@ -154,10 +155,11 @@ define([
          * @name ClassDiagramElementView#togglemethods
          * @function
          */
+        // tolta perché buggata
         toggleMethods: function () {
-            this.model.set("methodsExpanded", !this.model.get("methodsExpanded"));
-            this.model.updateRectangles();
-            this.update(); // ecco cosa dovevi fare, le cose funzionavano già
+            // this.model.set("methodsExpanded", !this.model.get("methodsExpanded"));
+            // this.model.updateRectangles();
+            // this.update(); // ecco cosa dovevi fare, le cose funzionavano già
         }
     });
 
@@ -265,9 +267,9 @@ define([
                 }
             },
 
-            attributesExpanded: false,
+            attributesExpanded: true,
 
-            methodsExpanded: false,
+            methodsExpanded: true,
 
             values: {
                 name: "ClassName",
@@ -456,7 +458,7 @@ define([
 
             },
 
-            methodsExpanded: false,
+            methodsExpanded: true,
 
 
             values: {
