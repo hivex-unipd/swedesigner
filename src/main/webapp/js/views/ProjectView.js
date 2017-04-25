@@ -537,8 +537,10 @@ define([
                     maxZoom: 10,
                     fit: false,
                     center:false,
+                    dblClickZoomEnabled:false,
                     zoomScaleSensitivity: 0.4,
-                    panEnabled: false,
+                    controlIconsEnabled:true,
+                    panEnabled: true,
                     onZoom: function(scale){
                         console.log(scale);
                         currentScale = scale;
@@ -549,7 +551,9 @@ define([
                         //setGrid(this.paper, gridsize*15*currentScale, '#808080', newpan);
                     }
                 });
-            this.panAndZoom.enableControlIcons();
+            //spostiamo a mano
+            $('#svg-pan-zoom-controls').attr("transform",'translate(' + ( $('#paper').width() - 70 ) + ' ' + ( $('#paper').height() - 76 ) + ') scale(0.75)');
+            //this.panAndZoom.enableControlIcons();
 
 
             var pAndZ= this.panAndZoom;
@@ -566,8 +570,8 @@ define([
 
 
             });
-            this.paper.on('blank:pointerup', function(cellView, event) {
-                console.log("pointeup");
+            this.paper.on('blank:pointerup', function(event,x,y) {
+                console.log("pointeup",x,y);
 
                 pAndZ.disablePan();
                 $('.joint-paper').css('cursor', '-webkit-grab');
