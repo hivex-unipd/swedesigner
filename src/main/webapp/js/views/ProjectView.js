@@ -54,6 +54,7 @@ define([
          */
         renderActivity: function () {
 
+            // piccolo bugfix orribile
             _.each(this.model.graph.get("cells").models, function (el) {
                 el.set("z", 1);
             });
@@ -437,7 +438,9 @@ define([
                     for (i = 0; i < v.length; i++) {
                         this.findViewByModel(v[i]).unhighlight();
                     }
-                    if (index != -1) {
+                    
+
+                    if (index != -1 && cellViewsBelow[index].model.get("canHaveChildren")) {
                         cellViewBelow = cellViewsBelow[index];
                         cellViewBelow.highlight();
                         this.isHighlighted = true;
