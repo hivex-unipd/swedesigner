@@ -3,13 +3,31 @@ package project;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+
+import server.Configurator;
+import test.TestConfigurator;
 import server.project.ParsedAttribute;
-import server.template.java.JavaTemplate;
+import server.template.Template;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {Configurator.class, TestConfigurator.class})
 public class ParsedAttributeTest {
 
-	private JavaTemplate javaTemplate = new JavaTemplate();
+	@Autowired
+	@Qualifier("javatemplate")
+	private Template javaTemplate;
+
+	@Autowired
+	@Qualifier("mockjavatemplate")
+	private Template mockjavaTemplate;
+
+
 
 	// Costruito un ParsedAttribute, questo è in grado di generare una stringa Java contenente tipo e nome passatigli nel costruttore.
 	@Test

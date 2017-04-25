@@ -17,7 +17,7 @@ public class ProvaMain {
 			//RequestHandlerController rhc = new RequestHandlerController();
 			ApplicationContext context = new AnnotationConfigApplicationContext(Configurator.class);
 			RequestHandlerController rhc = (RequestHandlerController)context.getBean("rhc");
-			rhc.HandleGeneratorRequest(testo, "1234");	
+			rhc.handleGeneratorRequest(testo, "1234");	
 		}
 		catch(IOException exception){System.out.println(exception.getMessage());}	
 	}*/

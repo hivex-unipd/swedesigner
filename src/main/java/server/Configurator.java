@@ -28,8 +28,8 @@ public class Configurator {
 		return new JavaCompiler();
 	}
 
-	/*@Bean("rhc")
+	@Bean("rhc")
 	public RequestHandlerController requesthandlercontroller() {
 		return new RequestHandlerController();
-	}*/
+	}
 }
