@@ -22,7 +22,7 @@ public class JavaGenerator implements Generator {
 	@Autowired
 	@Qualifier("javatemplate")
 	private Template template;
-
+	
 	/**
 	 * Given a path and a {@code ParsedProgram} object, converts
 	 * the object into Java source code and writes the output to
@@ -38,6 +38,8 @@ public class JavaGenerator implements Generator {
 			String filePath = dirPath + "/" + program.getType(i).getName() + ".java";
 			File typeFile = new File(filePath);
 		    PrintWriter writer = new PrintWriter(typeFile);
+			writer.println("package project;");
+			writer.println("import project.*;");
 		    writer.println(typeCode);
 		    writer.close();
 		}
