@@ -726,9 +726,12 @@ define([
         markup: [
             '<g class="activity">',
             '<rect class="activity-element-name-rect"/>',
+            '<text class="activity-element-type-text"/>',
             '<text class="activity-element-name-text"/>',
             '<rect class="activity-element-body-rect"/>',
+
             '<rect class="activity-toggle"/>',
+            '<rect class="activity-element-type-rect"/>',
 
             '</g>'
         ].join(''),
@@ -740,22 +743,39 @@ define([
                 rect: {'width': 200},
 
 
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
 
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
+                '.activity-toggle': {'fill': '#eedd99','stroke': 'd6b656', 'stroke-width': 1},
+                '.activity-element-name-rect': {'stroke': '#d6b656', 'stroke-width': 1, 'fill': '#fff2cc'},
 
+                '.activity-element-body-rect': {'stroke': '#d6b656', 'stroke-width': 1, 'fill': '#fff2cc'},
+                '.activity-element-type-rect': {'stroke': '#ffffff', 'stroke-width': 0, 'fill': '#ffffff'},
+
+                '.activity': {'stroke': '#d6b656', 'stroke-width': 0, 'fill': '#ffffff'},
+                '.activity-element-type-text': {
+                    'ref': '.activity-element-name-rect',
+                    'ref-y': 5,
+                    'ref-x': 5,
+                    'text-anchor': 'start',
+                    'y-alignment': 'text-before-edge',
+                    'fill': '#ffffff',
+                    'font-size': 11,
+                    'font-family': 'Roboto',
+                    'transform': 'translate(4,4)'
+
+                },
                 '.activity-element-name-text': {
                     'ref': '.activity-element-name-rect',
                     'ref-y': .5,
                     'ref-x': .5,
                     'text-anchor': 'middle',
                     'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
+                    'fill': '#ffffff',
+                    'font-size': 14,
+                    'font-family': 'Roboto',
+
                 },
+
+
 
             },
 
@@ -795,7 +815,7 @@ define([
             return this.get("offsetY");
         },
         getOffsetX: function () {
-            return this.getAncestors().length * 50;
+            return this.getAncestors().length * 10;
 
         },
         getHeight: function () {
@@ -813,18 +833,21 @@ define([
                 this.attributes.position = {x: this.getOffsetX(), y: this.getOffsetY()};
 
                 if (this.getValues().comment.length > 20) {
-                    var text = this.getValues().xType + "\n" + this.getValues().comment.slice(0, 20) + "...";
+                    var text = "\n" + this.getValues().comment.slice(0, 20) + "...";
 
                 }
                 else {
-                    var text = this.getValues().xType + "\n" + this.getValues().comment;
+                    var text =  "\n" + this.getValues().comment;
                 }
 
                 attrs['.activity-toggle'].transform = 'translate(180,0)';
                 attrs['.activity-toggle'].height = 35;
                 attrs['.activity-toggle'].width = 20;
                 attrs['.activity-element-name-text'].text = text;
+                attrs['.activity-element-type-text'].text = this.getValues().xType;
+                attrs['.activity-element-type-text'].transform = 'translate(-180,0)';
                 attrs['.activity-element-name-rect'].height = this.getHeight();
+
 
                 if (this.get("expanded")) {
                     var embedded = this.getEmbeddedCells({deep: true});
@@ -853,7 +876,17 @@ define([
                 attrs['.activity-element-name-rect'].transform = 'translate(0,0)';
                 attrs['.activity-element-body-rect'].transform = 'translate(0,35)';
 
+
+
             }
+
+            attrs['.activity-element-type-rect'].height =
+                attrs['.activity-element-name-rect'].height
+                +   attrs['.activity-element-body-rect'].height;
+
+            attrs['.activity-element-type-rect'].width = 5;
+
+
         }
 
     });
@@ -887,24 +920,10 @@ define([
 
             attrs: {
                 rect: {'width': 200},
-
-
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
-
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
-
-                '.activity-element-name-text': {
-                    'ref': '.activity-element-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
+                '.activity-element-name-rect': {
+                    'stroke': 'black', 'stroke-width': 0, 'fill': '#7c189d'
                 },
+                '.activity-element-type-rect': {'stroke': '#7c189d', 'stroke-width': 0, 'fill': '#7c189d'},
 
             },
 
@@ -928,24 +947,10 @@ define([
 
             attrs: {
                 rect: {'width': 200},
-
-
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
-
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
-
-                '.activity-element-name-text': {
-                    'ref': '.activity-element-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
+                '.activity-element-name-rect': {
+                    'stroke': 'black', 'stroke-width': 0, 'fill': '#00701d'
                 },
+                '.activity-element-type-rect': {'stroke': '#00701d', 'stroke-width': 0, 'fill': '#00701d'},
 
             },
             values: {
@@ -965,23 +970,11 @@ define([
             attrs: {
                 rect: {'width': 200},
 
-
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
-
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
-
-                '.activity-element-name-text': {
-                    'ref': '.activity-element-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
+                '.activity-element-name-rect': {
+                    'stroke': 'black', 'stroke-width': 0, 'fill': '#ed341c'
                 },
+
+                '.activity-element-type-rect': {'stroke': '#ed341c', 'stroke-width': 1, 'fill': '#ed341c'},
 
             },
 
@@ -1006,24 +999,10 @@ define([
 
             attrs: {
                 rect: {'width': 200},
-
-
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
-
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
-
-                '.activity-element-name-text': {
-                    'ref': '.activity-element-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
+                '.activity-element-name-rect': {
+                    'stroke': 'black', 'stroke-width': 0, 'fill': '#15b13e'
                 },
+                '.activity-element-type-rect': {'stroke': '#15b13e', 'stroke-width': 0, 'fill': '#15b13e'},
 
             },
 
@@ -1048,22 +1027,10 @@ define([
                 rect: {'width': 200},
 
 
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
-
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
-
-                '.activity-element-name-text': {
-                    'ref': '.activity-element-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
+                '.activity-element-name-rect': {
+                    'stroke': 'black', 'stroke-width': 0, 'fill': '#edae1c'
                 },
+                '.activity-element-type-rect': {'stroke': '#edae1c', 'stroke-width': 1, 'fill': '#edae1c'},
 
             },
 
@@ -1091,23 +1058,10 @@ define([
             attrs: {
                 rect: {'width': 200},
 
-
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
-
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
-
-                '.activity-element-name-text': {
-                    'ref': '.activity-element-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
+                '.activity-element-name-rect': {
+                    'stroke': 'black', 'stroke-width': 0, 'fill': '#ed841c'
                 },
+                '.activity-element-type-rect': {'stroke': '#ed841c', 'stroke-width': 0, 'fill': '#ed841c'},
 
             },
 
@@ -1132,23 +1086,10 @@ define([
             attrs: {
                 rect: {'width': 200},
 
-
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
-
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
-
-                '.activity-element-name-text': {
-                    'ref': '.activity-element-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
+                '.activity-element-name-rect': {
+                    'stroke': 'black', 'stroke-width': 0, 'fill': '#157b92'
                 },
+                '.activity-element-type-rect': {'stroke': '#157b92', 'stroke-width': 0, 'fill': '#157b92'},
 
             },
 

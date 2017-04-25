@@ -438,7 +438,7 @@ define([
                     for (i = 0; i < v.length; i++) {
                         this.findViewByModel(v[i]).unhighlight();
                     }
-                    
+
 
                     if (index != -1 && cellViewsBelow[index].model.get("canHaveChildren")) {
                         cellViewBelow = cellViewsBelow[index];
