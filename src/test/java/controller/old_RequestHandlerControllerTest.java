@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import server.Configurator;
+import test.TestConfigurator;
 import server.controller.RequestHandlerController;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpEntity;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Configurator.class)
+@SpringBootTest(classes = {Configurator.class, TestConfigurator.class})
 public class old_RequestHandlerControllerTest {
 
 	@Autowired

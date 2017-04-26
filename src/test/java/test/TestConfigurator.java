@@ -8,6 +8,7 @@ import org.stringtemplate.v4.ST;
 import java.util.List;
 import java.util.ArrayList;
 
+import server.controller.RequestHandlerController;
 import server.compiler.Compiler;
 import server.generator.Generator;
 import server.template.Template;
@@ -91,5 +92,10 @@ public class TestConfigurator {
 				return new ArrayList<String>();
 			};
 		};
+	}
+
+	@Bean("rhc")
+	public RequestHandlerController requesthandlercontroller() {
+		return new RequestHandlerController();
 	}
 }
