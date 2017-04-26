@@ -642,7 +642,7 @@ define([
                 let params = e.parameters.map(function (f) {
                     return f.name;
                 }).join(",");
-                return {'text':vis + " " + e.name + "(" + params + ")" + ":" + e.returnType};
+                return {'text':vis + " " + e.name + "(" + params + ")" + ":" + e.returnType,'icon':'assets/methodicon.png'};
             });
             return metDesc;
 
@@ -650,7 +650,8 @@ define([
         getCellDesc:function () {
             return {
                 'text':this.getValues().name,
-                'children':this.getAttrsDesc().concat(this.getMetDesc())
+                'icon':'assets/interfaceicon.png',
+                'children':this.getMetDesc()
             }
         }
     });
