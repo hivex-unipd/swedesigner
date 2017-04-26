@@ -42,43 +42,43 @@ public class TestConfigurator {
 		return new Template() {
 
 			public ST getAttributeTemplate() {
-				return new ST("attributejavatemplate(att) ::= \"<if(att.visibility)><att.visibility> <endif><if(att.isStatic)>static <endif><if(att.isFinal)>final <endif><if(att.type)><att.type> <endif><att.name><if(att.value)> <att.operation> <att.value><endif>\"");
+				return new ST("<if(att.visibility)><att.visibility> <endif><if(att.isStatic)>static <endif><if(att.isFinal)>final <endif><if(att.type)><att.type> <endif><att.name><if(att.value)> <att.operation> <att.value><endif>");
 			}
 
 			public ST getForTemplate() {
-				return new ST("forjavatemplate(for, body)::=<<for (<for.init>; <for.condition>; <for.step>) {\t<body>\n}>>");
+				return new ST("for (<for.init>; <for.condition>; <for.step>) {\t<body>\n}");
 			}
 
 			public ST getIfTemplate() {
-				return new ST("ifjavatemplate(if1, body)::=<<\nif (<if1.condition>) {\n	<body>\n}\n>>");
+				return new ST("if (<if1.condition>) {\n	<body>\n}\n");
 			}
 
 			public ST getReturnTemplate() {
-				return new ST("returnjavatemplate(return)::=\"return<if(return.value)> <return.value><endif>;\"");
+				return new ST("return<if(return.value)> <return.value><endif>;");
 			}
 
 			public ST getClassTemplate() {
-				return new ST("classjavatemplate(class, methods)::=<<\npublic <if(class.isAbstract)>abstract <endif>class <class.name><if(class.extended)> extends <class.extended:{e|<e>}; separator=\", \"><endif><if(class.implemented)> implements <class.implemented:{im|<im>}; separator=\", \"><endif>{\n\t<class.attributes:attributejavatemplate():end()>\n\t<methods>\n}\n>>");
+				return new ST("public <if(class.isAbstract)>abstract <endif>class <class.name><if(class.extended)> extends <class.extended:{e|<e>}; separator=\", \"><endif><if(class.implemented)> implements <class.implemented:{im|<im>}; separator=\", \"><endif>{\n\t<class.attributes:attributejavatemplate():end()>\n\t<methods>\n}\n");
 			}
 
 			public ST getMethodTemplate() {
-				return new ST("methodjavatemplate(method, body)::= <<\n<if(method.isAbstract)>abstract <endif><method.visibility:initVis()><if(method.isStatic)>static <endif><method.returnType> <method.name>(<method.args:attributejavatemplate(); separator=\", \">)<if(method.body)> {\n\t<body>\n}<else>;<endif>\n>>");
+				return new ST("<if(method.isAbstract)>abstract <endif><method.visibility:initVis()><if(method.isStatic)>static <endif><method.returnType> <method.name>(<method.args:attributejavatemplate(); separator=\", \">)<if(method.body)> {\n\t<body>\n}<else>;<endif>\n");
 			}
 
 			public ST getWhileTemplate() {
-				return new ST("whilejavatemplate(while, body)::=<<\nwhile (<while.condition>) {\n\t<body>\n}\n>>");
+				return new ST("while (<while.condition>) {\n\t<body>\n}\n");
 			}
 
 			public ST getInterfaceTemplate() {
-				return new ST("interfacejavatemplate(interface, methods)::=<<\npublic interface <interface.name><if(interface.extended)> extends <interface.extended:{e|<e>}; separator=\", \"><endif> {\n\t<interface.attributes:attributejavatemplate():end()>\n\t<methods>\n}\n>>");
+				return new ST("public interface <interface.name><if(interface.extended)> extends <interface.extended:{e|<e>}; separator=\", \"><endif> {\n\t<interface.attributes:attributejavatemplate():end()>\n\t<methods>\n}\n");
 			}
 
 			public ST getElseTemplate() {
-				return new ST("elsejavatemplate(body)::=<<\nelse {\n\t<body>\n}\n>>");
+				return new ST("else {\n\t<body>\n}\n");
 			}
 
 			public ST getStatementTemplate() {
-				return new ST("statementjavatemplate(att) ::= \"<if(att.isFinal)>final <endif><if(att.type)><att.type> <endif><att.name><if(att.value)><att.operation><att.value><else><if(att.operation)><att.operation><endif><endif>;\"");
+				return new ST("<if(att.isFinal)>final <endif><if(att.type)><att.type> <endif><att.name><if(att.value)><att.operation><att.value><else><if(att.operation)><att.operation><endif><endif>;");
 			}
 		};
 	}
