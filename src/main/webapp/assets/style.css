@@ -5,7 +5,7 @@
     border: #655f64;
 }
 #paper{
-    width: 65%;
+    width: 64%;
     margin-left: auto;
     height:calc(100% - 0px);
     max-height: calc(100% - 0px);
@@ -23,10 +23,10 @@
 .components{
     position: relative;
     display: inline-block;
-    width: 15%;
+    width: 18%;
     float: left;
     border: #655f64;
-    height: 100%;
+    height: 100%
 }
 
 #savefile,#generate{
@@ -39,7 +39,7 @@
 }
 .demo-cards{
     height: 100%;
-    width: 20%;
+    width: 18%;
     position: relative;
     display: inline-block;
     float: right;
@@ -92,7 +92,7 @@ input[type="file"] {
 }
 #components{
     overflow-y: scroll;
-    height: calc(100% - 64px);
+
 }
 .newcompbt{
     width:100%;
@@ -271,6 +271,9 @@ span.class-item-icon{
 }
 span.interface-item-icon{
     background: url("interfaceicon.png") no-repeat;
+}
+.classtree{
+    overflow-x: scroll;
 }
 
 

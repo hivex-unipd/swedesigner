@@ -320,7 +320,7 @@ define([
                 rectHeight = 1 * 15 + 1;
             }
             attrs['.uml-class-attrs-text'].text = _.isArray(rects[1].text) ? rects[1].text.map(function (e) {
-                    var vis = "";
+                    let vis = "";
                     switch (e.visibility) {
                         case "public":
                             vis = "+";
@@ -353,7 +353,7 @@ define([
                 rectHeight = 1 * 15 + 1;
             }
             attrs['.uml-class-methods-text'].text = _.isArray(rects[2].text) ? rects[2].text.map(function (e) {
-                    var vis = "";
+                    let vis = "";
                     switch (e.visibility) {
                         case "public":
                             vis = "+";
@@ -368,7 +368,7 @@ define([
                             vis = "#";
                             break;
                     }
-                    var params = e.parameters.map(function (f) {
+                    let params = e.parameters.map(function (f) {
                         return f.name;
                     }).join(",");
                     return vis + " " + e.name + "(" + params + ")" + ":" + e.returnType;
@@ -433,6 +433,59 @@ define([
         },
         deleteMethod: function (ind) {
             this.getValues().methods.splice(ind, 1);
+        },
+        getAttrsDesc: function () {
+            let attrDesc = this.getValues().attributes.map(function (e) {
+                let vis = "";
+                switch (e.visibility) {
+                    case "public":
+                        vis = "+";
+                        break;
+                    case "private":
+                        vis = "-";
+                        break;
+                    case "protected":
+                        vis = "~";
+                        break;
+                    /*case "package":
+                     vis = "#";
+                     break;*/
+                }
+                return {'text':vis + e.name+":"+e.type,'icon':'assets/attributeicon.png'};
+            }) ;
+            return attrDesc;
+        },
+        getMetDesc:function () {
+            let metDesc = this.getValues().methods.map(function (e) {
+                let vis = "";
+                switch (e.visibility) {
+                    case "public":
+                        vis = "+";
+                        break;
+                    case "private":
+                        vis = "-";
+                        break;
+                    case "protected":
+                        vis = "~";
+                        break;
+                    case "package":
+                        vis = "#";
+                        break;
+                }
+                let params = e.parameters.map(function (f) {
+                    return f.name;
+                }).join(",");
+                return {'text':vis + " " + e.name + "(" + params + ")" + ":" + e.returnType,'icon':'assets/methodicon.png'};
+            });
+            return metDesc;
+
+        },
+        getCellDesc:function () {
+            return {
+                'text':this.getValues().name,
+                'icon':'assets/classicon.png',
+                'children':this.getAttrsDesc().concat(this.getMetDesc())
+            }
         }
     });
 
@@ -568,6 +621,37 @@ define([
         },
         deleteMethod: function (ind) {
             this.getValues().methods.splice(ind, 1);
+        },
+        getMetDesc:function () {
+            let metDesc = this.getValues().methods.map(function (e) {
+                let vis = "";
+                switch (e.visibility) {
+                    case "public":
+                        vis = "+";
+                        break;
+                    case "private":
+                        vis = "-";
+                        break;
+                    case "protected":
+                        vis = "~";
+                        break;
+                    case "package":
+                        vis = "#";
+                        break;
+                }
+                let params = e.parameters.map(function (f) {
+                    return f.name;
+                }).join(",");
+                return {'text':vis + " " + e.name + "(" + params + ")" + ":" + e.returnType};
+            });
+            return metDesc;
+
+        },
+        getCellDesc:function () {
+            return {
+                'text':this.getValues().name,
+                'children':this.getAttrsDesc().concat(this.getMetDesc())
+            }
         }
     });
 

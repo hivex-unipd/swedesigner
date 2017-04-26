@@ -563,9 +563,15 @@ define([
                     }
                 });
             //spostiamo a mano
-            $('#svg-pan-zoom-controls').attr("transform",'translate(' + ( $('#paper').width() - 70 ) + ' ' + ( $('#paper').height() - 76 ) + ') scale(0.75)');
+            console.log("width",$('#paper').width());
+            console.log("height",$(window).height());
+            $('#svg-pan-zoom-controls').attr("transform",'translate(' + ( $('#paper').width() - 70 ) + ' ' + ( $(window).height() - 140 ) + ') scale(0.75)');
             //this.panAndZoom.enableControlIcons();
 
+            $('#classtree').jstree({'core':{
+                'data':[
+                ]
+            }});
 
             var pAndZ= this.panAndZoom;
 
@@ -624,14 +630,29 @@ define([
             else {
                 this.visibleElements = [];
             }
+            this.updateTreeview();
 
-            $('#classtree').jstree({'core':{
+
+            //console.log("elementi: ", this.visibleElements);
+            this.paper.selectedCell = null;
+            this.paper.trigger("changed-cell");
+            this.trigger("Switchgraph");
+        },
+
+        updateTreeview: function () {
+            ProjectModel.saveCurrentDiagram();
+            let new_data=[];
+            _.each(ProjectModel.options.graphs.classes.classesArray,function (e) {
+               if(e.get('type')!='class.HxComment'){
+                    new_data.push(e.getCellDesc());
+               }
+            });
+            $('#classtree').jstree(true).settings.core.data= new_data;
+            $('#classtree').jstree('refresh');
+            /*$('#classtree').jstree({'core':{
                 'data':[
                     {
                         'text':"classe1",
-                        'state':{
-                          'opened':true
-                        },
                         'children':[
                             {
                                 'text':"metodo1(param1,param2):int"
@@ -643,12 +664,7 @@ define([
                     }
                 ]
 
-            }});
-
-            console.log("elementi: ", this.visibleElements);
-            this.paper.selectedCell = null;
-            this.paper.trigger("changed-cell");
-            this.trigger("Switchgraph");
+            }});*/
         },
 
         /**
