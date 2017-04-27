@@ -9,6 +9,7 @@ import server.Configurator;
 import test.TestConfigurator;
 import server.controller.RequestHandlerController;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -44,7 +45,8 @@ public class RequestHandlerControllerTest {
 	public void controllerHandlesRequest() throws IOException {
 		HttpEntity<String> request = new HttpEntity<String>(new String(Files.readAllBytes(Paths.get("src/main/resources/project.json"))));
 		ResponseEntity<?> result = rhc.handleGeneratorRequest(request);
-		// TODO ...
+		File zip = new File("src/main/resources/sort/projectzip.zip");
+		assertTrue(zip.exists());
 	}
 
 
