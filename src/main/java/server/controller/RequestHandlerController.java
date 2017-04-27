@@ -32,6 +32,8 @@ import server.utility.Compressor;
 @RestController
 public class RequestHandlerController {
 
+	private Parser parser = new Parser();
+
 	@Autowired
 	@Qualifier("javagenerator")
 	private Generator generator;
@@ -40,7 +42,7 @@ public class RequestHandlerController {
 	@Qualifier("javacompiler")
 	private Compiler compiler;
 
-	private Parser parser = new Parser();
+	private Compressor compressor = new Compressor();
 	
 	private String uploadFolder = "/home/tomcat/Uploads/";
 	
@@ -77,7 +79,6 @@ public class RequestHandlerController {
 			} catch (IOException exception) {
 				errors.add(exception.getMessage());
 			}
-			Compressor compressor = new Compressor();
 			try {
 				compressor.zip(folderPath);
 			} catch (IOException exception) {

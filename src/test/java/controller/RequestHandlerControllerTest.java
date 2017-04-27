@@ -1,39 +1,61 @@
 package controller;
 
-// vedi anche https://spring.io/guides/gs/spring-boot/
-
-import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import server.controller.RequestHandlerController;
 import server.Configurator;
+import test.TestConfigurator;
+import server.controller.RequestHandlerController;
 
-/*@RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
-@WebAppConfiguration*/
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpEntity;
+
+// vedi anche https://spring.io/guides/gs/spring-boot/
+// ---------------------------------------------------
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {Configurator.class, TestConfigurator.class})
 public class RequestHandlerControllerTest {
-/*
+
+	@Autowired
+	@Qualifier("stubbedrhc")
+	private RequestHandlerController stubbedrhc;
+
 	@Autowired
 	@Qualifier("rhc")
 	private RequestHandlerController rhc;
 
-	// Avviato un RequestHandlerController, questo è in grado di rispodere a una richiesta di generazione di codice fornendo un archivio ZIP.
+
+
+	// Test di integrazione:
+	// =====================
+
+	// Avviato un RequestHandlerController, questo è in grado di rispondere a una richiesta di generazione di codice interagendo con un Parser, un Generator, un Compiler e un Compressor e fornendo un archivio ZIP.
 	@Test
-	public void controllerHandlesGenerationRequest() throws Exception {
-		// TODO per ora torna 400 anziché 200:
+	public void controllerHandlesRequest() throws IOException {
 		HttpEntity<String> request = new HttpEntity<String>(new String(Files.readAllBytes(Paths.get("src/main/resources/project.json"))));
 		ResponseEntity<?> result = rhc.handleGeneratorRequest(request);
-//		mvc.perform(MockMvcRequestBuilders.get("/generate").accept(MediaType.ALL)).andExpect(status().isOk());
-	}*/
+		// TODO ...
+	}
+
+
+
+	// Test di unità:
+	// ==============
+
+	// Avviato un RequestHandlerController, questo è in grado di rispondere a una richiesta di generazione di codice.
+	@Test
+	public void controllerInteractsWithCompiler() throws IOException {
+		HttpEntity<String> request = new HttpEntity<String>(new String(Files.readAllBytes(Paths.get("src/main/resources/project.json"))));
+		ResponseEntity<?> result = stubbedrhc.handleGeneratorRequest(request);
+	}
 }

@@ -19,7 +19,7 @@ import server.project.*;
 public class Parser {
 	private List<String> errors = new ArrayList<String>();
 
-	public List<String> getErrors(){
+	public List<String> getErrors() {
 		return errors;
 	}
 

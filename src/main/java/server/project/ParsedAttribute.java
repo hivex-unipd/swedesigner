@@ -26,7 +26,7 @@ public class ParsedAttribute implements ParsedElement {
 		this.value = value;
 			
 		if (name.equals(name.toUpperCase()))
-				isFinal = true;
+			isFinal = true;
 	}
 
 	public String getVisibility() {return visibility;}

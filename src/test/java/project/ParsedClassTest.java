@@ -3,23 +3,61 @@ package project;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import server.project.ParsedClass;
 import server.project.ParsedMethod;
 import server.project.ParsedAttribute;
 import server.project.ParsedException;
-import server.template.java.JavaTemplate;
+import server.template.Template;
+import server.Configurator;
+import test.TestConfigurator;
 
 import java.util.List;
 import java.util.Arrays;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {Configurator.class, TestConfigurator.class})
 public class ParsedClassTest {
+
+	@Autowired
+	@Qualifier("javatemplate")
+	private Template template;
+
+	@Autowired
+	@Qualifier("mockparsedattribute")
+	private ParsedAttribute mockParsedAttribute;
+
+	@Autowired
+	@Qualifier("mockjavatemplate")
+	private Template mockJavaTemplate;
+
+
+
+	// Test di integrazione:
+	// =====================
+
+	// PROVA:
+	@Test
+	public void TUclassContainsBasicInfo() throws ParsedException {
+		ParsedClass type = new ParsedClass("MyClass", false);
+		String result = type.renderTemplate(mockJavaTemplate);
+		assertThat(result, containsString("class MyClass"));
+	}
+
+
+
+	// Test di unità:
+	// ==============
 
 	// Costruita una ParsedClass, questa è in grado di generare una stringa Java contenente contenente la keyword ``class'' seguita dal nome della ParsedClass.
 	@Test
 	public void classContainsBasicInfo() throws ParsedException {
 		ParsedClass type = new ParsedClass("MyClass", false);
-		JavaTemplate template = new JavaTemplate();
 		String result = type.renderTemplate(template);
 		assertThat(result, containsString("class MyClass"));
 	}
@@ -28,7 +66,6 @@ public class ParsedClassTest {
 	@Test
 	public void classCanBeAbstract() throws ParsedException {
 		ParsedClass type = new ParsedClass("MyClass", true);
-		JavaTemplate template = new JavaTemplate();
 		String result = type.renderTemplate(template);
 		assertThat(result, containsString("abstract class MyClass"));
 	}
@@ -39,7 +76,6 @@ public class ParsedClassTest {
 		ParsedClass type = new ParsedClass("MyClass", false);
 		ParsedAttribute field = new ParsedAttribute(false, "private", "String", "pippo", "=", "\"test\"");
 		type.addField(field);
-		JavaTemplate template = new JavaTemplate();
 		String result = type.renderTemplate(template);
 		assertThat(result, containsString("private String pippo = \"test\";"));
 		// TODO gestire le virgolette?

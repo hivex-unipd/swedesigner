@@ -37,11 +37,11 @@ public class JavaGenerator implements Generator {
 			String typeCode = program.getType(i).renderTemplate(template);
 			String filePath = dirPath + "/" + program.getType(i).getName() + ".java";
 			File typeFile = new File(filePath);
-		    PrintWriter writer = new PrintWriter(typeFile);
+			PrintWriter writer = new PrintWriter(typeFile);
 			writer.println("package project;");
 			writer.println("import project.*;");
-		    writer.println(typeCode);
-		    writer.close();
+			writer.println(typeCode);
+			writer.close();
 		}
 	}
 }

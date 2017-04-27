@@ -94,8 +94,21 @@ public class TestConfigurator {
 		};
 	}
 
+	// Bean for REAL RequestHandlerController:
 	@Bean("rhc")
 	public RequestHandlerController requesthandlercontroller() {
 		return new RequestHandlerController();
+	}
+
+	// Bean for RequestHandlerController WITH STUBS:
+	@Bean("stubbedrhc")
+	public RequestHandlerController stubbedrequesthandlercontroller() {
+		return new StubbedRequestHandlerController();
+	}
+
+	// Stub for ParsedAttribute:
+	@Bean("mockparsedattribute")
+	public ParsedAttribute mockparsedattribute() {
+		return new MockParsedAttribute();
 	}
 }

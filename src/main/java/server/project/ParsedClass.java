@@ -20,7 +20,7 @@ public class ParsedClass extends ParsedType {
 		this.isAbstract = isAbstract;
 	}
 
-	public boolean getIsAbstract() { return isAbstract;}
+	public boolean getIsAbstract() {return isAbstract;}
 	public List<String> getImplemented() {return implemented;}
 	public void addField(ParsedAttribute parsedAttribute) throws ParsedException {
 		getAttributes().add(parsedAttribute);
@@ -29,7 +29,7 @@ public class ParsedClass extends ParsedType {
 		getMethods().add(parsedMethod);
 	}
 	public void addSupertype(String name, String type) throws ParsedException {
-		if (name!=null&&type!=null) {
+		if (name != null && type != null) {
 			if (type.equals("class"))
 				getExtended().add(name);
 			else if (type.equals("interface"))
