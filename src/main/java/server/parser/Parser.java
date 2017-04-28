@@ -327,14 +327,15 @@ public class Parser {
 						break;
 					}
 					case "class.HxAssociation" : {
+						JSONObject assocValues = JSONRel.getJSONObject("values");
 						int molteplicity = 1; 
-						if (JSONRel.has("card"))
+						if (assocValues.has("card"))
 							molteplicity = JSONRel.getInt("card");
 
 						String attributeType = targetTypeName+(molteplicity>1 ? "[]" : "");
 
 						String attributeName = "";
-						if (JSONRel.has("attribute"))
+						if (assocValues.has("attribute"))
 							attributeName = JSONRel.getString("attribute");
 						else
 							attributeName = "reference"+(attNoName++);
