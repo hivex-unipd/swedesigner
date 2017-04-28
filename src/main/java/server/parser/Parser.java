@@ -335,7 +335,7 @@ public class Parser {
 
 						String attributeName = "";
 						if (JSONRel.has("attribute"))
-							attributeName = JSONRel.getString("attrbute");
+							attributeName = JSONRel.getString("attribute");
 						else
 							attributeName = "reference"+(attNoName++);
 
