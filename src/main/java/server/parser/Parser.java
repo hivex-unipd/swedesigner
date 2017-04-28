@@ -33,7 +33,7 @@ public class Parser {
 	 * @throws JSONException a JSON parsing exception
 	 */
 	public ParsedProgram createParsedProgram(String jsonString) throws JSONException {
-
+		errors = new ArrayList<String>();
 		ParsedProgram parsedProgram = new ParsedProgram();
 		JSONObject program = new JSONObject(jsonString);
 		//First level JSONObject containing the JSON description of classes and relationships.
@@ -424,10 +424,10 @@ public class Parser {
 		switch(type) {
 		//this switch creates a different kind of instruction based the type specified in the json file
 		case "activity.HxCustom" : {
-			String value = (values.has("value") ? values.getString("value") : "");
+			String code = (values.has("code") ? values.getString("code") : "");
 
-			if (!value.equals(""))
-				parsedInstruction = new ParsedCustom(value);
+			if (!code.equals(""))
+				parsedInstruction = new ParsedCustom(code);
 			else
 				errors.add("JSON format error: missing information for custom instruction");
 			break;
