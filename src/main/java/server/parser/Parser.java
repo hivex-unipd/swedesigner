@@ -330,13 +330,13 @@ public class Parser {
 						JSONObject assocValues = JSONRel.getJSONObject("values");
 						int molteplicity = 1; 
 						if (assocValues.has("card"))
-							molteplicity = JSONRel.getInt("card");
+							molteplicity = assocValues.getInt("card");
 
 						String attributeType = targetTypeName+(molteplicity>1 ? "[]" : "");
 
 						String attributeName = "";
 						if (assocValues.has("attribute"))
-							attributeName = JSONRel.getString("attribute");
+							attributeName = assocValues.getString("attribute");
 						else
 							attributeName = "reference"+(attNoName++);
 
