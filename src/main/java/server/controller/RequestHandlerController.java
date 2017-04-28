@@ -98,8 +98,7 @@ public class RequestHandlerController {
 		// It should return a Request object containing the zip just created.
 		// This will be implemented later.
 		if (errors.size() > 0) {
-			ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
-			return ResponseEntity.ok(ba);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
 		} else {
 			return ResponseEntity.ok(ba);
 		}
