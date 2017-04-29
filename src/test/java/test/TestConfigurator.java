@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import org.stringtemplate.v4.ST;
 import java.util.List;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class TestConfigurator {
 	@Bean("mockjavagenerator")
 	public Generator mockjavagenerator() {
 		return new Generator() {
-			public void generate(String path, ParsedProgram program) throws IOException {
+			public void generate(String path, ParsedProgram program) throws FileNotFoundException {
 				return;
 			}
 		};
@@ -59,7 +60,7 @@ public class TestConfigurator {
 			}
 
 			public ST getClassTemplate() {
-				return new ST("public <if(class.isAbstract)>abstract <endif>class <class.name><if(class.extended)> extends <class.extended:{e|<e>}; separator=\", \"><endif><if(class.implemented)> implements <class.implemented:{im|<im>}; separator=\", \"><endif>{\n\t<class.attributes:attributejavatemplate():end()>\n\t<methods>\n}\n");
+				return new ST("public <if(class.isAbstract)>abstract <endif>class <class.name><if(class.extended)> extends <class.extended:{e|<e>}; separator=\", \"><endif><if(class.implemented)> implements <class.implemented:{im|<im>}; separator=\", \"><endif>{\n\tprivate boolean pippo = true;\n\tpublic void idle() {}\n}\n");
 			}
 
 			public ST getMethodTemplate() {

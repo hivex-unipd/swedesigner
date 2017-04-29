@@ -1,7 +1,7 @@
 package server.generator.java;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +28,11 @@ public class JavaGenerator implements Generator {
 	 * the object into Java source code and writes the output to
 	 * multiple .class files in the given path, one for each type
 	 * in the given program.
-	 * @param  dirPath     where to generate the source file(s)
-	 * @param  program     a valid ParsedProgram object
-	 * @throws IOException a file I/O exception
+	 * @param  dirPath               where to generate the source file(s)
+	 * @param  program               a valid ParsedProgram object
+	 * @throws FileNotFoundException a file I/O exception
 	 */
-	public void generate(String dirPath, ParsedProgram program) throws IOException {
+	public void generate(String dirPath, ParsedProgram program) throws FileNotFoundException {
 		for (int i = 0; i < program.nClasses(); i++) {
 			String typeCode = program.getType(i).renderTemplate(template);
 			String filePath = dirPath + "/" + program.getType(i).getName() + ".java";

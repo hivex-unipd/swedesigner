@@ -23,7 +23,7 @@ public class CompilerTest {
 	@Qualifier("javacompiler")
 	private Compiler compiler;
 
-	// JavaCompiler è in grado di compilare dei file sorgente Java (posti in una stessa directory) in un file eseguibile, senza generare errori di compilazione.
+	// Un JavaCompiler è in grado di compilare dei file sorgente Java (validi per la compilazione e posti in una stessa directory) in un file eseguibile, senza generare errori di compilazione.
 	@Test
 	public void compilerCanCompile() throws IOException {
 		List<String> results = compiler.compile("src/main/resources/sort");

@@ -3,22 +3,31 @@ package generator;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
+import server.Configurator;
 import server.generator.Generator;
-import server.generator.java.JavaGenerator;
 import server.project.*;
 
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Arrays;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = Configurator.class)
 public class GeneratorTest {
 
-	private Generator generator = new JavaGenerator();
+	@Autowired
+	@Qualifier("javagenerator")
+	private Generator generator;
 
-	// Dato il nome di una directory e un ParsedProgram valido, JavaGenerator esegue senza lanciare eccezioni.
+	// Dato il nome di una directory esistente e un ParsedProgram valido, JavaGenerator crea nella directory un file sorgente per ogni tipo appartenente al programma.
 	@Test
-	public void generatorYieldsBasicInfo() throws IOException, ParsedException {
+	public void generatorYieldsBasicInfo() throws FileNotFoundException, ParsedException {
 		ParsedProgram program = new ParsedProgram();
 
 		// ParsedType stub:
@@ -34,13 +43,12 @@ public class GeneratorTest {
 		ParsedType type2 = new ParsedClass("SecondClass", true);
 		program.addType(type2);
 
-		// TODO
-//		generator.generate("test", program);
+		generator.generate("src/main/resources/generator_test", program);
 	}
 
-	// Dato un ParsedProgram vuoto, JavaGenerator esegue senza lanciare eccezioni.
+	// Dato un ParsedProgram vuoto, JavaGenerator risponde a una richiesta generate() senza lanciare eccezioni.
 	@Test
-	public void generatorHandlesEmptyProgram() throws IOException {
+	public void generatorHandlesEmptyProgram() throws FileNotFoundException {
 		ParsedProgram program = new ParsedProgram();
 		generator.generate("stub", program);
 	}

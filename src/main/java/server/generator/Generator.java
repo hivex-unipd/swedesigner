@@ -1,6 +1,6 @@
 package server.generator;
 
-import java.io.IOException;
+import java.io.FileNotFoundException;
 
 import server.project.ParsedProgram;
 
@@ -15,9 +15,9 @@ public interface Generator {
 	 * the object into source code and writes the output to one
 	 * or multiple files in the given path, depending on
 	 * the language.
-	 * @param  path        where to generate the source file(s)
-	 * @param  program     a valid ParsedProgram object
-	 * @throws IOException a file I/O exception
+	 * @param  path                  where to generate the source file(s)
+	 * @param  program               a valid ParsedProgram object
+	 * @throws FileNotFoundException a file I/O exception
 	 */
-	void generate(String path, ParsedProgram program) throws IOException;
+	void generate(String path, ParsedProgram program) throws FileNotFoundException;
 }
