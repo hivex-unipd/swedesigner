@@ -33,7 +33,7 @@ public class alt_RequestHandlerControllerTest {
 	public void controllerHandlesGenerationRequest() throws Exception {
 		// TODO per ora torna 400 anziché 200:
 		HttpEntity<String> request = new HttpEntity<String>(new String(Files.readAllBytes(Paths.get("src/main/resources/project.json"))));
-		ResponseEntity<?> result = rhc.handleGeneratorRequest(request);
+		ResponseEntity<?> result = rhc.handleGenerationRequest(request);
 //		mvc.perform(MockMvcRequestBuilders.get("/generate").accept(MediaType.ALL)).andExpect(status().isOk());
 	}*/
 }

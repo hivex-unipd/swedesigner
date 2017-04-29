@@ -13,6 +13,7 @@ import server.Configurator;
 import server.generator.Generator;
 import server.project.*;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Arrays;
@@ -44,6 +45,10 @@ public class GeneratorTest {
 		program.addType(type2);
 
 		generator.generate("src/main/resources/generator_test", program);
+		File result_1 = new File("src/main/resources/generator_test/FirstClass.java");
+		File result_2 = new File("src/main/resources/generator_test/SecondClass.java");
+		assertTrue(result_1.exists());
+		assertTrue(result_2.exists());
 	}
 
 	// Dato un ParsedProgram vuoto, JavaGenerator risponde a una richiesta generate() senza lanciare eccezioni.

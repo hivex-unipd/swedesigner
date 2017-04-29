@@ -54,7 +54,7 @@ public class RequestHandlerController {
 	 * @return            the HTTP response
 	 */
 	@RequestMapping(value = "/generate", consumes = "application/json", produces = "application/zip")
-	public ResponseEntity<?> handleGeneratorRequest(HttpEntity<String> httpEntity) {
+	public ResponseEntity<?> handleGenerationRequest(HttpEntity<String> httpEntity) {
 		String idReq = UUID.randomUUID().toString();
 		String json = httpEntity.getBody();
 		// List for recording the errors:

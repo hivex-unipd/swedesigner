@@ -152,7 +152,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>org.springframework.http.ResponseEntity&lt;?&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../server/controller/RequestHandlerController.html#HandleGeneratorRequest-org.springframework.http.HttpEntity-">HandleGeneratorRequest</a></span>(org.springframework.http.HttpEntity&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;httpEntity)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../server/controller/RequestHandlerController.html#handleGenerationRequest-org.springframework.http.HttpEntity-">handleGenerationRequest</a></span>(org.springframework.http.HttpEntity&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;httpEntity)</code>
 <div class="block">Responds to an HTTP request for the "generate" resource.</div>
 </td>
 </tr>
@@ -195,16 +195,16 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="HandleGeneratorRequest-org.springframework.http.HttpEntity-">
+<a name="handleGenerationRequest-org.springframework.http.HttpEntity-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>HandleGeneratorRequest</h4>
+<h4>handleGenerationRequest</h4>
 <pre>@RequestMapping(value="/generate",
                 consumes="application/json",
                 produces="application/zip")
-public&nbsp;org.springframework.http.ResponseEntity&lt;?&gt;&nbsp;HandleGeneratorRequest(org.springframework.http.HttpEntity&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;httpEntity)</pre>
+public&nbsp;org.springframework.http.ResponseEntity&lt;?&gt;&nbsp;handleGenerationRequest(org.springframework.http.HttpEntity&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;httpEntity)</pre>
 <div class="block">Responds to an HTTP request for the "generate" resource.
  The request must carry a JSON file; the response produces
  a ZIP archive.</div>
