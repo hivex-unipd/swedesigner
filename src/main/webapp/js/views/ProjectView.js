@@ -38,14 +38,19 @@ define([
 
 
         deleteCell: function (e) {
-            if (e.which == 46) {//ha premuto tasto canc
+
+            /*if (e.which == 46) {//ha premuto tasto canc
                 if (this.paper.selectedCell) {
                     this.model.deleteCell(this.paper.selectedCell);
 
                     this.paper.selectedCell=null;
                     this.paper.trigger("changed-cell");
                 }
-            }
+            }*/
+            console.log(e);
+            this.model.deleteCell(e);
+            this.paper.selectedCell=null;
+            this.paper.trigger("changed-cell");
         },
         /**
          * Updates the drawing area by placing the activity blocks.
@@ -74,7 +79,7 @@ define([
             if (g && m.options.currentindex != 'class') {
                 debug();
 
-                var offsetY = 50;
+                var offsetY = 100;
 
                 for (i = 0; i < g.length; i++) {
                     var hidden = false;
@@ -121,8 +126,21 @@ define([
          * @param {number} x the horizontal position of the cell (?)
          * @param {number} y the vertical position of the cell (?)
          */
-        pointerDownFunction: function (cellView, evt, x, y) {
+        pointerDownFunction: function (prView,cellView, evt, x, y) {
 
+
+
+            var className = evt.target.parentNode.getAttribute('class');
+
+            switch (className) {
+
+                case 'element-tool-remove':
+                    prView.deleteCell(cellView.model);
+                    return;
+                    break;
+
+                default:
+            }
 
 
 
@@ -209,6 +227,8 @@ define([
          * @param {number} y the vertical position of the cell (?)
          */
         pointerUpFunction: function (cellView, evt, x, y) {
+
+            ProjectModel.adjustVertices(ProjectModel.graph,cellView);
             //panAndZoom.disablePan();
             if (cellView.model.get("type").startsWith("activity")) {
                 var parentCell = null;
@@ -563,9 +583,10 @@ define([
                     }
                 });
             //spostiamo a mano
-            console.log("width",$('#paper').width());
-            console.log("height",$(window).height());
-            $('#svg-pan-zoom-controls').attr("transform",'translate(' + ( $('#paper').width() - 70 ) + ' ' + ( $(window).height() - 140 ) + ') scale(0.75)');
+
+            //$('#svg-pan-zoom-controls').attr("transform",'translate(' + ( $('#paper').width() - 70 ) + ' ' + ( $(window).height() - 140 ) + ') scale(0.75)');
+            $('#svg-pan-zoom-controls').attr("transform",'translate(5 5) scale(0.75)');
+
             //this.panAndZoom.enableControlIcons();
 
             $('#classtree').jstree({'core':{
@@ -596,13 +617,15 @@ define([
             });
             this.paper.on('cell:pointerup', this.pointerUpFunction);
             this.paper.on('cell:pointermove', this.pointerMoveFunction);
-            this.paper.on('cell:pointerdown', this.pointerDownFunction);
+
+            this.paper.on('cell:pointerdown', _.partial(this.pointerDownFunction,this));
+
 
             var m = this.model;
 
             this.renderActivity();
 
-            $(document).on('keydown', $.proxy(this.deleteCell, this));
+            //$(document).on('keydown', $.proxy(this.deleteCell, this));
 
             this.listenTo(this.paper, 'renderActivity', this.renderActivity);
             this.listenTo(this.model, 'renderActivity', function () {

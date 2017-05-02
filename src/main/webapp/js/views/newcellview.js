@@ -67,6 +67,7 @@ define([
             this.$el.html(_.each(this.str));
         },
         switch: function () {
+            $('#classtreetab').toggle();
             this.model.switchComponents();
         },
         /**

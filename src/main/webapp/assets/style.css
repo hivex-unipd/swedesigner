@@ -275,5 +275,17 @@ span.interface-item-icon{
 .classtree{
     overflow-x: scroll;
 }
+#classtreetab{
+    display: none;
+}
+
+.element-tool-remove{
+    z-index: 1;
+    opacity: 0;
+    cursor: pointer;
+}
+.joint-element:hover .element-tool-remove{
+    opacity: 1;
+}
 
 
