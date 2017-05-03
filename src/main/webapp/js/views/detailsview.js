@@ -187,7 +187,6 @@ define([
          * @private
          */
         confirmEdit: function (e) {
-            console.log("dio te possa");
             if ((e.type == "keypress" && e.which == 13) || e.type == "change") {
                 if (e.target.type == "checkbox") {
                     ProjectView.paper.selectedCell.setToValue(e.target.checked ? "true" : "false", e.target.name);

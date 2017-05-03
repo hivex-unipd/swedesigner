@@ -26,13 +26,20 @@ define([
      */
     celltypes.class.ClassDiagramElement = joint.shapes.basic.Generic.extend({
 
+        toolMarkup: ['<g class="element-tools">',
+            '<g class="element-tool-remove"><circle fill="red" r="11"/>',
+            '<path transform="scale(.8) translate(-16, -16)" d="M24.778,21.419 19.276,15.917 24.777,10.415 21.949,7.585 16.447,13.087 10.945,7.585 8.117,10.415 13.618,15.917 8.116,21.419 10.946,24.248 16.447,18.746 21.948,24.248z"/>',
+            '<title>Remove</title>',
+            '</g>',
+            '</g>'].join(''),
         /**
          * Default attributes of a `ClassDiagramElement` object.
          * @name ClassDiagramElement#defaults
          * @type {Object}
          */
         defaults: _.defaultsDeep({
-            type: 'uml.ClassDiagramElement'
+            type: 'uml.ClassDiagramElement',
+
         }, joint.shapes.basic.Generic.prototype.defaults),
 
         /**
@@ -137,6 +144,49 @@ define([
             'mousedown .togglemethods': 'toggleMethods',
             'mousedown .toggleattributes': 'toggleAttributes'
         },
+
+        render: function(){
+            joint.dia.ElementView.prototype.render.apply(this, arguments);
+
+            this.renderTools();
+            this.update();
+            return this;
+        },
+
+        renderTools: function () {
+
+            var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
+            console.log("markup:",toolMarkup);
+            if (toolMarkup) {
+
+                var nodes = joint.V(toolMarkup);
+                console.log("el:",joint.V(this.el));
+                joint.V(this.el).append(nodes);
+
+            }
+
+            return this;
+        },
+        /*pointerclick: function (evt, x, y) {
+
+            /*this._dx = x;
+            this._dy = y;
+            this._action = '';
+
+            var className = evt.target.parentNode.getAttribute('class');
+
+            switch (className) {
+
+                case 'element-tool-remove':
+                    this.model.remove();
+                    return;
+                    break;
+
+                default:
+            }
+
+            joint.dia.CellView.prototype.pointerclick.apply(this, arguments);
+        },*/
 
         /**
          * Toggles the display of the class attributes.
@@ -755,6 +805,12 @@ define([
 
         defaults: _.defaultsDeep({
             type: 'class.HxAssociation',
+            attrs:{
+
+                '.marker-target':{d: 'M 50 10 L 60 3 M 50 10 L 60 16',fill:'white','fill-opacity':'0.4',stroke:'black'},
+                /*'.marker-target':{d: 'M 35 0 L 20 10 L 35 20',fill:'white','fill-opacity':'0.4',stroke:'black'},*/
+                '.connection': {'stroke-dasharray': '3,3'}
+            },
             labels: [
                 {
                     position: 0.5,
@@ -808,6 +864,12 @@ define([
     });
 
     celltypes.activity.ActivityDiagramElement = joint.shapes.basic.Generic.extend({
+        toolMarkup: ['<g class="element-tools">',
+            '<g class="element-tool-remove"><circle fill="red" r="11"/>',
+            '<path transform="scale(.8) translate(-16, -16)" d="M24.778,21.419 19.276,15.917 24.777,10.415 21.949,7.585 16.447,13.087 10.945,7.585 8.117,10.415 13.618,15.917 8.116,21.419 10.946,24.248 16.447,18.746 21.948,24.248z"/>',
+            '<title>Remove</title>',
+            '</g>',
+            '</g>'].join(''),
         markup: [
             '<g class="activity">',
             '<rect class="activity-element-name-rect"/>',
@@ -915,7 +977,7 @@ define([
             return this.get("offsetY");
         },
         getOffsetX: function () {
-            return this.getAncestors().length * 10;
+            return this.getAncestors().length * 10+10;
 
         },
         getHeight: function () {
@@ -930,10 +992,11 @@ define([
 
             if (this.get("hidden")) {
                 // hack cattivissimo per evitare creazioni di nuovi oggetti e nascondere l'oggetto
-                this.attributes.position = {x: -9999, y: -9999};
+                //this.attributes.position = {x: -9999, y: -9999};
+                attrs['.activity'].visibility="hidden";
             }
             else {
-
+                attrs['.activity'].visibility="visible";
                 this.attributes.position = {x: this.getOffsetX(), y: this.getOffsetY()};
 
                 if (this.getValues().comment.length > 20) {
@@ -1020,6 +1083,27 @@ define([
         events: {
             'mousedown .activity-toggle': 'toggle'
 
+        },
+        renderTools: function () {
+
+            var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
+            console.log("markup:",toolMarkup);
+            if (toolMarkup) {
+
+                var nodes = joint.V(toolMarkup);
+                console.log("el:",joint.V(this.el));
+                joint.V(this.el).append(nodes);
+
+            }
+
+            return this;
+        },
+        render: function(){
+            joint.dia.ElementView.prototype.render.apply(this, arguments);
+
+            this.renderTools();
+            this.update();
+            return this;
         },
         toggle: function () {
             this.model.set("expanded", !this.model.get("expanded"));
