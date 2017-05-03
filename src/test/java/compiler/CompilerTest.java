@@ -23,17 +23,22 @@ public class CompilerTest {
 	@Qualifier("javacompiler")
 	private Compiler compiler;
 
+
+
+	// Test di unità:
+	// ==============
+
 	// Un JavaCompiler è in grado di compilare dei file sorgente Java (validi per la compilazione e posti in una stessa directory) in un file eseguibile, senza generare errori di compilazione.
 	@Test
 	public void compilerCanCompile() throws IOException {
-		List<String> results = compiler.compile("src/main/resources/sort");
-		assertEquals(0, results.size());
+		List<String> errors = compiler.compile("src/main/resources/sort");
+		assertEquals(0, errors.size());
 	}
 
-	// Un JavaCompiler a cui venga chiesto di compilare i file di una cartella inesistente ritorna una lista di errori contenente l'errore "[cartella] is not a valid directory".
+	// Un JavaCompiler a cui venga chiesto di compilare i file di una directory inesistente ritorna una lista di errori contenente l'errore "[cartella] is not a valid directory".
 	@Test
 	public void compilerRejectsNonDirectories() throws IOException {
-		List<String> results = compiler.compile("src/main/resources/nothing");
-		assertThat(results, hasItems("nothing is not a valid directory"));
+		List<String> errors = compiler.compile("src/main/resources/nothing");
+		assertThat(errors, hasItems("nothing is not a valid directory"));
 	}
 }

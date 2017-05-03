@@ -33,7 +33,6 @@ public class Parser {
 	 * @throws JSONException a JSON parsing exception
 	 */
 	public ParsedProgram createParsedProgram(String jsonString) throws JSONException {
-		errors = new ArrayList<String>();
 		ParsedProgram parsedProgram = new ParsedProgram();
 		JSONObject program = new JSONObject(jsonString);
 		//First level JSONObject containing the JSON description of classes and relationships.

@@ -37,6 +37,18 @@ public class RequestHandlerControllerTest {
 
 
 
+	// Test di unità:
+	// ==============
+
+	// Avviato un RequestHandlerController, questo è in grado di rispondere a una richiesta di generazione di codice.
+	@Test
+	public void controllerInteractsWithCompiler() throws IOException {
+		HttpEntity<String> request = new HttpEntity<String>(new String(Files.readAllBytes(Paths.get("src/main/resources/project.json"))));
+		ResponseEntity<?> result = stubbedrhc.handleGenerationRequest(request);
+	}
+
+
+
 	// Test di integrazione:
 	// =====================
 
@@ -48,17 +60,5 @@ public class RequestHandlerControllerTest {
 		// TODO? non abbiamo la cartella Uploads...
 //		File zip = new File("src/main/resources/sort/projectzip.zip");
 //		assertTrue(zip.exists());
-	}
-
-
-
-	// Test di unità:
-	// ==============
-
-	// Avviato un RequestHandlerController, questo è in grado di rispondere a una richiesta di generazione di codice.
-	@Test
-	public void controllerInteractsWithCompiler() throws IOException {
-		HttpEntity<String> request = new HttpEntity<String>(new String(Files.readAllBytes(Paths.get("src/main/resources/project.json"))));
-		ResponseEntity<?> result = stubbedrhc.handleGenerationRequest(request);
 	}
 }

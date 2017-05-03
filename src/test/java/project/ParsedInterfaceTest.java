@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.*;
 import org.junit.Test;
 
 import server.project.*;
+import server.template.Template;
 import server.template.java.JavaTemplate;
 
 import java.util.List;
@@ -12,11 +13,17 @@ import java.util.Arrays;
 
 public class ParsedInterfaceTest {
 
+	private Template template = new JavaTemplate();
+
+
+
+	// Test di unità:
+	// ==============
+
 	// Costruita una ParsedInterface, questa è in grado di generare una stringa Java contenente la keyword ``interface'' seguita dal nome della ParsedInterface.
 	@Test
 	public void interfaceContainsBasicInfo() throws ParsedException {
 		ParsedInterface type = new ParsedInterface("MyInterface");
-		JavaTemplate template = new JavaTemplate();
 		String result = type.renderTemplate(template);
 		assertThat(result, containsString("interface MyInterface"));
 	}
@@ -27,7 +34,6 @@ public class ParsedInterfaceTest {
 		ParsedInterface type = new ParsedInterface("MyInterface");
 		ParsedAttribute field = new ParsedAttribute(true, null, "String", "DATA", "=", "2");
 		type.addField(field);
-		JavaTemplate template = new JavaTemplate();
 		String result = type.renderTemplate(template);
 		assertThat(result, containsString("static final String DATA = 2;"));
 	}
@@ -40,7 +46,6 @@ public class ParsedInterfaceTest {
 		List<ParsedInstruction> body = Arrays.asList();
 		ParsedMethod method = new ParsedMethod("public", false, true, "boolean", "isGood", arguments, body);
 		type.addMethod(method);
-		JavaTemplate template = new JavaTemplate();
 		String result = type.renderTemplate(template);
 		assertThat(result, containsString("public boolean isGood();"));
 	}
@@ -50,7 +55,6 @@ public class ParsedInterfaceTest {
 	public void interfaceCanExtendInterface() throws ParsedException {
 		ParsedInterface type = new ParsedInterface("MyInterface");
 		type.addSupertype("OtherInterface", "interface");
-		JavaTemplate template = new JavaTemplate();
 		String result = type.renderTemplate(template);
 		assertThat(result, containsString("interface MyInterface extends OtherInterface"));
 	}

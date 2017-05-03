@@ -13,7 +13,13 @@ import java.util.List;
 import java.util.Arrays;
 
 public class JavaTemplateTest {
+
 	private Template factory = new JavaTemplate();
+
+
+
+	// Test di unità:
+	// ==============
 
 	// Un JavaTemplate è in grado di fornire un oggetto ST che generi una stringa Java contenente la dichiarazione di un attributo.
 	@Test

@@ -46,7 +46,7 @@ public class JavaCompiler implements Compiler {
 
 			List<String> filePathsList = new ArrayList<String>();
 			for (File file : files) {
-				if(file.isFile()) {
+				if (file.isFile()) {
 					filePathsList.add(file.getAbsolutePath());
 					/*try {
 						errors.addAll(compileFile(file.getAbsolutePath()));}
@@ -64,6 +64,7 @@ public class JavaCompiler implements Compiler {
 
 		return errors;
 	}
+
 	private List<String> compileFile(List<String> fileName) throws IOException {
 		List<String> errors = new ArrayList<String>(); 
 		javax.tools.JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();

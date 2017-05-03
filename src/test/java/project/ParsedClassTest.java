@@ -28,27 +28,6 @@ public class ParsedClassTest {
 	@Qualifier("javatemplate")
 	private Template template;
 
-	@Autowired
-	@Qualifier("mockparsedattribute")
-	private ParsedAttribute mockParsedAttribute;
-
-	@Autowired
-	@Qualifier("mockjavatemplate")
-	private Template mockJavaTemplate;
-
-
-
-	// Test di integrazione:
-	// =====================
-
-	// PROVA:
-	@Test
-	public void TUclassContainsBasicInfo() throws ParsedException {
-		ParsedClass type = new ParsedClass("MyClass", false);
-		String result = type.renderTemplate(mockJavaTemplate);
-		assertThat(result, containsString("class MyClass"));
-	}
-
 
 
 	// Test di unità:

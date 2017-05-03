@@ -15,16 +15,36 @@ import java.nio.file.Paths;
 
 public class ParserTest {
 
-	// Dato un file JSON contenente informazioni per generare un programma (quindi un array di tipi), Parser è in grado di ricavare un ParsedProgram con tanti tipi quanti dichiarati nel file JSON.
+	private Parser parser = new Parser();
+
+
+
+	// Test di unità:
+	// ==============
+
+	// Dato un file JSON contenente informazioni per generare un programma (quindi un array di tipi), Parser è in grado di ricavare un ParsedProgram. % [--- con tanti tipi quanti dichiarati nel file JSON. ---]
 	@Test
 	public void parserParsesAllClasses() throws JSONException, IOException {
-		Parser parser = new Parser();
+		String diagrams = new String(Files.readAllBytes(Paths.get("src/main/resources/project.json")));
+
+		JSONObject program = new JSONObject(diagrams);
+		ParsedProgram result = parser.createParsedProgram(diagrams);
+	}
+
+
+
+	// Test di integrazione:
+	// =====================
+
+	// Il sistema gestisce correttamente le componenti relative al package parser; in particolare, gestisce correttamente l'interazione tra un Parser e un ParsedProgram di swedesigner::server.
+	@Test
+	public void parserYieldsParsedProgram() throws JSONException, IOException {
 		String diagrams = new String(Files.readAllBytes(Paths.get("src/main/resources/project.json")));
 
 		JSONObject program = new JSONObject(diagrams);
 		JSONArray classes = program.getJSONObject("classes").getJSONArray("classesArray");
 
-		ParsedProgram parsedProgram = parser.createParsedProgram(diagrams);
-		assertEquals(classes.length(), parsedProgram.nClasses());
+		ParsedProgram result = parser.createParsedProgram(diagrams);
+		assertEquals(classes.length(), result.nClasses());
 	}
 }

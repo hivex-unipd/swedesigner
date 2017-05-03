@@ -26,6 +26,11 @@ public class GeneratorTest {
 	@Qualifier("javagenerator")
 	private Generator generator;
 
+
+
+	// Test di unità:
+	// ==============
+
 	// Dato il nome di una directory esistente e un ParsedProgram valido, JavaGenerator crea nella directory un file sorgente per ogni tipo appartenente al programma.
 	@Test
 	public void generatorYieldsBasicInfo() throws FileNotFoundException, ParsedException {
@@ -49,6 +54,8 @@ public class GeneratorTest {
 		File result_2 = new File("src/main/resources/generator_test/SecondClass.java");
 		assertTrue(result_1.exists());
 		assertTrue(result_2.exists());
+		result_1.delete();
+		result_2.delete();
 	}
 
 	// Dato un ParsedProgram vuoto, JavaGenerator risponde a una richiesta generate() senza lanciare eccezioni.
@@ -56,5 +63,16 @@ public class GeneratorTest {
 	public void generatorHandlesEmptyProgram() throws FileNotFoundException {
 		ParsedProgram program = new ParsedProgram();
 		generator.generate("stub", program);
+	}
+
+
+
+	// Test di integrazione:
+	// =====================
+
+	// Il sistema gestisce correttamente le componenti relative al package generator; in particolare, gestisce correttamente l'interazione tra un Generator e un Template di swedesigner::server.
+	@Test
+	public void generatorHandlesTemplate() throws FileNotFoundException {
+		// TODO: ?????
 	}
 }

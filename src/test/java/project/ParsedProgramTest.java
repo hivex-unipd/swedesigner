@@ -53,5 +53,7 @@ public class ParsedProgramTest {
 		assertThat(result_1, containsString("int getSomething()"));
 		assertThat(result_1, containsString("String s = new String();"));
 		assertThat(result_2, containsString("abstract class SecondClass"));
+		Files.delete(Paths.get("src/main/resources/pprogram_test/FirstClass.java"));
+		Files.delete(Paths.get("src/main/resources/pprogram_test/SecondClass.java"));
 	}
 }

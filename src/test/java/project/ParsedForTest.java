@@ -7,12 +7,20 @@ import org.junit.Test;
 import server.project.ParsedFor;
 import server.project.ParsedInstruction;
 import server.project.ParsedStatement;
+import server.template.Template;
 import server.template.java.JavaTemplate;
 
 import java.util.List;
 import java.util.Arrays;
 
 public class ParsedForTest {
+
+	private Template template = new JavaTemplate();
+
+
+
+	// Test di unità:
+	// ==============
 
 	// Costruito un ParsedFor, questo è in grado di generare una stringa Java contenente ``for(A; B; C)'', dove A, B e C sono risp. l'inizializzazione, la condizione e l'aggiornamento passatigli nel costruttore.
 	@Test
