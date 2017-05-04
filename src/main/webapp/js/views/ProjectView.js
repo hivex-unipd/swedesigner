@@ -108,9 +108,13 @@ define([
 
                 var l = g.length;
                 for (ii = 0; ii < l; ii++) {
+					if(g[ii])
+					{
+						
                     g[ii].updateRectangles();
                     p.removeView(g[ii]);
                     p.renderView(g[ii]); // per qualche ragione è necessario..
+					}
                 }
             }
         },
@@ -262,6 +266,11 @@ define([
 
                 // cella corrente
                 var curr = this.selectedCell;
+				
+				if(curr)
+				{
+					
+					
                 var figli = curr.getEmbeddedCells({deep: true});
 
                 // funzione per muovere l'array (è fatta bene)
@@ -428,6 +437,10 @@ define([
                 }
                 this.trigger("renderActivity");
             }
+					
+					
+
+				}
         },
 
         /**
