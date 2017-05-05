@@ -65,6 +65,7 @@ define([
             'click #savefile': 'save',
             'change #files': 'load',
             'click #generate': 'generate',
+            'click #newproj':'newProject'
         },
         /**
          * Toggles the visibility of the 'Back to Class
@@ -76,6 +77,14 @@ define([
             $('#switchtoclass').toggle();
         },
 
+        newProject: function () {
+            //workaround orrendo ma funziona
+            if($('#switchtoclass').css('display')=='block'){
+                $('#switchtoclass')[0].click();
+            }
+            Command.execute('newProject');
+        },
+
         /**
          * Shows the class diagram.
          * @name AppView#switchToClass
@@ -83,6 +92,8 @@ define([
          */
         switchToClass: function (e) {
             this.views.project.switch('class');
+
+            $('#elementstab')[0].click();
         },
         /**
          * Switches between different diagram elements.
@@ -116,6 +127,10 @@ define([
          * @param {event} event the action event
          */
         load: function (event) {
+            //workaround orrendo ma funziona
+            if($('#switchtoclass').css('display')=='block'){
+                $('#switchtoclass')[0].click();
+            }
             Command.execute('loadProject', event);
         },
         /**

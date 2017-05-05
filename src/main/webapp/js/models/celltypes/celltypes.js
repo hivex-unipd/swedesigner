@@ -130,6 +130,7 @@ define([
             joint.dia.ElementView.prototype.initialize.apply(this, arguments);
 
             this.listenTo(this.model, 'uml-update', function () {
+
                 this.update();
                 this.resize();
             });
@@ -145,7 +146,7 @@ define([
             'mousedown .toggleattributes': 'toggleAttributes'
         },
 
-        render: function(){
+        render: function () {
             joint.dia.ElementView.prototype.render.apply(this, arguments);
 
             this.renderTools();
@@ -156,11 +157,11 @@ define([
         renderTools: function () {
 
             var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
-            console.log("markup:",toolMarkup);
+            console.log("markup:", toolMarkup);
             if (toolMarkup) {
 
                 var nodes = joint.V(toolMarkup);
-                console.log("el:",joint.V(this.el));
+                console.log("el:", joint.V(this.el));
                 joint.V(this.el).append(nodes);
 
             }
@@ -169,24 +170,24 @@ define([
         },
         /*pointerclick: function (evt, x, y) {
 
-            /*this._dx = x;
-            this._dy = y;
-            this._action = '';
+         /*this._dx = x;
+         this._dy = y;
+         this._action = '';
 
-            var className = evt.target.parentNode.getAttribute('class');
+         var className = evt.target.parentNode.getAttribute('class');
 
-            switch (className) {
+         switch (className) {
 
-                case 'element-tool-remove':
-                    this.model.remove();
-                    return;
-                    break;
+         case 'element-tool-remove':
+         this.model.remove();
+         return;
+         break;
 
-                default:
-            }
+         default:
+         }
 
-            joint.dia.CellView.prototype.pointerclick.apply(this, arguments);
-        },*/
+         joint.dia.CellView.prototype.pointerclick.apply(this, arguments);
+         },*/
 
         /**
          * Toggles the display of the class attributes.
@@ -291,7 +292,7 @@ define([
 
                 '.uml-class-name-text': {
                     'ref': '.uml-class-name-rect',
-                    'ref-y': .5,
+                    'ref-y': .6,
                     'ref-x': .5,
                     'text-anchor': 'middle',
                     'y-alignment': 'middle',
@@ -301,7 +302,7 @@ define([
                 },
                 '.uml-class-attrs-text': {
                     'ref': '.uml-class-attrs-rect',
-                    'ref-y': 5,
+                    'ref-y': 2,
                     'ref-x': 5,
                     'fill': '#222222',
                     'font-size': 12,
@@ -309,7 +310,7 @@ define([
                 },
                 '.uml-class-methods-text': {
                     'ref': '.uml-class-methods-rect',
-                    'ref-y': 5,
+                    'ref-y': 2,
                     'ref-x': 5,
                     'fill': '#222222',
                     'font-size': 12,
@@ -352,21 +353,25 @@ define([
                     text: this.get('methodsExpanded') ? this.getValues().methods : "Methods (click to expand)"
                 }
             ];
+
+            var rectWidth = this.getWidth();
+
             var rectHeight = 1 * 15 + 1;
             attrs['.uml-class-name-text'].text = rects[0].text;
             attrs['.uml-class-name-rect'].height = rectHeight;
+            attrs['.uml-class-name-rect'].width = rectWidth;
             attrs['.uml-class-name-rect'].transform = 'translate(0,' + offsetY + ')';
             offsetY += rectHeight;
             //rectHeight = _.isArray(rects[1].text) ? rects[1].text.length * 15 + 1 : 1 * 15 + 1;
-            if( _.isArray(rects[1].text)){
-                if(rects[1].text.length>0){
+            if (_.isArray(rects[1].text)) {
+                if (rects[1].text.length > 0) {
                     rectHeight = rects[1].text.length * 15 + 1;
                 }
-                else{
+                else {
                     rectHeight = 1 * 15 + 1;
                 }
             }
-            else{
+            else {
                 rectHeight = 1 * 15 + 1;
             }
             attrs['.uml-class-attrs-text'].text = _.isArray(rects[1].text) ? rects[1].text.map(function (e) {
@@ -382,24 +387,25 @@ define([
                             vis = "~";
                             break;
                         /*case "package":
-                            vis = "#";
-                            break;*/
+                         vis = "#";
+                         break;*/
                     }
                     return vis + " " + e.name + ":" + e.type;
                 }).join('\n') : rects[1].text;
             attrs['.uml-class-attrs-rect'].height = rectHeight;
+            attrs['.uml-class-attrs-rect'].width = rectWidth;
             attrs['.uml-class-attrs-rect'].transform = 'translate(0,' + offsetY + ')';
             offsetY += rectHeight;
             //rectHeight = _.isArray(rects[2].text) ? rects[2].text.length * 15 + 1 : 1 * 15 + 1;
-            if( _.isArray(rects[2].text)){
-                if(rects[2].text.length>0){
+            if (_.isArray(rects[2].text)) {
+                if (rects[2].text.length > 0) {
                     rectHeight = rects[2].text.length * 15 + 1;
                 }
-                else{
+                else {
                     rectHeight = 1 * 15 + 1;
                 }
             }
-            else{
+            else {
                 rectHeight = 1 * 15 + 1;
             }
             attrs['.uml-class-methods-text'].text = _.isArray(rects[2].text) ? rects[2].text.map(function (e) {
@@ -424,6 +430,7 @@ define([
                     return vis + " " + e.name + "(" + params + ")" + ":" + e.returnType;
                 }).join('\n') : rects[2].text;
             attrs['.uml-class-methods-rect'].height = rectHeight;
+            attrs['.uml-class-methods-rect'].width = rectWidth;
             attrs['.uml-class-methods-rect'].transform = 'translate(0,' + offsetY + ')';
 
             celltypes.class.ClassDiagramElement.prototype.updateRectangles.apply(this, arguments);
@@ -477,12 +484,18 @@ define([
         },
         deleteParameter: function (met) {
             this.getValues().methods[met[0]].parameters.splice(met[1], 1);
+            this.updateRectangles();
+            this.trigger("uml-update");
         },
         deleteAttribute: function (ind) {
             this.getValues().attributes.splice(ind, 1);
+            this.updateRectangles();
+            this.trigger("uml-update");
         },
         deleteMethod: function (ind) {
             this.getValues().methods.splice(ind, 1);
+            this.updateRectangles();
+            this.trigger("uml-update");
         },
         getAttrsDesc: function () {
             let attrDesc = this.getValues().attributes.map(function (e) {
@@ -501,11 +514,11 @@ define([
                      vis = "#";
                      break;*/
                 }
-                return {'text':vis + e.name+":"+e.type,'icon':'assets/attributeicon.png'};
-            }) ;
+                return {'text': vis + e.name + ":" + e.type, 'icon': 'assets/attributeicon.png'};
+            });
             return attrDesc;
         },
-        getMetDesc:function () {
+        getMetDesc: function () {
             let metDesc = this.getValues().methods.map(function (e) {
                 let vis = "";
                 switch (e.visibility) {
@@ -525,17 +538,40 @@ define([
                 let params = e.parameters.map(function (f) {
                     return f.name;
                 }).join(",");
-                return {'text':vis + " " + e.name + "(" + params + ")" + ":" + e.returnType,'icon':'assets/methodicon.png'};
+                return {
+                    'text': vis + " " + e.name + "(" + params + ")" + ":" + e.returnType,
+                    'icon': 'assets/methodicon.png'
+                };
             });
             return metDesc;
 
         },
-        getCellDesc:function () {
+        getCellDesc: function () {
             return {
-                'text':this.getValues().name,
-                'icon':'assets/classicon.png',
-                'children':this.getAttrsDesc().concat(this.getMetDesc())
+                'text': this.getValues().name,
+                'icon': 'assets/classicon.png',
+                'children': this.getAttrsDesc().concat(this.getMetDesc())
             }
+        },
+        getWidth: function () {
+
+            let longest = rects[0].text.length;
+            let tmp = this.getAttrsDesc();
+            for (i = 0; i < tmp.length; i++) {
+
+                if (tmp[i].text.length > longest) {
+                    longest = tmp[i].text.length;
+                }
+            }
+            console.log(longest);
+            tmp = this.getMetDesc();
+            for (i = 0; i < tmp.length; i++) {
+                if (tmp[i].text.length > longest) {
+                    longest = tmp[i].text.length;
+                }
+            }
+            return longest*5+180;
+
         }
     });
 
@@ -611,15 +647,15 @@ define([
             attrs['.uml-class-name-rect'].transform = 'translate(0,' + offsetY + ')';
             offsetY += rectHeight;
             //rectHeight = _.isArray(rects[1].text) ? rects[1].text.length * 15 + 1 : 1 * 15 + 1;
-            if( _.isArray(rects[1].text)){
-                if(rects[1].text.length>0){
+            if (_.isArray(rects[1].text)) {
+                if (rects[1].text.length > 0) {
                     rectHeight = rects[1].text.length * 15 + 1;
                 }
-                else{
+                else {
                     rectHeight = 1 * 15 + 1;
                 }
             }
-            else{
+            else {
                 rectHeight = 1 * 15 + 1;
             }
             attrs['.uml-class-methods-text'].text = _.isArray(rects[1].text) ? rects[1].text.map(function (e) {
@@ -635,8 +671,8 @@ define([
                             vis = "~";
                             break;
                         /*case "package":
-                            vis = "#";
-                            break;*/
+                         vis = "#";
+                         break;*/
                     }
                     var params = e.parameters.map(function (f) {
                         return f.name;
@@ -672,7 +708,7 @@ define([
         deleteMethod: function (ind) {
             this.getValues().methods.splice(ind, 1);
         },
-        getMetDesc:function () {
+        getMetDesc: function () {
             let metDesc = this.getValues().methods.map(function (e) {
                 let vis = "";
                 switch (e.visibility) {
@@ -692,16 +728,19 @@ define([
                 let params = e.parameters.map(function (f) {
                     return f.name;
                 }).join(",");
-                return {'text':vis + " " + e.name + "(" + params + ")" + ":" + e.returnType,'icon':'assets/methodicon.png'};
+                return {
+                    'text': vis + " " + e.name + "(" + params + ")" + ":" + e.returnType,
+                    'icon': 'assets/methodicon.png'
+                };
             });
             return metDesc;
 
         },
-        getCellDesc:function () {
+        getCellDesc: function () {
             return {
-                'text':this.getValues().name,
-                'icon':'assets/interfaceicon.png',
-                'children':this.getMetDesc()
+                'text': this.getValues().name,
+                'icon': 'assets/interfaceicon.png',
+                'children': this.getMetDesc()
             }
         }
     });
@@ -805,9 +844,14 @@ define([
 
         defaults: _.defaultsDeep({
             type: 'class.HxAssociation',
-            attrs:{
+            attrs: {
 
-                '.marker-target':{d: 'M 50 10 L 60 3 M 50 10 L 60 16',fill:'white','fill-opacity':'0.4',stroke:'black'},
+                '.marker-target': {
+                    d: 'M 50 10 L 60 3 M 50 10 L 60 16',
+                    fill: 'white',
+                    'fill-opacity': '0.4',
+                    stroke: 'black'
+                },
                 /*'.marker-target':{d: 'M 35 0 L 20 10 L 35 20',fill:'white','fill-opacity':'0.4',stroke:'black'},*/
                 '.connection': {'stroke-dasharray': '3,3'}
             },
@@ -892,8 +936,7 @@ define([
                 rect: {'width': 200},
 
 
-
-                '.activity-toggle': {'fill': '#eedd99','stroke': 'd6b656', 'stroke-width': 1},
+                '.activity-toggle': {'fill': '#eedd99', 'stroke': 'd6b656', 'stroke-width': 1},
                 '.activity-element-name-rect': {'stroke': '#d6b656', 'stroke-width': 1, 'fill': '#fff2cc'},
 
                 '.activity-element-body-rect': {'stroke': '#d6b656', 'stroke-width': 1, 'fill': '#fff2cc'},
@@ -938,7 +981,6 @@ define([
                 },
 
 
-
             },
 
             expanded: true,
@@ -977,14 +1019,14 @@ define([
             return this.get("offsetY");
         },
         getOffsetX: function () {
-            return this.getAncestors().length * 10+10;
+            return this.getAncestors().length * 10 + 10;
 
         },
         getHeight: function () {
             return 35;
         },
 
-        getDescription : function () {
+        getDescription: function () {
             return this.getValues().xType;
         },
         updateRectangles: function () {
@@ -993,10 +1035,10 @@ define([
             if (this.get("hidden")) {
                 // hack cattivissimo per evitare creazioni di nuovi oggetti e nascondere l'oggetto
                 //this.attributes.position = {x: -9999, y: -9999};
-                attrs['.activity'].visibility="hidden";
+                attrs['.activity'].visibility = "hidden";
             }
             else {
-                attrs['.activity'].visibility="visible";
+                attrs['.activity'].visibility = "visible";
                 this.attributes.position = {x: this.getOffsetX(), y: this.getOffsetY()};
 
                 if (this.getValues().comment.length > 20) {
@@ -1004,7 +1046,7 @@ define([
 
                 }
                 else {
-                    var text =  "\n" + this.getValues().comment;
+                    var text = "\n" + this.getValues().comment;
                 }
 
                 attrs['.activity-toggle'].transform = 'translate(180,0)';
@@ -1016,13 +1058,13 @@ define([
                     var i;
                     var len;
 
-                    for(i = 0, len = str.length; i < len; i += n) {
+                    for (i = 0, len = str.length; i < len; i += n) {
                         ret.push(str.substr(i, n))
                     }
 
                     return ret;
                 };
-                attrs['.activity-element-body-text'].text =  chunk(this.getDescription().slice(0,100),25).join('\n');
+                attrs['.activity-element-body-text'].text = chunk(this.getDescription().slice(0, 100), 25).join('\n');
                 attrs['.activity-element-type-text'].text = this.getValues().xType;
                 attrs['.activity-element-type-text'].transform = 'translate(-180,0)';
                 attrs['.activity-element-name-rect'].height = this.getHeight();
@@ -1056,12 +1098,11 @@ define([
                 attrs['.activity-element-body-rect'].transform = 'translate(0,35)';
 
 
-
             }
 
             attrs['.activity-element-type-rect'].height =
                 attrs['.activity-element-name-rect'].height
-                +   attrs['.activity-element-body-rect'].height;
+                + attrs['.activity-element-body-rect'].height;
 
             attrs['.activity-element-type-rect'].width = 5;
 
@@ -1087,18 +1128,18 @@ define([
         renderTools: function () {
 
             var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
-            console.log("markup:",toolMarkup);
+            console.log("markup:", toolMarkup);
             if (toolMarkup) {
 
                 var nodes = joint.V(toolMarkup);
-                console.log("el:",joint.V(this.el));
+                console.log("el:", joint.V(this.el));
                 joint.V(this.el).append(nodes);
 
             }
 
             return this;
         },
-        render: function(){
+        render: function () {
             joint.dia.ElementView.prototype.render.apply(this, arguments);
 
             this.renderTools();
@@ -1139,7 +1180,7 @@ define([
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
         },
-        getDescription : function () {
+        getDescription: function () {
             return this.getValues().code;
         },
     });
@@ -1164,7 +1205,7 @@ define([
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
         },
-        getDescription : function () {
+        getDescription: function () {
             return "";
         },
     });
@@ -1197,8 +1238,8 @@ define([
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
         },
-        getDescription : function () {
-            return this.getValues().initialization+";"+this.getValues().termination+";"+this.getValues().increment;
+        getDescription: function () {
+            return this.getValues().initialization + ";" + this.getValues().termination + ";" + this.getValues().increment;
         },
     });
     celltypes.activity.HxIf = celltypes.activity.ActivityDiagramElement.extend({
@@ -1226,8 +1267,8 @@ define([
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
         },
-        getDescription : function () {
-            return "if("+this.getValues().condition+ ")";
+        getDescription: function () {
+            return "if(" + this.getValues().condition + ")";
         },
     });
     celltypes.activity.HxVariable = celltypes.activity.ActivityDiagramElement.extend({
@@ -1261,7 +1302,7 @@ define([
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
         },
-        getDescription : function () {
+        getDescription: function () {
             return this.getValues().type + " " + this.getValues().name + this.getValues().operation + this.getValues().value;
         },
     });
@@ -1292,7 +1333,7 @@ define([
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
         },
-        getDescription : function () {
+        getDescription: function () {
             return "return " + this.getValues().value;
         },
     });
@@ -1322,7 +1363,7 @@ define([
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
         },
-        getDescription : function () {
+        getDescription: function () {
             return "while(" + this.getValues().condition + ")";
         },
     });

@@ -103,8 +103,19 @@ define([
             this.options.graphs = JSON.parse(diag);
             this.options.currentindex = "class";
             this.graph.resetCells(this.options.graphs.classes.classesArray.concat(this.options.graphs.classes.relationshipsArray));
-            this.trigger("renderActivity");
+            //this.trigger("renderActivity");
 
+        },
+        newProject:function () {
+            this.options.graphs =  {
+                classes: {
+                    classesArray: [],
+                        relationshipsArray: []
+                },
+                methods: []
+            };
+            this.options.currentindex = "class";
+            this.graph.clear();
         },
         getIndexFromId: function (id) {
             return this.options.graphs.methods.findIndex((x) => x.id == id);

@@ -58,6 +58,10 @@ define([
             reader.readAsText(f);
         },
 
+        newProject: function(evt){
+            ProjectModel.newProject();
+        },
+
 
         sendDiagram: function () {
             var data = {};
