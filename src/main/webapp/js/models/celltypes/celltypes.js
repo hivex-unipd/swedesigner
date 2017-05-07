@@ -746,6 +746,12 @@ define([
     });
 
     celltypes.class.HxComment = joint.shapes.basic.TextBlock.extend({
+        toolMarkup: ['<g class="element-tools">',
+            '<g class="element-tool-remove"><circle fill="red" r="11"/>',
+            '<path transform="scale(.8) translate(-16, -16)" d="M24.778,21.419 19.276,15.917 24.777,10.415 21.949,7.585 16.447,13.087 10.945,7.585 8.117,10.415 13.618,15.917 8.116,21.419 10.946,24.248 16.447,18.746 21.948,24.248z"/>',
+            '<title>Remove</title>',
+            '</g>',
+            '</g>'].join(''),
         defaults: _.defaultsDeep({
             type: "class.HxComment",
             position: {x: 200, y: 200},
@@ -794,6 +800,34 @@ define([
             }
         }
 
+    });
+
+    celltypes.class.CommentView = joint.shapes.basic.TextBlockView.extend({
+        initialize: function () {
+            joint.shapes.basic.TextBlockView.prototype.initialize.apply(this, arguments);
+        },
+        render: function () {
+            joint.shapes.basic.TextBlockView.prototype.render.apply(this, arguments);
+
+            this.renderTools();
+            this.update();
+            return this;
+        },
+
+        renderTools: function () {
+
+            var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
+            console.log("markup:", toolMarkup);
+            if (toolMarkup) {
+
+                var nodes = joint.V(toolMarkup);
+                console.log("el:", joint.V(this.el));
+                joint.V(this.el).append(nodes);
+
+            }
+
+            return this;
+        },
     });
 
     celltypes.class.ClassDiagramLink = joint.dia.Link.extend({

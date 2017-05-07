@@ -483,7 +483,7 @@ define([
                 elementView: function (element) {
                     if (element.get("type").startsWith("class")) {
                         if (element.get("type") == "class.HxComment") {
-                            return joint.shapes.basic.TextBlockView;
+                            return celltypes.class.CommentView;
                         }
                         else {
                             return celltypes.class.ClassDiagramElementView;
