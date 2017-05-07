@@ -16,7 +16,6 @@ public class Stereotype {
 	/**
 	 * Constructor for a stereotype.
 	 * @param  path where the stereotype is located
-	 * @return      a new Stereotype
 	 */
 	public Stereotype(String path) {
 		metaAttributes = new ArrayList<String>();
