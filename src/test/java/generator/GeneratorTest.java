@@ -62,7 +62,7 @@ public class GeneratorTest {
 	@Test
 	public void generatorHandlesEmptyProgram() throws FileNotFoundException {
 		ParsedProgram program = new ParsedProgram();
-		generator.generate("stub", program);
+		generator.generate("empty", program);
 	}
 
 
@@ -73,6 +73,8 @@ public class GeneratorTest {
 	// Il sistema gestisce correttamente le componenti relative al package generator; in particolare, gestisce correttamente l'interazione tra un Generator e un Template di swedesigner::server.
 	@Test
 	public void generatorHandlesTemplate() throws FileNotFoundException {
-		// TODO: ?????
+		ParsedProgram program = new ParsedProgram();
+		generator.generate("empty", program);
+		// TODO?
 	}
 }

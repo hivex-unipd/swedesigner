@@ -42,7 +42,7 @@ public class RequestHandlerControllerTest {
 
 	// Avviato un RequestHandlerController, questo è in grado di rispondere a una richiesta di generazione di codice.
 	@Test
-	public void controllerInteractsWithCompiler() throws IOException {
+	public void controllerHandlesRequest() throws IOException {
 		HttpEntity<String> request = new HttpEntity<String>(new String(Files.readAllBytes(Paths.get("src/main/resources/project.json"))));
 		ResponseEntity<?> result = stubbedrhc.handleGenerationRequest(request);
 	}
@@ -52,13 +52,29 @@ public class RequestHandlerControllerTest {
 	// Test di integrazione:
 	// =====================
 
-	// Avviato un RequestHandlerController, questo è in grado di rispondere a una richiesta di generazione di codice interagendo con un Parser, un Generator, un Compiler e un Compressor.
+	// Il sistema gestisce correttamente l'interazione tra un RequestHandlerController e i suoi membri di tipo Parser, Generator, Compiler e Compressor (del swedesigner::server).
 	@Test
-	public void controllerHandlesRequest() throws IOException {
+	public void controllerInteractsWithComponents() throws IOException {
 		HttpEntity<String> request = new HttpEntity<String>(new String(Files.readAllBytes(Paths.get("src/main/resources/project.json"))));
 		ResponseEntity<?> result = rhc.handleGenerationRequest(request);
 		// TODO? non abbiamo la cartella Uploads...
 //		File zip = new File("src/main/resources/sort/projectzip.zip");
 //		assertTrue(zip.exists());
+	}
+
+	// Il sistema gestisce correttamente l'interazione tra un RequestHandlerController e un Compiler di swedesigner::server.
+	@Test
+	public void controllerInteractsWithCompiler() throws IOException {
+		HttpEntity<String> request = new HttpEntity<String>(new String(Files.readAllBytes(Paths.get("src/main/resources/project.json"))));
+		ResponseEntity<?> result = rhc.handleGenerationRequest(request);
+		// TODO?
+	}
+
+	// Il sistema gestisce correttamente le componenti relative al package utility; in particolare, gestisce correttamente l'interazione tra un RequestHandlerController e un Compressor di swedesigner::server.
+	@Test
+	public void controllerInteractsWithCompressor() throws IOException {
+		HttpEntity<String> request = new HttpEntity<String>(new String(Files.readAllBytes(Paths.get("src/main/resources/project.json"))));
+		ResponseEntity<?> result = rhc.handleGenerationRequest(request);
+		// TODO?
 	}
 }
