@@ -79,14 +79,6 @@ define([
             $('#switchtoclass').toggle();
         },
 
-        newProject: function () {
-            // workaround orrendo ma funziona
-            if ($('#switchtoclass').css('display') == 'block') {
-                $('#switchtoclass')[0].click();
-            }
-            Command.execute('newProject');
-        },
-
         /**
          * Shows the class diagram.
          * @name AppView#switchToClass
@@ -111,6 +103,19 @@ define([
                 this.views.project.switch(0);
                 this.views.index = 0;
             }
+        },
+
+        /**
+         * Creates a new project from scratch.
+         * @name AppView#newProject
+         * @function
+         */
+        newProject: function () {
+            // workaround orrendo ma funziona
+            if ($('#switchtoclass').css('display') == 'block') {
+                $('#switchtoclass')[0].click();
+            }
+            Command.execute('newProject');
         },
 
         /**

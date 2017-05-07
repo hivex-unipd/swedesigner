@@ -79,6 +79,4 @@ require([
 	assert(ncfactory.getCell('HxVariable').defaults.type == 'activity.HxVariable', 'NewCellFactory è in grado di fornire una HxVariable');
 	assert(ncfactory.getCell('HxReturn').defaults.type == 'activity.HxReturn', 'NewCellFactory è in grado di fornire un HxReturn');
 	assert(ncfactory.getCell('HxWhile').defaults.type == 'activity.HxWhile', 'NewCellFactory è in grado di fornire un HxWhile');
-
-	app_view.Command.execute('saveProject');
 });

@@ -107,13 +107,13 @@ define([
 
                 var l = g.length;
                 for (ii = 0; ii < l; ii++) {
-					if (g[ii])
-					{
-						
+                    if (g[ii])
+                    {
+                        
                     g[ii].updateRectangles();
                     p.removeView(g[ii]);
                     p.renderView(g[ii]); // per qualche ragione è necessario..
-					}
+                    }
                 }
             }
         },
@@ -257,175 +257,165 @@ define([
 
                 // cella corrente
                 var curr = this.selectedCell;
-				
-				if (curr) {
-					
-					
-                var figli = curr.getEmbeddedCells({deep: true});
+                
+                if (curr) {
 
-                // funzione per muovere l'array (è fatta bene)
-                var move = function (a, old_index, new_index) {
-                    if (new_index >= a.length) {
-                        var k = new_index - a.length;
-                        while ((k--) + 1) {
-                            a.push(undefined);
+                    var figli = curr.getEmbeddedCells({deep: true});
+
+                    // funzione per muovere l'array (è fatta bene)
+                    var move = function (a, old_index, new_index) {
+                        if (new_index >= a.length) {
+                            var k = new_index - a.length;
+                            while ((k--) + 1) {
+                                a.push(undefined);
+                            }
                         }
-                    }
-                    a.splice(new_index, 0, a.splice(old_index, 1)[0]);
-                    return a; // for testing purposes
-                };
+                        a.splice(new_index, 0, a.splice(old_index, 1)[0]);
+                        return a; // for testing purposes
+                    };
 
-                // indice cella corrente
-                var currentIndex = g.indexOf(curr); // è necessario cercare a che indice vorrebbe mettere la cosa
+                    // indice cella corrente
+                    var currentIndex = g.indexOf(curr); // è necessario cercare a che indice vorrebbe mettere la cosa
 
-                // funzione di debug
-                var debug = function () {
-                    var x = "";
+                    // funzione di debug
+                    var debug = function () {
+                        var x = "";
 
-                    for (var d = 0; d < g.length; d++) {
-                        x += "|" + g[d].get("values").comment[0] + "|";
-                    }
-                    console.log(x);
-                };
+                        for (var d = 0; d < g.length; d++) {
+                            x += "|" + g[d].get("values").comment[0] + "|";
+                        }
+                        console.log(x);
+                    };
 
-                // necessaria per fixare problemi di ordine
-                var correctEmbedding = function (index, parent, cell) {
-                    var embcells = parent.getEmbeddedCells();
+                    // necessaria per fixare problemi di ordine
+                    var correctEmbedding = function (index, parent, cell) {
+                        var embcells = parent.getEmbeddedCells();
 
-                    // deeembeddo ogni cella
-                    parent.unembed(embcells.pop(cell));
+                        // deeembeddo ogni cella
+                        parent.unembed(embcells.pop(cell));
 
-                    for (var i = 0; i < embcells.length; i++) {
-                        parent.unembed(embcells[i]);
-                    }
+                        for (var i = 0; i < embcells.length; i++) {
+                            parent.unembed(embcells[i]);
+                        }
 
-                    // embeddo celle da i ad index
-                    for (var i = 0; i < index && i < embcells.length; i++) {
-                        parent.embed(embcells[i]);
-                    }
+                        // embeddo celle da i ad index
+                        for (var i = 0; i < index && i < embcells.length; i++) {
+                            parent.embed(embcells[i]);
+                        }
 
-                    // embeddo la cella in input
-                    parent.embed(cell);
+                        // embeddo la cella in input
+                        parent.embed(cell);
 
 
-                    // embeddo le celle rimanenti
-                    for (var i = index; i < embcells.length; i++) {
-                        parent.embed(embcells[i]);
-                    }
-                };
+                        // embeddo le celle rimanenti
+                        for (var i = index; i < embcells.length; i++) {
+                            parent.embed(embcells[i]);
+                        }
+                    };
 
-                // se parentCell esiste
-                if (parentCell) {
-                    // se parentCell ha solo me come figlio: yee! apposto, ho trovato del posto.
-                    if (parentCell.get("embeds").length == 1 && parentCell.get("embeds")[0] == this.selectedCell.id) {
-                        console.log("non ho fratelli :(");
-                        debug();
-                        var dest = g.indexOf(parentCell) + 1;
-                        for (var i = 0; i <= figli.length; i++) {
-                            move(g, g.length - 1 - figli.length + i, dest + i);
+                    // se parentCell esiste
+                    if (parentCell) {
+                        // se parentCell ha solo me come figlio: yee! apposto, ho trovato del posto.
+                        if (parentCell.get("embeds").length == 1 && parentCell.get("embeds")[0] == this.selectedCell.id) {
+                            console.log("non ho fratelli :(");
                             debug();
-                        }
-                    }
-                    // altrimenti: sono disponibili più di un posto e dobbiamo trovare quello migliore.
-                    else {
-                        var ff = parentCell.get("embeds");
-                        var found = false;
-
-                        fratelli = [];
-                        for (var i = 0; i < ff.length; i++) {
-                            if (ff[i] != curr.id) {
-                                fratelli.push(ff[i]);
+                            var dest = g.indexOf(parentCell) + 1;
+                            for (var i = 0; i <= figli.length; i++) {
+                                move(g, g.length - 1 - figli.length + i, dest + i);
+                                debug();
                             }
-                        }
+                        } else { // altrimenti: sono disponibili più di un posto e dobbiamo trovare quello migliore.
+                            var ff = parentCell.get("embeds");
+                            var found = false;
 
-                        for (var i = 0; i < fratelli.length && !found; i++) {
-                            // i miei fratelli sono in ordine di y crescente.
-                            // il primo fratello che mi supera in y è quello che mi seguirà
-                            if (y < this.model.getCell(fratelli[i]).get("position").y) {
+                            fratelli = [];
+                            for (var i = 0; i < ff.length; i++) {
+                                if (ff[i] != curr.id) {
+                                    fratelli.push(ff[i]);
+                                }
+                            }
 
-                                found = true;
-                                if (i != 0) {
+                            for (var i = 0; i < fratelli.length && !found; i++) {
+                                // i miei fratelli sono in ordine di y crescente.
+                                // il primo fratello che mi supera in y è quello che mi seguirà
+                                if (y < this.model.getCell(fratelli[i]).get("position").y) {
+
+                                    found = true;
+                                    if (i != 0) {
+                                        // bad
+                                        // se non è il primo dentro il blocco
+                                        var dest = g.indexOf(this.model.getCell(fratelli[i - 1]));
+                                        dest += this.model.getCell(fratelli[i - 1]).getEmbeddedCells({deep: true}).length;
+                                        // correctEmbedding(i-1,parentCell,curr);
+                                        for (var j = 0; j <= figli.length; j++) {
+                                            move(g, g.length - 1 - figli.length + j, dest + j + 1);
+                                            debug();
+                                        }
+                                    } else {
+                                        var dest = g.indexOf(parentCell);
+                                        dest++;
+                                        for (var j = 0; j <= figli.length; j++) {
+                                            move(g, g.length - 1 - figli.length + j, dest + j);
+                                            debug();
+                                        }
+                                    }
+                                }
+                            }
+                            // non ho trovato posto perché ho la y più grande di tutti i miei fratelli
+                            if (!found) {
+                                var index = 0;
+                                if (fratelli[fratelli.length - 1] == curr.id) {
+                                    index = fratelli.length - 2;
+                                } else {
                                     // bad
-                                    // se non è il primo dentro il blocco
-                                    var dest = g.indexOf(this.model.getCell(fratelli[i - 1]));
-                                    dest += this.model.getCell(fratelli[i - 1]).getEmbeddedCells({deep: true}).length;
-                                    // correctEmbedding(i-1,parentCell,curr);
-                                    for (var j = 0; j <= figli.length; j++) {
-                                        move(g, g.length - 1 - figli.length + j, dest + j + 1);
-                                        debug();
-                                    }
+                                    index = fratelli.length - 1;
                                 }
-                                else {
-                                    var dest = g.indexOf(parentCell);
-                                    dest++;
-                                    for (var j = 0; j <= figli.length; j++) {
-                                        move(g, g.length - 1 - figli.length + j, dest + j);
-                                        debug();
-                                    }
 
+                                var dest = g.indexOf(this.model.getCell(fratelli[index]));
+
+                                console.log(this.model.getCell(fratelli[index]).getEmbeddedCells({deep: true}).length);
+                                dest = dest + this.model.getCell(fratelli[index]).getEmbeddedCells({deep: true}).length;
+                                dest++;
+
+                                // correctEmbedding(index,parentCell,curr);
+
+                                for (var w = 0; w <= figli.length; w++) {
+                                    move(g, g.length - 1 - figli.length + w, dest + w);
+                                    debug();
                                 }
                             }
                         }
-                        // non ho trovato posto perché ho la y più grande di tutti i miei fratelli
-                        if (!found) {
-                            var index = 0;
-                            if (fratelli[fratelli.length - 1] == curr.id) {
-                                index = fratelli.length - 2;
+                    } else { // è a livello 0
+                        var fratelli = [];
+                        for (var i = 0; i < g.length; i++) {
+                            if (!g[i].get("parent")) {
+                                fratelli.push(g[i]);
                             }
-                            else {
-                                // bad
-                                index = fratelli.length - 1;
-                            }
+                        }
 
+                        var found2 = false;
+                        for (var i = 0; i < fratelli.length && !found2; i++) {
+                            if (fratelli[i] != curr.id && y < this.model.getCell(fratelli[i]).get("position").y) {
+                                console.log("trovato");
+                                found2 = true;
+                                var dest = g.indexOf(this.model.getCell(fratelli[i]));
+                                var k = 0;
 
-                            var dest = g.indexOf(this.model.getCell(fratelli[index]));
-
-                            console.log(this.model.getCell(fratelli[index]).getEmbeddedCells({deep: true}).length);
-                            dest = dest + this.model.getCell(fratelli[index]).getEmbeddedCells({deep: true}).length;
-                            dest++;
-
-                            // correctEmbedding(index,parentCell,curr);
-
-                            for (var w = 0; w <= figli.length; w++) {
-                                move(g, g.length - 1 - figli.length + w, dest + w);
-                                debug();
+                                for (k = 0; k <= figli.length; k++) {
+                                    move(g, g.length - 1 - figli.length + k, dest + k);
+                                    debug();
+                                }
                             }
                         }
                     }
-                }
-                // è a livello 0
-                else {
-                    var fratelli = [];
-                    for (var i = 0; i < g.length; i++) {
-                        if (!g[i].get("parent")) {
-                            fratelli.push(g[i]);
-                        }
+
+                    if (parentCell) {
+                        console.log(g.indexOf(curr));
+                        correctEmbedding(g.indexOf(curr) - g.indexOf(parentCell) - 1, parentCell, curr);
                     }
-
-                    var found2 = false;
-                    for (var i = 0; i < fratelli.length && !found2; i++) {
-                        if (fratelli[i] != curr.id && y < this.model.getCell(fratelli[i]).get("position").y) {
-                            console.log("trovato");
-                            found2 = true;
-                            var dest = g.indexOf(this.model.getCell(fratelli[i]));
-                            var k = 0;
-
-                            for (k = 0; k <= figli.length; k++) {
-                                move(g, g.length - 1 - figli.length + k, dest + k);
-                                debug();
-                            }
-                        }
-                    }
+                    this.trigger("renderActivity");
                 }
-
-                if (parentCell) {
-                    console.log(g.indexOf(curr));
-                    correctEmbedding(g.indexOf(curr) - g.indexOf(parentCell) - 1, parentCell, curr);
-
-                }
-                this.trigger("renderActivity");
             }
-			}
         },
 
         /**
