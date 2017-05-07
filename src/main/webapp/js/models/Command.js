@@ -25,7 +25,7 @@ define([
             var blob = new Blob([ProjectModel.saveProject()], {type: "application/json"});
             var url = window.URL.createObjectURL(blob);
 
-            //hacky things
+            // hacky things
             var a = document.createElement('a');
             a.style = "display:none";
             a.download = "project.json";
@@ -39,7 +39,7 @@ define([
         /**
          * Asks the `ProjectModel` object to load an entire project
          * from a JSON file uploaded by the user.
-         * @name Commands#loadDiagram
+         * @name Commands#loadProject
          * @function
          * @param {event} evt the action event
          */
@@ -58,14 +58,26 @@ define([
             reader.readAsText(f);
         },
 
-        newProject: function(evt){
+        /**
+         * Asks the `ProjectModel` object to start a new
+         * project from scratch.
+         * @name Commands#newProject
+         * @function
+         * @param {event} evt the action event
+         */
+        newProject: function (evt) {
             ProjectModel.newProject();
         },
 
-
+        /**
+         * Asks the `ProjectModel` object to send a
+         * project (in JSON format) to the server,
+         * for generating the program.
+         * @name Commands#sendDiagram
+         * @function
+         */
         sendDiagram: function () {
             var data = {};
-
 
             // construct an HTTP request
             var xhr = new XMLHttpRequest();
@@ -76,29 +88,31 @@ define([
             xhr.send(ProjectModel.saveProject());           
             xhr.onload = function () {
             	// Create a new Blob object using the 
-                //response data of the onload object
-            	if(this.status==200){
+                // response data of the onload object
+            	if (this.status == 200) {
 					var data = (this.response);
 					var blob = new Blob([data],{type: "application/octet-stream"});
-					//Create a link element, hide it, direct 
-					//it towards the blob, and then 'click' it programatically
+
+					// Create a link element, hide it, direct 
+					// it towards the blob, and then 'click' it programatically
 					let a = document.createElement("a");
 					a.style = "display: none";
 					document.body.appendChild(a);
-					//Create a DOMString representing the blob 
-					//and point the link element towards it
+
+					// Create a DOMString representing the blob 
+					// and point the link element towards it
 					let url = window.URL.createObjectURL(blob);
 					a.href = url;
 					a.download = 'projectzip.zip';
-					//programatically click the link to trigger the download
+					// programatically click the link to trigger the download
 					a.click();
 					window.URL.revokeObjectURL(url);
             	}
-            	else{
-            		function arrayBufferToString(buffer){
+            	else {
+            		function arrayBufferToString(buffer) {
             		    var arr = new Uint8Array(buffer);
             		    var str = String.fromCharCode.apply(String, arr);
-            		    if(/[\u0080-\uffff]/.test(str)){
+            		    if (/[\u0080-\uffff]/.test(str)) {
             		        throw new Error("this string seems to contain (still encoded) multibytes");
             		    }
             		    return str;
@@ -106,8 +120,7 @@ define([
             		alert(arrayBufferToString(this.response));
             	}            
             };
-
-        },
+        }
     };
 
     /**

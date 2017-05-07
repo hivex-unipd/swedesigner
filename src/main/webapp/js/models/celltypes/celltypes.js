@@ -642,7 +642,7 @@ define([
                 }
             ];
             var rectHeight = 2 * 15 + 1;
-            attrs['.uml-class-name-text'].text = ['<<Interface>>', rects[0].text].join('\n');
+            attrs['.uml-class-name-text'].text = ['<<interface>>', rects[0].text].join('\n');
             attrs['.uml-class-name-rect'].height = rectHeight;
             attrs['.uml-class-name-rect'].transform = 'translate(0,' + offsetY + ')';
             offsetY += rectHeight;

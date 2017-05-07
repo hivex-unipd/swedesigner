@@ -7,7 +7,9 @@ require.config({
 		text: 'libs/require/text',
 		joint: 'libs/jointjs/joint',
 		material: 'libs/mdl/material',
-		jqueryui: 'libs/jqueryui/jquery-ui'
+		jqueryui: 'libs/jqueryui/jquery-ui',
+		jstree:'libs/jquery/jstree',
+        'svg-pan-zoom': 'libs/svgpanzoom/svg-pan-zoom'
 	},
 	shim: {
 		'material': {
@@ -77,4 +79,6 @@ require([
 	assert(ncfactory.getCell('HxVariable').defaults.type == 'activity.HxVariable', 'NewCellFactory è in grado di fornire una HxVariable');
 	assert(ncfactory.getCell('HxReturn').defaults.type == 'activity.HxReturn', 'NewCellFactory è in grado di fornire un HxReturn');
 	assert(ncfactory.getCell('HxWhile').defaults.type == 'activity.HxWhile', 'NewCellFactory è in grado di fornire un HxWhile');
+
+	app_view.Command.execute('saveProject');
 });

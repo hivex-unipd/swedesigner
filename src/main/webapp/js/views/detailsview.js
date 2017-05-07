@@ -7,7 +7,7 @@ define([
     'material',
     'text!views/templates.html',
     'jqueryui',
-], function ($, _, Backbone, joint, ProjectView, componentHandler,templates) {
+], function ($, _, Backbone, joint, ProjectView, componentHandler, templates) {
 
     /**
      * @classdesc `DetailsView` shows the details of an element in one diagram.
@@ -29,8 +29,7 @@ define([
          * @name DetailsView#tagname
          * @type {string}
          */
-        tagname: "div",
-
+        tagname: 'div',
 
         /**
          * The DOM element corresponding to `DetailsView`.
@@ -47,9 +46,13 @@ define([
          */
         currentTemplate: {},
 
-        events:{
+        /**
+         * ?
+         * @name DetailsView#events
+         * @type {Object}
+         */
+        events:{},
 
-        },
         /**
          * Initializes `el` with a jQuery object that handles the `#details`
          * div and starts listening to the `ProjectView` events
@@ -63,6 +66,7 @@ define([
             //console.log(ProjectView.paper);
             this.listenTo(ProjectView.paper, "changed-cell", this.render);
         },
+
         /**
          * Re-paints the `#details` div after a 'changed-cell' event was
          * fired by the `ProjectView` object. The cell to be rendered
@@ -105,6 +109,7 @@ define([
                             response($.ui.autocomplete.filter(
                                 ProjectView.visibleElements, extractLast(request.term)));
                         },
+
                         focus: function () {
                             return false;
                         },
@@ -134,8 +139,7 @@ define([
                         }
                     });
                 }
-            }
-            else {
+            } else {
                 this.$el.html("");
             }
             return this;
@@ -168,7 +172,6 @@ define([
          * name as a string.
          * @param e the method name
          */
-        //execCommand
         execCommand: function (e) {
             var tmp = e.target.name.split(".");
             if (tmp[0] == "deleteMethod") {
@@ -177,6 +180,7 @@ define([
             ProjectView.paper.selectedCell.executeMethod(tmp[0], Array.prototype.slice.call(tmp, 1));
             this.render();
         },
+
         /**
          * Confirms the edits performed in a given field
          * inside the `#details` div and updates the

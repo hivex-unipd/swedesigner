@@ -54,6 +54,7 @@ define([
             this.views.newCell = new NewCellView;
             this.listenTo(this.views.project, 'Switchgraph', this.toggleVisib);
         },
+
         /**
          * The page events, each one linked to the desired action.
          * @name AppView#events
@@ -67,6 +68,7 @@ define([
             'click #generate': 'generate',
             'click #newproj':'newProject'
         },
+
         /**
          * Toggles the visibility of the 'Back to Class
          * Diagram' button.
@@ -78,8 +80,8 @@ define([
         },
 
         newProject: function () {
-            //workaround orrendo ma funziona
-            if($('#switchtoclass').css('display')=='block'){
+            // workaround orrendo ma funziona
+            if ($('#switchtoclass').css('display') == 'block') {
                 $('#switchtoclass')[0].click();
             }
             Command.execute('newProject');
@@ -95,6 +97,7 @@ define([
 
             $('#elementstab')[0].click();
         },
+
         /**
          * Switches between different diagram elements.
          * @name AppView#switchGraph
@@ -109,6 +112,7 @@ define([
                 this.views.index = 0;
             }
         },
+
         /**
          * Saves the entire project diagram to a JSON file
          * and gives it back to the user.
@@ -119,6 +123,7 @@ define([
         save: function (event) {
             Command.execute('saveProject');
         },
+
         /**
          * Loads an entire project from a JSON file
          * uploaded by the user.
@@ -127,12 +132,13 @@ define([
          * @param {event} event the action event
          */
         load: function (event) {
-            //workaround orrendo ma funziona
-            if($('#switchtoclass').css('display')=='block'){
+            // workaround orrendo ma funziona
+            if ($('#switchtoclass').css('display') == 'block') {
                 $('#switchtoclass')[0].click();
             }
             Command.execute('loadProject', event);
         },
+
         /**
          * Sends a request to the server for generating
          * an executable from the user diagrams.

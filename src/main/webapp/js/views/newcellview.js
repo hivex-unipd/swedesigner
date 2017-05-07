@@ -45,6 +45,7 @@ define([
         events: {
             'click .newcompbt': 'addCell'
         },
+
         /**
          * Initializes `model` with a `NexCellModel` object;
          * initializes `str` with with the HTML buttons for each insertable
@@ -59,6 +60,7 @@ define([
             this.listenTo(ProjectView, "Switchgraph", this.switch);
             this.render();
         },
+
         render: function () {
             this.str = [];
             for (var p in this.model.str) {
@@ -66,10 +68,12 @@ define([
             }
             this.$el.html(_.each(this.str));
         },
+
         switch: function () {
             $('#classtreetab').toggle();
             this.model.switchComponents();
         },
+
         /**
          * Adds a new cell to the current diagram, based on which
          * type of cell the user has selected.

@@ -36,7 +36,6 @@ define([
 
         panAndZoom:{},
 
-
         deleteCell: function (e) {
 
             /*if (e.which == 46) {//ha premuto tasto canc
@@ -108,7 +107,7 @@ define([
 
                 var l = g.length;
                 for (ii = 0; ii < l; ii++) {
-					if(g[ii])
+					if (g[ii])
 					{
 						
                     g[ii].updateRectangles();
@@ -132,35 +131,27 @@ define([
          */
         pointerDownFunction: function (prView,cellView, evt, x, y) {
 
-
-
             var className = evt.target.parentNode.getAttribute('class');
 
             switch (className) {
-
                 case 'element-tool-remove':
                     prView.deleteCell(cellView.model);
                     return;
                     break;
-
                 default:
             }
 
-
-
-            if(ProjectModel.options.cellToBeAdded && ProjectModel.options.cellToBeAdded.isLink()){
+            if (ProjectModel.options.cellToBeAdded && ProjectModel.options.cellToBeAdded.isLink()) {
                 console.log(ProjectModel.options.cellToBeAdded.get("source").id);
-                if(ProjectModel.options.cellToBeAdded.get("source").id!=undefined){
+                if (ProjectModel.options.cellToBeAdded.get("source").id!=undefined) {
                     console.log("set target");
                     ProjectModel.options.cellToBeAdded.set("target",{id:cellView.model.id});
                     ProjectModel.addCellToGraph();
-                }
-                else{
+                } else {
                     console.log("set source");
                     ProjectModel.options.cellToBeAdded.set("source",{id:cellView.model.id});
                 }
             }
-
 
             if (cellView) {
                 if (this.selectedCell != cellView.model) {
@@ -217,8 +208,8 @@ define([
                 debug();
 
             }
-
         },
+
         /**
          * Manages the release of the pointer from a cell
          * (i.e. when the user has finished dragging the cell);
@@ -267,8 +258,7 @@ define([
                 // cella corrente
                 var curr = this.selectedCell;
 				
-				if(curr)
-				{
+				if (curr) {
 					
 					
                 var figli = curr.getEmbeddedCells({deep: true});
@@ -424,10 +414,8 @@ define([
                                 move(g, g.length - 1 - figli.length + k, dest + k);
                                 debug();
                             }
-
                         }
                     }
-
                 }
 
                 if (parentCell) {
@@ -437,10 +425,7 @@ define([
                 }
                 this.trigger("renderActivity");
             }
-					
-					
-
-				}
+			}
         },
 
         /**
@@ -472,19 +457,17 @@ define([
                         this.findViewByModel(v[i]).unhighlight();
                     }
 
-
                     if (index != -1 && cellViewsBelow[index].model.get("canHaveChildren")) {
                         cellViewBelow = cellViewsBelow[index];
                         cellViewBelow.highlight();
                         this.isHighlighted = true;
-                    }
-                    else {
+                    } else {
                         this.isHighlighted = false;
                     }
                 }
             }
-
         },
+
         /**
          * Initializes `model` with a new `ProjectModel`;
          * initializes `paper` with a new `joint.dia.Paper` object;
@@ -496,6 +479,7 @@ define([
         initialize: function () {
             this.model = ProjectModel;//new ProjectModel();
             this.paper = new joint.dia.Paper({
+
                 el: $('#paper'),
                 model: this.model.graph,
                 width: 1500,
@@ -505,6 +489,7 @@ define([
                 background: {
                     color: '#6764A7'
                 },
+
                 elementView: function (element) {
                     if (element.get("type").startsWith("class")) {
                         if (element.get("type") == "class.HxComment") {
@@ -518,6 +503,7 @@ define([
                         return celltypes.activity.ActivityDiagramElementView;
                     }
                 },
+
                 highlighting: {
                     'default': {
                         name: 'stroke',
@@ -543,8 +529,6 @@ define([
                         // Disable the default vertex add functionality on pointerdown.
                         return {vertexAdd: false};
                     }
-
-
                     return true;
                 }
             });
@@ -569,7 +553,7 @@ define([
                 // Finally, set the grid background image of the paper container element.
                 var gridBackgroundImage = canvas[0].toDataURL('image/png');
                 $(paper.el.childNodes[0]).css('background-image', 'url("' + gridBackgroundImage + '")');
-                if(typeof(offset) != 'undefined'){
+                if (typeof(offset) != 'undefined') {
                     $(paper.el.childNodes[0]).css('background-position', offset.x + 'px ' + offset.y + 'px');
                 }
             }
@@ -585,12 +569,12 @@ define([
                     zoomScaleSensitivity: 0.4,
                     controlIconsEnabled:true,
                     panEnabled: true,
-                    onZoom: function(scale){
+                    onZoom: function(scale) {
                         console.log(scale);
                         currentScale = scale;
                         //setGrid(this.paper, gridsize*15*currentScale, '#808080');
                     },
-                    beforePan: function(oldpan, newpan){
+                    beforePan: function(oldpan, newpan) {
                         $('.joint-paper').css('cursor', '-webkit-grabbing');
                         //setGrid(this.paper, gridsize*15*currentScale, '#808080', newpan);
                     }
@@ -611,7 +595,7 @@ define([
 
             this.paper.on('blank:pointerdown', function (evt, x, y) {
                 console.log(ProjectModel.options.cellToBeAdded);
-                if(ProjectModel.options.cellToBeAdded && ProjectModel.options.cellToBeAdded.isElement()){
+                if (ProjectModel.options.cellToBeAdded && ProjectModel.options.cellToBeAdded.isElement()) {
                     console.log("blank add");
                     ProjectModel.options.cellToBeAdded.position(x,y);
                     ProjectModel.addCellToGraph();
@@ -679,28 +663,12 @@ define([
             ProjectModel.saveCurrentDiagram();
             let new_data=[];
             _.each(ProjectModel.options.graphs.classes.classesArray,function (e) {
-               if(e.get('type')!='class.HxComment'){
+               if (e.get('type')!='class.HxComment') {
                     new_data.push(e.getCellDesc());
                }
             });
             $('#classtree').jstree(true).settings.core.data= new_data;
             $('#classtree').jstree('refresh');
-            /*$('#classtree').jstree({'core':{
-                'data':[
-                    {
-                        'text':"classe1",
-                        'children':[
-                            {
-                                'text':"metodo1(param1,param2):int"
-                            },
-                            {
-                                'text':"attr1:int"
-                            }
-                        ]
-                    }
-                ]
-
-            }});*/
         },
 
         /**
@@ -711,10 +679,10 @@ define([
         getCurrentDiagramType: function () {
             return this.model.getCurrentDiagramType();
         },
+
         deleteMethodAt: function (ind) {
             this.model.deleteMethodDiagram(this.paper.selectedCell.getValues().methods[ind].id);
         }
-
     });
     return new ProjectView;
 });
