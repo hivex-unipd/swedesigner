@@ -55,8 +55,7 @@ require([
 
 	pview.renderActivity(); assert(true, 'Una ProjectView è in grado di disegnare un diagramma di attività.');
 
-	var paper = pview.paper;
-	assert(paper instanceof joint.dia.Paper, 'Una ProjectView possiede un joint.dia.Paper.');
+	assert(pview.paper instanceof joint.dia.Paper, 'Una ProjectView possiede un joint.dia.Paper.');
 
 
 
@@ -88,20 +87,20 @@ require([
 
 	var ncfactory = NewCellFactory; // NewCellFactory
 
-	assert(ncfactory.getCell('HxClass').defaults.type == 'class.HxClass', 'Una NewCellFactory è in grado di fornire una HxClass.');
-	assert(ncfactory.getCell('HxInterface').defaults.type == 'class.HxInterface', 'Una NewCellFactory è in grado di fornire una HxInterface.');
-	assert(ncfactory.getCell('HxComment').defaults.type == 'class.HxComment', 'Una NewCellFactory è in grado di fornire un HxComment.');
-	assert(ncfactory.getCell('HxGeneralization').defaults.type == 'class.HxGeneralization', 'Una NewCellFactory è in grado di fornire una HxGeneralization.');
-	assert(ncfactory.getCell('HxAssociation').defaults.type == 'class.HxAssociation', 'Una NewCellFactory è in grado di fornire una HxAssociation.');
-	assert(ncfactory.getCell('HxImplementation').defaults.type == 'class.HxImplementation', 'Una NewCellFactory è in grado di fornire una HxImplementation.');
+	assert(ncfactory.getCell('HxClass').defaults.type == 'class.HxClass', 'Una NewCellFactory è in grado di istanziare una HxClass.');
+	assert(ncfactory.getCell('HxInterface').defaults.type == 'class.HxInterface', 'Una NewCellFactory è in grado di istanziare una HxInterface.');
+	assert(ncfactory.getCell('HxComment').defaults.type == 'class.HxComment', 'Una NewCellFactory è in grado di istanziare un HxComment.');
+	assert(ncfactory.getCell('HxGeneralization').defaults.type == 'class.HxGeneralization', 'Una NewCellFactory è in grado di istanziare una HxGeneralization.');
+	assert(ncfactory.getCell('HxAssociation').defaults.type == 'class.HxAssociation', 'Una NewCellFactory è in grado di istanziare una HxAssociation.');
+	assert(ncfactory.getCell('HxImplementation').defaults.type == 'class.HxImplementation', 'Una NewCellFactory è in grado di istanziare una HxImplementation.');
 
-	assert(ncfactory.getCell('HxCustom').defaults.type == 'activity.HxCustom', 'Una NewCellFactory è in grado di fornire un HxCustom.');
-	assert(ncfactory.getCell('HxElse').defaults.type == 'activity.HxElse', 'Una NewCellFactory è in grado di fornire un HxElse.');
-	assert(ncfactory.getCell('HxFor').defaults.type == 'activity.HxFor', 'Una NewCellFactory è in grado di fornire un HxFor.');
-	assert(ncfactory.getCell('HxIf').defaults.type == 'activity.HxIf', 'Una NewCellFactory è in grado di fornire un HxIf.');
-	assert(ncfactory.getCell('HxVariable').defaults.type == 'activity.HxVariable', 'Una NewCellFactory è in grado di fornire una HxVariable.');
-	assert(ncfactory.getCell('HxReturn').defaults.type == 'activity.HxReturn', 'Una NewCellFactory è in grado di fornire un HxReturn.');
-	assert(ncfactory.getCell('HxWhile').defaults.type == 'activity.HxWhile', 'Una NewCellFactory è in grado di fornire un HxWhile.');
+	assert(ncfactory.getCell('HxCustom').defaults.type == 'activity.HxCustom', 'Una NewCellFactory è in grado di istanziare un HxCustom.');
+	assert(ncfactory.getCell('HxElse').defaults.type == 'activity.HxElse', 'Una NewCellFactory è in grado di istanziare un HxElse.');
+	assert(ncfactory.getCell('HxFor').defaults.type == 'activity.HxFor', 'Una NewCellFactory è in grado di istanziare un HxFor.');
+	assert(ncfactory.getCell('HxIf').defaults.type == 'activity.HxIf', 'Una NewCellFactory è in grado di istanziare un HxIf.');
+	assert(ncfactory.getCell('HxVariable').defaults.type == 'activity.HxVariable', 'Una NewCellFactory è in grado di istanziare una HxVariable.');
+	assert(ncfactory.getCell('HxReturn').defaults.type == 'activity.HxReturn', 'Una NewCellFactory è in grado di istanziare un HxReturn.');
+	assert(ncfactory.getCell('HxWhile').defaults.type == 'activity.HxWhile', 'Una NewCellFactory è in grado di istanziare un HxWhile.');
 
 
 
