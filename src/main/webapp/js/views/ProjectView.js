@@ -7,7 +7,7 @@ define([
     'models/celltypes/celltypes',
     'svg-pan-zoom',
     'jstree'
-], function ($, _, Backbone, joint, ProjectModel, celltypes,svgPanZoom) {
+], function ($, _, Backbone, joint, ProjectModel, celltypes, svgPanZoom) {
 
     /**
      * @classdesc `ProjectView` represents the drawing area.
@@ -28,14 +28,19 @@ define([
         paper: {},
 
         /**
-         * It contains variables and methods visible inside the selected method scope.
+         * Contains variables and methods visible inside the
+         * selected method scope.
          * @name ProjectView#visibleElements
-         *
          */
         visibleElements: [],
 
-        panAndZoom:{},
+        panAndZoom: {},
 
+        /**
+         * Deletes a specific cell in the diagram.
+         * @param  {event} e the action event
+         * @function
+         */
         deleteCell: function (e) {
 
             /*if (e.which == 46) {//ha premuto tasto canc
@@ -48,9 +53,10 @@ define([
             }*/
             console.log(e);
             this.model.deleteCell(e);
-            this.paper.selectedCell=null;
+            this.paper.selectedCell = null;
             this.paper.trigger("changed-cell");
         },
+
         /**
          * Updates the drawing area by placing the activity blocks.
          * @name ProjectView#renderActivity
@@ -98,8 +104,7 @@ define([
 
                         if (!g[i].get("expanded")) {
                             offsetY += 50;// se è ridotto ho bisogno di meno spazio
-                        }
-                        else {
+                        } else {
                             offsetY += 100;
                         }
                     }
@@ -107,12 +112,10 @@ define([
 
                 var l = g.length;
                 for (ii = 0; ii < l; ii++) {
-                    if (g[ii])
-                    {
-                        
-                    g[ii].updateRectangles();
-                    p.removeView(g[ii]);
-                    p.renderView(g[ii]); // per qualche ragione è necessario..
+                    if (g[ii]) {
+                        g[ii].updateRectangles();
+                        p.removeView(g[ii]);
+                        p.renderView(g[ii]); // per qualche ragione è necessario..
                     }
                 }
             }
@@ -124,12 +127,13 @@ define([
          * to the 'pointerdown' event on the view.
          * @name ProjectView#pointerUpFunction
          * @function
+         * @param {ProjectView} prView a ProjectView object
          * @param {joint.dia.ElementView} cellView the dragged cell's view
          * @param {event} evt the action event
          * @param {number} x the horizontal position of the cell (?)
          * @param {number} y the vertical position of the cell (?)
          */
-        pointerDownFunction: function (prView,cellView, evt, x, y) {
+        pointerDownFunction: function (prView, cellView, evt, x, y) {
 
             var className = evt.target.parentNode.getAttribute('class');
 
@@ -206,7 +210,6 @@ define([
                     debug();
                 }
                 debug();
-
             }
         },
 
@@ -291,7 +294,7 @@ define([
                     var correctEmbedding = function (index, parent, cell) {
                         var embcells = parent.getEmbeddedCells();
 
-                        // deeembeddo ogni cella
+                        // de-embeddo ogni cella
                         parent.unembed(embcells.pop(cell));
 
                         for (var i = 0; i < embcells.length; i++) {
@@ -461,8 +464,8 @@ define([
         /**
          * Initializes `model` with a new `ProjectModel`;
          * initializes `paper` with a new `joint.dia.Paper` object;
-         * link mouse events to the correct callbacks.
-         * Updates the paper with any existing cells.
+         * links mouse events to the correct callbacks;
+         * updates the paper with any existing cells.
          * @name ProjectView#initialize
          * @function
          */
@@ -525,7 +528,7 @@ define([
 
             var gridsize = 1;
             var currentScale = 1;
-            var targetElement= $('#paper')[0];
+            var targetElement = $('#paper')[0];
 
             console.log(svgPanZoom);
             function setGrid(paper, size, color, offset) {
@@ -548,27 +551,26 @@ define([
                 }
             }
 
-              this.panAndZoom = svgPanZoom(targetElement.childNodes[0],
-                {
-                    viewportSelector: targetElement.childNodes[0].childNodes[0],
-                    minZoom: 0.5,
-                    maxZoom: 10,
-                    fit: false,
-                    center:false,
-                    dblClickZoomEnabled:false,
-                    zoomScaleSensitivity: 0.4,
-                    controlIconsEnabled:true,
-                    panEnabled: true,
-                    onZoom: function(scale) {
-                        console.log(scale);
-                        currentScale = scale;
-                        //setGrid(this.paper, gridsize*15*currentScale, '#808080');
-                    },
-                    beforePan: function(oldpan, newpan) {
-                        $('.joint-paper').css('cursor', '-webkit-grabbing');
-                        //setGrid(this.paper, gridsize*15*currentScale, '#808080', newpan);
-                    }
-                });
+            this.panAndZoom = svgPanZoom(targetElement.childNodes[0], {
+                viewportSelector: targetElement.childNodes[0].childNodes[0],
+                minZoom: 0.5,
+                maxZoom: 10,
+                fit: false,
+                center: false,
+                dblClickZoomEnabled: false,
+                zoomScaleSensitivity: 0.4,
+                controlIconsEnabled: true,
+                panEnabled: true,
+                onZoom: function (scale) {
+                    console.log(scale);
+                    currentScale = scale;
+                    //setGrid(this.paper, gridsize*15*currentScale, '#808080');
+                },
+                beforePan: function (oldpan, newpan) {
+                    $('.joint-paper').css('cursor', '-webkit-grabbing');
+                    //setGrid(this.paper, gridsize*15*currentScale, '#808080', newpan);
+                }
+            });
             //spostiamo a mano
 
             //$('#svg-pan-zoom-controls').attr("transform",'translate(' + ( $('#paper').width() - 70 ) + ' ' + ( $(window).height() - 140 ) + ') scale(0.75)');
@@ -581,7 +583,7 @@ define([
                 ]
             }});
 
-            var pAndZ= this.panAndZoom;
+            var pAndZ = this.panAndZoom;
 
             this.paper.on('blank:pointerdown', function (evt, x, y) {
                 console.log(ProjectModel.options.cellToBeAdded);
@@ -595,7 +597,7 @@ define([
 
 
             });
-            this.paper.on('blank:pointerup', function(event,x,y) {
+            this.paper.on('blank:pointerup', function (event,x,y) {
                 console.log("pointeup",x,y);
 
                 pAndZ.disablePan();
@@ -607,7 +609,6 @@ define([
 
             this.paper.on('cell:pointerdown', _.partial(this.pointerDownFunction,this));
 
-
             var m = this.model;
 
             this.renderActivity();
@@ -616,8 +617,8 @@ define([
 
             this.listenTo(this.paper, 'renderActivity', this.renderActivity);
             this.listenTo(this.model, 'renderActivity', function () {
-                this.pointerDownFunction(this.paper.findView(this.graph.get("cells").models[0]), {}, 0, 0);
-                this.pointerUpFunction({}, {}, 0, 0);
+                this.pointerDownFunction (this.paper.findView(this.graph.get("cells").models[0]), {}, 0, 0);
+                this.pointerUpFunction ({}, {}, 0, 0);
             });
             this.listenTo(this.model, 'addcell', function () {
                 this.renderActivity();
@@ -625,23 +626,20 @@ define([
         },
 
         /**
-         * ...
+         * Switches to the graph identified by `id`.
          * @name ProjectView#switch
          * @function
-         * @param {number} index which graph to switch to
-         * @param {?} selectedCell ?
+         * @param {number} id which graph to switch to
          */
         switch: function (id) {
             this.panAndZoom.reset();
             this.model.switchToGraph(id);
             if (id != "class") {
                 this.visibleElements = this.model.getClassVisibleElements(this.paper.selectedCell);
-            }
-            else {
+            } else {
                 this.visibleElements = [];
             }
             this.updateTreeview();
-
 
             //console.log("elementi: ", this.visibleElements);
             this.paper.selectedCell = null;
@@ -649,6 +647,11 @@ define([
             this.trigger("Switchgraph");
         },
 
+        /**
+         * Updates the Tree View.
+         * @name ProjectView#updateTreeview
+         * @function
+         */
         updateTreeview: function () {
             ProjectModel.saveCurrentDiagram();
             let new_data=[];
@@ -662,7 +665,8 @@ define([
         },
 
         /**
-         * ...
+         * Returns whether the current diagram is an
+         * activity or a class one.
          * @name ProjectView#getCurrentDiagramType
          * @function
          */
@@ -670,6 +674,12 @@ define([
             return this.model.getCurrentDiagramType();
         },
 
+        /**
+         * Delets the `ind`th method of the diagram.
+         * @name ProjectView#deleteMethodAt
+         * @param  {number} ind the method index
+         * @function
+         */
         deleteMethodAt: function (ind) {
             this.model.deleteMethodDiagram(this.paper.selectedCell.getValues().methods[ind].id);
         }

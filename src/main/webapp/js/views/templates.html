@@ -1,13 +1,13 @@
 <script type="text/template" id="class.HxClass">
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="name">
-        <label class="mdl-textfield__label" for="classname">Nome classe</label>
+        <label class="mdl-textfield__label" for="classname">Class name</label>
         <input class="edit mdl-textfield__input" value="<%= name %>" name="name" id="classname">
     </div>
     <div class="prop_inputs" id="abstract">
         <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
             <input type="checkbox" name="abstract" class="mdl-checkbox__input edit" <%
             if(abstract=="true"){ %>checked <% } %>>
-            <span class="mdl-checkbox__label">Astratta</span>
+            <span class="mdl-checkbox__label">Abstract</span>
         </label>
     </div>
     <div class="prop_inputs" id="static">
@@ -17,24 +17,23 @@
             <span class="mdl-checkbox__label">Static</span>
         </label>
     </div>
-    <a class="togglable">Attributi</a>
+    <a class="togglable">Attributes</a>
     <div class="toggle"
          id="attributes">
         <% for(var attr in attributes) { %>
         <div class="propcontainer">
             <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <label class="mdl-textfield__label" for="attributes.<%=attr%>.name">Nome
-                    variabile</label>
+                <label class="mdl-textfield__label" for="attributes.<%=attr%>.name">Variable name</label>
                 <input class="edit mdl-textfield__input" value="<%= attributes[attr].name %>"
                        name="attributes.<%=attr%>.name">
             </div>
             <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <label class="mdl-textfield__label" for="attributes.<%=attr%>.value">Tipo</label>
+                <label class="mdl-textfield__label" for="attributes.<%=attr%>.value">Type</label>
                 <input class="edit mdl-textfield__input" value="<%= attributes[attr].type %>"
                        name="attributes.<%=attr%>.type">
             </div>
             <div class="visibility">
-                <label class="">Visibilità</label>
+                <label class="">Visibility</label>
                 <select class="edit" name="attributes.<%=attr%>.visibility">
                     <option value="private"
                     <%if(attributes[attr].visibility=="private"){%> selected <% }
@@ -51,46 +50,42 @@
                 </select>
             </div>
             <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <label class="mdl-textfield__label" for="attributes.<%=attr%>.defaultValue">Valore
-                    di default</label>
+                <label class="mdl-textfield__label" for="attributes.<%=attr%>.defaultValue">Default value</label>
                 <input class="edit mdl-textfield__input"
                        value="<%= attributes[attr].defaultValue %>"
                        name="attributes.<%=attr%>.defaultValue">
             </div>
-            <button class="add" name="deleteAttribute.<%= attr %>">Cancella</button>
+            <button class="add" name="deleteAttribute.<%= attr %>">Delete</button>
         </div>
 
 
         <% } %>
-        <button class="add" name="addAttribute">Aggiungi
-            attributo
-        </button>
+        <button class="add" name="addAttribute">Add attribute</button>
 
     </div>
-    <a class="togglable">Metodi</a>
+    <a class="togglable">Methods</a>
     <div class="prop_inputs toggle"
          id="methods">
         <% for(var met in methods) { %>
         <!--<a class="togglable"><%= methods[met].name %></a>-->
         <div class="propcontainer">
             <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <label class="mdl-textfield__label" for="<%=methods[met].name%>">Nome metodo</label>
+                <label class="mdl-textfield__label" for="<%=methods[met].name%>">Method name</label>
                 <input class="edit mdl-textfield__input" value="<%= methods[met].name %>"
                        name="methods.<%=met%>.name">
             </div>
             <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <label class="mdl-textfield__label" for="<%=methods[met].returnType%>">Tipo di
-                    ritorno</label>
+                <label class="mdl-textfield__label" for="<%=methods[met].returnType%>">Return value</label>
                 <input class="edit mdl-textfield__input" value="<%= methods[met].returnType %>"
                        name="methods.<%=met%>.returnType">
             </div>
             <!--<div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <label class="mdl-textfield__label" for="<%=methods[met].visibility%>">Visibilità</label>
+                <label class="mdl-textfield__label" for="<%=methods[met].visibility%>">Visibility</label>
                 <input class="edit mdl-textfield__input" value="<%= methods[met].visibility %>"
                        name="methods.<%=met%>.visibility">
             </div>-->
             <div class="visibility">
-                <label class="">Visibilità</label>
+                <label class="">Visibility</label>
                 <select class="edit" name="methods.<%=met%>.visibility">
                     <option value="private"
                     <%if(methods[met].visibility=="private"){%> selected <% } %>>Private</option>
@@ -117,7 +112,7 @@
                     <input type="checkbox" name="methods.<%=met%>.abstract"
                            class="mdl-checkbox__input edit" <% if(methods[met].abstract=="true"){
                     %>checked <% } %>>
-                    <span class="mdl-checkbox__label">Astratto</span>
+                    <span class="mdl-checkbox__label">Abstract</span>
                 </label>
             </div>
 
@@ -127,8 +122,7 @@
                 <div>
                     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <label class="mdl-textfield__label"
-                               for="methods.<%=met%>.parameters.<%=par%>.name">Nome
-                            parametro</label>
+                               for="methods.<%=met%>.parameters.<%=par%>.name">Argument name</label>
                         <input class="edit mdl-textfield__input"
                                value="<%=methods[met].parameters[par].name%>"
                                name="methods.<%=met%>.parameters.<%=par%>.name">
@@ -136,8 +130,7 @@
                     </div>
                     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <label class="mdl-textfield__label"
-                               for="methods.<%=met%>.parameters.<%=par%>.type">Tipo
-                            parametro</label>
+                               for="methods.<%=met%>.parameters.<%=par%>.type">Argument type</label>
                         <input class="edit mdl-textfield__input"
                                value="<%=methods[met].parameters[par].type%>"
                                name="methods.<%=met%>.parameters.<%=par%>.type">
@@ -145,68 +138,60 @@
                     </div>
                     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <label class="mdl-textfield__label"
-                               for="methods.<%=met%>.parameters.<%=par%>.defaultValue">Valore di
-                            default</label>
+                               for="methods.<%=met%>.parameters.<%=par%>.defaultValue">Default value</label>
                         <input class="edit mdl-textfield__input"
                                value="<%=methods[met].parameters[par].defaultValue%>"
                                name="methods.<%=met%>.parameters.<%=par%>.defaultValue">
 
                     </div>
                     <button class="add"
-                            name="deleteParameter.<%=met%>.<%=par%>">Cancella parametro
-                    </button>
+                            name="deleteParameter.<%=met%>.<%=par%>">Delete argument</button>
                 </div>
 
                 <% } %>
                 <button class="add"
-                        name="addParameter.<%=met%>">Aggiungi Parametro
+                        name="addParameter.<%=met%>">Add argument
                 </button>
             </div>
-            <button class="switch" name="switch" value="<%= methods[met].id %>">Vai al diagramma
-                delle
-                attività
-            </button>
-            <button class="add" name="deleteMethod.<%=met%>">Cancella metodo</button>
+            <button class="switch" name="switch" value="<%= methods[met].id %>">Go to Activity Diagram</button>
+            <button class="add" name="deleteMethod.<%=met%>">Delete method</button>
         </div>
 
         <% } %>
 
 
-        <button class="add" name="addMethod">Aggiungi
-            Metodo
-        </button>
+        <button class="add" name="addMethod">Add method</button>
     </div>
 </script>
 
 <script type="text/template" id="class.HxInterface">
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="name">
-        <label class="mdl-textfield__label" for="classname">Nome classe</label>
+        <label class="mdl-textfield__label" for="classname">Class name</label>
         <input class="edit mdl-textfield__input" value="<%= name %>" name="name" id="classname">
     </div>
-    <a class="togglable">Metodi</a>
+    <a class="togglable">Methods</a>
     <div class="prop_inputs toggle"
          id="methods">
         <% for(var met in methods) { %>
         <!--<a class="togglable"><%= methods[met].name %></a>-->
         <div class="propcontainer">
             <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <label class="mdl-textfield__label" for="<%=methods[met].name%>">Nome metodo</label>
+                <label class="mdl-textfield__label" for="<%=methods[met].name%>">Method name</label>
                 <input class="edit mdl-textfield__input" value="<%= methods[met].name %>"
                        name="methods.<%=met%>.name">
             </div>
             <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <label class="mdl-textfield__label" for="<%=methods[met].returnType%>">Tipo di
-                    ritorno</label>
+                <label class="mdl-textfield__label" for="<%=methods[met].returnType%>">Return value</label>
                 <input class="edit mdl-textfield__input" value="<%= methods[met].returnType %>"
                        name="methods.<%=met%>.returnType">
             </div>
             <!--<div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <label class="mdl-textfield__label" for="<%=methods[met].visibility%>">Visibilità</label>
+                <label class="mdl-textfield__label" for="<%=methods[met].visibility%>">Visibility</label>
                 <input class="edit mdl-textfield__input" value="<%= methods[met].visibility %>"
                        name="methods.<%=met%>.visibility">
             </div>-->
             <div class="visibility">
-                <label class="">Visibilità</label>
+                <label class="">Visibility</label>
                 <select class="edit" name="methods.<%=met%>.visibility">
                     <option value="private"
                     <%if(methods[met].visibility=="private"){%> selected <% } %>>Private</option>
@@ -228,56 +213,47 @@
                 <div>
                     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <label class="mdl-textfield__label"
-                               for="methods.<%=met%>.parameters.<%=par%>.name">Nome
-                            parametro</label>
+                               for="methods.<%=met%>.parameters.<%=par%>.name">Argument name</label>
                         <input class="edit mdl-textfield__input"
                                value="<%=methods[met].parameters[par].name%>"
                                name="methods.<%=met%>.parameters.<%=par%>.name">
-
                     </div>
                     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <label class="mdl-textfield__label"
-                               for="methods.<%=met%>.parameters.<%=par%>.type">Tipo
-                            parametro</label>
+                               for="methods.<%=met%>.parameters.<%=par%>.type">Argument type</label>
                         <input class="edit mdl-textfield__input"
                                value="<%=methods[met].parameters[par].type%>"
                                name="methods.<%=met%>.parameters.<%=par%>.type">
-
                     </div>
                     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <label class="mdl-textfield__label"
-                               for="methods.<%=met%>.parameters.<%=par%>.defaultValue">Valore di
-                            default</label>
+                               for="methods.<%=met%>.parameters.<%=par%>.defaultValue">Default value</label>
                         <input class="edit mdl-textfield__input"
                                value="<%=methods[met].parameters[par].defaultValue%>"
                                name="methods.<%=met%>.parameters.<%=par%>.defaultValue">
 
                     </div>
                     <button class="add"
-                            name="deleteParameter.<%=met%>.<%=par%>">Cancella parametro
-                    </button>
+                            name="deleteParameter.<%=met%>.<%=par%>">Delete argument</button>
                 </div>
 
                 <% } %>
                 <button class="add"
-                        name="addParameter.<%=met%>">Aggiungi Parametro
-                </button>
+                        name="addParameter.<%=met%>">Add argument</button>
             </div>
-            <button class="add" name="deleteMethod.<%=met%>">Cancella metodo</button>
+            <button class="add" name="deleteMethod.<%=met%>">Delete method</button>
         </div>
 
         <% } %>
 
 
-        <button class="add" name="addMethod">Aggiungi
-            Metodo
-        </button>
+        <button class="add" name="addMethod">Add method</button>
     </div>
 </script>
 
 <script type="text/template" id="class.HxComment">
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="comm">
-        <label class="mdl-textfield__label" for="classname">Commento</label>
+        <label class="mdl-textfield__label" for="classname">Comment</label>
         <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment" id="comment">
     </div>
 </script>
@@ -285,12 +261,12 @@
 <script type="text/template" id="uml.ActivityDiagramElement">
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="xType">Nome classe</label>
+        <label class="mdl-textfield__label" for="xType">Class name</label>
         <input class="edit mdl-textfield__input" value="<%= xType %>" name="xType" id="xType">
     </div>
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="comment">Nome classe</label>
+        <label class="mdl-textfield__label" for="comment">Class name</label>
         <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment" id="comment">
     </div>
 
@@ -323,13 +299,13 @@
 <script type="text/template" id="activity.HxCustom">
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="name">Codice</label>
+        <label class="mdl-textfield__label" for="name">Code</label>
         <textarea class="edit mdl-textfield__input" value="<%= code %>" rows=3 name="code"></textarea>
     </div>
 
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="comment">Commento</label>
+        <label class="mdl-textfield__label" for="comment">Comment</label>
         <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment">
     </div>
 
@@ -338,7 +314,7 @@
 <script type="text/template" id="activity.HxElse">
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="comment">Commento</label>
+        <label class="mdl-textfield__label" for="comment">Comment</label>
         <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment">
     </div>
 
@@ -347,23 +323,23 @@
 <script type="text/template" id="activity.HxFor">
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="initialization">Inizializzazione</label>
+        <label class="mdl-textfield__label" for="initialization">Initialization</label>
         <input class="edit mdl-textfield__input" value="<%= initialization %>"
                name="initialization">
     </div>
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="termination">Fine</label>
+        <label class="mdl-textfield__label" for="termination">End</label>
         <input class="edit mdl-textfield__input" value="<%= termination %>" name="termination">
     </div>
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="increment">Incremento</label>
+        <label class="mdl-textfield__label" for="increment">Increment</label>
         <input class="edit mdl-textfield__input" value="<%= increment %>" name="increment">
     </div>
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="comment">Commento</label>
+        <label class="mdl-textfield__label" for="comment">Comment</label>
         <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment">
     </div>
 
@@ -372,13 +348,13 @@
 <script type="text/template" id="activity.HxIf">
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="condition">Variabile</label>
+        <label class="mdl-textfield__label" for="condition">Variable</label>
         <input class="edit mdl-textfield__input" value="<%= condition %>" name="condition">
     </div>
 
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="comment">Commento</label>
+        <label class="mdl-textfield__label" for="comment">Comment</label>
         <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment">
     </div>
 
@@ -387,27 +363,27 @@
 <script type="text/template" id="activity.HxVariable">
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="name">Nome</label>
+        <label class="mdl-textfield__label" for="name">Name</label>
         <input class="edit mdl-textfield__input" value="<%= name %>" name="name">
     </div>
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="type">Tipo</label>
+        <label class="mdl-textfield__label" for="type">Type</label>
         <input class="edit mdl-textfield__input" value="<%= type %>" name="type">
     </div>
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="operation">Operazione</label>
+        <label class="mdl-textfield__label" for="operation">Operation</label>
         <input class="edit mdl-textfield__input" value="<%= operation %>" name="operation">
     </div>
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="value">Valore</label>
+        <label class="mdl-textfield__label" for="value">Value</label>
         <input class="edit mdl-textfield__input" value="<%= value %>" name="value">
     </div>
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="comment">Commento</label>
+        <label class="mdl-textfield__label" for="comment">Comment</label>
         <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment">
     </div>
 
@@ -417,12 +393,12 @@
 
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="value">Valore</label>
+        <label class="mdl-textfield__label" for="value">Value</label>
         <input class="edit mdl-textfield__input" value="<%= value %>" name="value">
     </div>
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="comment">Commento</label>
+        <label class="mdl-textfield__label" for="comment">Comment</label>
         <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment">
     </div>
 
@@ -431,13 +407,13 @@
 <script type="text/template" id="activity.HxWhile">
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
          id="vardiv">
-        <label class="mdl-textfield__label" for="condition">Variabile</label>
+        <label class="mdl-textfield__label" for="condition">Variable</label>
         <input class="edit mdl-textfield__input" value="<%= condition %>" name="condition">
     </div>
 
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
          id="commentdiv">
-        <label class="mdl-textfield__label" for="comment">Commento</label>
+        <label class="mdl-textfield__label" for="comment">Comment</label>
         <input class="edit mdl-textfield__input" value="<%= comment %>" name="comment">
     </div>
 
@@ -446,12 +422,12 @@
 <script type="text/template" id="class.HxAssociation">
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="card">Cardinalità</label>
+        <label class="mdl-textfield__label" for="card">Cardinality</label>
         <input class="edit mdl-textfield__input" value="<%= card %>" name="card">
     </div>
     <div class="prop_inputs mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
     >
-        <label class="mdl-textfield__label" for="card">Attributo</label>
+        <label class="mdl-textfield__label" for="card">Attribute</label>
         <input class="edit mdl-textfield__input" value="<%= attribute %>" name="attribute">
     </div>
     <!--<div class="">
@@ -461,6 +437,5 @@
             <option value="target">Destra</option>
         </select>
     </div>-->
-
 
 </script>

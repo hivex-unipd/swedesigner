@@ -85,15 +85,13 @@ define([
                 output = this.currentTemplate(c.getValues());
                 this.$el.html(output);
                 componentHandler.upgradeDom(); //refresh material design
-                this.delegateEvents(_.extend(this.events,
-                    {
-                        'keypress .edit': 'confirmEdit',
-                        'change .edit': 'confirmEdit',
-                        'click .add': 'execCommand',
-                        'click .switch': 'switch',
-                        'click .togglable': 'toggle'
-                    }
-                ));
+                this.delegateEvents(_.extend(this.events, {
+                    'keypress .edit': 'confirmEdit',
+                    'change .edit': 'confirmEdit',
+                    'click .add': 'execCommand',
+                    'click .switch': 'switch',
+                    'click .togglable': 'toggle'
+                }));
                 if (ProjectView.getCurrentDiagramType() == "activity") {
                     var split = function (val) {
                         return val.split(/(,\s* | \s*)/);
