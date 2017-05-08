@@ -61,6 +61,12 @@ define([
             this.render();
         },
 
+        /**
+         * Renders the panel for adding new components
+         * to to a diagram (class or activity diagram).
+         * @name NewCellView#render
+         * @function
+         */
         render: function () {
             this.str = [];
             for (var p in this.model.str) {
@@ -69,6 +75,12 @@ define([
             this.$el.html(_.each(this.str));
         },
 
+        /**
+         * Switches between the "elements" and
+         * "treeview" tabs in the left panel.
+         * @name NewCellView#switch
+         * @function
+         */
         switch: function () {
             $('#classtreetab').toggle();
             this.model.switchComponents();

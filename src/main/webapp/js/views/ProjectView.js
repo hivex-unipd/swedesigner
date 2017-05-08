@@ -37,7 +37,9 @@ define([
         panAndZoom: {},
 
         /**
-         * Deletes a specific cell in the diagram.
+         * Deletes a specific cell from the diagram
+         * and asks a `ProjectModel` to delete the
+         * cell from the model too.
          * @param  {event} e the action event
          * @function
          */
