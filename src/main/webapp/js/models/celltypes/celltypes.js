@@ -32,6 +32,7 @@ define([
             '<title>Remove</title>',
             '</g>',
             '</g>'].join(''),
+
         /**
          * Default attributes of a `ClassDiagramElement` object.
          * @name ClassDiagramElement#defaults
@@ -110,7 +111,7 @@ define([
 
     /**
      * @classdesc `ClassDiagramElementView` is the view for
-     * each`ClassDiagramElement`.
+     * a `ClassDiagramElement` object.
      *
      * @module client.model.celltypes.class
      * @name ClassDiagramElementView
@@ -130,7 +131,6 @@ define([
             joint.dia.ElementView.prototype.initialize.apply(this, arguments);
 
             this.listenTo(this.model, 'uml-update', function () {
-
                 this.update();
                 this.resize();
             });
@@ -576,6 +576,15 @@ define([
     });
 
 
+    /**
+     * @classdesc `HxInterface` represents a UML interface
+     * in a class diagram.
+     *
+     * @module client.model.celltypes.class
+     * @name HxInterface
+     * @class HxInterface
+     * @extends {celltypes.class.ClassDiagramElement}
+     */
     celltypes.class.HxInterface = celltypes.class.ClassDiagramElement.extend({
         markup: [
             '<g class="rotatable">',
@@ -627,9 +636,11 @@ define([
 
             }
         }, celltypes.class.ClassDiagramElement.prototype.defaults),
+
         initialize: function () {
             celltypes.class.ClassDiagramElement.prototype.initialize.apply(this, arguments);
         },
+
         updateRectangles: function () {
 
             var attrs = this.get('attrs');
@@ -684,6 +695,7 @@ define([
 
             celltypes.class.ClassDiagramElement.prototype.updateRectangles.apply(this, arguments);
         },
+
         addMethod: function () {
             this.getValues().methods.push({
                 name: "",
@@ -695,6 +707,7 @@ define([
                 parameters: []
             });
         },
+
         addParameter: function (ind) {
             this.getValues().methods[ind].parameters.push({
                 name: "",
@@ -702,12 +715,15 @@ define([
                 defaultValue: ""
             });
         },
+
         deleteParameter: function (met) {
             this.getValues().methods[met[0]].parameters.splice(met[1], 1);
         },
+
         deleteMethod: function (ind) {
             this.getValues().methods.splice(ind, 1);
         },
+
         getMetDesc: function () {
             let metDesc = this.getValues().methods.map(function (e) {
                 let vis = "";
@@ -736,6 +752,7 @@ define([
             return metDesc;
 
         },
+
         getCellDesc: function () {
             return {
                 'text': this.getValues().name,
@@ -745,6 +762,16 @@ define([
         }
     });
 
+
+    /**
+     * @classdesc `HxComment` represents a comment
+     * in a UML class diagram.
+     *
+     * @module client.model.celltypes.class
+     * @name HxComment
+     * @class HxComment
+     * @extends {joint.shapes.basic.TextBlock}
+     */
     celltypes.class.HxComment = joint.shapes.basic.TextBlock.extend({
         toolMarkup: ['<g class="element-tools">',
             '<g class="element-tool-remove"><circle fill="red" r="11"/>',
@@ -760,12 +787,15 @@ define([
                 comment: ""
             }
         }, joint.shapes.basic.TextBlock.prototype.defaults),
+
         initialize: function () {
             joint.shapes.basic.TextBlock.prototype.initialize.apply(this, arguments);
         },
+
         getValues: function () {
             return this.get("values");
         },
+
         setToValue: function (value, path) {
             obj = this.getValues();
             path = path.split('.');
@@ -778,6 +808,7 @@ define([
             //this.updateRectangles();
             //this.trigger("uml-update");
         },
+
         updateContent: function () {
             if (joint.env.test('svgforeignobject')) {
 
@@ -799,13 +830,24 @@ define([
                 });
             }
         }
-
     });
 
+
+    /**
+     * @classdesc `CommentView` is the view for
+     * a`HxComment` object.
+     *
+     * @module client.model.celltypes.class
+     * @name CommentView
+     * @class CommentView
+     * @extends {joint.shapes.basic.TextBlock}
+     */
     celltypes.class.CommentView = joint.shapes.basic.TextBlockView.extend({
+
         initialize: function () {
             joint.shapes.basic.TextBlockView.prototype.initialize.apply(this, arguments);
         },
+
         render: function () {
             joint.shapes.basic.TextBlockView.prototype.render.apply(this, arguments);
 
@@ -827,36 +869,57 @@ define([
             }
 
             return this;
-        },
+        }
     });
 
+
+    /**
+     * @classdesc `ClassDiagramLink` represents a link
+     * between two components in a UML class diagram.
+     *
+     * @module client.model.celltypes.class
+     * @name ClassDiagramLink
+     * @class ClassDiagramLink
+     * @extends {joint.dia.Link}
+     */
     celltypes.class.ClassDiagramLink = joint.dia.Link.extend({
         defaults: _.defaultsDeep({
             type: 'class.ClassDiagramLink',
             source: {x: 30, y: 30},
             target: {x: 150, y: 120}
         }, joint.dia.Link.prototype.defaults),
+
         initialize: function () {
             joint.dia.Link.prototype.initialize.apply(this, arguments);
         },
+
         getValues: function () {
             return this.get("values");
         },
+
         setToValue: function (value, path) {
             obj = this.getValues();
             path = path.split('.');
             for (i = 0; i < path.length - 1; i++) {
-
                 obj = obj[path[i]];
-
             }
             obj[path[i]] = value;
             this.updateRectangles();
             this.trigger("uml-update");
         }
-
     });
 
+
+    /**
+     * @classdesc `HxGeneralization` represents a
+     * generalization relationship between two components
+     * of a UML class diagram.
+     *
+     * @module client.model.celltypes.class
+     * @name HxGeneralization
+     * @class HxGeneralization
+     * @extends {celltypes.class.ClassDiagramLink}
+     */
     celltypes.class.HxGeneralization = celltypes.class.ClassDiagramLink.extend({
         defaults: _.defaultsDeep({
             type: 'class.HxGeneralization',
@@ -864,6 +927,17 @@ define([
         }, celltypes.class.ClassDiagramLink.prototype.defaults)
     });
 
+
+    /**
+     * @classdesc `HxImplementation` represents an
+     * implementation relationship between two components
+     * of a UML class diagram.
+     *
+     * @module client.model.celltypes.class
+     * @name HxImplementation
+     * @class HxImplementation
+     * @extends {celltypes.class.ClassDiagramLink}
+     */
     celltypes.class.HxImplementation = celltypes.class.ClassDiagramLink.extend({
         defaults: _.defaultsDeep({
             type: 'class.HxImplementation',
@@ -874,12 +948,22 @@ define([
         }, celltypes.class.ClassDiagramLink.prototype.defaults)
     });
 
+
+    /**
+     * @classdesc `HxAssociation` represents a UML
+     * association between two components of a
+     * class diagram.
+     *
+     * @module client.model.celltypes.class
+     * @name HxAssociation
+     * @class HxAssociation
+     * @extends {celltypes.class.ClassDiagramLink}
+     */
     celltypes.class.HxAssociation = celltypes.class.ClassDiagramLink.extend({
 
         defaults: _.defaultsDeep({
             type: 'class.HxAssociation',
             attrs: {
-
                 '.marker-target': {
                     d: 'M 50 10 L 60 3 M 50 10 L 60 16',
                     fill: 'white',
@@ -900,47 +984,54 @@ define([
                 }
             ],
             values: {
-
                 card: "default",
                 attribute: ""
             }
         }, celltypes.class.ClassDiagramLink.prototype.defaults),
+
         updatelabel: function () {
-
             this.label(0, {
-
                 attrs: {
-
                     text: {
                         text: this.getcard()
                     }
                 }
             });
         },
+
         getcard: function () {
             return this.get('values').card;
         },
+
         initialize: function () {
             this.updatelabel();
             celltypes.class.ClassDiagramLink.prototype.initialize.apply(this, arguments);
 
         },
+
         setToValue: function (value, path) {
             obj = this.getValues();
             path = path.split('.');
             for (i = 0; i < path.length - 1; i++) {
-
                 obj = obj[path[i]];
-
             }
             obj[path[i]] = value;
             this.updatelabel();
 
         }
-
-
     });
 
+
+    /**
+     * @classdesc `ActivityDiagramElement` is the base class
+     * for every element of an activity diagram. Elements can
+     * be statements, loops, assignments etcetera.
+     *
+     * @module client.model.celltypes.activity
+     * @name ActivityDiagramElement
+     * @class ActivityDiagramElement
+     * @extends {joint.shapes.basic.Generic}
+     */
     celltypes.activity.ActivityDiagramElement = joint.shapes.basic.Generic.extend({
         toolMarkup: ['<g class="element-tools">',
             '<g class="element-tool-remove"><circle fill="red" r="11"/>',
@@ -948,6 +1039,7 @@ define([
             '<title>Remove</title>',
             '</g>',
             '</g>'].join(''),
+
         markup: [
             '<g class="activity">',
             '<rect class="activity-element-name-rect"/>',
@@ -962,6 +1054,7 @@ define([
 
             '</g>'
         ].join(''),
+
         defaults: _.defaultsDeep({
 
             type: 'activity.ActivityDiagramElement',
@@ -1012,9 +1105,7 @@ define([
                     'font-size': 14,
                     'font-family': 'Roboto',
 
-                },
-
-
+                }
             },
 
             expanded: true,
@@ -1026,19 +1117,20 @@ define([
                 xType: '[block type]',
                 comment: '',
                 body: [],
-
             }
 
-
         }, joint.shapes.basic.Generic.prototype.defaults),
+
         initialize: function () {
             this.updateRectangles();
             joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
 
         },
+
         getValues: function () {
             return this.get("values");
         },
+
         setToValue: function (value, path) {
             obj = this.getValues();
             path = path.split('.');
@@ -1049,13 +1141,16 @@ define([
             this.updateRectangles();
             this.trigger("uml-update");
         },
+
         getOffsetY: function () {
             return this.get("offsetY");
         },
+
         getOffsetX: function () {
             return this.getAncestors().length * 10 + 10;
 
         },
+
         getHeight: function () {
             return 35;
         },
@@ -1063,6 +1158,7 @@ define([
         getDescription: function () {
             return this.getValues().xType;
         },
+
         updateRectangles: function () {
             var attrs = this.get('attrs');
 
@@ -1077,9 +1173,7 @@ define([
 
                 if (this.getValues().comment.length > 20) {
                     var text = "\n" + this.getValues().comment.slice(0, 20) + "...";
-
-                }
-                else {
+                } else {
                     var text = "\n" + this.getValues().comment;
                 }
 
@@ -1120,18 +1214,14 @@ define([
                     }
                     if (h != 0) {
                         attrs['.activity-element-body-rect'].height = 35 + 20 + h;
-                    }
-                    else {
+                    } else {
                         attrs['.activity-element-body-rect'].height = 35 + 20;
                     }
-                }
-                else {
+                } else {
                     attrs['.activity-element-body-rect'].height = 0;
                 }
                 attrs['.activity-element-name-rect'].transform = 'translate(0,0)';
                 attrs['.activity-element-body-rect'].transform = 'translate(0,35)';
-
-
             }
 
             attrs['.activity-element-type-rect'].height =
@@ -1139,13 +1229,21 @@ define([
                 + attrs['.activity-element-body-rect'].height;
 
             attrs['.activity-element-type-rect'].width = 5;
-
-
         }
-
     });
 
+
+    /**
+     * @classdesc `ActivityDiagramElementView` is the view for
+     * an `ActivityDiagramElement` object.
+     *
+     * @module client.model.celltypes.activity
+     * @name ActivityDiagramElementView
+     * @class ActivityDiagramElementView
+     * @extends {joint.dia.ElementView}
+     */
     celltypes.activity.ActivityDiagramElementView = joint.dia.ElementView.extend({
+
         initialize: function () {
             joint.dia.ElementView.prototype.initialize.apply(this, arguments);
 
@@ -1153,12 +1251,12 @@ define([
                 this.update();
                 this.resize();
             });
-
         },
+
         events: {
             'mousedown .activity-toggle': 'toggle'
-
         },
+
         renderTools: function () {
 
             var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
@@ -1173,6 +1271,7 @@ define([
 
             return this;
         },
+
         render: function () {
             joint.dia.ElementView.prototype.render.apply(this, arguments);
 
@@ -1180,14 +1279,24 @@ define([
             this.update();
             return this;
         },
+
         toggle: function () {
             this.model.set("expanded", !this.model.get("expanded"));
             this.model.updateRectangles();
             this.update(); // ecco cosa dovevi fare, le cose funzionavano già
-
         }
     });
 
+
+    /**
+     * @classdesc `HxCustom` represents custom code
+     * by the user.
+     *
+     * @module client.model.celltypes.activity
+     * @name HxCustom
+     * @class HxCustom
+     * @extends {celltypes.activity.ActivityDiagramElement}
+     */
     celltypes.activity.HxCustom = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
@@ -1199,7 +1308,6 @@ define([
                     'stroke': 'black', 'stroke-width': 0, 'fill': '#7c189d'
                 },
                 '.activity-element-type-rect': {'stroke': '#7c189d', 'stroke-width': 0, 'fill': '#7c189d'},
-
             },
 
             values: {
@@ -1207,17 +1315,30 @@ define([
                 code: ""
 
             },
+
             canHaveChildren: false,
 
-
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
+
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
         },
+
         getDescription: function () {
             return this.getValues().code;
-        },
+        }
     });
+
+
+    /**
+     * @classdesc `HxElse` represents the alternative
+     * to a conditional statement.
+     *
+     * @module client.model.celltypes.activity
+     * @name HxElse
+     * @class HxElse
+     * @extends {celltypes.activity.ActivityDiagramElement}
+     */
     celltypes.activity.HxElse = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
@@ -1236,13 +1357,26 @@ define([
 
             }
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
+
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
         },
+
         getDescription: function () {
             return "";
-        },
+        }
     });
+
+
+    /**
+     * @classdesc `HxFor` represents an iteration
+     * over a sequence of statements.
+     *
+     * @module client.model.celltypes.activity
+     * @name HxFor
+     * @class HxFor
+     * @extends {celltypes.activity.ActivityDiagramElement}
+     */
     celltypes.activity.HxFor = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
@@ -1256,7 +1390,6 @@ define([
                 },
 
                 '.activity-element-type-rect': {'stroke': '#ed341c', 'stroke-width': 1, 'fill': '#ed341c'},
-
             },
 
             values: {
@@ -1264,18 +1397,29 @@ define([
                 initialization: "",
                 termination: "",
                 increment: ""
-
             }
 
-
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
+
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
         },
+
         getDescription: function () {
             return this.getValues().initialization + ";" + this.getValues().termination + ";" + this.getValues().increment;
-        },
+        }
     });
+
+
+    /**
+     * @classdesc `HxIf` represents a conditional
+     * statement.
+     *
+     * @module client.model.celltypes.activity
+     * @name HxIf
+     * @class HxIf
+     * @extends {celltypes.activity.ActivityDiagramElement}
+     */
     celltypes.activity.HxIf = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
@@ -1287,24 +1431,35 @@ define([
                     'stroke': 'black', 'stroke-width': 0, 'fill': '#15b13e'
                 },
                 '.activity-element-type-rect': {'stroke': '#15b13e', 'stroke-width': 0, 'fill': '#15b13e'},
-
             },
 
             values: {
                 xType: 'If',
                 condition: ""
-
             }
 
-
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
+
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
         },
+
         getDescription: function () {
             return "if(" + this.getValues().condition + ")";
-        },
+        }
     });
+
+
+    /**
+     * @classdesc `HxVariable` represents a variable
+     * declaration, initialization or an operation
+     * on it.
+     *
+     * @module client.model.celltypes.activity
+     * @name HxVariable
+     * @class HxVariable
+     * @extends {celltypes.activity.ActivityDiagramElement}
+     */
     celltypes.activity.HxVariable = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
@@ -1313,12 +1468,10 @@ define([
             attrs: {
                 rect: {'width': 200},
 
-
                 '.activity-element-name-rect': {
                     'stroke': 'black', 'stroke-width': 0, 'fill': '#edae1c'
                 },
                 '.activity-element-type-rect': {'stroke': '#edae1c', 'stroke-width': 1, 'fill': '#edae1c'},
-
             },
 
             values: {
@@ -1327,19 +1480,32 @@ define([
                 type: "",
                 operation: "",
                 value: ""
-
             },
+
             canHaveChildren: false,
 
-
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
+
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
         },
+
         getDescription: function () {
             return this.getValues().type + " " + this.getValues().name + this.getValues().operation + this.getValues().value;
-        },
+        }
     });
+
+
+    /**
+     * @classdesc `HxReturn` represents a statement
+     * for exiting a method and returning to the
+     * caller.
+     *
+     * @module client.model.celltypes.activity
+     * @name HxReturn
+     * @class HxReturn
+     * @extends {celltypes.activity.ActivityDiagramElement}
+     */
     celltypes.activity.HxReturn = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
@@ -1352,25 +1518,36 @@ define([
                     'stroke': 'black', 'stroke-width': 0, 'fill': '#ed841c'
                 },
                 '.activity-element-type-rect': {'stroke': '#ed841c', 'stroke-width': 0, 'fill': '#ed841c'},
-
             },
 
             values: {
                 xType: 'Return',
                 value: ""
+            },
 
-            }
-            ,
             canHaveChildren: false,
 
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
+
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
         },
+
         getDescription: function () {
             return "return " + this.getValues().value;
-        },
+        }
     });
+
+
+    /**
+     * @classdesc `HxWhile` represents conditional
+     * loop over a sequence a statements.
+     *
+     * @module client.model.celltypes.activity
+     * @name HxWhile
+     * @class HxWhile
+     * @extends {celltypes.activity.ActivityDiagramElement}
+     */
     celltypes.activity.HxWhile = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
@@ -1383,23 +1560,23 @@ define([
                     'stroke': 'black', 'stroke-width': 0, 'fill': '#157b92'
                 },
                 '.activity-element-type-rect': {'stroke': '#157b92', 'stroke-width': 0, 'fill': '#157b92'},
-
             },
 
             values: {
                 xType: 'While',
                 condition: ""
-
             }
 
-
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
+
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
         },
+
         getDescription: function () {
             return "while(" + this.getValues().condition + ")";
-        },
+        }
     });
+
     return celltypes;
 });

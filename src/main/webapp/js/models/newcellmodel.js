@@ -35,16 +35,16 @@ define([
          * @function
          */
         initialize: function () {
-
             this.registerCells("class");
         },
-        switchComponents: function () {
 
+        switchComponents: function () {
             if (ProjectModel.options.currentindex == "class")
                 this.registerCells("class");
             else
                 this.registerCells("activity");
         },
+
         registerCells: function (diag) {
             this.str.length = 0;
             for (var property in celltypes[diag]) {
@@ -55,6 +55,7 @@ define([
             }
             this.trigger("change:str");
         },
+
         /**
          * Adds a new cell to the current diagram, based on which
          * type of cell the user has selected.

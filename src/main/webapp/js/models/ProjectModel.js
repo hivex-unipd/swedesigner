@@ -136,7 +136,6 @@ define([
 
         getIndexFromId: function (id) {
             return this.options.graphs.methods.findIndex((x) => x.id == id);
-
         },
 
         getClassVisibleElements: function (cell) {

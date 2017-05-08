@@ -23,22 +23,27 @@ require.config({
 	}
 });
 
+
+
 require([
 	'backbone',
 	'joint',
 	'views/AppView',
-	'models/newcellfactory'
-], function (backbone, joint, AppView, NewCellFactory) {
+	'models/newcellfactory',
+	'models/ProjectModel',
+	'models/Command'
+], function (backbone, joint, AppView, NewCellFactory, ProjectModel, Command) {
 
-	// testing function:
+	// --- testing function:
 	var assert = function (condition, message) {
 		if (!condition)
-			throw "non vale che " + message;
+			throw 'Non vale che "' + message + '"';
 	}
 
 
 
 	var app_view = new AppView; // AppView
+	assert(app_view instanceof backbone.View, 'Una AppView è una backbone.View.');
 
 	var views = app_view.views;
 	assert(views != undefined, 'Una AppView possiede un oggetto views.');
@@ -69,6 +74,18 @@ require([
 
 
 
+	pmodel = ProjectModel; // ProjectModel
+	assert(pmodel instanceof backbone.Model, 'Un ProjectModel è un backbone.Model.');
+
+	pmodel.newProject(); assert(true, 'Un ProjectModel è in grado di creare un nuovo progetto.');
+
+
+
+	ncmodel = ncview.model; // NewCellModel
+	assert(ncmodel instanceof backbone.Model, 'Un NewCellModel è un backbone.Model.');
+
+
+
 	var ncfactory = NewCellFactory; // NewCellFactory
 
 	assert(ncfactory.getCell('HxClass').defaults.type == 'class.HxClass', 'Una NewCellFactory è in grado di fornire una HxClass.');
@@ -85,4 +102,10 @@ require([
 	assert(ncfactory.getCell('HxVariable').defaults.type == 'activity.HxVariable', 'Una NewCellFactory è in grado di fornire una HxVariable.');
 	assert(ncfactory.getCell('HxReturn').defaults.type == 'activity.HxReturn', 'Una NewCellFactory è in grado di fornire un HxReturn.');
 	assert(ncfactory.getCell('HxWhile').defaults.type == 'activity.HxWhile', 'Una NewCellFactory è in grado di fornire un HxWhile.');
+
+
+
+	cmd = Command; // Command
+
+	cmd.newProject({}); assert(true, 'Un Command è in grado di creare un nuovo progetto.');
 });
