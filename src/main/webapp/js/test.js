@@ -8,7 +8,7 @@ require.config({
 		joint: 'libs/jointjs/joint',
 		material: 'libs/mdl/material',
 		jqueryui: 'libs/jqueryui/jquery-ui',
-		jstree:'libs/jquery/jstree',
+		jstree: 'libs/jquery/jstree',
         'svg-pan-zoom': 'libs/svgpanzoom/svg-pan-zoom'
 	},
 	shim: {
@@ -34,13 +34,31 @@ require([
 	'models/Command'
 ], function (backbone, joint, AppView, NewCellFactory, ProjectModel, Command) {
 
-	// --- testing function:
+
+
+	//  subroutines:
+	//  ============
+
 	var assert = function (condition, message) {
 		if (!condition)
 			throw 'Non vale che "' + message + '"';
-	}
+	};
+
+	var objectHasFields = function (obj, fields) {
+		ks = Object.keys(obj);
+		for (var el of fields) {
+			if (!ks.includes(el))
+				return false;
+		}
+		return true;
+	};
 
 
+
+
+
+	// test di unità:
+	// ==============
 
 	var app_view = new AppView; // AppView
 	assert(app_view instanceof backbone.View, 'Una AppView è una backbone.View.');
@@ -73,14 +91,14 @@ require([
 
 
 
-	pmodel = ProjectModel; // ProjectModel
+	var pmodel = ProjectModel; // ProjectModel
 	assert(pmodel instanceof backbone.Model, 'Un ProjectModel è un backbone.Model.');
 
 	pmodel.newProject(); assert(true, 'Un ProjectModel è in grado di creare un nuovo progetto.');
 
 
 
-	ncmodel = ncview.model; // NewCellModel
+	var ncmodel = ncview.model; // NewCellModel
 	assert(ncmodel instanceof backbone.Model, 'Un NewCellModel è un backbone.Model.');
 
 
@@ -93,7 +111,6 @@ require([
 	assert(ncfactory.getCell('HxGeneralization').defaults.type == 'class.HxGeneralization', 'Una NewCellFactory è in grado di istanziare una HxGeneralization.');
 	assert(ncfactory.getCell('HxAssociation').defaults.type == 'class.HxAssociation', 'Una NewCellFactory è in grado di istanziare una HxAssociation.');
 	assert(ncfactory.getCell('HxImplementation').defaults.type == 'class.HxImplementation', 'Una NewCellFactory è in grado di istanziare una HxImplementation.');
-
 	assert(ncfactory.getCell('HxCustom').defaults.type == 'activity.HxCustom', 'Una NewCellFactory è in grado di istanziare un HxCustom.');
 	assert(ncfactory.getCell('HxElse').defaults.type == 'activity.HxElse', 'Una NewCellFactory è in grado di istanziare un HxElse.');
 	assert(ncfactory.getCell('HxFor').defaults.type == 'activity.HxFor', 'Una NewCellFactory è in grado di istanziare un HxFor.');
@@ -104,7 +121,46 @@ require([
 
 
 
-	cmd = Command; // Command
+	var cmd = Command; // Command
 
 	cmd.newProject({}); assert(true, 'Un Command è in grado di creare un nuovo progetto.');
+
+
+
+	// ClassDiagramElement
+
+	assert(objectHasFields(ncfactory.getCell('HxClass').getValues(), ['name', 'abstract', 'static', 'attributes', 'methods']), 'Una HxClass possiede nome, attributi, metodi, astrazione e staticità.');
+	assert(objectHasFields(ncfactory.getCell('HxInterface').getValues(), ['name', 'methods']), 'Una HxInterface possiede nome e metodi.');
+	assert(objectHasFields(ncfactory.getCell('HxComment').getValues(), ['comment']), 'Un HxComment possiede un campo di testo.');
+
+
+
+	// ClassDiagramLink
+
+	assert(ncfactory.getCell('HxGeneralization').defaults.type != undefined, 'Un HxGeneralization possiede un meta-tipo.');
+	assert(ncfactory.getCell('HxAssociation').defaults.type != undefined, 'Un HxAssociation possiede un meta-tipo.');
+	assert(ncfactory.getCell('HxImplementation').defaults.type != undefined, 'Un HxImplementation possiede un meta-tipo.');
+
+
+
+	// ActivityDiagramElement
+
+	assert(objectHasFields(ncfactory.getCell('HxCustom').getValues(), ['xType', 'comment', 'code']), 'Un HxCustom possiede meta-tipo, commento e una stringa.');
+	assert(objectHasFields(ncfactory.getCell('HxElse').getValues(), ['xType', 'comment']), 'Un HxElse possiede meta-tipo e commento.');
+	assert(objectHasFields(ncfactory.getCell('HxFor').getValues(), ['xType', 'comment', 'initialization', 'termination', 'increment']), 'Un HxFor possiede meta-tipo, commento, inizializzazione, terminazione e incremento.');
+	assert(objectHasFields(ncfactory.getCell('HxIf').getValues(), ['xType', 'comment', 'condition']), 'Un HxIf possiede meta-tipo, commento e condizione.');
+	assert(objectHasFields(ncfactory.getCell('HxVariable').getValues(), ['xType', 'comment', 'name', 'type', 'operation', 'value']), 'Una HxVariable possiede meta-tipo, commento, nome, tipo, operazione e valore.');
+	assert(objectHasFields(ncfactory.getCell('HxReturn').getValues(), ['xType', 'comment', 'value']), 'Un HxReturn possiede meta-tipo, commento e valore.');
+	assert(objectHasFields(ncfactory.getCell('HxWhile').getValues(), ['xType', 'comment', 'condition']), 'Un HxWhile possiede meta-tipo, commento e condizione.');
+
+
+
+
+
+	// test di integrazione:
+	// =====================
+
+	assert(true, 'Le componenti dei package models e views di swedesigner::client interagiscono correttamente tra loro e con la libreria esterna JointJS.');
+
+	// TODO
 });

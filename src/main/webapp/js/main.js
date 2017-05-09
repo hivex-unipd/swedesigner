@@ -8,7 +8,7 @@ require.config({
         joint: 'libs/jointjs/joint',
         material: 'libs/mdl/material',
         jqueryui: 'libs/jqueryui/jquery-ui',
-        jstree:'libs/jquery/jstree',
+        jstree: 'libs/jquery/jstree',
         'svg-pan-zoom': 'libs/svgpanzoom/svg-pan-zoom'
     },
     shim: {

@@ -49,11 +49,11 @@
          * @name Commands#saveDiagram
          * @function
          */
-        saveDiagram: function () {
-            var blob = new Blob([ProjectModel.saveDiagram()], {type: "application/json"});
+        saveProject: function () {
+            var blob = new Blob([ProjectModel.saveProject()], {type: "application/json"});
             var url = window.URL.createObjectURL(blob);
 
-            //hacky things
+            // hacky things
             var a = document.createElement('a');
             a.style = "display:none";
             a.download = "project.json";
@@ -67,11 +67,11 @@
         /**
          * Asks the `ProjectModel` object to load an entire project
          * from a JSON file uploaded by the user.
-         * @name Commands#loadDiagram
+         * @name Commands#loadProject
          * @function
          * @param {event} evt the action event
          */
-        loadDiagram: function (evt) {
+        loadProject: function (evt) {
             var files = evt.target.files; // FileList object
             f = files[0];
             var reader = new FileReader();
@@ -81,30 +81,74 @@
                 // Render thumbnail.
                 JsonObj = e.target.result;
                 //console.log(JsonObj);
-                ProjectModel.loadDiagram(JsonObj);
+                ProjectModel.loadProject(JsonObj);
             };
             reader.readAsText(f);
         },
-		
-		
-		sendDiagram: function () {
-			var data = {};
-			
-			
-			// construct an HTTP request
-			var xhr = new XMLHttpRequest();
-			xhr.open("POST", "/generate", true);
-			xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-			
-			// send the collected data as JSON
-			xhr.send(saveDiagram());
-			
-			xhr.onloadend = function () {
-				// done
-				alert("fatto!");
-			};
 
-		},
+        /**
+         * Asks the `ProjectModel` object to start a new
+         * project from scratch.
+         * @name Commands#newProject
+         * @function
+         * @param {event} evt the action event
+         */
+        newProject: function (evt) {
+            ProjectModel.newProject();
+        },
+
+        /**
+         * Asks the `ProjectModel` object to send a
+         * project (in JSON format) to the server,
+         * for generating the program.
+         * @name Commands#sendDiagram
+         * @function
+         */
+        sendDiagram: function () {
+            var data = {};
+
+            // construct an HTTP request
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/generate", true);
+            xhr.responseType = "arraybuffer";
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            // send the collected data as JSON
+            xhr.send(ProjectModel.saveProject());           
+            xhr.onload = function () {
+            	// Create a new Blob object using the 
+                // response data of the onload object
+            	if (this.status == 200) {
+					var data = (this.response);
+					var blob = new Blob([data],{type: "application/octet-stream"});
+
+					// Create a link element, hide it, direct 
+					// it towards the blob, and then 'click' it programatically
+					let a = document.createElement("a");
+					a.style = "display: none";
+					document.body.appendChild(a);
+
+					// Create a DOMString representing the blob 
+					// and point the link element towards it
+					let url = window.URL.createObjectURL(blob);
+					a.href = url;
+					a.download = 'projectzip.zip';
+					// programatically click the link to trigger the download
+					a.click();
+					window.URL.revokeObjectURL(url);
+            	}
+            	else {
+            		function arrayBufferToString(buffer) {
+            		    var arr = new Uint8Array(buffer);
+            		    var str = String.fromCharCode.apply(String, arr);
+            		    if (/[\u0080-\uffff]/.test(str)) {
+            		        throw new Error("this string seems to contain (still encoded) multibytes");
+            		    }
+            		    return str;
+            		}           		
+            		alert(arrayBufferToString(this.response));
+            	}            
+            };
+        }
     };
 
     /**
@@ -129,13 +173,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AppView.html">AppView</a></li><li><a href="ClassDiagramElement.html">ClassDiagramElement</a></li><li><a href="ClassDiagramElementView.html">ClassDiagramElementView</a></li><li><a href="Commands.html">Commands</a></li><li><a href="DetailsView.html">DetailsView</a></li><li><a href="DiagramsCollection.html">DiagramsCollection</a></li><li><a href="HxClass.html">HxClass</a></li><li><a href="NewCellModel.html">NewCellModel</a></li><li><a href="NewCellView.html">NewCellView</a></li><li><a href="ProjectView.html">ProjectView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#execmod">execmod</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ActivityDiagramElement.html">ActivityDiagramElement</a></li><li><a href="ActivityDiagramElementView.html">ActivityDiagramElementView</a></li><li><a href="AppView.html">AppView</a></li><li><a href="ClassDiagramElement.html">ClassDiagramElement</a></li><li><a href="ClassDiagramElementView.html">ClassDiagramElementView</a></li><li><a href="ClassDiagramLink.html">ClassDiagramLink</a></li><li><a href="Commands.html">Commands</a></li><li><a href="CommentView.html">CommentView</a></li><li><a href="DetailsView.html">DetailsView</a></li><li><a href="HxAssociation.html">HxAssociation</a></li><li><a href="HxClass.html">HxClass</a></li><li><a href="HxComment.html">HxComment</a></li><li><a href="HxCustom.html">HxCustom</a></li><li><a href="HxElse.html">HxElse</a></li><li><a href="HxFor.html">HxFor</a></li><li><a href="HxGeneralization.html">HxGeneralization</a></li><li><a href="HxIf.html">HxIf</a></li><li><a href="HxImplementation.html">HxImplementation</a></li><li><a href="HxInterface.html">HxInterface</a></li><li><a href="HxReturn.html">HxReturn</a></li><li><a href="HxVariable.html">HxVariable</a></li><li><a href="HxWhile.html">HxWhile</a></li><li><a href="NewCellModel.html">NewCellModel</a></li><li><a href="NewCellView.html">NewCellView</a></li><li><a href="ProjectModel.html">ProjectModel</a></li><li><a href="ProjectView.html">ProjectView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCell">addCell</a></li><li><a href="global.html#deleteCell">deleteCell</a></li><li><a href="global.html#execCommand">execCommand</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Apr 07 2017 17:43:51 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue May 09 2017 09:36:01 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

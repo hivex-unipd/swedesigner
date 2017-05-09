@@ -42,7 +42,6 @@
     celltypes.class = {};
 
 
-
     /**
      * @classdesc `ClassDiagramElement` is the base class for every
      * element of the class diagram. Elements can be classes,
@@ -54,6 +53,13 @@
      * @extends {joint.shapes.basic.Generic}
      */
     celltypes.class.ClassDiagramElement = joint.shapes.basic.Generic.extend({
+
+        toolMarkup: ['&lt;g class="element-tools">',
+            '&lt;g class="element-tool-remove">&lt;circle fill="red" r="11"/>',
+            '&lt;path transform="scale(.8) translate(-16, -16)" d="M24.778,21.419 19.276,15.917 24.777,10.415 21.949,7.585 16.447,13.087 10.945,7.585 8.117,10.415 13.618,15.917 8.116,21.419 10.946,24.248 16.447,18.746 21.948,24.248z"/>',
+            '&lt;title>Remove&lt;/title>',
+            '&lt;/g>',
+            '&lt;/g>'].join(''),
 
         /**
          * Default attributes of a `ClassDiagramElement` object.
@@ -97,7 +103,7 @@
          * @function
          */
         updateRectangles: function () {
-            //non fare niente sulla classe astratta
+            // asbtract method
         },
 
         /**
@@ -120,21 +126,19 @@
 
         /**
          * Executes the method whose name matches `met`.
-         * @name ClassDiagramElement#executemethod
+         * @name ClassDiagramElement#executeMethod
          * @function
          * @param {function} met the method to be executed
          */
-        executemethod: function (met) {
-            console.log(met,arguments);
+        executeMethod: function (met) {
             return this[met] &amp;&amp; this[met].apply(this, [].slice.call(arguments, 1));
         }
     });
 
 
-
     /**
      * @classdesc `ClassDiagramElementView` is the view for
-     * each`ClassDiagramElement`.
+     * a `ClassDiagramElement` object.
      *
      * @module client.model.celltypes.class
      * @name ClassDiagramElementView
@@ -154,7 +158,6 @@
             joint.dia.ElementView.prototype.initialize.apply(this, arguments);
 
             this.listenTo(this.model, 'uml-update', function () {
-                console.log("update interfaccia");
                 this.update();
                 this.resize();
             });
@@ -166,20 +169,63 @@
          * @type {Object}
          */
         events: {
-            'mousedown .togglemethods': 'togglemethods',
-            'mousedown .toggleattributes': 'toggleattributes'
+            'mousedown .togglemethods': 'toggleMethods',
+            'mousedown .toggleattributes': 'toggleAttributes'
         },
+
+        render: function () {
+            joint.dia.ElementView.prototype.render.apply(this, arguments);
+
+            this.renderTools();
+            this.update();
+            return this;
+        },
+
+        renderTools: function () {
+
+            var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
+            console.log("markup:", toolMarkup);
+            if (toolMarkup) {
+
+                var nodes = joint.V(toolMarkup);
+                console.log("el:", joint.V(this.el));
+                joint.V(this.el).append(nodes);
+
+            }
+
+            return this;
+        },
+        /*pointerclick: function (evt, x, y) {
+
+         /*this._dx = x;
+         this._dy = y;
+         this._action = '';
+
+         var className = evt.target.parentNode.getAttribute('class');
+
+         switch (className) {
+
+         case 'element-tool-remove':
+         this.model.remove();
+         return;
+         break;
+
+         default:
+         }
+
+         joint.dia.CellView.prototype.pointerclick.apply(this, arguments);
+         },*/
 
         /**
          * Toggles the display of the class attributes.
          * @name ClassDiagramElementView#toggleattributes
          * @function
          */
-        toggleattributes: function () { //non so se sia giusto tenerli qua...boh vedremo
-            this.model.set("attributesexpanded", !this.model.get("attributesexpanded"));
-            
-            this.model.updateRectangles();
-            this.update(); // ecco cosa dovevi fare, le cose funzionavano già
+        // tolta perché buggata
+        toggleAttributes: function () { //non so se sia giusto tenerli qua...boh vedremo
+            // this.model.set("attributesExpanded", !this.model.get("attributesExpanded"));
+            // this.model.updateRectangles();
+            // this.update(); // ecco cosa dovevi fare, le cose funzionavano già
         },
 
         /**
@@ -187,13 +233,13 @@
          * @name ClassDiagramElementView#togglemethods
          * @function
          */
-        togglemethods: function () {
-            this.model.set("methodsexpanded", !this.model.get("methodsexpanded"));
-            this.model.updateRectangles();
-            this.update(); // ecco cosa dovevi fare, le cose funzionavano già
+        // tolta perché buggata
+        toggleMethods: function () {
+            // this.model.set("methodsExpanded", !this.model.get("methodsExpanded"));
+            // this.model.updateRectangles();
+            // this.update(); // ecco cosa dovevi fare, le cose funzionavano già
         }
     });
-
 
 
     /**
@@ -249,21 +295,21 @@
                 rect: {'width': 200},
 
                 '.uml-class-name-rect': {
-                    'stroke': 'black',
-                    'stroke-width': 0,
-                    'fill': '#4db6ac'
+                    'stroke': '#d6b656',
+                    'stroke-width': 1,
+                    'fill': '#fff2cc'
                 },
                 '.uml-class-attrs-rect': {
-                    'stroke': 'black',
-                    'stroke-width': 0,
-                    'fill': '#ffffff', 
-                'expanded': 'false'
+                    'stroke': '#d6b656',
+                    'stroke-width': 1,
+                    'fill': '#fff2cc',
+                    'expanded': 'true'
                 },
                 '.uml-class-methods-rect': {
-                    'stroke': 'black',
-                    'stroke-width': 0,
-                    'fill': '#eeeeee',
-                    'expanded': 'false'
+                    'stroke': '#d6b656',
+                    'stroke-width': 1,
+                    'fill': '#fff2cc',
+                    'expanded': 'true'
                 },
                 '.uml-class-divider-rect': {
                     'stroke': 'black',
@@ -273,17 +319,17 @@
 
                 '.uml-class-name-text': {
                     'ref': '.uml-class-name-rect',
-                    'ref-y': .5,
+                    'ref-y': .6,
                     'ref-x': .5,
                     'text-anchor': 'middle',
                     'y-alignment': 'middle',
-                    'fill': 'white',
+                    'fill': '#222222',
                     'font-size': 16,
                     'font-family': 'Roboto'
                 },
                 '.uml-class-attrs-text': {
                     'ref': '.uml-class-attrs-rect',
-                    'ref-y': 5,
+                    'ref-y': 2,
                     'ref-x': 5,
                     'fill': '#222222',
                     'font-size': 12,
@@ -291,7 +337,7 @@
                 },
                 '.uml-class-methods-text': {
                     'ref': '.uml-class-methods-rect',
-                    'ref-y': 5,
+                    'ref-y': 2,
                     'ref-x': 5,
                     'fill': '#222222',
                     'font-size': 12,
@@ -299,47 +345,16 @@
                 }
             },
 
-            attributesexpanded: false,
+            attributesExpanded: true,
 
-            methodsexpanded: false,
+            methodsExpanded: true,
 
             values: {
-                name: "classedefault",
-                abstract:"false",
-                static:"false",
-                attributes: [
-                    {
-                        name: "variabileDefault",
-                        type: "TipoDefault",
-                        defaultValue:"",
-                        visibility:"public",
-                        static:"false"
-                    },
-                    {
-                        name: "variabileDefault2",
-                        type: "TipoDefault2",
-                        defaultValue:"",
-                        visibility:"public",
-                        static:"false"
-                    }
-                ],
-                methods: [
-                    {
-                        name: "metodoDefault",
-                        visibility: "public",
-                        id: joint.util.uuid(),
-                        returntype: "tipoRitorno",
-                        abstract:"false",
-                        static:"false",
-                        parameters: [
-                            {
-                                name:"param1",
-                                type:"int",
-                                defaultValue:"0"
-                            }
-                        ]
-                    }
-                ]
+                name: "ClassName",
+                abstract: "false",
+                static: "false",
+                attributes: [],
+                methods: []
             }
         }, celltypes.class.ClassDiagramElement.prototype.defaults),
 
@@ -358,44 +373,36 @@
                 },
                 {
                     type: 'attrs',
-                    text: this.get('attributesexpanded') ? this.getValues().attributes : "Attributes (click to expand)"
+                    text: this.get('attributesExpanded') ? this.getValues().attributes : "Attributes (click to expand)"
                 },
                 {
                     type: 'methods',
-                    text: this.get('methodsexpanded') ? this.getValues().methods : "Methods (click to expand)"
+                    text: this.get('methodsExpanded') ? this.getValues().methods : "Methods (click to expand)"
                 }
             ];
-            /*_.each(rects, function (rect) {
 
-             var lines = _.isArray(rect.text) ? rect.text : [rect.text];
-             //console.log(lines);
-             var rectHeight = lines.length * 15 + 1;
+            var rectWidth = this.getWidth();
 
-             attrs['.uml-class-' + rect.type + '-text'].text = lines.map(function (e) {
-             //console.log(e);
-             if (e.hasOwnProperty('name')) {
-             return e.name + ":" + e.value;
-             }
-             else {
-             return e;
-             }
-             }).join('\n');
-             attrs['.uml-class-' + rect.type + '-rect'].height = rectHeight;
-             attrs['.uml-class-' + rect.type + '-rect'].transform = 'translate(0,' + offsetY + ')';
-
-             offsetY += rectHeight + 1;
-
-             });*/
             var rectHeight = 1 * 15 + 1;
             attrs['.uml-class-name-text'].text = rects[0].text;
             attrs['.uml-class-name-rect'].height = rectHeight;
+            attrs['.uml-class-name-rect'].width = rectWidth;
             attrs['.uml-class-name-rect'].transform = 'translate(0,' + offsetY + ')';
-            offsetY += rectHeight + 1;
-            console.log(rects[1].text.length);
-            rectHeight = _.isArray(rects[1].text) ? rects[1].text.length * 15 + 1 : 1 * 15 + 1;
-            console.log(rects[1].text);
+            offsetY += rectHeight;
+            //rectHeight = _.isArray(rects[1].text) ? rects[1].text.length * 15 + 1 : 1 * 15 + 1;
+            if (_.isArray(rects[1].text)) {
+                if (rects[1].text.length > 0) {
+                    rectHeight = rects[1].text.length * 15 + 1;
+                }
+                else {
+                    rectHeight = 1 * 15 + 1;
+                }
+            }
+            else {
+                rectHeight = 1 * 15 + 1;
+            }
             attrs['.uml-class-attrs-text'].text = _.isArray(rects[1].text) ? rects[1].text.map(function (e) {
-                    var vis = "";
+                    let vis = "";
                     switch (e.visibility) {
                         case "public":
                             vis = "+";
@@ -406,20 +413,30 @@
                         case "protected":
                             vis = "~";
                             break;
-                        case "package":
-                            vis = "#";
-                            break;
+                        /*case "package":
+                         vis = "#";
+                         break;*/
                     }
-                    return vis+ " "+ e.name + ":" + e.type;
+                    return vis + " " + e.name + ":" + e.type;
                 }).join('\n') : rects[1].text;
             attrs['.uml-class-attrs-rect'].height = rectHeight;
+            attrs['.uml-class-attrs-rect'].width = rectWidth;
             attrs['.uml-class-attrs-rect'].transform = 'translate(0,' + offsetY + ')';
-            offsetY += rectHeight + 1;
-            console.log(rects[2].text.length);
-            rectHeight = _.isArray(rects[2].text) ? rects[2].text.length * 15 + 1 : 1 * 15 + 1;
-
+            offsetY += rectHeight;
+            //rectHeight = _.isArray(rects[2].text) ? rects[2].text.length * 15 + 1 : 1 * 15 + 1;
+            if (_.isArray(rects[2].text)) {
+                if (rects[2].text.length > 0) {
+                    rectHeight = rects[2].text.length * 15 + 1;
+                }
+                else {
+                    rectHeight = 1 * 15 + 1;
+                }
+            }
+            else {
+                rectHeight = 1 * 15 + 1;
+            }
             attrs['.uml-class-methods-text'].text = _.isArray(rects[2].text) ? rects[2].text.map(function (e) {
-                    var vis = "";
+                    let vis = "";
                     switch (e.visibility) {
                         case "public":
                             vis = "+";
@@ -434,10 +451,13 @@
                             vis = "#";
                             break;
                     }
-                    var params = e.parameters.map(function(f){return f.name;}).join(",");
-                    return vis + " " + e.name + "(" + params+")" + ":" + e.returntype;
+                    let params = e.parameters.map(function (f) {
+                        return f.name;
+                    }).join(",");
+                    return vis + " " + e.name + "(" + params + ")" + ":" + e.returnType;
                 }).join('\n') : rects[2].text;
             attrs['.uml-class-methods-rect'].height = rectHeight;
+            attrs['.uml-class-methods-rect'].width = rectWidth;
             attrs['.uml-class-methods-rect'].transform = 'translate(0,' + offsetY + ')';
 
             celltypes.class.ClassDiagramElement.prototype.updateRectangles.apply(this, arguments);
@@ -445,62 +465,153 @@
 
         /**
          * Adds a new method to the class represented by the cell.
-         * @name HxClass#addmethod
+         * @name HxClass#addMethod
          * @function
          */
-        addmethod: function () {
+        addMethod: function () {
             this.getValues().methods.push({
                 name: "",
-                visibility: "",
+                visibility: "private",
                 id: joint.util.uuid(),
-                returntype: "",
-                static:"false",
-                abstract:"false",
+                returnType: "",
+                static: "false",
+                abstract: "false",
                 parameters: []
             });
         },
 
         /**
          * Adds a new attribute to the class represented by the cell.
-         * @name HxClass#addmethod
+         * @name HxClass#addMethod
          * @function
          */
-        addattribute: function () {
+        addAttribute: function () {
             this.getValues().attributes.push({
                 name: "",
                 type: "",
-                defaultValue:"",
-                visibility:"",
-                static:"false"
+                defaultValue: "",
+                visibility: "private",
+                static: "false"
             });
         },
 
         /**
          * Adds a new argument to the `ind`th method in
          * the class represented by the cell.
-         * @name HxClass#addmethod
+         * @name HxClass#addMethod
          * @function
          * @param {number} ind the method's position
          */
-        addparameter: function (ind) {
+        addParameter: function (ind) {
             this.getValues().methods[ind].parameters.push({
-                name:"",
-                type:"",
-                defaultValue:""
+                name: "",
+                type: "",
+                defaultValue: ""
             });
         },
-        deleteparameter:function (met) {
-            console.log(met[1]);
-          this.getValues().methods[met[0]].parameters.splice(met[1],1);
-          console.log(this.getValues());
+        deleteParameter: function (met) {
+            this.getValues().methods[met[0]].parameters.splice(met[1], 1);
+            this.updateRectangles();
+            this.trigger("uml-update");
         },
-        deleteattribute: function(ind){
-            this.getValues().attributes.splice(ind,1);
+        deleteAttribute: function (ind) {
+            this.getValues().attributes.splice(ind, 1);
+            this.updateRectangles();
+            this.trigger("uml-update");
+        },
+        deleteMethod: function (ind) {
+            this.getValues().methods.splice(ind, 1);
+            this.updateRectangles();
+            this.trigger("uml-update");
+        },
+        getAttrsDesc: function () {
+            let attrDesc = this.getValues().attributes.map(function (e) {
+                let vis = "";
+                switch (e.visibility) {
+                    case "public":
+                        vis = "+";
+                        break;
+                    case "private":
+                        vis = "-";
+                        break;
+                    case "protected":
+                        vis = "~";
+                        break;
+                    /*case "package":
+                     vis = "#";
+                     break;*/
+                }
+                return {'text': vis + e.name + ":" + e.type, 'icon': 'assets/attributeicon.png'};
+            });
+            return attrDesc;
+        },
+        getMetDesc: function () {
+            let metDesc = this.getValues().methods.map(function (e) {
+                let vis = "";
+                switch (e.visibility) {
+                    case "public":
+                        vis = "+";
+                        break;
+                    case "private":
+                        vis = "-";
+                        break;
+                    case "protected":
+                        vis = "~";
+                        break;
+                    case "package":
+                        vis = "#";
+                        break;
+                }
+                let params = e.parameters.map(function (f) {
+                    return f.name;
+                }).join(",");
+                return {
+                    'text': vis + " " + e.name + "(" + params + ")" + ":" + e.returnType,
+                    'icon': 'assets/methodicon.png'
+                };
+            });
+            return metDesc;
+
+        },
+        getCellDesc: function () {
+            return {
+                'text': this.getValues().name,
+                'icon': 'assets/classicon.png',
+                'children': this.getAttrsDesc().concat(this.getMetDesc())
+            }
+        },
+        getWidth: function () {
+
+            let longest = rects[0].text.length;
+            let tmp = this.getAttrsDesc();
+            for (i = 0; i &lt; tmp.length; i++) {
+
+                if (tmp[i].text.length > longest) {
+                    longest = tmp[i].text.length;
+                }
+            }
+            console.log(longest);
+            tmp = this.getMetDesc();
+            for (i = 0; i &lt; tmp.length; i++) {
+                if (tmp[i].text.length > longest) {
+                    longest = tmp[i].text.length;
+                }
+            }
+            return longest*5+180;
+
         }
     });
 
 
-
+    /**
+     * @classdesc `HxInterface` represents a UML interface
+     * in a class diagram.
+     *
+     * @module client.model.celltypes.class
+     * @name HxInterface
+     * @class HxInterface
+     * @extends {celltypes.class.ClassDiagramElement}
+     */
     celltypes.class.HxInterface = celltypes.class.ClassDiagramElement.extend({
         markup: [
             '&lt;g class="rotatable">',
@@ -514,17 +625,17 @@
 
             type: 'class.HxInterface',
             position: {x: 200, y: 200},
-            size:{width: 100, height: 100},
+            size: {width: 100, height: 100},
             attrs: {
                 rect: {'width': 200},
 
-                '.uml-class-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
+                '.uml-class-name-rect': {'stroke': '#d6b656', 'stroke-width': 1, 'fill': '#fff2cc'},
 
                 '.uml-class-methods-rect': {
-                    'stroke': 'black',
-                    'stroke-width': 0,
-                    'fill': '#eeeeee',
-                    'expanded': 'false'
+                    'stroke': '#d6b656',
+                    'stroke-width': 1,
+                    'fill': '#fff2cc',
+                    'expanded': 'true'
                 },
                 '.uml-class-name-text': {
                     'ref': '.uml-class-name-rect',
@@ -532,7 +643,7 @@
                     'ref-x': .5,
                     'text-anchor': 'middle',
                     'y-alignment': 'middle',
-                    'fill': 'white',
+                    'fill': '#222222',
                     'font-size': 16,
                     'font-family': 'Roboto'
                 },
@@ -543,30 +654,18 @@
 
             },
 
-            methodsexpanded: false,
-
+            methodsExpanded: true,
 
             values: {
-                name: "interfacciadefault",
-                methods: [
-                    {
-                        name: "metodoDefault",
-                        visibility: "public",
-                        id: joint.util.uuid(),
-                        returntype: "tipoRitorno",
-                        parameters: [{
-                            name:"param1",
-                            type:"int",
-                            defaultValue:"0"
-                        }]
-                    }
-                ]
-
+                name: "InterfaceName",
+                methods: []
             }
         }, celltypes.class.ClassDiagramElement.prototype.defaults),
+
         initialize: function () {
             celltypes.class.ClassDiagramElement.prototype.initialize.apply(this, arguments);
         },
+
         updateRectangles: function () {
 
             var attrs = this.get('attrs');
@@ -575,37 +674,26 @@
                 {type: 'name', text: this.getValues().name},
                 {
                     type: 'methods',
-                    text: this.get('methodsexpanded') ? this.getValues().methods : "Methods (click to expand)"
+                    text: this.get('methodsExpanded') ? this.getValues().methods : "Methods (click to expand)"
                 }
             ];
-            /*_.each(rects, function (rect) {
-
-             var lines = _.isArray(rect.text) ? rect.text : [rect.text];
-             //console.log(lines);
-             var rectHeight = lines.length * 15 + 1;
-
-             attrs['.uml-class-' + rect.type + '-text'].text = lines.map(function (e) {
-             //console.log(e);
-             if (e.hasOwnProperty('name')) {
-             return e.name + ":" + e.value;
-             }
-             else {
-             return e;
-             }
-             }).join('\n');
-             attrs['.uml-class-' + rect.type + '-rect'].height = rectHeight;
-             attrs['.uml-class-' + rect.type + '-rect'].transform = 'translate(0,' + offsetY + ')';
-
-             offsetY += rectHeight + 1;
-
-             });*/
             var rectHeight = 2 * 15 + 1;
-            attrs['.uml-class-name-text'].text = ['&lt;&lt;Interface>>', rects[0].text].join('\n');
+            attrs['.uml-class-name-text'].text = ['&lt;&lt;interface>>', rects[0].text].join('\n');
             attrs['.uml-class-name-rect'].height = rectHeight;
             attrs['.uml-class-name-rect'].transform = 'translate(0,' + offsetY + ')';
-            offsetY += rectHeight + 1;
-            rectHeight = _.isArray(rects[1].text) ? rects[1].text.length * 15 + 1 : 1 * 15 + 1;
-
+            offsetY += rectHeight;
+            //rectHeight = _.isArray(rects[1].text) ? rects[1].text.length * 15 + 1 : 1 * 15 + 1;
+            if (_.isArray(rects[1].text)) {
+                if (rects[1].text.length > 0) {
+                    rectHeight = rects[1].text.length * 15 + 1;
+                }
+                else {
+                    rectHeight = 1 * 15 + 1;
+                }
+            }
+            else {
+                rectHeight = 1 * 15 + 1;
+            }
             attrs['.uml-class-methods-text'].text = _.isArray(rects[1].text) ? rects[1].text.map(function (e) {
                     var vis = "";
                     switch (e.visibility) {
@@ -618,72 +706,263 @@
                         case "protected":
                             vis = "~";
                             break;
-                        case "package":
-                            vis = "#";
-                            break;
+                        /*case "package":
+                         vis = "#";
+                         break;*/
                     }
-                    var params = e.parameters.map(function(f){return f.name;}).join(",");
-                    return vis + " " + e.name + "(" + params+")" + ":" + e.returntype;
+                    var params = e.parameters.map(function (f) {
+                        return f.name;
+                    }).join(",");
+                    return vis + " " + e.name + "(" + params + ")" + ":" + e.returnType;
                 }).join('\n') : rects[1].text;
             attrs['.uml-class-methods-rect'].height = rectHeight;
             attrs['.uml-class-methods-rect'].transform = 'translate(0,' + offsetY + ')';
 
             celltypes.class.ClassDiagramElement.prototype.updateRectangles.apply(this, arguments);
         },
-        addmethod: function () {
+
+        addMethod: function () {
             this.getValues().methods.push({
                 name: "",
-                visibility: "",
+                visibility: "private",
                 id: joint.util.uuid(),
-                static:"false",
-                abstract:"false",
-                returntype: "",
+                static: "false",
+                abstract: "false",
+                returnType: "",
                 parameters: []
             });
         },
-        addparameter: function (ind) {
+
+        addParameter: function (ind) {
             this.getValues().methods[ind].parameters.push({
-                name:"",
-                type:"",
-                defaultValue:""
+                name: "",
+                type: "",
+                defaultValue: ""
             });
+        },
+
+        deleteParameter: function (met) {
+            this.getValues().methods[met[0]].parameters.splice(met[1], 1);
+        },
+
+        deleteMethod: function (ind) {
+            this.getValues().methods.splice(ind, 1);
+        },
+
+        getMetDesc: function () {
+            let metDesc = this.getValues().methods.map(function (e) {
+                let vis = "";
+                switch (e.visibility) {
+                    case "public":
+                        vis = "+";
+                        break;
+                    case "private":
+                        vis = "-";
+                        break;
+                    case "protected":
+                        vis = "~";
+                        break;
+                    case "package":
+                        vis = "#";
+                        break;
+                }
+                let params = e.parameters.map(function (f) {
+                    return f.name;
+                }).join(",");
+                return {
+                    'text': vis + " " + e.name + "(" + params + ")" + ":" + e.returnType,
+                    'icon': 'assets/methodicon.png'
+                };
+            });
+            return metDesc;
+
+        },
+
+        getCellDesc: function () {
+            return {
+                'text': this.getValues().name,
+                'icon': 'assets/interfaceicon.png',
+                'children': this.getMetDesc()
+            }
         }
     });
 
-    celltypes.class.ClassDiagramLink = joint.dia.Link.extend({
+
+    /**
+     * @classdesc `HxComment` represents a comment
+     * in a UML class diagram.
+     *
+     * @module client.model.celltypes.class
+     * @name HxComment
+     * @class HxComment
+     * @extends {joint.shapes.basic.TextBlock}
+     */
+    celltypes.class.HxComment = joint.shapes.basic.TextBlock.extend({
+        toolMarkup: ['&lt;g class="element-tools">',
+            '&lt;g class="element-tool-remove">&lt;circle fill="red" r="11"/>',
+            '&lt;path transform="scale(.8) translate(-16, -16)" d="M24.778,21.419 19.276,15.917 24.777,10.415 21.949,7.585 16.447,13.087 10.945,7.585 8.117,10.415 13.618,15.917 8.116,21.419 10.946,24.248 16.447,18.746 21.948,24.248z"/>',
+            '&lt;title>Remove&lt;/title>',
+            '&lt;/g>',
+            '&lt;/g>'].join(''),
         defaults: _.defaultsDeep({
-            type: 'class.ClassDiagramLink',
-            source:{x:30,y:30},
-            target:{x:150,y:120}
-        },joint.dia.Link.prototype.defaults),
-        initialize:function(){
-            joint.dia.Link.prototype.initialize.apply(this,arguments);
+            type: "class.HxComment",
+            position: {x: 200, y: 200},
+            size: {width: 100, height: 100},
+            values: {
+                comment: ""
+            }
+        }, joint.shapes.basic.TextBlock.prototype.defaults),
+
+        initialize: function () {
+            joint.shapes.basic.TextBlock.prototype.initialize.apply(this, arguments);
         },
+
         getValues: function () {
             return this.get("values");
         },
+
         setToValue: function (value, path) {
             obj = this.getValues();
             path = path.split('.');
             for (i = 0; i &lt; path.length - 1; i++) {
-
                 obj = obj[path[i]];
+            }
+            obj[path[i]] = value;
+            this.updateContent();
+            //this.get('content')=value;
+            //this.updateRectangles();
+            //this.trigger("uml-update");
+        },
 
+        updateContent: function () {
+            if (joint.env.test('svgforeignobject')) {
+
+                // Content element is a &lt;div> element.
+                this.attr({
+                    '.content': {
+                        html: joint.util.breakText(this.getValues().comment, this.get('size'), this.get('attrs')['.content'])
+                    }
+                });
+
+            } else {
+
+                // Content element is a &lt;text> element.
+                // SVG elements don't have innerHTML attribute.
+                this.attr({
+                    '.content': {
+                        text: joint.util.breakText(this.getValues().comment, cell.get('size'), this.get('attrs')['.content'])
+                    }
+                });
+            }
+        }
+    });
+
+
+    /**
+     * @classdesc `CommentView` is the view for
+     * a`HxComment` object.
+     *
+     * @module client.model.celltypes.class
+     * @name CommentView
+     * @class CommentView
+     * @extends {joint.shapes.basic.TextBlock}
+     */
+    celltypes.class.CommentView = joint.shapes.basic.TextBlockView.extend({
+
+        initialize: function () {
+            joint.shapes.basic.TextBlockView.prototype.initialize.apply(this, arguments);
+        },
+
+        render: function () {
+            joint.shapes.basic.TextBlockView.prototype.render.apply(this, arguments);
+
+            this.renderTools();
+            this.update();
+            return this;
+        },
+
+        renderTools: function () {
+
+            var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
+            console.log("markup:", toolMarkup);
+            if (toolMarkup) {
+
+                var nodes = joint.V(toolMarkup);
+                console.log("el:", joint.V(this.el));
+                joint.V(this.el).append(nodes);
+
+            }
+
+            return this;
+        }
+    });
+
+
+    /**
+     * @classdesc `ClassDiagramLink` represents a link
+     * between two components in a UML class diagram.
+     *
+     * @module client.model.celltypes.class
+     * @name ClassDiagramLink
+     * @class ClassDiagramLink
+     * @extends {joint.dia.Link}
+     */
+    celltypes.class.ClassDiagramLink = joint.dia.Link.extend({
+        defaults: _.defaultsDeep({
+            type: 'class.ClassDiagramLink',
+            source: {x: 30, y: 30},
+            target: {x: 150, y: 120}
+        }, joint.dia.Link.prototype.defaults),
+
+        initialize: function () {
+            joint.dia.Link.prototype.initialize.apply(this, arguments);
+        },
+
+        getValues: function () {
+            return this.get("values");
+        },
+
+        setToValue: function (value, path) {
+            obj = this.getValues();
+            path = path.split('.');
+            for (i = 0; i &lt; path.length - 1; i++) {
+                obj = obj[path[i]];
             }
             obj[path[i]] = value;
             this.updateRectangles();
             this.trigger("uml-update");
         }
-
     });
 
+
+    /**
+     * @classdesc `HxGeneralization` represents a
+     * generalization relationship between two components
+     * of a UML class diagram.
+     *
+     * @module client.model.celltypes.class
+     * @name HxGeneralization
+     * @class HxGeneralization
+     * @extends {celltypes.class.ClassDiagramLink}
+     */
     celltypes.class.HxGeneralization = celltypes.class.ClassDiagramLink.extend({
         defaults: _.defaultsDeep({
             type: 'class.HxGeneralization',
             attrs: {'.marker-target': {d: 'M 20 0 L 0 10 L 20 20 z', fill: 'white'}}
-        },celltypes.class.ClassDiagramLink.prototype.defaults)
+        }, celltypes.class.ClassDiagramLink.prototype.defaults)
     });
 
+
+    /**
+     * @classdesc `HxImplementation` represents an
+     * implementation relationship between two components
+     * of a UML class diagram.
+     *
+     * @module client.model.celltypes.class
+     * @name HxImplementation
+     * @class HxImplementation
+     * @extends {celltypes.class.ClassDiagramLink}
+     */
     celltypes.class.HxImplementation = celltypes.class.ClassDiagramLink.extend({
         defaults: _.defaultsDeep({
             type: 'class.HxImplementation',
@@ -691,33 +970,34 @@
                 '.marker-target': {d: 'M 20 0 L 0 10 L 20 20 z', fill: 'white'},
                 '.connection': {'stroke-dasharray': '3,3'}
             }
-        },celltypes.class.ClassDiagramLink.prototype.defaults)
+        }, celltypes.class.ClassDiagramLink.prototype.defaults)
     });
 
-    /*
 
-     per ora non servono ma nel caso ci sono
-
-     celltypes.class.HxAggregation = celltypes.class.ClassDiagramLink.extend({
-     defaults: {
-     type: 'class.HxAggregation',
-     attrs: { '.marker-target': { d: 'M 40 10 L 20 20 L 0 10 L 20 0 z', fill: 'white' }}
-     }
-     });
-
-     celltypes.class.HxComposition = celltypes.class.ClassDiagramLink.extend({
-     defaults: {
-     type: 'class.HxComposition',
-     attrs: { '.marker-target': { d: 'M 40 10 L 20 20 L 0 10 L 20 0 z', fill: 'black' }}
-     }
-     });
-
+    /**
+     * @classdesc `HxAssociation` represents a UML
+     * association between two components of a
+     * class diagram.
+     *
+     * @module client.model.celltypes.class
+     * @name HxAssociation
+     * @class HxAssociation
+     * @extends {celltypes.class.ClassDiagramLink}
      */
-
     celltypes.class.HxAssociation = celltypes.class.ClassDiagramLink.extend({
 
-        defaults:_.defaultsDeep({
+        defaults: _.defaultsDeep({
             type: 'class.HxAssociation',
+            attrs: {
+                '.marker-target': {
+                    d: 'M 50 10 L 60 3 M 50 10 L 60 16',
+                    fill: 'white',
+                    'fill-opacity': '0.4',
+                    stroke: 'black'
+                },
+                /*'.marker-target':{d: 'M 35 0 L 20 10 L 35 20',fill:'white','fill-opacity':'0.4',stroke:'black'},*/
+                '.connection': {'stroke-dasharray': '3,3'}
+            },
             labels: [
                 {
                     position: 0.5,
@@ -729,70 +1009,77 @@
                 }
             ],
             values: {
-
                 card: "default",
-                attribute:""
+                attribute: ""
             }
-        },celltypes.class.ClassDiagramLink.prototype.defaults),
+        }, celltypes.class.ClassDiagramLink.prototype.defaults),
+
         updatelabel: function () {
-
             this.label(0, {
-
-                attrs:
-                    {
-
-                        text:
-                            {
-                                text: this.getcard()
-                            }
+                attrs: {
+                    text: {
+                        text: this.getcard()
                     }
+                }
             });
         },
+
         getcard: function () {
             return this.get('values').card;
         },
 
-        /*getpos: function(){
-            if(this.get("values").pos=="target"){
-                return -25;
-            }
-            else{
-                return 25;
-            }
-            //return Number(this.get("values").pos);
-        },*/
         initialize: function () {
             this.updatelabel();
-            celltypes.class.ClassDiagramLink.prototype.initialize.apply(this,arguments);
+            celltypes.class.ClassDiagramLink.prototype.initialize.apply(this, arguments);
 
         },
+
         setToValue: function (value, path) {
             obj = this.getValues();
             path = path.split('.');
             for (i = 0; i &lt; path.length - 1; i++) {
-
                 obj = obj[path[i]];
-
             }
             obj[path[i]] = value;
             this.updatelabel();
 
         }
-
-
     });
 
 
+    /**
+     * @classdesc `ActivityDiagramElement` is the base class
+     * for every element of an activity diagram. Elements can
+     * be statements, loops, assignments etcetera.
+     *
+     * @module client.model.celltypes.activity
+     * @name ActivityDiagramElement
+     * @class ActivityDiagramElement
+     * @extends {joint.shapes.basic.Generic}
+     */
     celltypes.activity.ActivityDiagramElement = joint.shapes.basic.Generic.extend({
+        toolMarkup: ['&lt;g class="element-tools">',
+            '&lt;g class="element-tool-remove">&lt;circle fill="red" r="11"/>',
+            '&lt;path transform="scale(.8) translate(-16, -16)" d="M24.778,21.419 19.276,15.917 24.777,10.415 21.949,7.585 16.447,13.087 10.945,7.585 8.117,10.415 13.618,15.917 8.116,21.419 10.946,24.248 16.447,18.746 21.948,24.248z"/>',
+            '&lt;title>Remove&lt;/title>',
+            '&lt;/g>',
+            '&lt;/g>'].join(''),
+
         markup: [
             '&lt;g class="activity">',
             '&lt;rect class="activity-element-name-rect"/>',
+            '&lt;text class="activity-element-type-text"/>',
             '&lt;text class="activity-element-name-text"/>',
             '&lt;rect class="activity-element-body-rect"/>',
+            '&lt;text class="activity-element-body-text"/>',
+
+
             '&lt;rect class="activity-toggle"/>',
+            '&lt;rect class="activity-element-type-rect"/>',
 
             '&lt;/g>'
         ].join(''),
+
         defaults: _.defaultsDeep({
 
             type: 'activity.ActivityDiagramElement',
@@ -801,95 +1088,140 @@
                 rect: {'width': 200},
 
 
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
+                '.activity-toggle': {'fill': '#eedd99', 'stroke': 'd6b656', 'stroke-width': 1},
+                '.activity-element-name-rect': {'stroke': '#d6b656', 'stroke-width': 1, 'fill': '#fff2cc'},
 
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
+                '.activity-element-body-rect': {'stroke': '#d6b656', 'stroke-width': 1, 'fill': '#fff2cc'},
+                '.activity-element-type-rect': {'stroke': '#ffffff', 'stroke-width': 0, 'fill': '#ffffff'},
 
+                '.activity': {'stroke': '#d6b656', 'stroke-width': 0, 'fill': '#ffffff'},
+                '.activity-element-type-text': {
+                    'ref': '.activity-element-name-rect',
+                    'ref-y': 5,
+                    'ref-x': 5,
+                    'text-anchor': 'start',
+                    'y-alignment': 'text-before-edge',
+                    'fill': '#ffffff',
+                    'font-size': 11,
+                    'font-family': 'Roboto',
+                    'transform': 'translate(4,4)'
+
+                },
+                '.activity-element-body-text': {
+                    'ref': '.activity-element-body-rect',
+                    'ref-y': 5,
+                    'ref-x': 10,
+                    'text-anchor': 'start',
+                    'y-alignment': 'text-before-edge',
+                    'fill': '#000000',
+                    'font-size': 12,
+                    'font-family': 'monospace',
+                    'width': 200
+
+
+                },
                 '.activity-element-name-text': {
                     'ref': '.activity-element-name-rect',
                     'ref-y': .5,
                     'ref-x': .5,
                     'text-anchor': 'middle',
                     'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
-                },
+                    'fill': '#ffffff',
+                    'font-size': 14,
+                    'font-family': 'Roboto',
 
+                }
             },
 
-
-            index: 0,
             expanded: true,
             hidden: false,
+            canHaveChildren: true,
             offsetY: 0,
 
             values: {
-                xtype: '[block type]',
-                comment: '[new block]',
+                xType: '[block type]',
+                comment: '',
                 body: [],
-
             }
 
-
         }, joint.shapes.basic.Generic.prototype.defaults),
+
         initialize: function () {
             this.updateRectangles();
             joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
 
         },
+
         getValues: function () {
             return this.get("values");
         },
+
         setToValue: function (value, path) {
             obj = this.getValues();
             path = path.split('.');
             for (i = 0; i &lt; path.length - 1; i++) {
-
                 obj = obj[path[i]];
-
             }
             obj[path[i]] = value;
             this.updateRectangles();
             this.trigger("uml-update");
         },
+
         getOffsetY: function () {
             return this.get("offsetY");
         },
+
         getOffsetX: function () {
-            return this.getAncestors().length * 50;
+            return this.getAncestors().length * 10 + 10;
 
         },
+
         getHeight: function () {
             return 35;
         },
+
+        getDescription: function () {
+            return this.getValues().xType;
+        },
+
         updateRectangles: function () {
             var attrs = this.get('attrs');
 
             if (this.get("hidden")) {
                 // hack cattivissimo per evitare creazioni di nuovi oggetti e nascondere l'oggetto
-                this.attributes.position = {x: -9999, y: -9999};
+                //this.attributes.position = {x: -9999, y: -9999};
+                attrs['.activity'].visibility = "hidden";
             }
-
             else {
-
+                attrs['.activity'].visibility = "visible";
                 this.attributes.position = {x: this.getOffsetX(), y: this.getOffsetY()};
 
                 if (this.getValues().comment.length > 20) {
-                    var text = this.getValues().xtype + "\n" + this.getValues().comment.slice(0, 20) + "...";
-
-                }
-                else {
-                    var text = this.getValues().xtype + "\n" + this.getValues().comment;
+                    var text = "\n" + this.getValues().comment.slice(0, 20) + "...";
+                } else {
+                    var text = "\n" + this.getValues().comment;
                 }
 
                 attrs['.activity-toggle'].transform = 'translate(180,0)';
                 attrs['.activity-toggle'].height = 35;
                 attrs['.activity-toggle'].width = 20;
                 attrs['.activity-element-name-text'].text = text;
+                function chunk(str, n) {
+                    var ret = [];
+                    var i;
+                    var len;
+
+                    for (i = 0, len = str.length; i &lt; len; i += n) {
+                        ret.push(str.substr(i, n))
+                    }
+
+                    return ret;
+                };
+                attrs['.activity-element-body-text'].text = chunk(this.getDescription().slice(0, 100), 25).join('\n');
+                attrs['.activity-element-type-text'].text = this.getValues().xType;
+                attrs['.activity-element-type-text'].transform = 'translate(-180,0)';
                 attrs['.activity-element-name-rect'].height = this.getHeight();
+
 
                 if (this.get("expanded")) {
                     var embedded = this.getEmbeddedCells({deep: true});
@@ -907,23 +1239,36 @@
                     }
                     if (h != 0) {
                         attrs['.activity-element-body-rect'].height = 35 + 20 + h;
-                    }
-                    else {
+                    } else {
                         attrs['.activity-element-body-rect'].height = 35 + 20;
                     }
-                }
-                else {
+                } else {
                     attrs['.activity-element-body-rect'].height = 0;
                 }
                 attrs['.activity-element-name-rect'].transform = 'translate(0,0)';
                 attrs['.activity-element-body-rect'].transform = 'translate(0,35)';
-
             }
-        }
 
+            attrs['.activity-element-type-rect'].height =
+                attrs['.activity-element-name-rect'].height
+                + attrs['.activity-element-body-rect'].height;
+
+            attrs['.activity-element-type-rect'].width = 5;
+        }
     });
 
+
+    /**
+     * @classdesc `ActivityDiagramElementView` is the view for
+     * an `ActivityDiagramElement` object.
+     *
+     * @module client.model.celltypes.activity
+     * @name ActivityDiagramElementView
+     * @class ActivityDiagramElementView
+     * @extends {joint.dia.ElementView}
+     */
     celltypes.activity.ActivityDiagramElementView = joint.dia.ElementView.extend({
+
         initialize: function () {
             joint.dia.ElementView.prototype.initialize.apply(this, arguments);
 
@@ -931,61 +1276,52 @@
                 this.update();
                 this.resize();
             });
-
         },
+
         events: {
             'mousedown .activity-toggle': 'toggle'
-
         },
+
+        renderTools: function () {
+
+            var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
+            console.log("markup:", toolMarkup);
+            if (toolMarkup) {
+
+                var nodes = joint.V(toolMarkup);
+                console.log("el:", joint.V(this.el));
+                joint.V(this.el).append(nodes);
+
+            }
+
+            return this;
+        },
+
+        render: function () {
+            joint.dia.ElementView.prototype.render.apply(this, arguments);
+
+            this.renderTools();
+            this.update();
+            return this;
+        },
+
         toggle: function () {
             this.model.set("expanded", !this.model.get("expanded"));
             this.model.updateRectangles();
             this.update(); // ecco cosa dovevi fare, le cose funzionavano già
-
         }
     });
 
-    /*celltypes.activity.HxAssignement = celltypes.activity.ActivityDiagramElement.extend({
-        defaults: _.defaultsDeep({
 
-            type: 'activity.HxAssignement',
-
-            attrs: {
-                rect: {'width': 200},
-
-
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
-
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
-
-                '.activity-element-name-text': {
-                    'ref': '.activity-element-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
-                },
-
-            },
-
-            values: {
-                xtype: "Assegnazione",
-                name: "",
-                operation: "",
-                value: ""
-            }
-
-
-        }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
-        initialize: function () {
-            celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
-        }
-    });*/
+    /**
+     * @classdesc `HxCustom` represents custom code
+     * by the user.
+     *
+     * @module client.model.celltypes.activity
+     * @name HxCustom
+     * @class HxCustom
+     * @extends {celltypes.activity.ActivityDiagramElement}
+     */
     celltypes.activity.HxCustom = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
@@ -993,39 +1329,40 @@
 
             attrs: {
                 rect: {'width': 200},
-
-
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
-
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
-
-                '.activity-element-name-text': {
-                    'ref': '.activity-element-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
+                '.activity-element-name-rect': {
+                    'stroke': 'black', 'stroke-width': 0, 'fill': '#7c189d'
                 },
-
+                '.activity-element-type-rect': {'stroke': '#7c189d', 'stroke-width': 0, 'fill': '#7c189d'},
             },
 
             values: {
-                xtype: 'Custom',
+                xType: 'Custom',
                 code: ""
+            },
 
-            }
-
+            canHaveChildren: false,
 
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
+
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
+        },
+
+        getDescription: function () {
+            return this.getValues().code;
         }
     });
+
+
+    /**
+     * @classdesc `HxElse` represents the alternative
+     * to a conditional statement.
+     *
+     * @module client.model.celltypes.activity
+     * @name HxElse
+     * @class HxElse
+     * @extends {celltypes.activity.ActivityDiagramElement}
+     */
     celltypes.activity.HxElse = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
@@ -1033,38 +1370,36 @@
 
             attrs: {
                 rect: {'width': 200},
-
-
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
-
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
-
-                '.activity-element-name-text': {
-                    'ref': '.activity-element-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
+                '.activity-element-name-rect': {
+                    'stroke': 'black', 'stroke-width': 0, 'fill': '#00701d'
                 },
+                '.activity-element-type-rect': {'stroke': '#00701d', 'stroke-width': 0, 'fill': '#00701d'},
 
             },
-
             values: {
-                xtype: 'Else'
-
+                xType: 'Else'
             }
-
-
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
+
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
+        },
+
+        getDescription: function () {
+            return "";
         }
     });
+
+
+    /**
+     * @classdesc `HxFor` represents an iteration
+     * over a sequence of statements.
+     *
+     * @module client.model.celltypes.activity
+     * @name HxFor
+     * @class HxFor
+     * @extends {celltypes.activity.ActivityDiagramElement}
+     */
     celltypes.activity.HxFor = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
@@ -1073,40 +1408,41 @@
             attrs: {
                 rect: {'width': 200},
 
-
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
-
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
-
-                '.activity-element-name-text': {
-                    'ref': '.activity-element-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
+                '.activity-element-name-rect': {
+                    'stroke': 'black', 'stroke-width': 0, 'fill': '#ed341c'
                 },
 
+                '.activity-element-type-rect': {'stroke': '#ed341c', 'stroke-width': 1, 'fill': '#ed341c'},
             },
 
             values: {
-                xtype: 'For',
+                xType: 'For',
                 initialization: "",
                 termination: "",
                 increment: ""
-
             }
 
-
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
+
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
+        },
+
+        getDescription: function () {
+            return this.getValues().initialization + ";" + this.getValues().termination + ";" + this.getValues().increment;
         }
     });
+
+
+    /**
+     * @classdesc `HxIf` represents a conditional
+     * statement.
+     *
+     * @module client.model.celltypes.activity
+     * @name HxIf
+     * @class HxIf
+     * @extends {celltypes.activity.ActivityDiagramElement}
+     */
     celltypes.activity.HxIf = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
@@ -1114,39 +1450,39 @@
 
             attrs: {
                 rect: {'width': 200},
-
-
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
-
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
-
-                '.activity-element-name-text': {
-                    'ref': '.activity-element-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
+                '.activity-element-name-rect': {
+                    'stroke': 'black', 'stroke-width': 0, 'fill': '#15b13e'
                 },
-
+                '.activity-element-type-rect': {'stroke': '#15b13e', 'stroke-width': 0, 'fill': '#15b13e'},
             },
 
             values: {
-                xtype: 'If',
+                xType: 'If',
                 condition: ""
-
             }
 
-
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
+
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
+        },
+
+        getDescription: function () {
+            return "if (" + this.getValues().condition + ")";
         }
     });
+
+
+    /**
+     * @classdesc `HxVariable` represents a variable
+     * declaration, initialization or an operation
+     * on it.
+     *
+     * @module client.model.celltypes.activity
+     * @name HxVariable
+     * @class HxVariable
+     * @extends {celltypes.activity.ActivityDiagramElement}
+     */
     celltypes.activity.HxVariable = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
@@ -1155,41 +1491,44 @@
             attrs: {
                 rect: {'width': 200},
 
-
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
-
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
-
-                '.activity-element-name-text': {
-                    'ref': '.activity-element-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
+                '.activity-element-name-rect': {
+                    'stroke': 'black', 'stroke-width': 0, 'fill': '#edae1c'
                 },
-
+                '.activity-element-type-rect': {'stroke': '#edae1c', 'stroke-width': 1, 'fill': '#edae1c'},
             },
 
             values: {
-                xtype: 'Variabile',
+                xType: 'Variabile',
                 name: "",
                 type: "",
-                operation:"",
+                operation: "",
                 value: ""
+            },
 
-            }
-
+            canHaveChildren: false,
 
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
+
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
+        },
+
+        getDescription: function () {
+            return this.getValues().type + " " + this.getValues().name + this.getValues().operation + this.getValues().value;
         }
     });
+
+
+    /**
+     * @classdesc `HxReturn` represents a statement
+     * for exiting a method and returning to the
+     * caller.
+     *
+     * @module client.model.celltypes.activity
+     * @name HxReturn
+     * @class HxReturn
+     * @extends {celltypes.activity.ActivityDiagramElement}
+     */
     celltypes.activity.HxReturn = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
@@ -1198,38 +1537,40 @@
             attrs: {
                 rect: {'width': 200},
 
-
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
-
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
-
-                '.activity-element-name-text': {
-                    'ref': '.activity-element-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
+                '.activity-element-name-rect': {
+                    'stroke': 'black', 'stroke-width': 0, 'fill': '#ed841c'
                 },
-
+                '.activity-element-type-rect': {'stroke': '#ed841c', 'stroke-width': 0, 'fill': '#ed841c'},
             },
 
             values: {
-                xtype: 'Return',
+                xType: 'Return',
                 value: ""
+            },
 
-            }
-
+            canHaveChildren: false,
 
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
+
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
+        },
+
+        getDescription: function () {
+            return "return " + this.getValues().value;
         }
     });
+
+
+    /**
+     * @classdesc `HxWhile` represents conditional
+     * loop over a sequence a statements.
+     *
+     * @module client.model.celltypes.activity
+     * @name HxWhile
+     * @class HxWhile
+     * @extends {celltypes.activity.ActivityDiagramElement}
+     */
     celltypes.activity.HxWhile = celltypes.activity.ActivityDiagramElement.extend({
         defaults: _.defaultsDeep({
 
@@ -1238,543 +1579,31 @@
             attrs: {
                 rect: {'width': 200},
 
-
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
-
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
-
-                '.activity-element-name-text': {
-                    'ref': '.activity-element-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
+                '.activity-element-name-rect': {
+                    'stroke': 'black', 'stroke-width': 0, 'fill': '#157b92'
                 },
-
+                '.activity-element-type-rect': {'stroke': '#157b92', 'stroke-width': 0, 'fill': '#157b92'},
             },
 
             values: {
-                xtype: 'While',
+                xType: 'While',
                 condition: ""
-
             }
-
 
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
+
         initialize: function () {
             celltypes.activity.ActivityDiagramElement.prototype.initialize.apply(this, arguments);
+        },
+
+        getDescription: function () {
+            return "while (" + this.getValues().condition + ")";
         }
     });
-
-    joint.shapes.uml.ActivityDiagramElement = joint.shapes.basic.Generic.extend({
-
-        markup: [
-            '&lt;g class="activity">',
-            '&lt;rect class="activity-element-name-rect"/>',
-            '&lt;text class="activity-element-name-text"/>',
-            '&lt;rect class="activity-element-body-rect"/>',
-            '&lt;rect class="activity-toggle"/>',
-
-            '&lt;/g>'
-        ].join(''),
-
-        defaults: _.defaultsDeep({
-
-            type: 'uml.ActivityDiagramElement',
-
-            attrs: {
-                rect: {'width': 200},
-
-
-                '.activity-toggle': {'fill': '#eedd99'},
-                '.activity-element-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.activity-element-body-rect': {'stroke': 'black', 'stroke-width': 2, 'fill': '#ffffff'},
-
-                '.activity': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff'},
-
-                '.activity-element-name-text': {
-                    'ref': '.activity-element-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
-                },
-
-            },
-
-
-            index: 0,
-            expanded: true,
-            hidden: false,
-            offsetY: 0,
-
-            keyvalues: {
-                xtype: '[block type]',
-                comment: '[new block]',
-                body: [],
-
-            }
-
-
-        }, joint.shapes.basic.Generic.prototype.defaults),
-
-        initialize: function () {
-
-            joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
-
-            //_.bindAll(this.setOffsetY,'setOffsetY');
-            this.updateRectangles();
-            //_.bindAll(this, 'getOffsetY');
-
-
-        },
-
-        setToValue: function (value, path) {
-            obj = this.get('keyvalues');
-            path = path.split('.');
-            for (i = 0; i &lt; path.length - 1; i++) {
-
-                obj = obj[path[i]];
-
-            }
-            obj[path[i]] = value;
-            console.log(this.get('keyvalues'));
-            this.updateRectangles();
-            this.trigger("uml-update");
-        },
-
-        getKeyvalues: function () {
-            return this.get('keyvalues');
-        },
-
-        getValues:function(){
-            return this.get('keyvalues');
-        },
-
-
-        setOffsetY: function (a) {
-            this.offsetY = a;
-        },
-
-        getOffsetY: function () {
-            return this.attributes.offsetY;
-        },
-
-        getOffsetX: function () {
-            return this.getAncestors().length * 50;
-
-        },
-
-        getHeight: function () {
-            return 35;
-        },
-
-
-        updateRectangles: function () {
-
-            //console.log("updateRect");
-            //console.log(this.get("keyvalues").xtype);
-            var attrs = this.get('attrs');
-
-            // this.set('size.height', (this.get('attributes') + this.get('methods')) * 20);
-
-            if (this.get("hidden")) {
-                // hack cattivissimo per evitare creazioni di nuovi oggetti e nascondere l'oggetto
-                this.attributes.position = {x: -9999, y: -9999};
-            }
-
-            else {
-
-                this.attributes.position = {x: this.getOffsetX(), y: this.getOffsetY()};
-
-
-                if (this.get("keyvalues").comment.length > 20) {
-                    var text = this.getKeyvalues().xtype + "\n" + this.getKeyvalues().comment.slice(0, 20) + "...";
-
-                }
-                else {
-                    var text = this.getKeyvalues().xtype + "\n" + this.getKeyvalues().comment;
-                }
-
-                attrs['.activity-toggle'].transform = 'translate(180,0)';
-                attrs['.activity-toggle'].height = 35;
-                attrs['.activity-toggle'].width = 20;
-                //attrs['.activity-toggle'].text = '+';
-
-
-                attrs['.activity-element-name-text'].text = text;
-                attrs['.activity-element-name-rect'].height = this.getHeight();
-
-                //console.log(this.getEmbeddedCells({deep:true}));
-
-                if (this.get("expanded")) {
-                    //var l = _.where(this.getEmbeddedCells({deep:true}), {attributes.hidden: true})
-
-                    var embedded = this.getEmbeddedCells({deep: true});
-                    //console.log(embedded);
-                    var h = 0;
-                    for (i = 0; i &lt; embedded.length; i++) {
-                        if (embedded[i].get("hidden")) {
-                            h += 0;
-                        }
-                        if (!embedded[i].get("hidden") &amp;&amp; embedded[i].get("expanded")) {
-                            h += 100;
-                        }
-                        if (!embedded[i].get("hidden") &amp;&amp; !embedded[i].get("expanded")) {
-                            h += 50;
-                        }
-                    }
-
-
-                    //console.log(h);
-                    if (h != 0) {
-                        attrs['.activity-element-body-rect'].height = 35 + 20 + h;
-                    }
-                    else {
-                        attrs['.activity-element-body-rect'].height = 35 + 20;
-                    }
-                }
-
-                else {
-                    attrs['.activity-element-body-rect'].height = 0;
-                }
-
-                attrs['.activity-element-name-rect'].transform = 'translate(0,0)';
-                attrs['.activity-element-body-rect'].transform = 'translate(0,35)';
-                ///console.log("valore offset: ");
-                //console.log(this.getOffsetY());
-
-
-                //attrs['.activity'].transform = 'translate(0,' + this.getOffsetY()+ ')';
-                //console.log(this.getOffsetY());
-
-
-            }
-
-
-        },
-
-
-    });
-
-
-    joint.shapes.uml.ActivityDiagramElementView = joint.dia.ElementView.extend({
-
-        initialize: function () {
-            joint.dia.ElementView.prototype.initialize.apply(this, arguments);
-
-            this.listenTo(this.model, 'uml-update', function () {
-                console.log("update interfaccia");
-                this.update();
-                this.resize();
-            });
-            ///this.listenTo(this.model, 'click', toggl);
-
-        },
-        events: {
-            'mousedown .activity-toggle': 'toggle',
-
-        },
-        toggle: function () {
-
-            console.log("togglo!");
-            this.model.set("expanded", !this.model.get("expanded"));
-            this.model.updateRectangles();
-            this.update(); // ecco cosa dovevi fare, le cose funzionavano già
-
-        }
-
-    });
-
-    joint.shapes.uml.ClassDiagramElement = joint.shapes.basic.Generic.extend({
-
-        markup: [
-            '&lt;g class="rotatable">',
-            '&lt;g class="">',
-            '&lt;rect class="uml-class-name-rect"/>&lt;rect class="uml-class-attrs-rect toggleattributes"/>&lt;rect class="uml-class-divider-rect"/>&lt;rect class="uml-class-methods-rect togglemethods"/>',
-            '&lt;/g>',
-            '&lt;text class="uml-class-name-text"/>&lt;text class="uml-class-attrs-text toggleattributes"/>&lt;text class="uml-class-methods-text togglemethods"/>',
-            '&lt;/g>'
-        ].join(''),
-
-        defaults: _.defaultsDeep({
-
-            type: 'uml.ClassDiagramElement',
-
-            attrs: {
-                rect: {'width': 200},
-
-                '.uml-class-name-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#4db6ac'},
-                '.uml-class-attrs-rect': {'stroke': 'black', 'stroke-width': 0, 'fill': '#ffffff', 'expanded': 'false'},
-                '.uml-class-methods-rect': {
-                    'stroke': 'black',
-                    'stroke-width': 0,
-                    'fill': '#eeeeee',
-                    'expanded': 'false'
-                },
-                '.uml-class-divider-rect': {'stroke': 'black', 'stroke-width': 1, 'fill': 'black'},
-
-
-                '.uml-class-name-text': {
-                    'ref': '.uml-class-name-rect',
-                    'ref-y': .5,
-                    'ref-x': .5,
-                    'text-anchor': 'middle',
-                    'y-alignment': 'middle',
-                    'fill': 'white',
-                    'font-size': 16,
-                    'font-family': 'Roboto'
-                },
-                '.uml-class-attrs-text': {
-                    'ref': '.uml-class-attrs-rect', 'ref-y': 5, 'ref-x': 5,
-                    'fill': '#222222', 'font-size': 12, 'font-family': 'monospace'
-                },
-                '.uml-class-methods-text': {
-                    'ref': '.uml-class-methods-rect', 'ref-y': 5, 'ref-x': 5,
-                    'fill': '#222222', 'font-size': 12, 'font-family': 'monospace'
-                }
-
-            },
-
-            name: [],
-            attributes: [],
-            methods: [],
-            attributesexpanded: false,
-            methodsexpanded: false,
-
-
-            keyvalues: {
-                name: "classedefault",
-                attributes: [
-                    {name: "variabileDefault", value: "valoreDefault"},
-                    {name: "variabileDefault2", value: "valoreDefault2"}
-                ],
-                methods: [
-                    {
-                        name: "metodoDefault", visibility: "public", value: "id univoco blabla",
-                        parameters: ["param1:int"]
-                    }
-                ]
-
-            }
-
-            // l'idea è che ogni cella abbia sto coso che contiene tutte le cose che vogliamo editare
-            // quindi attributes e methods dovrebbero stare qua dentro
-
-
-        }, joint.shapes.basic.Generic.prototype.defaults),
-
-        initialize: function () {
-
-            this.on('change:name change:attributes change:methods', function () {
-                this.updateRectangles();
-                this.trigger('uml-update');
-            }, this);
-            //this.on('cell:pointerup', function (cellView, evt, x, y) {        this.updateRectangles(); });
-
-
-            this.updateRectangles();
-
-            joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
-        },
-
-        getClassName: function () {
-            return this.get('name');
-        },
-
-        getMethods: function () {
-            return this.get('methods');
-        },
-
-        setToValue: function (value, path) {
-            obj = this.get('keyvalues');
-            path = path.split('.');
-            for (i = 0; i &lt; path.length - 1; i++) {
-
-                obj = obj[path[i]];
-
-            }
-            obj[path[i]] = value;
-            console.log(this.get('keyvalues'));
-            this.updateRectangles();
-            this.trigger("uml-update");
-        },
-        executemethod: function (met) {
-            return this[met] &amp;&amp; this[met].apply(this, [].slice.call(arguments, 1));
-        },
-        addmethod: function () {
-            this.get('keyvalues').methods.push({
-                name: "",
-                visibility: "",
-                id: joint.util.uuid(),
-                returntype: "",
-                parameters: []
-            });
-            console.log("added");
-            console.log(this.get('keyvalues'));
-        },
-        addattribute: function () {
-            this.get('keyvalues').attributes.push({name: "", type: ""});
-        },
-        addparameter: function (ind) {
-
-
-            this.get('keyvalues').methods[ind].parameters.push("");
-        },
-
-        updateRectangles: function () {
-
-            var attrs = this.get('attrs');
-
-            /*var rects = [
-             {type: 'name', text: this.getClassName()},
-             {type: 'attrs', text: this.get('attributes')},
-             {type: 'methods', text: this.get('methods')}
-             ];*/
-
-            var offsetY = 0;
-
-
-            // this.set('size.height', (this.get('attributes') + this.get('methods')) * 20);
-
-
-            /*var rects = [
-             {type: 'name', text: this.getClassName()},
-             ];*/
-
-            /*
-             if(attrs['uml-class-attrs-rect']){
-
-             if(attrs['uml-class-attrs-rect'].expanded) {
-             rects.push(
-             { type: 'attrs', text: this.get('attributes')}
-             );
-             } else {
-             rects.push(
-             { type: 'attrs', text: "click to expand" }
-             );
-             }
-
-             if(attrs['uml-class-methods-rect'].expanded) {
-             rects.push(
-             { type: 'attrs', text: this.get('methods')}
-             );
-             } else {
-             rects.push(
-             { type: 'methods', text: "click to expand" }
-             );
-             }
-             }*/
-
-//console.log( this.get('attributesexpanded'));
-
-            rects = [
-                {type: 'name', text: this.get('keyvalues').name},
-                {
-
-                    type: 'attrs',
-                    text: this.get('attributesexpanded') ? this.get('keyvalues').attributes : "Attributes (click to expand)"
-                },
-                {
-                    type: 'methods',
-                    text: this.get('methodsexpanded') ? this.get('keyvalues').methods : "Methods (click to expand)"
-                }
-            ];
-            console.log(this.get('keyvalues')['attributes']);
-
-            _.each(rects, function (rect) {
-
-                var lines = _.isArray(rect.text) ? rect.text : [rect.text];
-                //console.log(lines);
-                var rectHeight = lines.length * 15 + 1;
-
-                attrs['.uml-class-' + rect.type + '-text'].text = lines.map(function (e) {
-                    //console.log(e);
-                    if (e.hasOwnProperty('name')) {
-                        return e.name + ":" + e.value;
-                    }
-                    else {
-                        return e;
-                    }
-                }).join('\n');
-                attrs['.uml-class-' + rect.type + '-rect'].height = rectHeight;
-                attrs['.uml-class-' + rect.type + '-rect'].transform = 'translate(0,' + offsetY + ')';
-
-                offsetY += rectHeight + 1;
-
-            });
-
-        }
-
-
-    });
-
-    joint.shapes.uml.ClassDiagramElementView = joint.dia.ElementView.extend({
-
-        initialize: function () {
-            joint.dia.ElementView.prototype.initialize.apply(this, arguments);
-
-            this.listenTo(this.model, 'uml-update', function () {
-                console.log("update interfaccia");
-                this.update();
-                this.resize();
-            });
-            ///this.listenTo(this.model, 'click', toggl);
-
-        },
-        events: {
-            'mousedown .togglemethods': 'togglemethods',
-            'mousedown .toggleattributes': 'toggleattributes',
-        },
-        toggleattributes: function () {
-
-            this.model.set("attributesexpanded", !this.model.get("attributesexpanded"));
-            _.each(this.model.graph.getConnectedLinks(this.model), function (e) {
-                e.trigger("change:markup");
-            });
-
-
-            this.model.updateRectangles();
-            this.update(); // ecco cosa dovevi fare, le cose funzionavano già
-            this.resize();
-        },
-        togglemethods: function () {
-
-            this.model.set("methodsexpanded", !this.model.get("methodsexpanded"));
-            this.model.updateRectangles();
-            this.update(); // ecco cosa dovevi fare, le cose funzionavano già
-            this.resize();
-        },
-
-
-    });
-
-
-    // prova:
-    joint.shapes.uml.HxInterface = joint.shapes.uml.ClassDiagramElement.extend({
-        markup: [
-            '&lt;g class="rotatable">',
-            '&lt;g class="">',
-            '&lt;rect class="uml-class-name-rect"/>&lt;rect class="uml-class-divider-rect"/>&lt;rect class="uml-class-methods-rect togglemethods"/>',
-            '&lt;/g>',
-            '&lt;text class="uml-class-name-text"/>&lt;text class="uml-class-methods-text togglemethods"/>',
-            '&lt;/g>'
-        ].join('')
-    });
-
-    joint.shapes.uml.HxClass = joint.shapes.uml.ClassDiagramElement.extend({});
-
 
     return celltypes;
-});</code></pre>
+});
+</code></pre>
         </article>
     </section>
 
@@ -1784,13 +1613,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AppView.html">AppView</a></li><li><a href="ClassDiagramElement.html">ClassDiagramElement</a></li><li><a href="ClassDiagramElementView.html">ClassDiagramElementView</a></li><li><a href="Commands.html">Commands</a></li><li><a href="DetailsView.html">DetailsView</a></li><li><a href="DiagramsCollection.html">DiagramsCollection</a></li><li><a href="HxClass.html">HxClass</a></li><li><a href="NewCellModel.html">NewCellModel</a></li><li><a href="NewCellView.html">NewCellView</a></li><li><a href="ProjectView.html">ProjectView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#execmod">execmod</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ActivityDiagramElement.html">ActivityDiagramElement</a></li><li><a href="ActivityDiagramElementView.html">ActivityDiagramElementView</a></li><li><a href="AppView.html">AppView</a></li><li><a href="ClassDiagramElement.html">ClassDiagramElement</a></li><li><a href="ClassDiagramElementView.html">ClassDiagramElementView</a></li><li><a href="ClassDiagramLink.html">ClassDiagramLink</a></li><li><a href="Commands.html">Commands</a></li><li><a href="CommentView.html">CommentView</a></li><li><a href="DetailsView.html">DetailsView</a></li><li><a href="HxAssociation.html">HxAssociation</a></li><li><a href="HxClass.html">HxClass</a></li><li><a href="HxComment.html">HxComment</a></li><li><a href="HxCustom.html">HxCustom</a></li><li><a href="HxElse.html">HxElse</a></li><li><a href="HxFor.html">HxFor</a></li><li><a href="HxGeneralization.html">HxGeneralization</a></li><li><a href="HxIf.html">HxIf</a></li><li><a href="HxImplementation.html">HxImplementation</a></li><li><a href="HxInterface.html">HxInterface</a></li><li><a href="HxReturn.html">HxReturn</a></li><li><a href="HxVariable.html">HxVariable</a></li><li><a href="HxWhile.html">HxWhile</a></li><li><a href="NewCellModel.html">NewCellModel</a></li><li><a href="NewCellView.html">NewCellView</a></li><li><a href="ProjectModel.html">ProjectModel</a></li><li><a href="ProjectView.html">ProjectView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCell">addCell</a></li><li><a href="global.html#deleteCell">deleteCell</a></li><li><a href="global.html#execCommand">execCommand</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Apr 07 2017 17:43:51 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue May 09 2017 09:36:01 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

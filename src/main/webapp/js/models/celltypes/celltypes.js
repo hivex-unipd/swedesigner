@@ -39,8 +39,7 @@ define([
          * @type {Object}
          */
         defaults: _.defaultsDeep({
-            type: 'uml.ClassDiagramElement',
-
+            type: 'uml.ClassDiagramElement'
         }, joint.shapes.basic.Generic.prototype.defaults),
 
         /**
@@ -76,7 +75,7 @@ define([
          * @function
          */
         updateRectangles: function () {
-            //non fare niente sulla classe astratta
+            // asbtract method
         },
 
         /**
@@ -140,7 +139,7 @@ define([
          * The events on the view, each one linked to its callback.
          * @name ClassDiagramElementView#events
          * @type {Object}
-         *///
+         */
         events: {
             'mousedown .togglemethods': 'toggleMethods',
             'mousedown .toggleattributes': 'toggleAttributes'
@@ -629,11 +628,9 @@ define([
 
             methodsExpanded: true,
 
-
             values: {
                 name: "InterfaceName",
                 methods: []
-
             }
         }, celltypes.class.ClassDiagramElement.prototype.defaults),
 
@@ -1313,7 +1310,6 @@ define([
             values: {
                 xType: 'Custom',
                 code: ""
-
             },
 
             canHaveChildren: false,
@@ -1354,7 +1350,6 @@ define([
             },
             values: {
                 xType: 'Else'
-
             }
         }, celltypes.activity.ActivityDiagramElement.prototype.defaults),
 
@@ -1445,7 +1440,7 @@ define([
         },
 
         getDescription: function () {
-            return "if(" + this.getValues().condition + ")";
+            return "if (" + this.getValues().condition + ")";
         }
     });
 
@@ -1574,7 +1569,7 @@ define([
         },
 
         getDescription: function () {
-            return "while(" + this.getValues().condition + ")";
+            return "while (" + this.getValues().condition + ")";
         }
     });
 
