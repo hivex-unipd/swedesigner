@@ -29,7 +29,7 @@
           href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-light_blue.min.css">
-    <link rel="stylesheet" type="text/css" href="assets/style.css">
+    <link rel="stylesheet" id="pagetheme" type="text/css" href="assets/style.css">
     <link rel="stylesheet" type="text/css" href="assets/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="assets/jstree.css">
     <link rel="stylesheet" type="text/css" href="assets/joint.css">
@@ -41,16 +41,23 @@
 <div id="all" class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
         <div class="mdl-layout__header-row">
+            <!--<img src="assets/hivex_logo.png" id="headerlogo" alt="logo">-->
             <span class="mdl-layout-title">SWEDesigner</span>
-            <div class="mdl-layout-spacer"></div>
-
+            <div class="mdl-layout-spacer space1"></div>
+            <nav class="mdl-navigation topnav">
+                <a class="mdl-navigation__link newproj"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">create</i></a>
+                <input type="file" class="files" id="files2" accept=".json" name="files[]"/><label class=" upload mdl-navigation__link" for="files2"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">open_in_browser</i> Open</label>
+                <a class="mdl-navigation__link savefile"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">save</i></a>
+                <a class="mdl-navigation__link generate" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">donut_large</i></a>
+                <a class="mdl-navigation__link" target="_blank" href="./docs/index.html"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">local_offer</i></a>
+            </nav>
+            <div class="mdl-layout-spacer space2"></div>
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
                 <i class="material-icons">more_vert</i>
             </button>
-            <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right">
-                <li class="mdl-menu__item">Theme1</li>
-                <li class="mdl-menu__item">Theme2</li>
-                <li class="mdl-menu__item">Theme Dark</li>
+            <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
+                <li id="extendedtheme" class="mdl-menu__item">Extended</li>
+                <li id="compacttheme" class="mdl-menu__item">Compact</li>
             </ul>
         </div>
     </header>
@@ -73,11 +80,11 @@
             </div>-->
         </header>
         <nav id="navbar" class="mdl-navigation mdl-color--blue-grey-800">
-            <a id="newproj" class="mdl-navigation__link" href="#"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">create</i> New</a>
-            <input type="file" id="files" accept=".json" name="files[]"/><label class=" upload mdl-navigation__link" for="files"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">open_in_browser</i> Open</label>
-            <a id="savefile" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">save</i> Save</a>
-            <a id="generate" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">donut_large</i> Compile</a>
-            <a class="mdl-navigation__link" href="./docs/index.html"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">local_offer</i> Documentation</a>
+            <a id="newproj" class="mdl-navigation__link newproj" href="#"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">create</i> New</a>
+            <input type="file" class="files" id="files" accept=".json" name="files[]"/><label class=" upload mdl-navigation__link" for="files"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">open_in_browser</i> Open</label>
+            <a id="savefile" class="mdl-navigation__link savefile"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">save</i> Save</a>
+            <a id="generate" class="mdl-navigation__link generate"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">donut_large</i> Compile</a>
+            <a class="mdl-navigation__link" target="_blank" href="./docs/index.html"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">local_offer</i> Documentation</a>
             <div class="mdl-layout-spacer"></div>
 
         </nav>
@@ -89,12 +96,12 @@
             <div class="components ">
 
                 <div class="mdl-shadow--2dp comp mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-                    <div class="mdl-card__title mdl-card--expand mdl-color--teal-300">
+                    <div id="elementstitle" class="mdl-card__title mdl-card--expand mdl-color--teal-300">
                         <h2 class="mdl-card__title-text mdl-color-text--white">Elements</h2>
                     </div>
                     <div class="mdl-tabs__tab-bar">
-                        <a id="elementstab" href="#components" class="mdl-tabs__tab is-active">Elements</a>
-                        <a id="classtreetab" href="#classtree" class="mdl-tabs__tab">ClassTree</a>
+                        <a id="elementstab" href="#components" class="mdl-tabs__tab is-active"><i class="mdl-color-text--blue-grey-400 material-icons elicon" role="presentation">build</i>Elements</a>
+                        <a id="classtreetab" href="#classtree" class="mdl-tabs__tab"><i class="mdl-color-text--blue-grey-400 material-icons visicon" role="presentation">visibility</i>ClassTree</a>
 
                     </div>
                     <div id="components" class="mdl-tabs__panel is-active mdl-card__actions mdl-card--border">
@@ -119,7 +126,7 @@
                 </div>
             </div>
             <button id="switchtoclass" value="class"
-                    class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color-text--white">Return to class diagram
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color-text--white">Back to class diagram
             </button>
         </div>
     </main>

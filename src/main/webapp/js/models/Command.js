@@ -118,6 +118,7 @@ define([
             		    return str;
             		}           		
             		alert(arrayBufferToString(this.response));
+            		return false;
             	}            
             };
         }

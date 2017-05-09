@@ -63,10 +63,12 @@ define([
         events: {
             'click #switchtoclass': 'switchToClass',
             'click #switch': 'switchGraph',
-            'click #savefile': 'save',
-            'change #files': 'load',
-            'click #generate': 'generate',
-            'click #newproj':'newProject'
+            'click .savefile': 'save',
+            'change .files': 'load',
+            'click .generate': 'generate',
+            'click .newproj':'newProject',
+            'click #extendedtheme':'themeExtended',
+            'click #compacttheme':'themeCompact'
         },
 
         /**
@@ -77,6 +79,22 @@ define([
          */
         toggleVisib: function () {
             $('#switchtoclass').toggle();
+        },
+        /**
+         * Change the css to the extended style one
+         * @name AppView#themeExtended
+         * @function
+         */
+        themeExtended:function () {
+            $('#pagetheme').attr('href',"assets/style.css");
+        },
+        /**
+         * Change the css to the compact style one
+         * @name AppView#themeCompact
+         * @function
+         */
+        themeCompact:function () {
+            $('#pagetheme').attr('href',"assets/style2.css");
         },
 
         /**
@@ -153,6 +171,7 @@ define([
          */
         generate: function (event) {
             Command.execute('sendDiagram');
+            return false;
         }
     });
     return AppView;
