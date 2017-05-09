@@ -142,6 +142,7 @@ input[type=checkbox]:checked ~ .switch{
 .togglable:after{
 
     content: "\02C5";
+    float: right;
 }
 .add,.switch{
     margin-top: 0.3em;
@@ -166,7 +167,7 @@ input[type=checkbox]:checked ~ .switch{
 }
 
 
-.HxClassicon,.HxInterfaceicon{
+/*.HxClassicon,.HxInterfaceicon{
     background: #4db6ac;
     border: 2px solid #fff;
     display: inline-block;
@@ -185,11 +186,8 @@ input[type=checkbox]:checked ~ .switch{
     left: 0;
     top: 50%;
     width: 100%;
-    /* height: 100%; */
-    /* margin: 65% 0; */
     margin: auto;
     background: #fff;
-    /*background: -moz-linear-gradient(top, #888 0, #888 20%, #fff 20%, #fff 40%, #888 40%, #888 60%, #fff 60%, #fff 80%, #888 80%, #888 100%);*/
     height: 2px;
 }
 .HxClassicon:after{
@@ -197,17 +195,32 @@ input[type=checkbox]:checked ~ .switch{
     display: block;
     position: absolute;
     left: 0;
-    /* top: 50%; */
     width: 100%;
-    /* height: 100%; */
-    /* margin: 65% 0; */
     margin: auto;
     background: #fff;
     background: -webkit-linear-gradient(top, #4db6ac 0, #4db6ac 32%, #fff 31%, #fff 34%, #4db6ac 35%, #4db6ac 65%, #fff 64%, #fff 67%, #4db6ac 68%, #4db6ac 100%);
     height: 100%;
-}
+}*/
 .HxGeneralizationicon{
     background: url("generalization.svg");
+    background-size: 24px 24px;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: 0.3em;
+    vertical-align: middle;
+}
+.HxClassicon{
+    background: url("class.svg");
+    background-size: 24px 24px;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: 0.3em;
+    vertical-align: middle;
+}
+.HxInterfaceicon{
+    background: url("interface.svg");
     background-size: 24px 24px;
     width: 24px;
     height: 24px;
@@ -242,6 +255,70 @@ input[type=checkbox]:checked ~ .switch{
     margin-right: 0.3em;
     vertical-align: middle;
 }
+.HxIficon{
+    background: url("if.svg");
+    background-size: 24px 24px;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: 0.3em;
+    vertical-align: middle;
+}
+.HxElseicon{
+    background: url("else.svg");
+    background-size: 24px 24px;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: 0.3em;
+    vertical-align: middle;
+}
+.HxReturnicon{
+    background: url("return.svg");
+    background-size: 24px 24px;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: 0.3em;
+    vertical-align: middle;
+}
+.HxWhileicon{
+     background: url("while.svg");
+     background-size: 24px 24px;
+     width: 24px;
+     height: 24px;
+     display: inline-block;
+     margin-right: 0.3em;
+     vertical-align: middle;
+ }
+.HxForicon{
+    background: url("for.svg");
+    background-size: 24px 24px;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: 0.3em;
+    vertical-align: middle;
+}
+.HxVariableicon{
+    background: url("variable.svg");
+    background-size: 24px 24px;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: 0.3em;
+    vertical-align: middle;
+}
+.HxCustomicon{
+    background: url("custom.svg");
+    background-size: 24px 24px;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: 0.3em;
+    vertical-align: middle;
+}
+
 
 
 .ui-menu .ui-menu-item-with-icon a {
