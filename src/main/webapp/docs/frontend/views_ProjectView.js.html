@@ -32,8 +32,10 @@
     'backbone',
     'joint',
     'models/ProjectModel',
-    'models/celltypes/celltypes'
-], function ($, _, Backbone, joint, ProjectModel, celltypes) {
+    'models/celltypes/celltypes',
+    'svg-pan-zoom',
+    'jstree'
+], function ($, _, Backbone, joint, ProjectModel, celltypes, svgPanZoom) {
 
     /**
      * @classdesc `ProjectView` represents the drawing area.
@@ -54,28 +56,65 @@
         paper: {},
 
         /**
-         * ...
+         * Contains variables and methods visible inside the
+         * selected method scope.
          * @name ProjectView#visibleElements
-         * @type {Array}
          */
         visibleElements: [],
 
+        panAndZoom: {},
+
         /**
-         * ...
+         * Deletes a specific cell from the diagram
+         * and asks a `ProjectModel` to delete the
+         * cell from the model too.
+         * @param  {event} e the action event
+         * @function
+         */
+        deleteCell: function (e) {
+            /*if (e.which == 46) {//ha premuto tasto canc
+                if (this.paper.selectedCell) {
+                    this.model.deleteCell(this.paper.selectedCell);
+
+                    this.paper.selectedCell=null;
+                    this.paper.trigger("changed-cell");
+                }
+            }*/
+            console.log(e);
+            this.model.deleteCell(e);
+            this.paper.selectedCell = null;
+            this.paper.trigger("changed-cell");
+        },
+
+        /**
+         * Updates the drawing area by placing the activity blocks.
          * @name ProjectView#renderActivity
          * @function
          */
         renderActivity: function () {
+
+            // piccolo bugfix orribile
+            _.each(this.model.graph.get("cells").models, function (el) {
+                el.set("z", 1);
+            });
+
             // CODICE OK
-            //console.log(this);
-            //var g = this.paper.attributes.cells.models;
+            var debug = function () {
+                var x = "";
+
+                for (var d = 0; d &lt; g.length; d++) {
+                    x += "|" + g[d].get("values").comment[0] + "|";
+                }
+                console.log(x);
+            };
+
             var m = this.model;
             var p = this.paper;
-            console.log(m);
             var g = m.graph.get("cells").models;
-            console.log(g);
             if (g &amp;&amp; m.options.currentindex != 'class') {
-                var offsetY = 50;
+                debug();
+
+                var offsetY = 100;
 
                 for (i = 0; i &lt; g.length; i++) {
                     var hidden = false;
@@ -95,37 +134,18 @@
 
                         if (!g[i].get("expanded")) {
                             offsetY += 50;// se è ridotto ho bisogno di meno spazio
-                        }
-
-                        else {
+                        } else {
                             offsetY += 100;
                         }
-
                     }
-                    /*else
-                     {
-                     g[i].set("hidden", true);
-                     }*/
-
                 }
 
                 var l = g.length;
-                //console.log(g);
-                //console.log(l);
-
                 for (ii = 0; ii &lt; l; ii++) {
-
-                    if (true) {//g[ii].get("type").startsWith("activity") == "uml.ActivityDiagramElement") {
+                    if (g[ii]) {
                         g[ii].updateRectangles();
-                        console.log(this);
                         p.removeView(g[ii]);
                         p.renderView(g[ii]); // per qualche ragione è necessario..
-
-                    }
-
-                    else {
-                        console.log(g[ii]);
-                        console.log("questo no :(");
                     }
                 }
             }
@@ -137,35 +157,48 @@
          * to the 'pointerdown' event on the view.
          * @name ProjectView#pointerUpFunction
          * @function
+         * @param {ProjectView} prView a ProjectView object
          * @param {joint.dia.ElementView} cellView the dragged cell's view
          * @param {event} evt the action event
          * @param {number} x the horizontal position of the cell (?)
          * @param {number} y the vertical position of the cell (?)
          */
-        pointerDownFunction: function (cellView, evt, x, y) {
+        pointerDownFunction: function (prView, cellView, evt, x, y) {
+
+            var className = evt.target.parentNode.getAttribute('class');
+
+            switch (className) {
+                case 'element-tool-remove':
+                    prView.deleteCell(cellView.model);
+                    return;
+                    break;
+                default:
+            }
+
+            if (ProjectModel.options.cellToBeAdded &amp;&amp; ProjectModel.options.cellToBeAdded.isLink()) {
+                console.log(ProjectModel.options.cellToBeAdded.get("source").id);
+                if (ProjectModel.options.cellToBeAdded.get("source").id!=undefined) {
+                    console.log("set target");
+                    ProjectModel.options.cellToBeAdded.set("target",{id:cellView.model.id});
+                    ProjectModel.addCellToGraph();
+                } else {
+                    console.log("set source");
+                    ProjectModel.options.cellToBeAdded.set("source",{id:cellView.model.id});
+                }
+            }
 
             if (cellView) {
-                console.log(this);
                 if (this.selectedCell != cellView.model) {
                     changed = true;
                     this.selectedCell = cellView.model;
                     if (true) {//cellView.model instanceof joint.shapes.uml.ClassDiagramElement) {
                         this.trigger("changed-cell");
-                        console.log("ho cambiato la selectedcell");
-                        console.log(this.selectedCell);
                     }
                 }
             }
 
-            console.log(ProjectModel.options.currentindex);
             if (cellView.model.get("type").startsWith("activity")) {
                 var cell = cellView.model;
-
-                if (!cell.get('embeds') || cell.get('embeds').length === 0) {
-                    // Show the dragged element above all the other cells (except when the
-                    // element is a parent).
-                    //cell.toFront();
-                }
 
                 if (cell.get('parent')) {
                     this.model.getCell(cell.get('parent')).unembed(cell);
@@ -173,7 +206,6 @@
                 var g = this.model.attributes.cells.models;
 
                 var currentCell = this.selectedCell;
-                console.log(this.selectedCell);
                 var currentIndex = g.indexOf(currentCell);
                 var figli = currentCell.getEmbeddedCells({deep: true});
 
@@ -198,7 +230,6 @@
                 };
 
                 debug();
-                console.log("SPOSTO", g[currentIndex].get("values").comment[0]);
 
                 move(g, currentIndex, g.length - 1);
 
@@ -209,9 +240,7 @@
                     debug();
                 }
                 debug();
-
             }
-
         },
 
         /**
@@ -226,15 +255,15 @@
          * @param {number} y the vertical position of the cell (?)
          */
         pointerUpFunction: function (cellView, evt, x, y) {
+
+            ProjectModel.adjustVertices(ProjectModel.graph,cellView);
+            //panAndZoom.disablePan();
             if (cellView.model.get("type").startsWith("activity")) {
-                var changed = false;
                 var parentCell = null;
                 var embedded = false;
-                // EMBED e selectedcell
                 if (cellView) {
                     var cell = cellView.model;
                     var cellViewsBelow = this.findViewsFromPoint(cell.getBBox().center());
-
                     if (cellViewsBelow.length) {
                         // Note that the findViewsFromPoint() returns the view for the `cell` itself.
 
@@ -246,10 +275,8 @@
                             return c.model.id !== cell.id
                         });
                         cellViewBelow = cellViewsBelow[index];
-
-
                         // Prevent recursive embedding.
-                        if (cellViewBelow &amp;&amp; cellViewBelow.model.get('parent') !== cell.id) {
+                        if (cellViewBelow &amp;&amp; cellViewBelow.model.get('parent') !== cell.id &amp;&amp; cellViewBelow.model.get("canHaveChildren")) {
 
                             cellViewBelow.model.embed(cell);
                             embedded = true;
@@ -263,328 +290,172 @@
 
                 // cella corrente
                 var curr = this.selectedCell;
-                var figli = curr.getEmbeddedCells({deep: true});
+                
+                if (curr) {
 
-                // funzione per muovere l'array (è fatta bene)
-                var move = function (a, old_index, new_index) {
-                    if (new_index >= a.length) {
-                        var k = new_index - a.length;
-                        while ((k--) + 1) {
-                            a.push(undefined);
-                        }
-                    }
-                    a.splice(new_index, 0, a.splice(old_index, 1)[0]);
-                    return a; // for testing purposes
-                };
+                    var figli = curr.getEmbeddedCells({deep: true});
 
-                // indice cella corrente
-                var currentIndex = g.indexOf(curr);//curr.get("index"); // è necessario cercare a che indice vorrebbe mettere la cosa
-
-                // funzione di debug
-                var debug = function () {
-                    var x = "";
-
-                    for (var d = 0; d &lt; g.length; d++) {
-                        x += "|" + g[d].get("values").comment[0] + "|";
-                    }
-                    console.log(x);
-                };
-
-                var getNextIndex = function (g, c) {
-                    var l = g[c].getEmbeddedCells({deep: true}).length;
-                    return c + l + 1;
-                };
-                var getNextIndexByID = function (graph, g, c) {
-                    var l = graph.getCell(g[c]).getEmbeddedCells({deep: true}).length;
-                    return c + l + 1;
-                };
-
-                var getNext = function (g, c) {
-                    var l = g[c].getEmbeddedCells({deep: true}).length;
-                    return g[c + l + 1];
-                };
-
-                var getPrev = function (m, g, c) {
-                    var p = g[c].get("parent");
-                    // se non esiste?
-                    if (p) {
-                        p = m.getCell(p);
-
-                        for (var i = 0; i &lt; p.getEmbeddedCells().length; i++) {
-                            if (getNext(g, c + i + 1) == g[c]) {
-                                return g[c + i + 1];
+                    // funzione per muovere l'array (è fatta bene)
+                    var move = function (a, old_index, new_index) {
+                        if (new_index >= a.length) {
+                            var k = new_index - a.length;
+                            while ((k--) + 1) {
+                                a.push(undefined);
                             }
                         }
-                    }
-                    else {
-                        var i = c - 1;
-                        while (g[i] &amp;&amp; g[i].get("parent")) {
-                            i--;
+                        a.splice(new_index, 0, a.splice(old_index, 1)[0]);
+                        return a; // for testing purposes
+                    };
+
+                    // indice cella corrente
+                    var currentIndex = g.indexOf(curr); // è necessario cercare a che indice vorrebbe mettere la cosa
+
+                    // funzione di debug
+                    var debug = function () {
+                        var x = "";
+
+                        for (var d = 0; d &lt; g.length; d++) {
+                            x += "|" + g[d].get("values").comment[0] + "|";
                         }
-                        //if(!g[i]) return g[0];
-                        return g[i];
-                    }
-                };
-                var getPrevIndex = function (m, g, c) {
-                    var p = g[c].get("parent");
-                    // se non esiste?
-                    if (p) {
-                        p = m.getCell(p);
-                        for (var i = 0; i &lt; p.getEmbeddedCells().length; i++) {
-                            if (getNext(g, c + i + 1) == g[c]) {
-                                return c + i + 1;
-                            }
+                        console.log(x);
+                    };
+
+                    // necessaria per fixare problemi di ordine
+                    var correctEmbedding = function (index, parent, cell) {
+                        var embcells = parent.getEmbeddedCells();
+
+                        // de-embeddo ogni cella
+                        parent.unembed(embcells.pop(cell));
+
+                        for (var i = 0; i &lt; embcells.length; i++) {
+                            parent.unembed(embcells[i]);
                         }
-                    }
-                    else {
-                        var i = c - 1;
-                        while (g[i] &amp;&amp; g[i].get("parent")) {
-                            i--;
+
+                        // embeddo celle da i ad index
+                        for (var i = 0; i &lt; index &amp;&amp; i &lt; embcells.length; i++) {
+                            parent.embed(embcells[i]);
                         }
-                        //if(!g[i]) return undefined;
 
-                        console.log("previndex: ", i);
-                        return i;
-                    }
-                };
+                        // embeddo la cella in input
+                        parent.embed(cell);
 
 
-                var correctEmbedding = function (index, parent, cell) {
-                    var embcells = parent.getEmbeddedCells();
+                        // embeddo le celle rimanenti
+                        for (var i = index; i &lt; embcells.length; i++) {
+                            parent.embed(embcells[i]);
+                        }
+                    };
 
-                    console.log("correggo embed");
-                    var deba = parent.get("embeds");
-
-                    var deb = [];
-                    for (var i = 0; i &lt; embcells.length; i++) {
-                        deb.push(embcells[i].get("values").comment[0]);
-                    }
-                    console.log(deb);
-
-
-                    parent.unembed(embcells.pop(cell));
-                    for (var i = 0; i &lt; embcells.length; i++) {
-                        parent.unembed(embcells[i]);
-                        console.log(embcells[i].id, "deembedded");
-                    }
-                    console.log(parent, "parent");
-
-
-                    //if(index==0)
-                    //{
-                    //	console.log("c", cell.get("keyvalues").comment[0]);
-                    //	parent.embed(cell);
-                    //	for (var i=index+1;i&lt;embcells.length;i++)
-                    //	{
-                    //		console.log("e2", embcells[i].get("keyvalues").comment[0]);
-                    //		parent.embed(embcells[i]);
-                    //	}
-                    //	console.log("corretti embed");
-                    //
-                    //}
-                    //else
-                    //{
-
-
-                    for (var i = 0; i &lt; index &amp;&amp; i &lt; embcells.length; i++) {
-                        console.log("e1", embcells[i].get("values").comment[0]);
-                        parent.embed(embcells[i]);
-                        console.log(parent);
-                    }
-                    console.log("c", cell.get("values").comment[0]);
-                    parent.embed(cell);
-                    console.log(parent);
-
-                    for (var i = index; i &lt; embcells.length; i++) {
-                        console.log("e2", embcells[i].get("values").comment[0]);
-                        parent.embed(embcells[i]);
-                    }
-                    console.log("corretti embed");
-
-                    //}
-
-                    embcells = parent.getEmbeddedCells();
-                    deb = [];
-                    for (var i = 0; i &lt; embcells.length; i++) {
-                        deb.push(embcells[i].get("values").comment[0]);
-                    }
-                    console.log(deb);
-
-
-                };
-
-                // se parentCell esiste
-                if (parentCell) {
-                    // se parentCell ha solo me come figlio: yee! apposto, ho trovato del posto.
-                    if (parentCell.get("embeds").length == 1 &amp;&amp; parentCell.get("embeds")[0] == this.selectedCell.id) {
-                        console.log("non ho fratelli :(");
-                        debug();
-                        var dest = g.indexOf(parentCell) + 1;
-                        //move(g, g.length-1-figli.length, dest);
-
-                        console.log("caso con unico figlio e parentcell");
-                        for (var i = 0; i &lt;= figli.length; i++) {
-                            move(g, g.length - 1 - figli.length + i, dest + i);
+                    // se parentCell esiste
+                    if (parentCell) {
+                        // se parentCell ha solo me come figlio: yee! apposto, ho trovato del posto.
+                        if (parentCell.get("embeds").length == 1 &amp;&amp; parentCell.get("embeds")[0] == this.selectedCell.id) {
+                            console.log("non ho fratelli :(");
                             debug();
-                        }
-                    }
-                    // altrimenti: sono disponibili più di un posto e dobbiamo trovare quello migliore.
-                    else {
-
-                        console.log(g);
-                        console.log("i miei fratelli sono:");
-                        var ff = parentCell.get("embeds");
-                        console.log(ff);
-                        console.log(this.model.getCell(ff[0]));
-                        var found = false;
-
-                        fratelli = [];
-                        var frad = [];
-                        for (var i = 0; i &lt; ff.length; i++) {
-                            if (ff[i] != curr.id) {
-                                fratelli.push(ff[i]);
-                                frad.push(this.model.getCell(ff[i]).get("values").comment[0]);
+                            var dest = g.indexOf(parentCell) + 1;
+                            for (var i = 0; i &lt;= figli.length; i++) {
+                                move(g, g.length - 1 - figli.length + i, dest + i);
+                                debug();
                             }
-                        }
-                        console.log(frad);
-                        /*
-                         var fratelliOrdinati = [];
-                         for(var i=0;i &lt; g.length;i++)
-                         {
-                         if(fratelli.indexOf(g[i])!=-1)
-                         {
-                         fratelliOrdinati.push(g[i]);
-                         }
-                         }
-                         fratelli = fratelliOrdinati;
-                         */
-                        for (var i = 0; i &lt; fratelli.length &amp;&amp; !found; i++) {
-                            // i miei fratelli sono in ordine di y crescente.
-                            // il primo fratello che mi supera in y è quello che mi seguirà
-                            console.log(y, " &lt; ", this.model.getCell(fratelli[i]).get("position").y);
-                            if (y &lt; this.model.getCell(fratelli[i]).get("position").y) {
+                        } else { // altrimenti: sono disponibili più di un posto e dobbiamo trovare quello migliore.
+                            var ff = parentCell.get("embeds");
+                            var found = false;
 
-                                found = true;
-                                if (i != 0) {
-                                    console.log("pezzo buggato?");
+                            fratelli = [];
+                            for (var i = 0; i &lt; ff.length; i++) {
+                                if (ff[i] != curr.id) {
+                                    fratelli.push(ff[i]);
+                                }
+                            }
+
+                            for (var i = 0; i &lt; fratelli.length &amp;&amp; !found; i++) {
+                                // i miei fratelli sono in ordine di y crescente.
+                                // il primo fratello che mi supera in y è quello che mi seguirà
+                                if (y &lt; this.model.getCell(fratelli[i]).get("position").y) {
+
+                                    found = true;
+                                    if (i != 0) {
+                                        // bad
+                                        // se non è il primo dentro il blocco
+                                        var dest = g.indexOf(this.model.getCell(fratelli[i - 1]));
+                                        dest += this.model.getCell(fratelli[i - 1]).getEmbeddedCells({deep: true}).length;
+                                        // correctEmbedding(i-1,parentCell,curr);
+                                        for (var j = 0; j &lt;= figli.length; j++) {
+                                            move(g, g.length - 1 - figli.length + j, dest + j + 1);
+                                            debug();
+                                        }
+                                    } else {
+                                        var dest = g.indexOf(parentCell);
+                                        dest++;
+                                        for (var j = 0; j &lt;= figli.length; j++) {
+                                            move(g, g.length - 1 - figli.length + j, dest + j);
+                                            debug();
+                                        }
+                                    }
+                                }
+                            }
+                            // non ho trovato posto perché ho la y più grande di tutti i miei fratelli
+                            if (!found) {
+                                var index = 0;
+                                if (fratelli[fratelli.length - 1] == curr.id) {
+                                    index = fratelli.length - 2;
+                                } else {
                                     // bad
-                                    // se non è il primo dentro il blocco
-                                    var dest = g.indexOf(this.model.getCell(fratelli[i - 1]));
-                                    dest += this.model.getCell(fratelli[i - 1]).getEmbeddedCells({deep: true}).length;
-                                    //dest = dest + this.model.getCell(fratelli[i]).getEmbeddedCells({deep: true}).length;
-                                    //dest--;
-
-
-                                    // correctEmbedding(i-1,parentCell,curr);
-                                    for (var j = 0; j &lt;= figli.length; j++) {
-                                        move(g, g.length - 1 - figli.length + j, dest + j + 1);
-                                        debug();
-                                    }
+                                    index = fratelli.length - 1;
                                 }
-                                else {
-                                    console.log("i=0");
-                                    var dest = g.indexOf(parentCell);
-                                    dest++;
 
-                                    // correctEmbedding(0,parentCell,curr);
+                                var dest = g.indexOf(this.model.getCell(fratelli[index]));
 
-                                    for (var j = 0; j &lt;= figli.length; j++) {
-                                        move(g, g.length - 1 - figli.length + j, dest + j);
-                                        debug();
-                                    }
+                                console.log(this.model.getCell(fratelli[index]).getEmbeddedCells({deep: true}).length);
+                                dest = dest + this.model.getCell(fratelli[index]).getEmbeddedCells({deep: true}).length;
+                                dest++;
 
+                                // correctEmbedding(index,parentCell,curr);
+
+                                for (var w = 0; w &lt;= figli.length; w++) {
+                                    move(g, g.length - 1 - figli.length + w, dest + w);
+                                    debug();
                                 }
                             }
                         }
-                        // non ho trovato posto perché ho la y più grande di tutti i miei fratelli
-                        if (!found) {
-                            console.log("y grande");
-                            //var dest = getNextIndexByID(this.model, fratelli,fratelli.length-1);
-                            //dest--;
-                            var index = 0;
-                            if (fratelli[fratelli.length - 1] == curr.id) {
-                                index = fratelli.length - 2;
+                    } else { // è a livello 0
+                        var fratelli = [];
+                        for (var i = 0; i &lt; g.length; i++) {
+                            if (!g[i].get("parent")) {
+                                fratelli.push(g[i]);
                             }
-                            else {
-                                // bad
-                                //console.log("non dovrebbe mai accadere");
-                                index = fratelli.length - 1;
-                            }
+                        }
 
+                        var found2 = false;
+                        for (var i = 0; i &lt; fratelli.length &amp;&amp; !found2; i++) {
+                            if (fratelli[i] != curr.id &amp;&amp; y &lt; this.model.getCell(fratelli[i]).get("position").y) {
+                                console.log("trovato");
+                                found2 = true;
+                                var dest = g.indexOf(this.model.getCell(fratelli[i]));
+                                var k = 0;
 
-                            var dest = g.indexOf(this.model.getCell(fratelli[index]));
-
-                            console.log(this.model.getCell(fratelli[index]).getEmbeddedCells({deep: true}).length);
-                            dest = dest + this.model.getCell(fratelli[index]).getEmbeddedCells({deep: true}).length;
-                            dest++;
-
-                            // correctEmbedding(index,parentCell,curr);
-
-                            for (var w = 0; w &lt;= figli.length; w++) {
-                                move(g, g.length - 1 - figli.length + w, dest + w);
-                                debug();
+                                for (k = 0; k &lt;= figli.length; k++) {
+                                    move(g, g.length - 1 - figli.length + k, dest + k);
+                                    debug();
+                                }
                             }
                         }
                     }
-                }
-                // è a livello 0
-                else {
-                    console.log("caso livello 0");
-                    var fratelli = [];
-                    for (var i = 0; i &lt; g.length; i++) {
-                        if (!g[i].get("parent")) {
-                            fratelli.push(g[i]);
-                        }
+
+                    if (parentCell) {
+                        console.log(g.indexOf(curr));
+                        correctEmbedding(g.indexOf(curr) - g.indexOf(parentCell) - 1, parentCell, curr);
                     }
-                    console.log(fratelli.length);
-
-                    var found2 = false;
-                    for (var i = 0; i &lt; fratelli.length &amp;&amp; !found2; i++) {
-                        if (fratelli[i] != curr.id &amp;&amp; y &lt; this.model.getCell(fratelli[i]).get("position").y) {
-                            console.log("trovato");
-                            found2 = true;
-                            var dest = g.indexOf(this.model.getCell(fratelli[i]));
-                            console.log(dest);
-
-                            console.log(figli);
-                            console.log(figli.length);
-                            var k = 0;
-                            //correctEmbedding(i,parentCell,curr);
-
-                            for (k = 0; k &lt;= figli.length; k++) {
-                                console.log("ciclo", k);
-                                move(g, g.length - 1 - figli.length + k, dest + k);
-                                debug();
-                            }
-                            console.log(k, "&lt;=", figli.length, k &lt;= figli.length);
-                            console.log(figli.length);
-
-                            console.log(figli);
-
-                        } else {
-                            console.log("avanti");
-                        }
-                    }
-
+                    this.trigger("renderActivity");
                 }
-
-                if (parentCell) {
-                    console.log(g.indexOf(curr));
-                    correctEmbedding(g.indexOf(curr) - g.indexOf(parentCell) - 1, parentCell, curr);
-
-                }
-
-                //console.log(this);
-                console.log(this);
-                //this.renderActivity();
-                this.trigger("renderActivity");
             }
         },
 
         /**
          * Manages the movement of the pointer when
-         * the user is dragging the cell; this is a
-         * callback to the 'pointermove' event on the view.
+         * the user is dragging the cell, highlighting the cell
+         * under the pointer;
+         * this is a callback to the 'pointermove' event on the view.
          * @name ProjectView#pointerMoveFunction
          * @function
          * @param {joint.dia.ElementView} cellView the dragged cell's view
@@ -597,7 +468,6 @@
 
                 if (cellViewsBelow.length > 0) {
                     // Note that the findViewsFromPoint() returns the view for the `cell` itself.
-
                     // ho modificato il comportamento di default descritto nelle API perché sennò prendeva sempre il
                     /// primo trovato (_.find).
                     // prendendo l'ultimo sono sicuro che sia quello più interessante per l'user.
@@ -605,53 +475,38 @@
                     var index = _.findLastIndex(cellViewsBelow, function (c) {
                         return c.model.id !== cell.id
                     });
-
-
                     v = this.model.getElements();
-
-
                     for (i = 0; i &lt; v.length; i++) {
-
                         this.findViewByModel(v[i]).unhighlight();
-
                     }
 
-                    if (index != -1) {
+                    if (index != -1 &amp;&amp; cellViewsBelow[index].model.get("canHaveChildren")) {
                         cellViewBelow = cellViewsBelow[index];
                         cellViewBelow.highlight();
                         this.isHighlighted = true;
-
-                        //console.log("view highlight");
-                        // console.log(cellViewBelow);
-
-                    }
-                    else {
+                    } else {
                         this.isHighlighted = false;
                     }
-
-
                 }
             }
-
         },
-
-        // if this.model.currentIndex != 'class'
 
         /**
          * Initializes `model` with a new `ProjectModel`;
          * initializes `paper` with a new `joint.dia.Paper` object;
-         * links mouse events to the right actions
-         * [...]
+         * links mouse events to the correct callbacks;
+         * updates the paper with any existing cells.
          * @name ProjectView#initialize
          * @function
          */
         initialize: function () {
             this.model = ProjectModel;//new ProjectModel();
             this.paper = new joint.dia.Paper({
+
                 el: $('#paper'),
                 model: this.model.graph,
                 width: 1500,
-                height: 1000,
+                height: 2000,
                 gridSize: 6,
                 drawGrid: true,
                 background: {
@@ -660,7 +515,13 @@
 
                 elementView: function (element) {
                     if (element.get("type").startsWith("class")) {
-                        return celltypes.class.ClassDiagramElementView;
+                        if (element.get("type") == "class.HxComment") {
+                            return celltypes.class.CommentView;
+                        }
+                        else {
+                            return celltypes.class.ClassDiagramElementView;
+                        }
+
                     } else {
                         return celltypes.activity.ActivityDiagramElementView;
                     }
@@ -675,17 +536,12 @@
                     }
                 },
 
-                //clickThreshold: 1,
                 linkView: joint.dia.LinkView.extend({
                     pointerdblclick: function (evt, x, y) {
-                        if (V(evt.target).hasClass('connection') || V(evt.target).hasClass('connection-wrap')) {
+                        if (joint.V(evt.target).hasClass('connection') || joint.V(evt.target).hasClass('connection-wrap')) {
                             this.addVertex({x: x, y: y});
                         }
                     },
-                    /*pointerclick: function (evt, x, y) {
-                     console.log("you clicked a link");
-                     // codice per dire a detailsview che è cambiato qualcosa
-                     }*/
                 }),
 
                 selectedCell: null,
@@ -696,82 +552,167 @@
                         // Disable the default vertex add functionality on pointerdown.
                         return {vertexAdd: false};
                     }
-
-
                     return true;
                 }
             });
 
+            var gridsize = 1;
+            var currentScale = 1;
+            var targetElement = $('#paper')[0];
 
+            console.log(svgPanZoom);
+            function setGrid(paper, size, color, offset) {
+                // Set grid size on the JointJS paper object (joint.dia.Paper instance)
+                paper.options.gridSize = gridsize;
+                // Draw a grid into the HTML 5 canvas and convert it to a data URI image
+                var canvas = $('&lt;canvas/>', { width: size, height: size });
+                canvas[0].width = size;
+                canvas[0].height = size;
+                var context = canvas[0].getContext('2d');
+                context.beginPath();
+                context.rect(1, 1, 1, 1);
+                context.fillStyle = color || '#AAAAAA';
+                context.fill();
+                // Finally, set the grid background image of the paper container element.
+                var gridBackgroundImage = canvas[0].toDataURL('image/png');
+                $(paper.el.childNodes[0]).css('background-image', 'url("' + gridBackgroundImage + '")');
+                if (typeof(offset) != 'undefined') {
+                    $(paper.el.childNodes[0]).css('background-position', offset.x + 'px ' + offset.y + 'px');
+                }
+            }
+
+            this.panAndZoom = svgPanZoom(targetElement.childNodes[0], {
+                viewportSelector: targetElement.childNodes[0].childNodes[0],
+                minZoom: 0.5,
+                maxZoom: 10,
+                fit: false,
+                center: false,
+                dblClickZoomEnabled: false,
+                zoomScaleSensitivity: 0.4,
+                controlIconsEnabled: true,
+                panEnabled: true,
+                onZoom: function (scale) {
+                    console.log(scale);
+                    currentScale = scale;
+                    //setGrid(this.paper, gridsize*15*currentScale, '#808080');
+                },
+                beforePan: function (oldpan, newpan) {
+                    $('.joint-paper').css('cursor', '-webkit-grabbing');
+                    //setGrid(this.paper, gridsize*15*currentScale, '#808080', newpan);
+                }
+            });
+            //spostiamo a mano
+
+            //$('#svg-pan-zoom-controls').attr("transform",'translate(' + ( $('#paper').width() - 70 ) + ' ' + ( $(window).height() - 140 ) + ') scale(0.75)');
+            $('#svg-pan-zoom-controls').attr("transform",'translate(5 5) scale(0.75)');
+
+            //this.panAndZoom.enableControlIcons();
+
+            $('#classtree').jstree({'core':{
+                'data':[
+                ]
+            }});
+
+            var pAndZ = this.panAndZoom;
+
+            this.paper.on('blank:pointerdown', function (evt, x, y) {
+                console.log(ProjectModel.options.cellToBeAdded);
+                if (ProjectModel.options.cellToBeAdded &amp;&amp; ProjectModel.options.cellToBeAdded.isElement()) {
+                    console.log("blank add");
+                    ProjectModel.options.cellToBeAdded.position(x,y);
+                    ProjectModel.addCellToGraph();
+                }
+
+                pAndZ.enablePan();
+
+
+            });
+            this.paper.on('blank:pointerup', function (event,x,y) {
+                console.log("pointeup",x,y);
+
+                pAndZ.disablePan();
+                $('.joint-paper').css('cursor', '-webkit-grab');
+
+            });
             this.paper.on('cell:pointerup', this.pointerUpFunction);
             this.paper.on('cell:pointermove', this.pointerMoveFunction);
 
+            this.paper.on('cell:pointerdown', _.partial(this.pointerDownFunction,this));
 
-            this.paper.on('cell:pointerdown', this.pointerDownFunction);
-
-            console.log(this);
             var m = this.model;
 
             this.renderActivity();
 
+            //$(document).on('keydown', $.proxy(this.deleteCell, this));
 
             this.listenTo(this.paper, 'renderActivity', this.renderActivity);
             this.listenTo(this.model, 'renderActivity', function () {
-                this.pointerDownFunction(this.paper.findView(this.graph.get("cells").models[0]), {}, 0, 0);
-                this.pointerUpFunction({}, {}, 0, 0);
+                this.pointerDownFunction (this.paper.findView(this.graph.get("cells").models[0]), {}, 0, 0);
+                this.pointerUpFunction ({}, {}, 0, 0);
             });
-            this.listenTo(this.model, 'addcell', this.renderActivity);
-            //pointerDownFunction();
-
-
-            //zoom in futuro
-            /*graphscale =1;
-             this.paper.on('blank:mousewheel',function (evt, x, y, delta) {
-             console.log(delta);
-             graphscale+=delta*0.1;
-             this.scale(graphscale,graphscale);
-             });*/
-
-            /*
-             this.paper.on('blank:pointerdown', function (evt, x, y) {
-             //console.log(evt);
-             //console.log(x,y);
-             });*/
-
-            //this.model.addInitialsCells();
-            //this.trigger("cell:pointerup"); // come faccio a triggerare la cosa che ho definito sopra?
-
-            // console.log(this);
-            // pointerUpFunction();
-
+            this.listenTo(this.model, 'addcell', function () {
+                this.renderActivity();
+            });
         },
 
         /**
-         * ...
+         * Switches to the graph identified by `id`.
          * @name ProjectView#switch
          * @function
-         * @param {number} index which graph to swith to
-         * @param {?} selectedCell ?
+         * @param {number} id which graph to switch to
          */
         switch: function (id) {
+            this.panAndZoom.reset();
             this.model.switchToGraph(id);
-            this.visibleElements = this.model.getClassVisibileElements(this.paper.selectedCell);
-            console.log("elementi: ",this.visibleElements);
-            this.paper.selectedCell= null;
-            //console.log("ah oh perchè non triggeri");
+            if (id != "class") {
+                this.visibleElements = this.model.getClassVisibleElements(this.paper.selectedCell);
+            } else {
+                this.visibleElements = [];
+            }
+            this.updateTreeview();
+
+            //console.log("elementi: ", this.visibleElements);
+            this.paper.selectedCell = null;
             this.paper.trigger("changed-cell");
             this.trigger("Switchgraph");
         },
 
         /**
-         * ...
+         * Updates the Tree View.
+         * @name ProjectView#updateTreeview
+         * @function
+         */
+        updateTreeview: function () {
+            ProjectModel.saveCurrentDiagram();
+            let new_data=[];
+            _.each(ProjectModel.options.graphs.classes.classesArray,function (e) {
+               if (e.get('type')!='class.HxComment') {
+                    new_data.push(e.getCellDesc());
+               }
+            });
+            $('#classtree').jstree(true).settings.core.data= new_data;
+            $('#classtree').jstree('refresh');
+        },
+
+        /**
+         * Returns whether the current diagram is an
+         * activity or a class one.
          * @name ProjectView#getCurrentDiagramType
          * @function
          */
         getCurrentDiagramType: function () {
             return this.model.getCurrentDiagramType();
-        }
+        },
 
+        /**
+         * Delets the `ind`th method of the diagram.
+         * @name ProjectView#deleteMethodAt
+         * @param  {number} ind the method index
+         * @function
+         */
+        deleteMethodAt: function (ind) {
+            this.model.deleteMethodDiagram(this.paper.selectedCell.getValues().methods[ind].id);
+        }
     });
     return new ProjectView;
 });
@@ -785,13 +726,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AppView.html">AppView</a></li><li><a href="ClassDiagramElement.html">ClassDiagramElement</a></li><li><a href="ClassDiagramElementView.html">ClassDiagramElementView</a></li><li><a href="Commands.html">Commands</a></li><li><a href="DetailsView.html">DetailsView</a></li><li><a href="DiagramsCollection.html">DiagramsCollection</a></li><li><a href="HxClass.html">HxClass</a></li><li><a href="NewCellModel.html">NewCellModel</a></li><li><a href="NewCellView.html">NewCellView</a></li><li><a href="ProjectView.html">ProjectView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#execmod">execmod</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ActivityDiagramElement.html">ActivityDiagramElement</a></li><li><a href="ActivityDiagramElementView.html">ActivityDiagramElementView</a></li><li><a href="AppView.html">AppView</a></li><li><a href="ClassDiagramElement.html">ClassDiagramElement</a></li><li><a href="ClassDiagramElementView.html">ClassDiagramElementView</a></li><li><a href="ClassDiagramLink.html">ClassDiagramLink</a></li><li><a href="Commands.html">Commands</a></li><li><a href="CommentView.html">CommentView</a></li><li><a href="DetailsView.html">DetailsView</a></li><li><a href="HxAssociation.html">HxAssociation</a></li><li><a href="HxClass.html">HxClass</a></li><li><a href="HxComment.html">HxComment</a></li><li><a href="HxCustom.html">HxCustom</a></li><li><a href="HxElse.html">HxElse</a></li><li><a href="HxFor.html">HxFor</a></li><li><a href="HxGeneralization.html">HxGeneralization</a></li><li><a href="HxIf.html">HxIf</a></li><li><a href="HxImplementation.html">HxImplementation</a></li><li><a href="HxInterface.html">HxInterface</a></li><li><a href="HxReturn.html">HxReturn</a></li><li><a href="HxVariable.html">HxVariable</a></li><li><a href="HxWhile.html">HxWhile</a></li><li><a href="NewCellModel.html">NewCellModel</a></li><li><a href="NewCellView.html">NewCellView</a></li><li><a href="ProjectModel.html">ProjectModel</a></li><li><a href="ProjectView.html">ProjectView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCell">addCell</a></li><li><a href="global.html#deleteCell">deleteCell</a></li><li><a href="global.html#execCommand">execCommand</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Apr 07 2017 17:43:51 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue May 09 2017 09:36:01 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

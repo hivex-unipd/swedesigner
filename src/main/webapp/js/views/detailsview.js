@@ -10,12 +10,13 @@ define([
 ], function ($, _, Backbone, joint, ProjectView, componentHandler, templates) {
 
     /**
-     * @classdesc `DetailsView` shows the details of an element in one diagram.
-     * The diagram can be the main class diagram or a method diagram.
-     * In the first case the elements are classes or links between them,
-     * so `DetailsView` shows the class name, its attributes and methods, etcetera.
-     * In the second case the elements are instruction blocks, so `DetailsView`
-     * shows the operands, parameters, or conditions of a block.
+     * @classdesc `DetailsView` shows the details of an element in one
+     * diagram. The diagram can be the main class diagram or an activity
+     * diagram. In the first case, the elements are classes or links
+     * between them: `DetailsView` shows the class name, its attributes
+     * and methods, etcetera. In the second case, the elements are
+     * instruction blocks: `DetailsView` shows the operands, parameters,
+     * or conditions of a block.
      *
      * @module client.view
      * @name DetailsView
@@ -47,11 +48,11 @@ define([
         currentTemplate: {},
 
         /**
-         * ?
+         * The event handling mapping.
          * @name DetailsView#events
          * @type {Object}
          */
-        events:{},
+        events: {},
 
         /**
          * Initializes `el` with a jQuery object that handles the `#details`
@@ -128,8 +129,7 @@ define([
                     };*/
 
                     _.each($('input.edit'),function (el) {
-                        $(el).data('ui-autocomplete')._renderItem = function (ul, item)
-                        {
+                        $(el).data('ui-autocomplete')._renderItem = function (ul, item) {
                             return $('<li class="ui-menu-item-with-icon"></li>')
                                 .data("item.autocomplete", item)
                                 .append('<a><span class="' + item.icon + '-item-icon"></span>' + item.label + '</a>')
@@ -192,8 +192,7 @@ define([
             if ((e.type == "keypress" && e.which == 13) || e.type == "change") {
                 if (e.target.type == "checkbox") {
                     ProjectView.paper.selectedCell.setToValue(e.target.checked ? "true" : "false", e.target.name);
-                }
-                else {
+                } else {
                     ProjectView.paper.selectedCell.setToValue(e.target.value, e.target.name);
                 }
             }

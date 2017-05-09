@@ -29,15 +29,6 @@ public class TestConfigurator {
 		};
 	}
 
-	// Stub for JavaGenerator:
-	// TODO
-
-	// Stub for ParsedProgram:
-	// TODO
-
-	// Stub for Compressor:
-	// TODO
-
 	// Stub for JavaTemplate:
 	@Bean("mockjavatemplate")
 	public Template mockjavatemplate() {

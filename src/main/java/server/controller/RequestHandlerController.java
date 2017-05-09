@@ -90,8 +90,6 @@ public class RequestHandlerController {
 		try {
 			ba = Files.readAllBytes(Paths.get(folderPath + "/projectzip.zip"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
 			errors.add(e.getMessage());
 		}
 		
@@ -113,8 +111,7 @@ public class RequestHandlerController {
 			} catch (IOException e) {
 				// e.printStackTrace();
 			}
-		}
-		else {
+		} else {
 			boolean isDirectoryCreated = folder.mkdir();
 			if (!isDirectoryCreated) {
 				try {

@@ -44,7 +44,6 @@ define([
          * @function
          */
         deleteCell: function (e) {
-
             /*if (e.which == 46) {//ha premuto tasto canc
                 if (this.paper.selectedCell) {
                     this.model.deleteCell(this.paper.selectedCell);
@@ -80,6 +79,7 @@ define([
                 }
                 console.log(x);
             };
+
             var m = this.model;
             var p = this.paper;
             var g = m.graph.get("cells").models;

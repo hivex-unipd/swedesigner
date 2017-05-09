@@ -55,7 +55,7 @@
          * @name AppView#el
          * @type {jQuery}
          */
-        el: $('main'),
+        el: $('#all'),
 
         /**
          * Links each page view to an appropriate object
@@ -80,7 +80,6 @@
             this.views.project = ProjectView;
             this.views.details = new DetailsView;
             this.views.newCell = new NewCellView;
-
             this.listenTo(this.views.project, 'Switchgraph', this.toggleVisib);
         },
 
@@ -91,10 +90,11 @@
          */
         events: {
             'click #switchtoclass': 'switchToClass',
-            'click #switch': 'switchgraph',
+            'click #switch': 'switchGraph',
             'click #savefile': 'save',
             'change #files': 'load',
-			'click #generate': 'generate'
+            'click #generate': 'generate',
+            'click #newproj':'newProject'
         },
 
         /**
@@ -104,7 +104,7 @@
          * @function
          */
         toggleVisib: function () {
-          $('#switchtoclass').toggle();
+            $('#switchtoclass').toggle();
         },
 
         /**
@@ -113,16 +113,17 @@
          * @function
          */
         switchToClass: function (e) {
-            //console.log("appviewwwwwwwwww");
             this.views.project.switch('class');
+
+            $('#elementstab')[0].click();
         },
 
         /**
          * Switches between different diagram elements.
-         * @name AppView#switchgraph
+         * @name AppView#switchGraph
          * @function
          */
-        switchgraph: function () {
+        switchGraph: function () {
             if (this.views.index == 0) {
                 this.views.project.switch(1);
                 this.views.index = 1;
@@ -133,6 +134,19 @@
         },
 
         /**
+         * Creates a new project from scratch.
+         * @name AppView#newProject
+         * @function
+         */
+        newProject: function () {
+            // workaround orrendo ma funziona
+            if ($('#switchtoclass').css('display') == 'block') {
+                $('#switchtoclass')[0].click();
+            }
+            Command.execute('newProject');
+        },
+
+        /**
          * Saves the entire project diagram to a JSON file
          * and gives it back to the user.
          * @name AppView#save
@@ -140,7 +154,7 @@
          * @param {event} event the action event
          */
         save: function (event) {
-            Command.execute('saveDiagram');
+            Command.execute('saveProject');
         },
 
         /**
@@ -151,7 +165,11 @@
          * @param {event} event the action event
          */
         load: function (event) {
-            Command.execute('loadDiagram', event);
+            // workaround orrendo ma funziona
+            if ($('#switchtoclass').css('display') == 'block') {
+                $('#switchtoclass')[0].click();
+            }
+            Command.execute('loadProject', event);
         },
 
         /**
@@ -161,9 +179,9 @@
          * @function
          * @param {event} event the action event
          */
-		generate: function(event) {
-			Command.execute('sendDiagram');
-		}
+        generate: function (event) {
+            Command.execute('sendDiagram');
+        }
     });
     return AppView;
 });
@@ -177,13 +195,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AppView.html">AppView</a></li><li><a href="ClassDiagramElement.html">ClassDiagramElement</a></li><li><a href="ClassDiagramElementView.html">ClassDiagramElementView</a></li><li><a href="Commands.html">Commands</a></li><li><a href="DetailsView.html">DetailsView</a></li><li><a href="DiagramsCollection.html">DiagramsCollection</a></li><li><a href="HxClass.html">HxClass</a></li><li><a href="NewCellModel.html">NewCellModel</a></li><li><a href="NewCellView.html">NewCellView</a></li><li><a href="ProjectView.html">ProjectView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#execmod">execmod</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ActivityDiagramElement.html">ActivityDiagramElement</a></li><li><a href="ActivityDiagramElementView.html">ActivityDiagramElementView</a></li><li><a href="AppView.html">AppView</a></li><li><a href="ClassDiagramElement.html">ClassDiagramElement</a></li><li><a href="ClassDiagramElementView.html">ClassDiagramElementView</a></li><li><a href="ClassDiagramLink.html">ClassDiagramLink</a></li><li><a href="Commands.html">Commands</a></li><li><a href="CommentView.html">CommentView</a></li><li><a href="DetailsView.html">DetailsView</a></li><li><a href="HxAssociation.html">HxAssociation</a></li><li><a href="HxClass.html">HxClass</a></li><li><a href="HxComment.html">HxComment</a></li><li><a href="HxCustom.html">HxCustom</a></li><li><a href="HxElse.html">HxElse</a></li><li><a href="HxFor.html">HxFor</a></li><li><a href="HxGeneralization.html">HxGeneralization</a></li><li><a href="HxIf.html">HxIf</a></li><li><a href="HxImplementation.html">HxImplementation</a></li><li><a href="HxInterface.html">HxInterface</a></li><li><a href="HxReturn.html">HxReturn</a></li><li><a href="HxVariable.html">HxVariable</a></li><li><a href="HxWhile.html">HxWhile</a></li><li><a href="NewCellModel.html">NewCellModel</a></li><li><a href="NewCellView.html">NewCellView</a></li><li><a href="ProjectModel.html">ProjectModel</a></li><li><a href="ProjectView.html">ProjectView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCell">addCell</a></li><li><a href="global.html#deleteCell">deleteCell</a></li><li><a href="global.html#execCommand">execCommand</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Apr 07 2017 17:43:51 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue May 09 2017 09:36:01 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
