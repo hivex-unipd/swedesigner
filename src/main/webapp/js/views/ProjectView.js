@@ -53,7 +53,7 @@ define([
                     this.paper.trigger("changed-cell");
                 }
             }*/
-            console.log(e);
+            //console.log(e);
             this.model.deleteCell(e);
             this.paper.selectedCell = null;
             this.paper.trigger("changed-cell");
@@ -78,7 +78,7 @@ define([
                 for (var d = 0; d < g.length; d++) {
                     x += "|" + g[d].get("values").comment[0] + "|";
                 }
-                console.log(x);
+                //console.log(x);
             };
 
             var m = this.model;
@@ -149,13 +149,13 @@ define([
             }
 
             if (ProjectModel.options.cellToBeAdded && ProjectModel.options.cellToBeAdded.isLink()) {
-                console.log(ProjectModel.options.cellToBeAdded.get("source").id);
+                //console.log(ProjectModel.options.cellToBeAdded.get("source").id);
                 if (ProjectModel.options.cellToBeAdded.get("source").id!=undefined) {
-                    console.log("set target");
+                    //console.log("set target");
                     ProjectModel.options.cellToBeAdded.set("target",{id:cellView.model.id});
                     ProjectModel.addCellToGraph();
                 } else {
-                    console.log("set source");
+                    //console.log("set source");
                     ProjectModel.options.cellToBeAdded.set("source",{id:cellView.model.id});
                 }
             }
@@ -164,9 +164,8 @@ define([
                 if (this.selectedCell != cellView.model) {
                     changed = true;
                     this.selectedCell = cellView.model;
-                    if (true) {//cellView.model instanceof joint.shapes.uml.ClassDiagramElement) {
-                        this.trigger("changed-cell");
-                    }
+                    this.trigger("changed-cell");
+
                 }
             }
 
@@ -199,20 +198,20 @@ define([
                     for (var d = 0; d < g.length; d++) {
                         x += "|" + g[d].get("values").comment[0] + "|";
                     }
-                    console.log(x);
+                    //console.log(x);
                 };
 
-                debug();
+                //debug();
 
                 move(g, currentIndex, g.length - 1);
 
                 for (var i = 0; i < figli.length; i++) {
-                    console.log("SPOSTO", g[currentIndex].get("values").comment[0]);
+                    //onsole.log("SPOSTO", g[currentIndex].get("values").comment[0]);
 
                     move(g, currentIndex, g.length - 1);
-                    debug();
+                    //debug();
                 }
-                debug();
+                //debug();
             }
         },
 
@@ -323,12 +322,12 @@ define([
                     if (parentCell) {
                         // se parentCell ha solo me come figlio: yee! apposto, ho trovato del posto.
                         if (parentCell.get("embeds").length == 1 && parentCell.get("embeds")[0] == this.selectedCell.id) {
-                            console.log("non ho fratelli :(");
-                            debug();
+                            //console.log("non ho fratelli :(");
+                            //debug();
                             var dest = g.indexOf(parentCell) + 1;
                             for (var i = 0; i <= figli.length; i++) {
                                 move(g, g.length - 1 - figli.length + i, dest + i);
-                                debug();
+                                //debug();
                             }
                         } else { // altrimenti: sono disponibili più di un posto e dobbiamo trovare quello migliore.
                             var ff = parentCell.get("embeds");
@@ -348,21 +347,21 @@ define([
 
                                     found = true;
                                     if (i != 0) {
-                                        // bad
+
                                         // se non è il primo dentro il blocco
                                         var dest = g.indexOf(this.model.getCell(fratelli[i - 1]));
                                         dest += this.model.getCell(fratelli[i - 1]).getEmbeddedCells({deep: true}).length;
                                         // correctEmbedding(i-1,parentCell,curr);
                                         for (var j = 0; j <= figli.length; j++) {
                                             move(g, g.length - 1 - figli.length + j, dest + j + 1);
-                                            debug();
+                                            //debug();
                                         }
                                     } else {
                                         var dest = g.indexOf(parentCell);
                                         dest++;
                                         for (var j = 0; j <= figli.length; j++) {
                                             move(g, g.length - 1 - figli.length + j, dest + j);
-                                            debug();
+                                            //debug();
                                         }
                                     }
                                 }
@@ -373,7 +372,7 @@ define([
                                 if (fratelli[fratelli.length - 1] == curr.id) {
                                     index = fratelli.length - 2;
                                 } else {
-                                    // bad
+
                                     index = fratelli.length - 1;
                                 }
 
@@ -387,7 +386,7 @@ define([
 
                                 for (var w = 0; w <= figli.length; w++) {
                                     move(g, g.length - 1 - figli.length + w, dest + w);
-                                    debug();
+                                    ///debug();
                                 }
                             }
                         }
@@ -409,14 +408,14 @@ define([
 
                                 for (k = 0; k <= figli.length; k++) {
                                     move(g, g.length - 1 - figli.length + k, dest + k);
-                                    debug();
+                                    //debug();
                                 }
                             }
                         }
                     }
 
                     if (parentCell) {
-                        console.log(g.indexOf(curr));
+                        //console.log(g.indexOf(curr));
                         correctEmbedding(g.indexOf(curr) - g.indexOf(parentCell) - 1, parentCell, curr);
                     }
                     this.trigger("renderActivity");
