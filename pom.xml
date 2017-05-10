@@ -5,7 +5,7 @@
   <groupId>org.hivex.swedesigner</groupId>
   <artifactId>swedesigner</artifactId>
   <packaging>war</packaging>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0</version>
   <url>https://github.com/hivex-unipd/swedesigner</url>
 
   <properties>
@@ -64,7 +64,7 @@
   </reporting>
 
   <build>
-    <finalName>swedesigner</finalName>
+    <finalName>ROOT</finalName>
   </build>
 
   <name>SWEDesigner</name>

@@ -8,11 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +36,9 @@ import server.utility.Compressor;
 public class RequestHandlerController {
 
 	private Parser parser = new Parser();
+	
+	@Autowired
+	private Environment env;
 
 	@Autowired
 	@Qualifier("javagenerator")
@@ -44,7 +50,12 @@ public class RequestHandlerController {
 
 	private Compressor compressor = new Compressor();
 	
-	private String uploadFolder = "/home/tomcat/Uploads/";
+	private String uploadFolder;
+	
+	@PostConstruct
+	private void init(){
+		uploadFolder= env.getProperty("UploadsDir");
+	}
 	
 	/**
 	 * Responds to an HTTP request for the "generate" resource.

@@ -13,6 +13,12 @@ import server.template.java.JavaTemplate;
 
 @Configuration
 public class Configurator {
+	
+	@Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+	
 	@Bean("javagenerator")
 	public Generator javagenerator() {
 		return new JavaGenerator();
