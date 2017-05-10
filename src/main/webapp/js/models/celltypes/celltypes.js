@@ -1188,7 +1188,8 @@ define([
 
                     return ret;
                 };
-                attrs['.activity-element-body-text'].text = chunk(this.getDescription().slice(0, 100), 25).join('\n');
+                //attrs['.activity-element-body-text'].text = chunk(this.getDescription().slice(0, 100), 25).join('\n');
+                // magari un giorno ci sarà una implementazione un po' più pulita
                 attrs['.activity-element-type-text'].text = this.getValues().xType;
                 attrs['.activity-element-type-text'].transform = 'translate(-180,0)';
                 attrs['.activity-element-name-rect'].height = this.getHeight();
