@@ -15,7 +15,7 @@ public class ParsedProgram {
 		classes.add(type);
 	}
 
-	public int nClasses() {
+	public int numberClasses() {
 		return classes.size();
 	}
 

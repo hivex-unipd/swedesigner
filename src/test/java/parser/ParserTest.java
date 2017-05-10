@@ -45,6 +45,6 @@ public class ParserTest {
 		JSONArray classes = program.getJSONObject("classes").getJSONArray("classesArray");
 
 		ParsedProgram result = parser.createParsedProgram(diagrams);
-		assertEquals(classes.length(), result.nClasses());
+		assertEquals(classes.length(), result.numberClasses());
 	}
 }

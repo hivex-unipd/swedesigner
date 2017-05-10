@@ -33,7 +33,7 @@ public class JavaGenerator implements Generator {
 	 * @throws FileNotFoundException a file I/O exception
 	 */
 	public void generate(String dirPath, ParsedProgram program) throws FileNotFoundException {
-		for (int i = 0; i < program.nClasses(); i++) {
+		for (int i = 0; i < program.numberClasses(); i++) {
 			String typeCode = program.getType(i).renderTemplate(template);
 			String filePath = dirPath + "/" + program.getType(i).getName() + ".java";
 			File typeFile = new File(filePath);
