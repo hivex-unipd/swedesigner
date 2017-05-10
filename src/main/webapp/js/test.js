@@ -160,7 +160,9 @@ require([
 	// test di integrazione:
 	// =====================
 
-	assert(true, 'Le componenti dei package models e views di swedesigner::client interagiscono correttamente tra loro e con la libreria esterna JointJS.');
+	app_view.newProject();
+	app_view.save();
+	app_view.generate();
 
-	// TODO
+	assert(true, 'Le componenti dei package models e views di swedesigner::client interagiscono correttamente tra loro e con la libreria esterna JointJS.');
 });
