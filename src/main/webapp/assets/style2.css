@@ -79,7 +79,12 @@ display: none;
 
 .upload {
     cursor: pointer;
-    font-size: 0;
+}
+
+@media screen and (max-width: 620px) {
+    .upload, .mdl-navigation .mdl-navigation__link {
+        font-size: 0;
+    }
 }
 
 input[type="file"] {

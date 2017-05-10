@@ -169,10 +169,5 @@ require([
 	var factoryWorks = ['HxClass', 'HxInterface', 'HxComment', 'HxGeneralization', 'HxAssociation', 'HxImplementation', 'HxCustom', 'HxElse', 'HxFor', 'HxIf', 'HxVariable', 'HxReturn', 'HxWhile'].every(function (element) {
 		return ncfactory.getCell(element) != undefined;
 	});
-	assert(factoryWorks, 'Il sistema gestisce correttamente le componenti relative al package models::celltypes; in particolare, gestisce correttamente l\'interazione con il package views di swedesigner::client e la libreria esterna JointJS.');
-
-
-
-	// TODO!
-	assert(true, 'Il sistema gestisce correttamente le componenti relative ai package models, views e views::celltypes, oltre che con la libreria esterna JointJS.');
+	assert(factoryWorks, 'Il sistema gestisce correttamente le componenti relative al package models::celltypes; in particolare, gestisce correttamente l\'interazione con il package models di swedesigner::client e la libreria esterna JointJS.');
 });
