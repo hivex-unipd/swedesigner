@@ -79,6 +79,7 @@ display: none;
 
 .upload {
     cursor: pointer;
+    font-size: 0;
 }
 
 input[type="file"] {
