@@ -40,6 +40,7 @@ define([
          * Deletes a specific cell from the diagram
          * and asks a `ProjectModel` to delete the
          * cell from the model too.
+         * @name ProjectView#deleteCell
          * @param  {event} e the action event
          * @function
          */
@@ -489,11 +490,9 @@ define([
                     if (element.get("type").startsWith("class")) {
                         if (element.get("type") == "class.HxComment") {
                             return celltypes.class.CommentView;
-                        }
-                        else {
+                        } else {
                             return celltypes.class.ClassDiagramElementView;
                         }
-
                     } else {
                         return celltypes.activity.ActivityDiagramElementView;
                     }
@@ -554,6 +553,7 @@ define([
             }
 
             this.panAndZoom = svgPanZoom(targetElement.childNodes[0], {
+
                 viewportSelector: targetElement.childNodes[0].childNodes[0],
                 minZoom: 0.5,
                 maxZoom: 10,
@@ -563,11 +563,13 @@ define([
                 zoomScaleSensitivity: 0.4,
                 controlIconsEnabled: true,
                 panEnabled: true,
+
                 onZoom: function (scale) {
                     console.log(scale);
                     currentScale = scale;
                     //setGrid(this.paper, gridsize*15*currentScale, '#808080');
                 },
+
                 beforePan: function (oldpan, newpan) {
                     $('.joint-paper').css('cursor', '-webkit-grabbing');
                     //setGrid(this.paper, gridsize*15*currentScale, '#808080', newpan);
@@ -580,10 +582,11 @@ define([
 
             //this.panAndZoom.enableControlIcons();
 
-            $('#classtree').jstree({'core':{
-                'data':[
-                ]
-            }});
+            $('#classtree').jstree({
+                'core':{
+                    'data':[]
+                }
+            });
 
             var pAndZ = this.panAndZoom;
 
@@ -596,16 +599,15 @@ define([
                 }
 
                 pAndZ.enablePan();
-
-
             });
-            this.paper.on('blank:pointerup', function (event,x,y) {
+
+            this.paper.on('blank:pointerup', function (event, x, y) {
                 console.log("pointeup",x,y);
 
                 pAndZ.disablePan();
                 $('.joint-paper').css('cursor', '-webkit-grab');
-
             });
+
             this.paper.on('cell:pointerup', this.pointerUpFunction);
             this.paper.on('cell:pointermove', this.pointerMoveFunction);
 

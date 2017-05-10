@@ -5,21 +5,52 @@ define([
     'joint',
     'models/celltypes/celltypes'
 ], function ($, _, Backbone, joint, celltypes) {
+
+    /**
+     * @classdesc `AbstractCellFactory` is an abstract factory
+     * for registering new cell types to the model and
+     * getting instances of these types.
+     *
+     * @module client.models
+     * @name AbstractCellFactory
+     * @class AbstractCellFactory
+     */
     var abstractCellFactory = (function () {
 
+        /**
+         * The available cell types.
+         * @name AbstractCellFactory#types
+         * @type {Object}
+         */
         var types = {};
 
         return {
+
+            /**
+             * Returns a cell of a particular type,
+             * possibly customized.
+             * @name AbstractCellFactory#getCell
+             * @param  {string} type           the type name
+             * @param  {Object} customizations the customizations
+             * @return {class}                 a new cell
+             * @function
+             */
             getCell: function (type, customizations) {
                 var Cells = types[type];
-
                 return (Cells ? new Cells(customizations) : null);
             },
 
+            /**
+             * [registerCell description]
+             * @name AbstractCellFactory#registerCell
+             * @param  {string} type                the type name
+             * @param  {class}  Cell                the cell type
+             * @return {joint.shapes.basic.Generic} a new cell
+             * @function
+             */
             registerCell: function (type, Cell) {
                 var proto = Cell.prototype;
                 types[type] = Cell;
-
                 return abstractCellFactory;
             }
         };

@@ -1113,7 +1113,7 @@ define([
             values: {
                 xType: '[block type]',
                 comment: '',
-                body: [],
+                body: []
             }
 
         }, joint.shapes.basic.Generic.prototype.defaults),
@@ -1121,7 +1121,6 @@ define([
         initialize: function () {
             this.updateRectangles();
             joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
-
         },
 
         getValues: function () {
