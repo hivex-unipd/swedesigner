@@ -162,7 +162,17 @@ require([
 
 	app_view.newProject();
 	app_view.save();
-	app_view.generate();
-
 	assert(true, 'Le componenti dei package models e views di swedesigner::client interagiscono correttamente tra loro e con la libreria esterna JointJS.');
+
+
+
+	var factoryWorks = ['HxClass', 'HxInterface', 'HxComment', 'HxGeneralization', 'HxAssociation', 'HxImplementation', 'HxCustom', 'HxElse', 'HxFor', 'HxIf', 'HxVariable', 'HxReturn', 'HxWhile'].every(function (element) {
+		return ncfactory.getCell(element) != undefined;
+	});
+	assert(factoryWorks, 'Il sistema gestisce correttamente le componenti relative al package models::celltypes; in particolare, gestisce correttamente l\'interazione con il package views di swedesigner::client e la libreria esterna JointJS.');
+
+
+
+	// TODO!
+	assert(true, 'Il sistema gestisce correttamente le componenti relative ai package models, views e views::celltypes, oltre che con la libreria esterna JointJS.');
 });
