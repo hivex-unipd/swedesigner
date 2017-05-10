@@ -1,70 +1,86 @@
 #headerlogo{
-    display: none;
+    width: 150px;
+    height: 64px;
 }
-.topnav{
-    display: none;
-}
-#newcell{
-    width:15%;
+#newcell {
+    width: 15%;
     overflow-y: scroll;
     float: left;
     border: #655f64;
 }
-#paper{
-    width: 64%;
+
+#paper {
+    width: auto;
     margin-left: auto;
-    height:calc(100% - 0px);
+    height: calc(100% - 0px);
     max-height: calc(100% - 0px);
     /* margin: auto; */
     overflow: hidden;
     border: #655f64;
-    position: relative;
+    position: absolute;
     display: inline-block;
 }
-/*#details{
-    width:10%;
-    float: right;
-    border: #655f64;
-}*/
-.components{
+
+.components {
+    z-index: 1;
     position: relative;
     display: inline-block;
-    width: 18%;
+    width: auto;
     float: left;
     border: #655f64;
     height: 100%
 }
-
-#savefile,#generate{
-    cursor: pointer;
+#elementstitle{
+    display: none;
 }
 
-.main{
+#savefile, #generate {
+    cursor: pointer;
+}
+.space1{
+display: none;
+}
+.mdl-layout__drawer-button{
+    display: none;
+}
+.mdl-layout__header-row{
+    padding: 0 40px 0 10px;
+}
+
+.main {
     height: calc(100% - 64px);
     max-height: calc(100% - 64px);
 }
-.demo-cards{
+
+.demo-cards {
+    background-color:whitesmoke;
+    z-index: 1;
     height: 100%;
     width: 18%;
     position: relative;
     display: inline-block;
     float: right;
 }
-.prop{
+
+.prop {
     height: 100%;
     margin-left: 0.2em;
+    padding-left: 0.5em;
 }
-.demo-content{
+
+.demo-content {
     height: 100%;
     width: 100%;
 }
-.comp{
+
+.comp {
     height: 100%;
 }
 
-.upload{
+.upload {
     cursor: pointer;
 }
+
 input[type="file"] {
     position: absolute;
     width: 1px;
@@ -72,7 +88,7 @@ input[type="file"] {
     padding: 0;
     margin: -1px;
     overflow: hidden;
-    clip: rect(0,0,0,0);
+    clip: rect(0, 0, 0, 0);
     border: 0;
 }
 
@@ -81,6 +97,7 @@ input[type="file"] {
     height: 48px;
     border-radius: 24px;
 }
+
 .demo-drawer-header {
     box-sizing: border-box;
     display: -webkit-flex;
@@ -95,32 +112,37 @@ input[type="file"] {
     padding: 16px;
     height: 151px;
 }
-#components{
-    overflow-y: scroll;
+
+#components {
+    overflow-y: hidden;
 
 }
-.newcompbt{
-    width:100%;
-    margin-bottom: 0.3em;
+
+.newcompbt {
+    font-size: 0;
+    width: 50px;
+    margin-bottom: 6px;
     border: none;
     background-color: #4db6ac;
-    display: inline-block;
-    padding: 1em 2em;
+    display: block;
+    padding: inherit;
     border-radius: 3px;
     cursor: pointer;
     color: white;
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.newcompbt:active{
+
+.newcompbt:active {
     border: none;
-    box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-#details{
+
+#details {
     overflow-y: scroll;
     height: calc(100% - 64px);
-    padding: 20px 0.5em;
 }
-#switchtoclass{
+
+#switchtoclass {
     position: fixed;
     display: none;
     right: 0;
@@ -129,10 +151,12 @@ input[type="file"] {
     margin-bottom: 40px;
     z-index: 900;
 }
-input[type=checkbox]:checked ~ .switch{
+
+input[type=checkbox]:checked ~ .switch {
     display: none;
 }
-.togglable{
+
+.togglable {
     width: 95%;
     display: inline-block;
     padding: 0.2em;
@@ -143,14 +167,16 @@ input[type=checkbox]:checked ~ .switch{
     cursor: pointer;
     font-size: 1.5em;
     font-weight: 300;
-    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 }
-.togglable:after{
+
+.togglable:after {
 
     content: "\02C5";
     float: right;
 }
-.add,.switch{
+
+.add, .switch {
     margin-top: 0.3em;
     margin-bottom: 0.3em;
     border: none;
@@ -160,18 +186,19 @@ input[type=checkbox]:checked ~ .switch{
     border-radius: 3px;
     cursor: pointer;
     color: white;
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.toggle{
+
+.toggle {
     /*display: none;*/
 }
-.propcontainer{
+
+.propcontainer {
     border-radius: 3px;
     background-color: white;
     border: 1px solid lightgray;
     margin: 0.1em;
 }
-
 
 /*.HxClassicon,.HxInterfaceicon{
     background: #4db6ac;
@@ -207,7 +234,7 @@ input[type=checkbox]:checked ~ .switch{
     background: -webkit-linear-gradient(top, #4db6ac 0, #4db6ac 32%, #fff 31%, #fff 34%, #4db6ac 35%, #4db6ac 65%, #fff 64%, #fff 67%, #4db6ac 68%, #4db6ac 100%);
     height: 100%;
 }*/
-.HxGeneralizationicon{
+.HxGeneralizationicon {
     background: url("generalization.svg");
     background-size: 24px 24px;
     width: 24px;
@@ -216,7 +243,8 @@ input[type=checkbox]:checked ~ .switch{
     margin-right: 0.3em;
     vertical-align: middle;
 }
-.HxClassicon{
+
+.HxClassicon {
     background: url("class.svg");
     background-size: 24px 24px;
     width: 24px;
@@ -225,7 +253,8 @@ input[type=checkbox]:checked ~ .switch{
     margin-right: 0.3em;
     vertical-align: middle;
 }
-.HxInterfaceicon{
+
+.HxInterfaceicon {
     background: url("interface.svg");
     background-size: 24px 24px;
     width: 24px;
@@ -234,7 +263,8 @@ input[type=checkbox]:checked ~ .switch{
     margin-right: 0.3em;
     vertical-align: middle;
 }
-.HxAssociationicon{
+
+.HxAssociationicon {
     background: url("association.svg");
     background-size: 24px 24px;
     width: 24px;
@@ -243,7 +273,8 @@ input[type=checkbox]:checked ~ .switch{
     margin-right: 0.3em;
     vertical-align: middle;
 }
-.HxImplementationicon{
+
+.HxImplementationicon {
     background: url("implementation.svg");
     background-size: 24px 24px;
     width: 24px;
@@ -252,7 +283,8 @@ input[type=checkbox]:checked ~ .switch{
     margin-right: 0.3em;
     vertical-align: middle;
 }
-.HxCommenticon{
+
+.HxCommenticon {
     background: url("comment.svg");
     background-size: 24px 24px;
     width: 24px;
@@ -261,7 +293,8 @@ input[type=checkbox]:checked ~ .switch{
     margin-right: 0.3em;
     vertical-align: middle;
 }
-.HxIficon{
+
+.HxIficon {
     background: url("if.svg");
     background-size: 24px 24px;
     width: 24px;
@@ -270,7 +303,8 @@ input[type=checkbox]:checked ~ .switch{
     margin-right: 0.3em;
     vertical-align: middle;
 }
-.HxElseicon{
+
+.HxElseicon {
     background: url("else.svg");
     background-size: 24px 24px;
     width: 24px;
@@ -279,7 +313,8 @@ input[type=checkbox]:checked ~ .switch{
     margin-right: 0.3em;
     vertical-align: middle;
 }
-.HxReturnicon{
+
+.HxReturnicon {
     background: url("return.svg");
     background-size: 24px 24px;
     width: 24px;
@@ -288,16 +323,18 @@ input[type=checkbox]:checked ~ .switch{
     margin-right: 0.3em;
     vertical-align: middle;
 }
-.HxWhileicon{
-     background: url("while.svg");
-     background-size: 24px 24px;
-     width: 24px;
-     height: 24px;
-     display: inline-block;
-     margin-right: 0.3em;
-     vertical-align: middle;
- }
-.HxForicon{
+
+.HxWhileicon {
+    background: url("while.svg");
+    background-size: 24px 24px;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: 0.3em;
+    vertical-align: middle;
+}
+
+.HxForicon {
     background: url("for.svg");
     background-size: 24px 24px;
     width: 24px;
@@ -306,7 +343,8 @@ input[type=checkbox]:checked ~ .switch{
     margin-right: 0.3em;
     vertical-align: middle;
 }
-.HxVariableicon{
+
+.HxVariableicon {
     background: url("variable.svg");
     background-size: 24px 24px;
     width: 24px;
@@ -315,7 +353,8 @@ input[type=checkbox]:checked ~ .switch{
     margin-right: 0.3em;
     vertical-align: middle;
 }
-.HxCustomicon{
+
+.HxCustomicon {
     background: url("custom.svg");
     background-size: 24px 24px;
     width: 24px;
@@ -325,49 +364,64 @@ input[type=checkbox]:checked ~ .switch{
     vertical-align: middle;
 }
 
-
-
 .ui-menu .ui-menu-item-with-icon a {
     padding-left: 20px;
     color: #4d4d4c;
 }
+
 span.attribute-item-icon,
 span.method-item-icon,
 span.class-item-icon,
-span.interface-item-icon{
+span.interface-item-icon {
     display: inline-block;
     height: 16px;
     width: 16px;
     margin-left: -16px;
     padding-right: 0.2em;
 }
+
 span.method-item-icon {
     background: url("methodicon.png") no-repeat;
 
 }
+
 span.attribute-item-icon {
     background: url("attributeicon.png") no-repeat;
 
 }
-span.class-item-icon{
+
+span.class-item-icon {
     background: url("classicon.png") no-repeat;
 }
-span.interface-item-icon{
+
+span.interface-item-icon {
     background: url("interfaceicon.png") no-repeat;
 }
-.classtree{
+
+.classtree {
     overflow-x: scroll;
 }
-#classtreetab{
+
+#classtreetab {
     display: none;
+    font-size: 0;
+    padding:0 1px 0 10px;
+}
+#elementstab{
+    font-size: 0;
+    padding:0 1px 0 0;
+}
+.elicon,.visicon{
+    padding-top: 0.5em;
 }
 
-.element-tool-remove{
+.element-tool-remove {
     z-index: 1;
     opacity: 0;
     cursor: pointer;
 }
-.joint-element:hover .element-tool-remove{
+
+.joint-element:hover .element-tool-remove {
     opacity: 1;
 }
 
