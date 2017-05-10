@@ -2,6 +2,7 @@ package server;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import server.controller.RequestHandlerController;
 import server.compiler.Compiler;
