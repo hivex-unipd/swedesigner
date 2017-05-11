@@ -977,7 +977,7 @@ define([
                 }
             ],
             values: {
-                card: "default",
+                card: "1",
                 attribute: ""
             }
         }, celltypes.class.ClassDiagramLink.prototype.defaults),
@@ -986,7 +986,7 @@ define([
             this.label(0, {
                 attrs: {
                     text: {
-                        text: this.getcard()
+                        text: this.getcard()+" "+this.getAttribute()
                     }
                 }
             });
@@ -994,6 +994,10 @@ define([
 
         getcard: function () {
             return this.get('values').card;
+        },
+        
+        getAttribute: function () {
+            return this.get('values').attribute;
         },
 
         initialize: function () {
