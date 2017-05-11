@@ -32,7 +32,7 @@ Di default, gli upload dei file degli utenti e i rispettivi file compilati sono 
 
 1. Creare una cartella nella posizione desiderata (`/home/tomcat/Uploads/`)
 2. Controllare i permessi della cartella (in lettura e scrittura)
-3. Entrare nella cartella di installazione di Tomcat, poi proseguire in `webapps/ROOT/WEB-INF/application.properties`
+3. Entrare nella cartella di installazione di Tomcat, poi proseguire in `webapps/ROOT/WEB-INF/classes/application.properties`
 4. Modificare il file alla riga `uploadsDir = <PATH>`
 5. Riavviare il server
 
@@ -48,8 +48,7 @@ Al termine della attività di deploy, recarsi all'indirizzo del server (di defau
 
 ### Maven
 1. Portarsi sulla path radice del progetto
-2. Eseguire il seguente comando 
-```mvn compile war:war```
+2. Eseguire il seguente comando `mvn compile war:war`
 3. Il file WAR sarà generato nella cartella `/target` con il nome `ROOT.war`
 
 

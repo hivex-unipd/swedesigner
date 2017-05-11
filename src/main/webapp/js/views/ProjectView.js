@@ -518,7 +518,7 @@ define([
             var currentScale = 1;
             var targetElement = $('#paper')[0];
 
-            console.log(svgPanZoom);
+            //console.log(svgPanZoom);
             function setGrid(paper, size, color, offset) {
                 // Set grid size on the JointJS paper object (joint.dia.Paper instance)
                 paper.options.gridSize = gridsize;
