@@ -383,7 +383,7 @@ define([
                             vis = "-";
                             break;
                         case "protected":
-                            vis = "~";
+                            vis = "#";
                             break;
                         /*case "package":
                          vis = "#";
@@ -417,11 +417,9 @@ define([
                             vis = "-";
                             break;
                         case "protected":
-                            vis = "~";
-                            break;
-                        case "package":
                             vis = "#";
                             break;
+                        
                     }
                     let params = e.parameters.map(function (f) {
                         return f.name+":"+f.type;
@@ -507,7 +505,7 @@ define([
                         vis = "-";
                         break;
                     case "protected":
-                        vis = "~";
+                        vis = "#";
                         break;
                     /*case "package":
                      vis = "#";
@@ -528,11 +526,9 @@ define([
                         vis = "-";
                         break;
                     case "protected":
-                        vis = "~";
-                        break;
-                    case "package":
                         vis = "#";
                         break;
+                   
                 }
                 let params = e.parameters.map(function (f) {
                     return f.name;
