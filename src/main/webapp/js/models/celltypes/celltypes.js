@@ -156,11 +156,11 @@ define([
         renderTools: function () {
 
             var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
-            console.log("markup:", toolMarkup);
+            //console.log("markup:", toolMarkup);
             if (toolMarkup) {
 
                 var nodes = joint.V(toolMarkup);
-                console.log("el:", joint.V(this.el));
+                //console.log("el:", joint.V(this.el));
                 joint.V(this.el).append(nodes);
 
             }
@@ -373,7 +373,7 @@ define([
                             vis = "-";
                             break;
                         case "protected":
-                            vis = "~";
+                            vis = "#";
                             break;
                         /*case "package":
                          vis = "#";
@@ -407,14 +407,12 @@ define([
                             vis = "-";
                             break;
                         case "protected":
-                            vis = "~";
-                            break;
-                        case "package":
                             vis = "#";
                             break;
+                        
                     }
                     let params = e.parameters.map(function (f) {
-                        return f.name;
+                        return f.name+":"+f.type;
                     }).join(",");
                     return vis + " " + e.name + "(" + params + ")" + ":" + e.returnType;
                 }).join('\n') : rects[2].text;
@@ -501,7 +499,7 @@ define([
                         vis = "-";
                         break;
                     case "protected":
-                        vis = "~";
+                        vis = "#";
                         break;
                     /*case "package":
                      vis = "#";
@@ -523,14 +521,12 @@ define([
                         vis = "-";
                         break;
                     case "protected":
-                        vis = "~";
-                        break;
-                    case "package":
                         vis = "#";
                         break;
+                   
                 }
                 let params = e.parameters.map(function (f) {
-                    return f.name;
+                    return f.name+":"+f.type;
                 }).join(",");
                 return {
                     'text': vis + " " + e.name + "(" + params + ")" + ":" + e.returnType,
@@ -557,7 +553,7 @@ define([
                     longest = tmp[i].text.length;
                 }
             }
-            console.log(longest);
+            //console.log(longest);
             tmp = this.getMetDesc();
             for (i = 0; i < tmp.length; i++) {
                 if (tmp[i].text.length > longest) {
@@ -643,9 +639,12 @@ define([
                     text: this.get('methodsExpanded') ? this.getValues().methods : "Methods (click to expand)"
                 }
             ];
+            
+            var rectWidth = this.getWidth();
             var rectHeight = 2 * 15 + 1;
             attrs['.uml-class-name-text'].text = ['<<interface>>', rects[0].text].join('\n');
             attrs['.uml-class-name-rect'].height = rectHeight;
+            attrs['.uml-class-name-rect'].width = rectWidth;
             attrs['.uml-class-name-rect'].transform = 'translate(0,' + offsetY + ')';
             offsetY += rectHeight;
             //rectHeight = _.isArray(rects[1].text) ? rects[1].text.length * 15 + 1 : 1 * 15 + 1;
@@ -677,11 +676,12 @@ define([
                          break;*/
                     }
                     var params = e.parameters.map(function (f) {
-                        return f.name;
+                        return f.name+":"+f.type;
                     }).join(",");
                     return vis + " " + e.name + "(" + params + ")" + ":" + e.returnType;
                 }).join('\n') : rects[1].text;
             attrs['.uml-class-methods-rect'].height = rectHeight;
+            attrs['.uml-class-methods-rect'].width = rectWidth;
             attrs['.uml-class-methods-rect'].transform = 'translate(0,' + offsetY + ')';
 
             celltypes.class.ClassDiagramElement.prototype.updateRectangles.apply(this, arguments);
@@ -733,7 +733,7 @@ define([
                         break;
                 }
                 let params = e.parameters.map(function (f) {
-                    return f.name;
+                    return f.name+":"+f.type;
                 }).join(",");
                 return {
                     'text': vis + " " + e.name + "(" + params + ")" + ":" + e.returnType,
@@ -750,6 +750,19 @@ define([
                 'icon': 'assets/interfaceicon.png',
                 'children': this.getMetDesc()
             }
+        },
+        getWidth: function () {
+
+            let longest = rects[0].text.length;
+            //console.log(longest);
+            let tmp = this.getMetDesc();
+            for (i = 0; i < tmp.length; i++) {
+                if (tmp[i].text.length > longest) {
+                    longest = tmp[i].text.length;
+                }
+            }
+            return longest*5+180;
+
         }
     });
 
@@ -850,11 +863,11 @@ define([
         renderTools: function () {
 
             var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
-            console.log("markup:", toolMarkup);
+            //console.log("markup:", toolMarkup);
             if (toolMarkup) {
 
                 var nodes = joint.V(toolMarkup);
-                console.log("el:", joint.V(this.el));
+                //console.log("el:", joint.V(this.el));
                 joint.V(this.el).append(nodes);
 
             }
@@ -975,7 +988,7 @@ define([
                 }
             ],
             values: {
-                card: "default",
+                card: "1",
                 attribute: ""
             }
         }, celltypes.class.ClassDiagramLink.prototype.defaults),
@@ -984,7 +997,7 @@ define([
             this.label(0, {
                 attrs: {
                     text: {
-                        text: this.getcard()
+                        text: this.getcard()+" "+this.getAttribute()
                     }
                 }
             });
@@ -992,6 +1005,10 @@ define([
 
         getcard: function () {
             return this.get('values').card;
+        },
+        
+        getAttribute: function () {
+            return this.get('values').attribute;
         },
 
         initialize: function () {
@@ -1245,11 +1262,11 @@ define([
         renderTools: function () {
 
             var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
-            console.log("markup:", toolMarkup);
+            //console.log("markup:", toolMarkup);
             if (toolMarkup) {
 
                 var nodes = joint.V(toolMarkup);
-                console.log("el:", joint.V(this.el));
+                //console.log("el:", joint.V(this.el));
                 joint.V(this.el).append(nodes);
 
             }

@@ -46,14 +46,21 @@ define([
         loadProject: function (evt) {
             var files = evt.target.files; // FileList object
             f = files[0];
+	    var type = f.type;
             var reader = new FileReader();
 
             // Closure to capture the file information.
             reader.onload = function (e) {
-                // Render thumbnail.
-                JsonObj = e.target.result;
-                //console.log(JsonObj);
-                ProjectModel.loadProject(JsonObj);
+		if(type!="application/json"){
+			alert("errore nel tipo di file");
+			return false;
+		}
+		else{
+                    // Render thumbnail.
+                    JsonObj = e.target.result;
+                    //console.log(JsonObj);
+                    ProjectModel.loadProject(JsonObj);
+		}
             };
             reader.readAsText(f);
         },
