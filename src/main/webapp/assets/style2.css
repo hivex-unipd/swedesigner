@@ -34,7 +34,7 @@
     display: none;
 }
 
-#savefile, #generate {
+.savefile, .generate {
     cursor: pointer;
 }
 .space1{
