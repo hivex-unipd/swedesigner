@@ -365,9 +365,8 @@ public class Parser {
 		
 		//extracting all the values of the instruction
 		JSONObject instructionValues = null;
-		if (instruction.has("values")) {
+		if (instruction.has("values"))
 			instructionValues = instruction.getJSONObject("values");
-		}
 		else
 			errors.add("JSON format error: cannot find values of instruction");
 		
@@ -377,9 +376,8 @@ public class Parser {
 		}
 		
 		//if the instruction has an empty body or has no body we can directly return it
-		if (!instruction.has("embeds")) {
+		if (!instruction.has("embeds"))
 			return currentInstruction;
-		}
 
 		//extracting the list of embedded instructions of the method body
 		JSONArray embeddedInstructions = instruction.getJSONArray("embeds");

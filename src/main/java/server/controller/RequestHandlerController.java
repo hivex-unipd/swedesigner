@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import javax.annotation.PostConstruct;
 
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -53,8 +52,8 @@ public class RequestHandlerController {
 	private String uploadFolder;
 	
 	@PostConstruct
-	private void init(){
-		uploadFolder= env.getProperty("UploadsDir");
+	private void init() {
+		uploadFolder = env.getProperty("UploadsDir");
 	}
 	
 	/**
