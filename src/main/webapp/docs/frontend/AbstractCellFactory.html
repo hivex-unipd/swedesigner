@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: NewCellModel</title>
+    <title>JSDoc: Class: AbstractCellFactory</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: NewCellModel</h1>
+    <h1 class="page-title">Class: AbstractCellFactory</h1>
 
     
 
@@ -28,11 +28,11 @@
 
 <header>
     
-        <h2>NewCellModel</h2>
+        <h2>AbstractCellFactory</h2>
         
-            <div class="class-description"><p><code>NewCellModel</code> stores all the available
-elements, relations, and blocks that can be inserted in
-a diagram. Every <code>NewCellView</code> owns a <code>NewCellModel</code>.</p></div>
+            <div class="class-description"><p><code>AbstractCellFactory</code> is an abstract factory
+for registering new cell types to the model and
+getting instances of these types.</p></div>
         
     
 </header>
@@ -46,7 +46,7 @@ a diagram. Every <code>NewCellView</code> owns a <code>NewCellModel</code>.</p><
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="NewCellModel"><span class="type-signature"></span>new NewCellModel<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="AbstractCellFactory"><span class="type-signature"></span>new AbstractCellFactory<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
@@ -93,7 +93,7 @@ a diagram. Every <code>NewCellView</code> owns a <code>NewCellModel</code>.</p><
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_newcellmodel.js.html">models/newcellmodel.js</a>, <a href="models_newcellmodel.js.html#line11">line 11</a>
+        <a href="models_newcellfactory.js.html">models/newcellfactory.js</a>, <a href="models_newcellfactory.js.html#line9">line 9</a>
     </li></ul></dd>
     
 
@@ -123,17 +123,6 @@ a diagram. Every <code>NewCellView</code> owns a <code>NewCellModel</code>.</p><
     </div>
 
     
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li>Backbone.Model</li>
-    </ul>
-
-
-    
 
     
 
@@ -148,14 +137,13 @@ a diagram. Every <code>NewCellView</code> owns a <code>NewCellModel</code>.</p><
 
         
             
-<h4 class="name" id="str"><span class="type-signature"></span>str<span class="type-signature"> :Array</span></h4>
+<h4 class="name" id="types"><span class="type-signature"></span>types<span class="type-signature"> :Object</span></h4>
 
 
 
 
 <div class="description">
-    <p>The available type of cell that the user
-can insert into the current diagram.</p>
+    <p>The available cell types.</p>
 </div>
 
 
@@ -164,7 +152,7 @@ can insert into the current diagram.</p>
     <ul>
         <li>
             
-<span class="param-type">Array</span>
+<span class="param-type">Object</span>
 
 
         </li>
@@ -203,7 +191,7 @@ can insert into the current diagram.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_newcellmodel.js.html">models/newcellmodel.js</a>, <a href="models_newcellmodel.js.html#line23">line 23</a>
+        <a href="models_newcellfactory.js.html">models/newcellfactory.js</a>, <a href="models_newcellfactory.js.html#line20">line 20</a>
     </li></ul></dd>
     
 
@@ -230,15 +218,15 @@ can insert into the current diagram.</p>
 
     
 
-    <h4 class="name" id="addCell"><span class="type-signature"></span>addCell<span class="signature">(event)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getCell"><span class="type-signature"></span>getCell<span class="signature">(type, customizations)</span><span class="type-signature"> &rarr; {class}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Adds a new cell to the current diagram, based on which
-type of cell the user has selected.</p>
+    <p>Returns a cell of a particular type,
+possibly customized.</p>
 </div>
 
 
@@ -274,13 +262,13 @@ type of cell the user has selected.</p>
 
         <tr>
             
-                <td class="name"><code>event</code></td>
+                <td class="name"><code>type</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">event</span>
+<span class="param-type">string</span>
 
 
             
@@ -290,7 +278,30 @@ type of cell the user has selected.</p>
 
             
 
-            <td class="description last"><p>the action event</p></td>
+            <td class="description last"><p>the type name</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>customizations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the customizations</p></td>
         </tr>
 
     
@@ -331,7 +342,7 @@ type of cell the user has selected.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_newcellmodel.js.html">models/newcellmodel.js</a>, <a href="models_newcellmodel.js.html#line59">line 59</a>
+        <a href="models_newcellfactory.js.html">models/newcellfactory.js</a>, <a href="models_newcellfactory.js.html#line29">line 29</a>
     </li></ul></dd>
     
 
@@ -354,6 +365,28 @@ type of cell the user has selected.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>a new cell</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">class</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -362,15 +395,14 @@ type of cell the user has selected.</p>
 
     
 
-    <h4 class="name" id="initialize"><span class="type-signature"></span>initialize<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="registerCell"><span class="type-signature"></span>registerCell<span class="signature">(type, Cell)</span><span class="type-signature"> &rarr; {joint.shapes.basic.Generic}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Initialize the <code>str</code> array with all the available
-cell types.</p>
+    <p>[registerCell description]</p>
 </div>
 
 
@@ -379,6 +411,78 @@ cell types.</p>
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the type name</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Cell</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">class</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the cell type</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -414,7 +518,7 @@ cell types.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_newcellmodel.js.html">models/newcellmodel.js</a>, <a href="models_newcellmodel.js.html#line31">line 31</a>
+        <a href="models_newcellfactory.js.html">models/newcellfactory.js</a>, <a href="models_newcellfactory.js.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -437,6 +541,28 @@ cell types.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>a new cell</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">joint.shapes.basic.Generic</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 

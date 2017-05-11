@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: models/newcellmodel.js</title>
+    <title>JSDoc: Source: models/newcellfactory.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: models/newcellmodel.js</h1>
+    <h1 class="page-title">Source: models/newcellfactory.js</h1>
 
     
 
@@ -31,72 +31,75 @@
     'underscore',
     'backbone',
     'joint',
-    'models/ProjectModel',
-    'models/newcellfactory',
     'models/celltypes/celltypes'
-], function ($, _, Backbone, joint, ProjectModel, abstractCellFactory, celltypes) {
+], function ($, _, Backbone, joint, celltypes) {
 
     /**
-     * @classdesc `NewCellModel` stores all the available
-     * elements, relations, and blocks that can be inserted in
-     * a diagram. Every `NewCellView` owns a `NewCellModel`.
+     * @classdesc `AbstractCellFactory` is an abstract factory
+     * for registering new cell types to the model and
+     * getting instances of these types.
      *
      * @module client.models
-     * @name NewCellModel
-     * @class NewCellModel
-     * @extends {Backbone.Model}
+     * @name AbstractCellFactory
+     * @class AbstractCellFactory
      */
-    var NewCellModel = Backbone.Model.extend({
+    var abstractCellFactory = (function () {
 
         /**
-         * The available type of cell that the user
-         * can insert into the current diagram.
-         * @name NewCellModel#str
-         * @type {Array}
+         * The available cell types.
+         * @name AbstractCellFactory#types
+         * @type {Object}
          */
-        str: [],
+        var types = {};
 
-        /**
-         * Initialize the `str` array with all the available
-         * cell types.
-         * @name NewCellModel#initialize
-         * @function
-         */
-        initialize: function () {
-            this.registerCells("class");
-        },
+        return {
 
-        switchComponents: function () {
-            if (ProjectModel.options.currentindex == "class")
-                this.registerCells("class");
-            else
-                this.registerCells("activity");
-        },
+            /**
+             * Returns a cell of a particular type,
+             * possibly customized.
+             * @name AbstractCellFactory#getCell
+             * @param  {string} type           the type name
+             * @param  {Object} customizations the customizations
+             * @return {class}                 a new cell
+             * @function
+             */
+            getCell: function (type, customizations) {
+                var Cells = types[type];
+                return (Cells ? new Cells(customizations) : null);
+            },
 
-        registerCells: function (diag) {
-            this.str.length = 0;
-            for (var property in celltypes[diag]) {
-                if (celltypes[diag].hasOwnProperty(property) &amp;&amp; property.startsWith("Hx")) {
-                    console.log(property);
-                    this.str.push(property);
-                }
+            /**
+             * [registerCell description]
+             * @name AbstractCellFactory#registerCell
+             * @param  {string} type                the type name
+             * @param  {class}  Cell                the cell type
+             * @return {joint.shapes.basic.Generic} a new cell
+             * @function
+             */
+            registerCell: function (type, Cell) {
+                var proto = Cell.prototype;
+                types[type] = Cell;
+                return abstractCellFactory;
             }
-            this.trigger("change:str");
-        },
+        };
+    })();
 
-        /**
-         * Adds a new cell to the current diagram, based on which
-         * type of cell the user has selected.
-         * @name NewCellModel#addCell
-         * @function
-         * @param {event} event the action event
-         */
-        addCell: function (type) {
-            var cell = abstractCellFactory.getCell(type);
-            ProjectModel.addCell(cell);
-        }
-    });
-    return NewCellModel;
+    abstractCellFactory.registerCell("HxInterface", celltypes.class.HxInterface);
+    abstractCellFactory.registerCell("HxClass", celltypes.class.HxClass);
+    abstractCellFactory.registerCell("HxComment", celltypes.class.HxComment);
+    abstractCellFactory.registerCell("HxGeneralization", celltypes.class.HxGeneralization);
+    abstractCellFactory.registerCell("HxAssociation", celltypes.class.HxAssociation);
+    abstractCellFactory.registerCell("HxImplementation", celltypes.class.HxImplementation);
+
+    abstractCellFactory.registerCell("HxCustom", celltypes.activity.HxCustom);
+    abstractCellFactory.registerCell("HxElse", celltypes.activity.HxElse);
+    abstractCellFactory.registerCell("HxFor", celltypes.activity.HxFor);
+    abstractCellFactory.registerCell("HxIf", celltypes.activity.HxIf);
+    abstractCellFactory.registerCell("HxVariable", celltypes.activity.HxVariable);
+    abstractCellFactory.registerCell("HxReturn", celltypes.activity.HxReturn);
+    abstractCellFactory.registerCell("HxWhile", celltypes.activity.HxWhile);
+
+    return abstractCellFactory;
 });
 </code></pre>
         </article>

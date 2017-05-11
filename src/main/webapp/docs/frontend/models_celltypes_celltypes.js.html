@@ -184,11 +184,11 @@
         renderTools: function () {
 
             var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
-            console.log("markup:", toolMarkup);
+            //console.log("markup:", toolMarkup);
             if (toolMarkup) {
 
                 var nodes = joint.V(toolMarkup);
-                console.log("el:", joint.V(this.el));
+                //console.log("el:", joint.V(this.el));
                 joint.V(this.el).append(nodes);
 
             }
@@ -221,24 +221,14 @@
          * @name ClassDiagramElementView#toggleattributes
          * @function
          */
-        // tolta perché buggata
-        toggleAttributes: function () { //non so se sia giusto tenerli qua...boh vedremo
-            // this.model.set("attributesExpanded", !this.model.get("attributesExpanded"));
-            // this.model.updateRectangles();
-            // this.update(); // ecco cosa dovevi fare, le cose funzionavano già
-        },
+        toggleAttributes: function () {}, // tolta perché buggata
 
         /**
          * Toggles the display of the class methods.
          * @name ClassDiagramElementView#togglemethods
          * @function
          */
-        // tolta perché buggata
-        toggleMethods: function () {
-            // this.model.set("methodsExpanded", !this.model.get("methodsExpanded"));
-            // this.model.updateRectangles();
-            // this.update(); // ecco cosa dovevi fare, le cose funzionavano già
-        }
+        toggleMethods: function () {} // tolta perché buggata
     });
 
 
@@ -411,7 +401,7 @@
                             vis = "-";
                             break;
                         case "protected":
-                            vis = "~";
+                            vis = "#";
                             break;
                         /*case "package":
                          vis = "#";
@@ -445,14 +435,12 @@
                             vis = "-";
                             break;
                         case "protected":
-                            vis = "~";
-                            break;
-                        case "package":
                             vis = "#";
                             break;
+                        
                     }
                     let params = e.parameters.map(function (f) {
-                        return f.name;
+                        return f.name+":"+f.type;
                     }).join(",");
                     return vis + " " + e.name + "(" + params + ")" + ":" + e.returnType;
                 }).join('\n') : rects[2].text;
@@ -509,21 +497,25 @@
                 defaultValue: ""
             });
         },
+
         deleteParameter: function (met) {
             this.getValues().methods[met[0]].parameters.splice(met[1], 1);
             this.updateRectangles();
             this.trigger("uml-update");
         },
+
         deleteAttribute: function (ind) {
             this.getValues().attributes.splice(ind, 1);
             this.updateRectangles();
             this.trigger("uml-update");
         },
+
         deleteMethod: function (ind) {
             this.getValues().methods.splice(ind, 1);
             this.updateRectangles();
             this.trigger("uml-update");
         },
+
         getAttrsDesc: function () {
             let attrDesc = this.getValues().attributes.map(function (e) {
                 let vis = "";
@@ -535,7 +527,7 @@
                         vis = "-";
                         break;
                     case "protected":
-                        vis = "~";
+                        vis = "#";
                         break;
                     /*case "package":
                      vis = "#";
@@ -545,6 +537,7 @@
             });
             return attrDesc;
         },
+
         getMetDesc: function () {
             let metDesc = this.getValues().methods.map(function (e) {
                 let vis = "";
@@ -556,14 +549,12 @@
                         vis = "-";
                         break;
                     case "protected":
-                        vis = "~";
-                        break;
-                    case "package":
                         vis = "#";
                         break;
+                   
                 }
                 let params = e.parameters.map(function (f) {
-                    return f.name;
+                    return f.name+":"+f.type;
                 }).join(",");
                 return {
                     'text': vis + " " + e.name + "(" + params + ")" + ":" + e.returnType,
@@ -571,8 +562,8 @@
                 };
             });
             return metDesc;
-
         },
+
         getCellDesc: function () {
             return {
                 'text': this.getValues().name,
@@ -580,8 +571,8 @@
                 'children': this.getAttrsDesc().concat(this.getMetDesc())
             }
         },
-        getWidth: function () {
 
+        getWidth: function () {
             let longest = rects[0].text.length;
             let tmp = this.getAttrsDesc();
             for (i = 0; i &lt; tmp.length; i++) {
@@ -590,7 +581,7 @@
                     longest = tmp[i].text.length;
                 }
             }
-            console.log(longest);
+            //console.log(longest);
             tmp = this.getMetDesc();
             for (i = 0; i &lt; tmp.length; i++) {
                 if (tmp[i].text.length > longest) {
@@ -598,7 +589,6 @@
                 }
             }
             return longest*5+180;
-
         }
     });
 
@@ -677,9 +667,12 @@
                     text: this.get('methodsExpanded') ? this.getValues().methods : "Methods (click to expand)"
                 }
             ];
+            
+            var rectWidth = this.getWidth();
             var rectHeight = 2 * 15 + 1;
             attrs['.uml-class-name-text'].text = ['&lt;&lt;interface>>', rects[0].text].join('\n');
             attrs['.uml-class-name-rect'].height = rectHeight;
+            attrs['.uml-class-name-rect'].width = rectWidth;
             attrs['.uml-class-name-rect'].transform = 'translate(0,' + offsetY + ')';
             offsetY += rectHeight;
             //rectHeight = _.isArray(rects[1].text) ? rects[1].text.length * 15 + 1 : 1 * 15 + 1;
@@ -711,11 +704,12 @@
                          break;*/
                     }
                     var params = e.parameters.map(function (f) {
-                        return f.name;
+                        return f.name+":"+f.type;
                     }).join(",");
                     return vis + " " + e.name + "(" + params + ")" + ":" + e.returnType;
                 }).join('\n') : rects[1].text;
             attrs['.uml-class-methods-rect'].height = rectHeight;
+            attrs['.uml-class-methods-rect'].width = rectWidth;
             attrs['.uml-class-methods-rect'].transform = 'translate(0,' + offsetY + ')';
 
             celltypes.class.ClassDiagramElement.prototype.updateRectangles.apply(this, arguments);
@@ -767,7 +761,7 @@
                         break;
                 }
                 let params = e.parameters.map(function (f) {
-                    return f.name;
+                    return f.name+":"+f.type;
                 }).join(",");
                 return {
                     'text': vis + " " + e.name + "(" + params + ")" + ":" + e.returnType,
@@ -784,6 +778,19 @@
                 'icon': 'assets/interfaceicon.png',
                 'children': this.getMetDesc()
             }
+        },
+        getWidth: function () {
+
+            let longest = rects[0].text.length;
+            //console.log(longest);
+            let tmp = this.getMetDesc();
+            for (i = 0; i &lt; tmp.length; i++) {
+                if (tmp[i].text.length > longest) {
+                    longest = tmp[i].text.length;
+                }
+            }
+            return longest*5+180;
+
         }
     });
 
@@ -884,11 +891,11 @@
         renderTools: function () {
 
             var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
-            console.log("markup:", toolMarkup);
+            //console.log("markup:", toolMarkup);
             if (toolMarkup) {
 
                 var nodes = joint.V(toolMarkup);
-                console.log("el:", joint.V(this.el));
+                //console.log("el:", joint.V(this.el));
                 joint.V(this.el).append(nodes);
 
             }
@@ -1009,7 +1016,7 @@
                 }
             ],
             values: {
-                card: "default",
+                card: "1",
                 attribute: ""
             }
         }, celltypes.class.ClassDiagramLink.prototype.defaults),
@@ -1018,7 +1025,7 @@
             this.label(0, {
                 attrs: {
                     text: {
-                        text: this.getcard()
+                        text: this.getcard()+" "+this.getAttribute()
                     }
                 }
             });
@@ -1027,11 +1034,14 @@
         getcard: function () {
             return this.get('values').card;
         },
+        
+        getAttribute: function () {
+            return this.get('values').attribute;
+        },
 
         initialize: function () {
             this.updatelabel();
             celltypes.class.ClassDiagramLink.prototype.initialize.apply(this, arguments);
-
         },
 
         setToValue: function (value, path) {
@@ -1042,7 +1052,6 @@
             }
             obj[path[i]] = value;
             this.updatelabel();
-
         }
     });
 
@@ -1073,7 +1082,6 @@
             '&lt;rect class="activity-element-body-rect"/>',
             '&lt;text class="activity-element-body-text"/>',
 
-
             '&lt;rect class="activity-toggle"/>',
             '&lt;rect class="activity-element-type-rect"/>',
 
@@ -1086,7 +1094,6 @@
 
             attrs: {
                 rect: {'width': 200},
-
 
                 '.activity-toggle': {'fill': '#eedd99', 'stroke': 'd6b656', 'stroke-width': 1},
                 '.activity-element-name-rect': {'stroke': '#d6b656', 'stroke-width': 1, 'fill': '#fff2cc'},
@@ -1118,7 +1125,6 @@
                     'font-family': 'monospace',
                     'width': 200
 
-
                 },
                 '.activity-element-name-text': {
                     'ref': '.activity-element-name-rect',
@@ -1129,7 +1135,6 @@
                     'fill': '#ffffff',
                     'font-size': 14,
                     'font-family': 'Roboto',
-
                 }
             },
 
@@ -1141,7 +1146,7 @@
             values: {
                 xType: '[block type]',
                 comment: '',
-                body: [],
+                body: []
             }
 
         }, joint.shapes.basic.Generic.prototype.defaults),
@@ -1149,7 +1154,6 @@
         initialize: function () {
             this.updateRectangles();
             joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
-
         },
 
         getValues: function () {
@@ -1217,7 +1221,8 @@
 
                     return ret;
                 };
-                attrs['.activity-element-body-text'].text = chunk(this.getDescription().slice(0, 100), 25).join('\n');
+                //attrs['.activity-element-body-text'].text = chunk(this.getDescription().slice(0, 100), 25).join('\n');
+                // magari un giorno ci sarà una implementazione un po' più pulita
                 attrs['.activity-element-type-text'].text = this.getValues().xType;
                 attrs['.activity-element-type-text'].transform = 'translate(-180,0)';
                 attrs['.activity-element-name-rect'].height = this.getHeight();
@@ -1285,11 +1290,11 @@
         renderTools: function () {
 
             var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
-            console.log("markup:", toolMarkup);
+            //console.log("markup:", toolMarkup);
             if (toolMarkup) {
 
                 var nodes = joint.V(toolMarkup);
-                console.log("el:", joint.V(this.el));
+                //console.log("el:", joint.V(this.el));
                 joint.V(this.el).append(nodes);
 
             }
@@ -1613,13 +1618,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ActivityDiagramElement.html">ActivityDiagramElement</a></li><li><a href="ActivityDiagramElementView.html">ActivityDiagramElementView</a></li><li><a href="AppView.html">AppView</a></li><li><a href="ClassDiagramElement.html">ClassDiagramElement</a></li><li><a href="ClassDiagramElementView.html">ClassDiagramElementView</a></li><li><a href="ClassDiagramLink.html">ClassDiagramLink</a></li><li><a href="Commands.html">Commands</a></li><li><a href="CommentView.html">CommentView</a></li><li><a href="DetailsView.html">DetailsView</a></li><li><a href="HxAssociation.html">HxAssociation</a></li><li><a href="HxClass.html">HxClass</a></li><li><a href="HxComment.html">HxComment</a></li><li><a href="HxCustom.html">HxCustom</a></li><li><a href="HxElse.html">HxElse</a></li><li><a href="HxFor.html">HxFor</a></li><li><a href="HxGeneralization.html">HxGeneralization</a></li><li><a href="HxIf.html">HxIf</a></li><li><a href="HxImplementation.html">HxImplementation</a></li><li><a href="HxInterface.html">HxInterface</a></li><li><a href="HxReturn.html">HxReturn</a></li><li><a href="HxVariable.html">HxVariable</a></li><li><a href="HxWhile.html">HxWhile</a></li><li><a href="NewCellModel.html">NewCellModel</a></li><li><a href="NewCellView.html">NewCellView</a></li><li><a href="ProjectModel.html">ProjectModel</a></li><li><a href="ProjectView.html">ProjectView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCell">addCell</a></li><li><a href="global.html#deleteCell">deleteCell</a></li><li><a href="global.html#execCommand">execCommand</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AbstractCellFactory.html">AbstractCellFactory</a></li><li><a href="ActivityDiagramElement.html">ActivityDiagramElement</a></li><li><a href="ActivityDiagramElementView.html">ActivityDiagramElementView</a></li><li><a href="AppView.html">AppView</a></li><li><a href="ClassDiagramElement.html">ClassDiagramElement</a></li><li><a href="ClassDiagramElementView.html">ClassDiagramElementView</a></li><li><a href="ClassDiagramLink.html">ClassDiagramLink</a></li><li><a href="Commands.html">Commands</a></li><li><a href="CommentView.html">CommentView</a></li><li><a href="DetailsView.html">DetailsView</a></li><li><a href="HxAssociation.html">HxAssociation</a></li><li><a href="HxClass.html">HxClass</a></li><li><a href="HxComment.html">HxComment</a></li><li><a href="HxCustom.html">HxCustom</a></li><li><a href="HxElse.html">HxElse</a></li><li><a href="HxFor.html">HxFor</a></li><li><a href="HxGeneralization.html">HxGeneralization</a></li><li><a href="HxIf.html">HxIf</a></li><li><a href="HxImplementation.html">HxImplementation</a></li><li><a href="HxInterface.html">HxInterface</a></li><li><a href="HxReturn.html">HxReturn</a></li><li><a href="HxVariable.html">HxVariable</a></li><li><a href="HxWhile.html">HxWhile</a></li><li><a href="NewCellModel.html">NewCellModel</a></li><li><a href="NewCellView.html">NewCellView</a></li><li><a href="ProjectModel.html">ProjectModel</a></li><li><a href="ProjectView.html">ProjectView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCell">addCell</a></li><li><a href="global.html#deleteCell">deleteCell</a></li><li><a href="global.html#execCommand">execCommand</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue May 09 2017 09:36:01 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu May 11 2017 13:08:48 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

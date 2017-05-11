@@ -68,19 +68,12 @@
          * Deletes a specific cell from the diagram
          * and asks a `ProjectModel` to delete the
          * cell from the model too.
+         * @name ProjectView#deleteCell
          * @param  {event} e the action event
          * @function
          */
         deleteCell: function (e) {
-            /*if (e.which == 46) {//ha premuto tasto canc
-                if (this.paper.selectedCell) {
-                    this.model.deleteCell(this.paper.selectedCell);
-
-                    this.paper.selectedCell=null;
-                    this.paper.trigger("changed-cell");
-                }
-            }*/
-            console.log(e);
+            //console.log(e);
             this.model.deleteCell(e);
             this.paper.selectedCell = null;
             this.paper.trigger("changed-cell");
@@ -93,7 +86,6 @@
          */
         renderActivity: function () {
 
-            // piccolo bugfix orribile
             _.each(this.model.graph.get("cells").models, function (el) {
                 el.set("z", 1);
             });
@@ -105,7 +97,7 @@
                 for (var d = 0; d &lt; g.length; d++) {
                     x += "|" + g[d].get("values").comment[0] + "|";
                 }
-                console.log(x);
+                //console.log(x);
             };
 
             var m = this.model;
@@ -176,13 +168,13 @@
             }
 
             if (ProjectModel.options.cellToBeAdded &amp;&amp; ProjectModel.options.cellToBeAdded.isLink()) {
-                console.log(ProjectModel.options.cellToBeAdded.get("source").id);
+                //console.log(ProjectModel.options.cellToBeAdded.get("source").id);
                 if (ProjectModel.options.cellToBeAdded.get("source").id!=undefined) {
-                    console.log("set target");
+                    //console.log("set target");
                     ProjectModel.options.cellToBeAdded.set("target",{id:cellView.model.id});
                     ProjectModel.addCellToGraph();
                 } else {
-                    console.log("set source");
+                    //console.log("set source");
                     ProjectModel.options.cellToBeAdded.set("source",{id:cellView.model.id});
                 }
             }
@@ -191,9 +183,7 @@
                 if (this.selectedCell != cellView.model) {
                     changed = true;
                     this.selectedCell = cellView.model;
-                    if (true) {//cellView.model instanceof joint.shapes.uml.ClassDiagramElement) {
-                        this.trigger("changed-cell");
-                    }
+                    this.trigger("changed-cell");
                 }
             }
 
@@ -226,20 +216,20 @@
                     for (var d = 0; d &lt; g.length; d++) {
                         x += "|" + g[d].get("values").comment[0] + "|";
                     }
-                    console.log(x);
+                    //console.log(x);
                 };
 
-                debug();
+                //debug();
 
                 move(g, currentIndex, g.length - 1);
 
                 for (var i = 0; i &lt; figli.length; i++) {
-                    console.log("SPOSTO", g[currentIndex].get("values").comment[0]);
+                    //console.log("SPOSTO", g[currentIndex].get("values").comment[0]);
 
                     move(g, currentIndex, g.length - 1);
-                    debug();
+                    //debug();
                 }
-                debug();
+                //debug();
             }
         },
 
@@ -283,7 +273,6 @@
                             parentCell = cellViewBelow.model;
                         }
                     }
-
                 }
 
                 var g = this.model.attributes.cells.models;
@@ -339,7 +328,6 @@
                         // embeddo la cella in input
                         parent.embed(cell);
 
-
                         // embeddo le celle rimanenti
                         for (var i = index; i &lt; embcells.length; i++) {
                             parent.embed(embcells[i]);
@@ -350,12 +338,12 @@
                     if (parentCell) {
                         // se parentCell ha solo me come figlio: yee! apposto, ho trovato del posto.
                         if (parentCell.get("embeds").length == 1 &amp;&amp; parentCell.get("embeds")[0] == this.selectedCell.id) {
-                            console.log("non ho fratelli :(");
-                            debug();
+                            //console.log("non ho fratelli :(");
+                            //debug();
                             var dest = g.indexOf(parentCell) + 1;
                             for (var i = 0; i &lt;= figli.length; i++) {
                                 move(g, g.length - 1 - figli.length + i, dest + i);
-                                debug();
+                                //debug();
                             }
                         } else { // altrimenti: sono disponibili più di un posto e dobbiamo trovare quello migliore.
                             var ff = parentCell.get("embeds");
@@ -375,21 +363,21 @@
 
                                     found = true;
                                     if (i != 0) {
-                                        // bad
+
                                         // se non è il primo dentro il blocco
                                         var dest = g.indexOf(this.model.getCell(fratelli[i - 1]));
                                         dest += this.model.getCell(fratelli[i - 1]).getEmbeddedCells({deep: true}).length;
                                         // correctEmbedding(i-1,parentCell,curr);
                                         for (var j = 0; j &lt;= figli.length; j++) {
                                             move(g, g.length - 1 - figli.length + j, dest + j + 1);
-                                            debug();
+                                            //debug();
                                         }
                                     } else {
                                         var dest = g.indexOf(parentCell);
                                         dest++;
                                         for (var j = 0; j &lt;= figli.length; j++) {
                                             move(g, g.length - 1 - figli.length + j, dest + j);
-                                            debug();
+                                            //debug();
                                         }
                                     }
                                 }
@@ -400,7 +388,7 @@
                                 if (fratelli[fratelli.length - 1] == curr.id) {
                                     index = fratelli.length - 2;
                                 } else {
-                                    // bad
+
                                     index = fratelli.length - 1;
                                 }
 
@@ -414,7 +402,7 @@
 
                                 for (var w = 0; w &lt;= figli.length; w++) {
                                     move(g, g.length - 1 - figli.length + w, dest + w);
-                                    debug();
+                                    ///debug();
                                 }
                             }
                         }
@@ -436,14 +424,14 @@
 
                                 for (k = 0; k &lt;= figli.length; k++) {
                                     move(g, g.length - 1 - figli.length + k, dest + k);
-                                    debug();
+                                    //debug();
                                 }
                             }
                         }
                     }
 
                     if (parentCell) {
-                        console.log(g.indexOf(curr));
+                        //console.log(g.indexOf(curr));
                         correctEmbedding(g.indexOf(curr) - g.indexOf(parentCell) - 1, parentCell, curr);
                     }
                     this.trigger("renderActivity");
@@ -500,7 +488,7 @@
          * @function
          */
         initialize: function () {
-            this.model = ProjectModel;//new ProjectModel();
+            this.model = ProjectModel; // new ProjectModel();
             this.paper = new joint.dia.Paper({
 
                 el: $('#paper'),
@@ -517,11 +505,9 @@
                     if (element.get("type").startsWith("class")) {
                         if (element.get("type") == "class.HxComment") {
                             return celltypes.class.CommentView;
-                        }
-                        else {
+                        } else {
                             return celltypes.class.ClassDiagramElementView;
                         }
-
                     } else {
                         return celltypes.activity.ActivityDiagramElementView;
                     }
@@ -582,6 +568,7 @@
             }
 
             this.panAndZoom = svgPanZoom(targetElement.childNodes[0], {
+
                 viewportSelector: targetElement.childNodes[0].childNodes[0],
                 minZoom: 0.5,
                 maxZoom: 10,
@@ -591,11 +578,13 @@
                 zoomScaleSensitivity: 0.4,
                 controlIconsEnabled: true,
                 panEnabled: true,
+
                 onZoom: function (scale) {
                     console.log(scale);
                     currentScale = scale;
                     //setGrid(this.paper, gridsize*15*currentScale, '#808080');
                 },
+
                 beforePan: function (oldpan, newpan) {
                     $('.joint-paper').css('cursor', '-webkit-grabbing');
                     //setGrid(this.paper, gridsize*15*currentScale, '#808080', newpan);
@@ -608,10 +597,11 @@
 
             //this.panAndZoom.enableControlIcons();
 
-            $('#classtree').jstree({'core':{
-                'data':[
-                ]
-            }});
+            $('#classtree').jstree({
+                'core':{
+                    'data':[]
+                }
+            });
 
             var pAndZ = this.panAndZoom;
 
@@ -624,16 +614,15 @@
                 }
 
                 pAndZ.enablePan();
-
-
             });
-            this.paper.on('blank:pointerup', function (event,x,y) {
+
+            this.paper.on('blank:pointerup', function (event, x, y) {
                 console.log("pointeup",x,y);
 
                 pAndZ.disablePan();
                 $('.joint-paper').css('cursor', '-webkit-grab');
-
             });
+
             this.paper.on('cell:pointerup', this.pointerUpFunction);
             this.paper.on('cell:pointermove', this.pointerMoveFunction);
 
@@ -726,13 +715,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ActivityDiagramElement.html">ActivityDiagramElement</a></li><li><a href="ActivityDiagramElementView.html">ActivityDiagramElementView</a></li><li><a href="AppView.html">AppView</a></li><li><a href="ClassDiagramElement.html">ClassDiagramElement</a></li><li><a href="ClassDiagramElementView.html">ClassDiagramElementView</a></li><li><a href="ClassDiagramLink.html">ClassDiagramLink</a></li><li><a href="Commands.html">Commands</a></li><li><a href="CommentView.html">CommentView</a></li><li><a href="DetailsView.html">DetailsView</a></li><li><a href="HxAssociation.html">HxAssociation</a></li><li><a href="HxClass.html">HxClass</a></li><li><a href="HxComment.html">HxComment</a></li><li><a href="HxCustom.html">HxCustom</a></li><li><a href="HxElse.html">HxElse</a></li><li><a href="HxFor.html">HxFor</a></li><li><a href="HxGeneralization.html">HxGeneralization</a></li><li><a href="HxIf.html">HxIf</a></li><li><a href="HxImplementation.html">HxImplementation</a></li><li><a href="HxInterface.html">HxInterface</a></li><li><a href="HxReturn.html">HxReturn</a></li><li><a href="HxVariable.html">HxVariable</a></li><li><a href="HxWhile.html">HxWhile</a></li><li><a href="NewCellModel.html">NewCellModel</a></li><li><a href="NewCellView.html">NewCellView</a></li><li><a href="ProjectModel.html">ProjectModel</a></li><li><a href="ProjectView.html">ProjectView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCell">addCell</a></li><li><a href="global.html#deleteCell">deleteCell</a></li><li><a href="global.html#execCommand">execCommand</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AbstractCellFactory.html">AbstractCellFactory</a></li><li><a href="ActivityDiagramElement.html">ActivityDiagramElement</a></li><li><a href="ActivityDiagramElementView.html">ActivityDiagramElementView</a></li><li><a href="AppView.html">AppView</a></li><li><a href="ClassDiagramElement.html">ClassDiagramElement</a></li><li><a href="ClassDiagramElementView.html">ClassDiagramElementView</a></li><li><a href="ClassDiagramLink.html">ClassDiagramLink</a></li><li><a href="Commands.html">Commands</a></li><li><a href="CommentView.html">CommentView</a></li><li><a href="DetailsView.html">DetailsView</a></li><li><a href="HxAssociation.html">HxAssociation</a></li><li><a href="HxClass.html">HxClass</a></li><li><a href="HxComment.html">HxComment</a></li><li><a href="HxCustom.html">HxCustom</a></li><li><a href="HxElse.html">HxElse</a></li><li><a href="HxFor.html">HxFor</a></li><li><a href="HxGeneralization.html">HxGeneralization</a></li><li><a href="HxIf.html">HxIf</a></li><li><a href="HxImplementation.html">HxImplementation</a></li><li><a href="HxInterface.html">HxInterface</a></li><li><a href="HxReturn.html">HxReturn</a></li><li><a href="HxVariable.html">HxVariable</a></li><li><a href="HxWhile.html">HxWhile</a></li><li><a href="NewCellModel.html">NewCellModel</a></li><li><a href="NewCellView.html">NewCellView</a></li><li><a href="ProjectModel.html">ProjectModel</a></li><li><a href="ProjectView.html">ProjectView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCell">addCell</a></li><li><a href="global.html#deleteCell">deleteCell</a></li><li><a href="global.html#execCommand">execCommand</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue May 09 2017 09:36:01 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu May 11 2017 13:08:48 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
