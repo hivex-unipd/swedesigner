@@ -531,7 +531,7 @@ define([
                    
                 }
                 let params = e.parameters.map(function (f) {
-                    return f.name;
+                    return f.name+":"+f.type;
                 }).join(",");
                 return {
                     'text': vis + " " + e.name + "(" + params + ")" + ":" + e.returnType,
@@ -645,9 +645,12 @@ define([
                     text: this.get('methodsExpanded') ? this.getValues().methods : "Methods (click to expand)"
                 }
             ];
+            
+            var rectWidth = this.getWidth();
             var rectHeight = 2 * 15 + 1;
             attrs['.uml-class-name-text'].text = ['<<interface>>', rects[0].text].join('\n');
             attrs['.uml-class-name-rect'].height = rectHeight;
+            attrs['.uml-class-name-rect'].width = rectWidth;
             attrs['.uml-class-name-rect'].transform = 'translate(0,' + offsetY + ')';
             offsetY += rectHeight;
             //rectHeight = _.isArray(rects[1].text) ? rects[1].text.length * 15 + 1 : 1 * 15 + 1;
@@ -684,6 +687,7 @@ define([
                     return vis + " " + e.name + "(" + params + ")" + ":" + e.returnType;
                 }).join('\n') : rects[1].text;
             attrs['.uml-class-methods-rect'].height = rectHeight;
+            attrs['.uml-class-methods-rect'].width = rectWidth;
             attrs['.uml-class-methods-rect'].transform = 'translate(0,' + offsetY + ')';
 
             celltypes.class.ClassDiagramElement.prototype.updateRectangles.apply(this, arguments);
@@ -735,7 +739,7 @@ define([
                         break;
                 }
                 let params = e.parameters.map(function (f) {
-                    return f.name;
+                    return f.name+":"+f.type;
                 }).join(",");
                 return {
                     'text': vis + " " + e.name + "(" + params + ")" + ":" + e.returnType,
@@ -752,6 +756,19 @@ define([
                 'icon': 'assets/interfaceicon.png',
                 'children': this.getMetDesc()
             }
+        },
+        getWidth: function () {
+
+            let longest = rects[0].text.length;
+            //console.log(longest);
+            let tmp = this.getMetDesc();
+            for (i = 0; i < tmp.length; i++) {
+                if (tmp[i].text.length > longest) {
+                    longest = tmp[i].text.length;
+                }
+            }
+            return longest*5+180;
+
         }
     });
 
