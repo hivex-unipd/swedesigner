@@ -68,9 +68,14 @@ define([
          * @function
          */
         render: function () {
+            var order = ['HxVariable', 'HxIf', 'HxElse', 'HxFor', 'HxWhile', 'HxReturn', 'HxCustom', 'HxClass', 'HxInterface', 'HxComment', 'HxGeneralization', 'HxImplementation', 'HxAssociation'];
+            var compareFunction = function (a, b) {
+                return order.indexOf(a) - order.indexOf(b);
+            }
+
             this.str = [];
-            for (var p in this.model.str) {
-                this.str.push('<button id="' + this.model.str[p] + '"" class="newcompbt "><i class="' + this.model.str[p] +'icon"></i>' + this.model.str[p].substring(2) +'</button>');
+            for (var p in this.model.str.sort(compareFunction)) {
+                this.str.push('<button title="' + this.model.str[p].substr(2) + '" id="' + this.model.str[p] + '"" class="newcompbt "><i class="' + this.model.str[p] + 'icon"></i>' + this.model.str[p].substring(2) + '</button>');
             }
             this.$el.html(_.each(this.str));
         },
