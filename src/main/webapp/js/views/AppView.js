@@ -129,7 +129,6 @@ define([
          * @function
          */
         newProject: function () {
-            // workaround orrendo ma funziona
             if ($('#switchtoclass').css('display') == 'block') {
                 $('#switchtoclass')[0].click();
             }
@@ -155,7 +154,6 @@ define([
          * @param {event} event the action event
          */
         load: function (event) {
-            // workaround orrendo ma funziona
             if ($('#switchtoclass').css('display') == 'block') {
                 $('#switchtoclass')[0].click();
             }

@@ -45,14 +45,6 @@ define([
          * @function
          */
         deleteCell: function (e) {
-            /*if (e.which == 46) {//ha premuto tasto canc
-                if (this.paper.selectedCell) {
-                    this.model.deleteCell(this.paper.selectedCell);
-
-                    this.paper.selectedCell=null;
-                    this.paper.trigger("changed-cell");
-                }
-            }*/
             //console.log(e);
             this.model.deleteCell(e);
             this.paper.selectedCell = null;
@@ -66,7 +58,6 @@ define([
          */
         renderActivity: function () {
 
-            // piccolo bugfix orribile
             _.each(this.model.graph.get("cells").models, function (el) {
                 el.set("z", 1);
             });
@@ -165,7 +156,6 @@ define([
                     changed = true;
                     this.selectedCell = cellView.model;
                     this.trigger("changed-cell");
-
                 }
             }
 
@@ -206,7 +196,7 @@ define([
                 move(g, currentIndex, g.length - 1);
 
                 for (var i = 0; i < figli.length; i++) {
-                    //onsole.log("SPOSTO", g[currentIndex].get("values").comment[0]);
+                    //console.log("SPOSTO", g[currentIndex].get("values").comment[0]);
 
                     move(g, currentIndex, g.length - 1);
                     //debug();
@@ -255,7 +245,6 @@ define([
                             parentCell = cellViewBelow.model;
                         }
                     }
-
                 }
 
                 var g = this.model.attributes.cells.models;
@@ -310,7 +299,6 @@ define([
 
                         // embeddo la cella in input
                         parent.embed(cell);
-
 
                         // embeddo le celle rimanenti
                         for (var i = index; i < embcells.length; i++) {
@@ -472,7 +460,7 @@ define([
          * @function
          */
         initialize: function () {
-            this.model = ProjectModel;//new ProjectModel();
+            this.model = ProjectModel; // new ProjectModel();
             this.paper = new joint.dia.Paper({
 
                 el: $('#paper'),

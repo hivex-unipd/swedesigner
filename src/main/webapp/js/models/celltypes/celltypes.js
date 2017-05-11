@@ -193,24 +193,14 @@ define([
          * @name ClassDiagramElementView#toggleattributes
          * @function
          */
-        // tolta perché buggata
-        toggleAttributes: function () { //non so se sia giusto tenerli qua...boh vedremo
-            // this.model.set("attributesExpanded", !this.model.get("attributesExpanded"));
-            // this.model.updateRectangles();
-            // this.update(); // ecco cosa dovevi fare, le cose funzionavano già
-        },
+        toggleAttributes: function () {}, // tolta perché buggata
 
         /**
          * Toggles the display of the class methods.
          * @name ClassDiagramElementView#togglemethods
          * @function
          */
-        // tolta perché buggata
-        toggleMethods: function () {
-            // this.model.set("methodsExpanded", !this.model.get("methodsExpanded"));
-            // this.model.updateRectangles();
-            // this.update(); // ecco cosa dovevi fare, le cose funzionavano già
-        }
+        toggleMethods: function () {} // tolta perché buggata
     });
 
 
@@ -481,21 +471,25 @@ define([
                 defaultValue: ""
             });
         },
+
         deleteParameter: function (met) {
             this.getValues().methods[met[0]].parameters.splice(met[1], 1);
             this.updateRectangles();
             this.trigger("uml-update");
         },
+
         deleteAttribute: function (ind) {
             this.getValues().attributes.splice(ind, 1);
             this.updateRectangles();
             this.trigger("uml-update");
         },
+
         deleteMethod: function (ind) {
             this.getValues().methods.splice(ind, 1);
             this.updateRectangles();
             this.trigger("uml-update");
         },
+
         getAttrsDesc: function () {
             let attrDesc = this.getValues().attributes.map(function (e) {
                 let vis = "";
@@ -517,6 +511,7 @@ define([
             });
             return attrDesc;
         },
+
         getMetDesc: function () {
             let metDesc = this.getValues().methods.map(function (e) {
                 let vis = "";
@@ -543,8 +538,8 @@ define([
                 };
             });
             return metDesc;
-
         },
+
         getCellDesc: function () {
             return {
                 'text': this.getValues().name,
@@ -552,8 +547,8 @@ define([
                 'children': this.getAttrsDesc().concat(this.getMetDesc())
             }
         },
-        getWidth: function () {
 
+        getWidth: function () {
             let longest = rects[0].text.length;
             let tmp = this.getAttrsDesc();
             for (i = 0; i < tmp.length; i++) {
@@ -570,7 +565,6 @@ define([
                 }
             }
             return longest*5+180;
-
         }
     });
 
@@ -1003,7 +997,6 @@ define([
         initialize: function () {
             this.updatelabel();
             celltypes.class.ClassDiagramLink.prototype.initialize.apply(this, arguments);
-
         },
 
         setToValue: function (value, path) {
@@ -1014,7 +1007,6 @@ define([
             }
             obj[path[i]] = value;
             this.updatelabel();
-
         }
     });
 
@@ -1045,7 +1037,6 @@ define([
             '<rect class="activity-element-body-rect"/>',
             '<text class="activity-element-body-text"/>',
 
-
             '<rect class="activity-toggle"/>',
             '<rect class="activity-element-type-rect"/>',
 
@@ -1058,7 +1049,6 @@ define([
 
             attrs: {
                 rect: {'width': 200},
-
 
                 '.activity-toggle': {'fill': '#eedd99', 'stroke': 'd6b656', 'stroke-width': 1},
                 '.activity-element-name-rect': {'stroke': '#d6b656', 'stroke-width': 1, 'fill': '#fff2cc'},
@@ -1090,7 +1080,6 @@ define([
                     'font-family': 'monospace',
                     'width': 200
 
-
                 },
                 '.activity-element-name-text': {
                     'ref': '.activity-element-name-rect',
@@ -1101,7 +1090,6 @@ define([
                     'fill': '#ffffff',
                     'font-size': 14,
                     'font-family': 'Roboto',
-
                 }
             },
 
