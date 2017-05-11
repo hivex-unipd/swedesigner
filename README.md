@@ -31,7 +31,7 @@ Di default gli upload dei file degli utenti e i rispettivi file compilati sono c
 
 1. Creare una cartella nella posizione desiderata (`/home/tomcat/Uploads/`)
 2. Controllare i permessi della cartella (in lettura e scrittura)
-3. Entra nella cartella di installazione di Tomcat, poi proseguire in `webapps/ROOT/WEB-INF/application.properties`
+3. Entra nella cartella di installazione di Tomcat, poi proseguire in `webapps/ROOT/WEB-INF/classes/application.properties`
 4. Modificare il file alla riga `uploadsDir = <PATH>`
 5. Riavviare il server
 
