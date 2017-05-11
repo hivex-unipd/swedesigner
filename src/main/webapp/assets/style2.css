@@ -12,7 +12,7 @@
 #paper {
     width: auto;
     margin-left: auto;
-    height: calc(100% - 0px);
+    height: calc(100% - 64px);
     max-height: calc(100% - 0px);
     /* margin: auto; */
     overflow: hidden;
