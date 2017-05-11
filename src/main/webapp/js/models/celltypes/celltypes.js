@@ -156,11 +156,11 @@ define([
         renderTools: function () {
 
             var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
-            console.log("markup:", toolMarkup);
+            //console.log("markup:", toolMarkup);
             if (toolMarkup) {
 
                 var nodes = joint.V(toolMarkup);
-                console.log("el:", joint.V(this.el));
+                //console.log("el:", joint.V(this.el));
                 joint.V(this.el).append(nodes);
 
             }
@@ -424,7 +424,7 @@ define([
                             break;
                     }
                     let params = e.parameters.map(function (f) {
-                        return f.name;
+                        return f.name+":"+f.type;
                     }).join(",");
                     return vis + " " + e.name + "(" + params + ")" + ":" + e.returnType;
                 }).join('\n') : rects[2].text;
@@ -562,7 +562,7 @@ define([
                     longest = tmp[i].text.length;
                 }
             }
-            console.log(longest);
+            //console.log(longest);
             tmp = this.getMetDesc();
             for (i = 0; i < tmp.length; i++) {
                 if (tmp[i].text.length > longest) {
@@ -683,7 +683,7 @@ define([
                          break;*/
                     }
                     var params = e.parameters.map(function (f) {
-                        return f.name;
+                        return f.name+":"+f.type;
                     }).join(",");
                     return vis + " " + e.name + "(" + params + ")" + ":" + e.returnType;
                 }).join('\n') : rects[1].text;
@@ -856,11 +856,11 @@ define([
         renderTools: function () {
 
             var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
-            console.log("markup:", toolMarkup);
+            //console.log("markup:", toolMarkup);
             if (toolMarkup) {
 
                 var nodes = joint.V(toolMarkup);
-                console.log("el:", joint.V(this.el));
+                //console.log("el:", joint.V(this.el));
                 joint.V(this.el).append(nodes);
 
             }
@@ -1257,11 +1257,11 @@ define([
         renderTools: function () {
 
             var toolMarkup = this.model.toolMarkup || this.model.get('toolMarkup');
-            console.log("markup:", toolMarkup);
+            //console.log("markup:", toolMarkup);
             if (toolMarkup) {
 
                 var nodes = joint.V(toolMarkup);
-                console.log("el:", joint.V(this.el));
+                //console.log("el:", joint.V(this.el));
                 joint.V(this.el).append(nodes);
 
             }
