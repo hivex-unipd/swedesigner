@@ -49,7 +49,7 @@ define([
             this.str.length = 0;
             for (var property in celltypes[diag]) {
                 if (celltypes[diag].hasOwnProperty(property) && property.startsWith("Hx")) {
-                    console.log(property);
+                    //console.log(property);
                     this.str.push(property);
                 }
             }
