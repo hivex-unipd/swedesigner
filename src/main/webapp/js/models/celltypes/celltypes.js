@@ -193,14 +193,16 @@ define([
          * @name ClassDiagramElementView#toggleattributes
          * @function
          */
-        toggleAttributes: function () {}, // tolta perché buggata
+        toggleAttributes: function () {
+        }, // tolta perché buggata
 
         /**
          * Toggles the display of the class methods.
          * @name ClassDiagramElementView#togglemethods
          * @function
          */
-        toggleMethods: function () {} // tolta perché buggata
+        toggleMethods: function () {
+        } // tolta perché buggata
     });
 
 
@@ -350,6 +352,12 @@ define([
             attrs['.uml-class-name-rect'].height = rectHeight;
             attrs['.uml-class-name-rect'].width = rectWidth;
             attrs['.uml-class-name-rect'].transform = 'translate(0,' + offsetY + ')';
+            if (this.getValues().abstract == "true") {
+                attrs['.uml-class-name-text']['font-style'] = "italic";
+            }
+            else {
+                attrs['.uml-class-name-text']['font-style'] = "normal";
+            }
             offsetY += rectHeight;
             //rectHeight = _.isArray(rects[1].text) ? rects[1].text.length * 15 + 1 : 1 * 15 + 1;
             if (_.isArray(rects[1].text)) {
@@ -409,10 +417,10 @@ define([
                         case "protected":
                             vis = "#";
                             break;
-                        
+
                     }
                     let params = e.parameters.map(function (f) {
-                        return f.name+":"+f.type;
+                        return f.name + ":" + f.type;
                     }).join(",");
                     return vis + " " + e.name + "(" + params + ")" + ":" + e.returnType;
                 }).join('\n') : rects[2].text;
@@ -523,10 +531,10 @@ define([
                     case "protected":
                         vis = "#";
                         break;
-                   
+
                 }
                 let params = e.parameters.map(function (f) {
-                    return f.name+":"+f.type;
+                    return f.name + ":" + f.type;
                 }).join(",");
                 return {
                     'text': vis + " " + e.name + "(" + params + ")" + ":" + e.returnType,
@@ -560,7 +568,7 @@ define([
                     longest = tmp[i].text.length;
                 }
             }
-            return longest*5+180;
+            return longest * 5 + 180;
         }
     });
 
@@ -639,7 +647,7 @@ define([
                     text: this.get('methodsExpanded') ? this.getValues().methods : "Methods (click to expand)"
                 }
             ];
-            
+
             var rectWidth = this.getWidth();
             var rectHeight = 2 * 15 + 1;
             attrs['.uml-class-name-text'].text = ['<<interface>>', rects[0].text].join('\n');
@@ -676,7 +684,7 @@ define([
                          break;*/
                     }
                     var params = e.parameters.map(function (f) {
-                        return f.name+":"+f.type;
+                        return f.name + ":" + f.type;
                     }).join(",");
                     return vis + " " + e.name + "(" + params + ")" + ":" + e.returnType;
                 }).join('\n') : rects[1].text;
@@ -733,7 +741,7 @@ define([
                         break;
                 }
                 let params = e.parameters.map(function (f) {
-                    return f.name+":"+f.type;
+                    return f.name + ":" + f.type;
                 }).join(",");
                 return {
                     'text': vis + " " + e.name + "(" + params + ")" + ":" + e.returnType,
@@ -761,7 +769,7 @@ define([
                     longest = tmp[i].text.length;
                 }
             }
-            return longest*5+180;
+            return longest * 5 + 180;
 
         }
     });
@@ -997,7 +1005,7 @@ define([
             this.label(0, {
                 attrs: {
                     text: {
-                        text: this.getcard()+" "+this.getAttribute()
+                        text: this.getcard() + " " + this.getAttribute()
                     }
                 }
             });
@@ -1006,7 +1014,7 @@ define([
         getcard: function () {
             return this.get('values').card;
         },
-        
+
         getAttribute: function () {
             return this.get('values').attribute;
         },
