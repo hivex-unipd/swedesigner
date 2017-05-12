@@ -46,18 +46,18 @@ define([
          */
         deleteCell: function (e) {
             //console.log(e);
-            /*this.paper.selectedCell = null;
-             this.model.deleteCell(e);
 
-             this.paper.trigger("changed-cell");*/
-            if (e.which == 46) {//ha premuto tasto canc
+            this.model.deleteCell(this.paper.selectedCell);
+            this.paper.selectedCell = null;
+            this.paper.trigger("changed-cell");
+            /*if (e.which == 46) {//ha premuto tasto canc
                 if (this.paper.selectedCell) {
                     this.model.deleteCell(this.paper.selectedCell);
 
                     this.paper.selectedCell = null;
                     this.paper.trigger("changed-cell");
                 }
-            }
+            }*/
 
         },
 
@@ -139,14 +139,17 @@ define([
          */
         pointerDownFunction: function (prView, cellView, evt, x, y) {
 
-            var className = evt.target.parentNode.getAttribute('class');
-            switch (className) {
-                case 'element-tool-remove':
-                    //prView.deleteCell(cellView.model);
-                    return;
-                    break;
-                default:
+            if (cellView) {
+                //console.log(this.selectedCell,"cella selez");
+                //console.log("cellview ",cellView);
+                if (this.selectedCell != cellView.model) {
+                    changed = true;
+                    this.selectedCell = cellView.model;
+                    this.trigger("changed-cell");
+                }
             }
+
+
 
             if (ProjectModel.options.cellToBeAdded && ProjectModel.options.cellToBeAdded.isLink()) {
                 //console.log(ProjectModel.options.cellToBeAdded.get("source").id);
@@ -160,63 +163,57 @@ define([
                 }
             }
 
-            if (cellView) {
-                //console.log(this.selectedCell,"cella selez");
-                //console.log("cellview ",cellView);
-                if (this.selectedCell != cellView.model) {
-                    changed = true;
-                    this.selectedCell = cellView.model;
-                    this.trigger("changed-cell");
-                }
-            }
+            if(this.selectedCell) {
 
-            if (cellView.model.get("type").startsWith("activity")) {
-                var cell = cellView.model;
-                console.log(cellView);
-                if (cell.get('parent')) {
-                    this.model.getCell(cell.get('parent')).unembed(cell);
-                }
-                var g = this.model.attributes.cells.models;
-                if (this.selectedCell) {
-                    var currentCell = this.selectedCell;
-                    var currentIndex = g.indexOf(currentCell);
-                    if (currentCell) {
-                        console.log("mousedown");
-                        var figli = this.selectedCell.getEmbeddedCells({deep: true});
-                        if (figli) {
-                            var move = function (a, old_index, new_index) {
-                                if (new_index >= a.length) {
-                                    var k = new_index - a.length;
-                                    while ((k--) + 1) {
-                                        a.push(undefined);
+
+                if (cellView.model.get("type").startsWith("activity")) {
+                    var cell = cellView.model;
+                    console.log(cellView);
+                    if (cell.get('parent')) {
+                        this.model.getCell(cell.get('parent')).unembed(cell);
+                    }
+                    var g = this.model.attributes.cells.models;
+                    if (this.selectedCell) {
+                        var currentCell = this.selectedCell;
+                        var currentIndex = g.indexOf(currentCell);
+                        if (currentCell) {
+                            console.log("mousedown");
+                            var figli = this.selectedCell.getEmbeddedCells({deep: true});
+                            if (figli) {
+                                var move = function (a, old_index, new_index) {
+                                    if (new_index >= a.length) {
+                                        var k = new_index - a.length;
+                                        while ((k--) + 1) {
+                                            a.push(undefined);
+                                        }
                                     }
-                                }
-                                a.splice(new_index, 0, a.splice(old_index, 1)[0]);
-                                return a; // for testing purposes
-                            };
-                            // funzione di debug
-                            var debug = function () {
-                                var x = "";
+                                    a.splice(new_index, 0, a.splice(old_index, 1)[0]);
+                                    return a; // for testing purposes
+                                };
+                                // funzione di debug
+                                var debug = function () {
+                                    var x = "";
 
-                                for (var d = 0; d < g.length; d++) {
-                                    x += "|" + g[d].get("values").comment[0] + "|";
-                                }
-                                //console.log(x);
-                            };
+                                    for (var d = 0; d < g.length; d++) {
+                                        x += "|" + g[d].get("values").comment[0] + "|";
+                                    }
+                                    //console.log(x);
+                                };
 
-                            //debug();
-
-                            move(g, currentIndex, g.length - 1);
-
-                            for (var i = 0; i < figli.length; i++) {
-                                //console.log("SPOSTO", g[currentIndex].get("values").comment[0]);
+                                //debug();
 
                                 move(g, currentIndex, g.length - 1);
-                                //debug();
+
+                                for (var i = 0; i < figli.length; i++) {
+                                    //console.log("SPOSTO", g[currentIndex].get("values").comment[0]);
+
+                                    move(g, currentIndex, g.length - 1);
+                                    //debug();
+                                }
                             }
                         }
+                        //debug();
                     }
-                    //debug();
                 }
             }
         },
@@ -232,7 +229,15 @@ define([
          * @param {number} x the horizontal position of the cell (?)
          * @param {number} y the vertical position of the cell (?)
          */
-        pointerUpFunction: function (cellView, evt, x, y) {
+        pointerUpFunction: function (prView,cellView, evt, x, y) {
+
+            var className = evt.target.parentNode.getAttribute('class');
+            switch (className) {
+                case 'element-tool-remove':
+                    prView.deleteCell(cellView.model);
+                    return;
+                default:
+            }
 
             ProjectModel.adjustVertices(ProjectModel.graph, cellView);
             //panAndZoom.disablePan();
@@ -612,7 +617,7 @@ define([
                 $('.joint-paper').css('cursor', '-webkit-grab');
             });
 
-            this.paper.on('cell:pointerup', this.pointerUpFunction);
+            this.paper.on('cell:pointerup', _.partial(this.pointerUpFunction, this));
             this.paper.on('cell:pointermove', this.pointerMoveFunction);
 
             this.paper.on('cell:pointerdown', _.partial(this.pointerDownFunction, this));
@@ -621,7 +626,7 @@ define([
 
             this.renderActivity();
 
-            $(document).on('keydown', $.proxy(this.deleteCell, this));
+            //$(document).on('keydown', $.proxy(this.deleteCell, this));
 
             this.listenTo(this.paper, 'renderActivity', this.renderActivity);
             this.listenTo(this.model, 'renderActivity', function () {
