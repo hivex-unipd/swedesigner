@@ -46,9 +46,19 @@ define([
          */
         deleteCell: function (e) {
             //console.log(e);
-            this.model.deleteCell(e);
-            this.paper.selectedCell = null;
-            this.paper.trigger("changed-cell");
+            /*this.paper.selectedCell = null;
+             this.model.deleteCell(e);
+
+             this.paper.trigger("changed-cell");*/
+            if (e.which == 46) {//ha premuto tasto canc
+                if (this.paper.selectedCell) {
+                    this.model.deleteCell(this.paper.selectedCell);
+
+                    this.paper.selectedCell = null;
+                    this.paper.trigger("changed-cell");
+                }
+            }
+
         },
 
         /**
@@ -130,10 +140,9 @@ define([
         pointerDownFunction: function (prView, cellView, evt, x, y) {
 
             var className = evt.target.parentNode.getAttribute('class');
-
             switch (className) {
                 case 'element-tool-remove':
-                    prView.deleteCell(cellView.model);
+                    //prView.deleteCell(cellView.model);
                     return;
                     break;
                 default:
@@ -141,17 +150,19 @@ define([
 
             if (ProjectModel.options.cellToBeAdded && ProjectModel.options.cellToBeAdded.isLink()) {
                 //console.log(ProjectModel.options.cellToBeAdded.get("source").id);
-                if (ProjectModel.options.cellToBeAdded.get("source").id!=undefined) {
+                if (ProjectModel.options.cellToBeAdded.get("source").id != undefined) {
                     //console.log("set target");
-                    ProjectModel.options.cellToBeAdded.set("target",{id:cellView.model.id});
+                    ProjectModel.options.cellToBeAdded.set("target", {id: cellView.model.id});
                     ProjectModel.addCellToGraph();
                 } else {
                     //console.log("set source");
-                    ProjectModel.options.cellToBeAdded.set("source",{id:cellView.model.id});
+                    ProjectModel.options.cellToBeAdded.set("source", {id: cellView.model.id});
                 }
             }
 
             if (cellView) {
+                //console.log(this.selectedCell,"cella selez");
+                //console.log("cellview ",cellView);
                 if (this.selectedCell != cellView.model) {
                     changed = true;
                     this.selectedCell = cellView.model;
@@ -161,47 +172,52 @@ define([
 
             if (cellView.model.get("type").startsWith("activity")) {
                 var cell = cellView.model;
-
+                console.log(cellView);
                 if (cell.get('parent')) {
                     this.model.getCell(cell.get('parent')).unembed(cell);
                 }
                 var g = this.model.attributes.cells.models;
+                if (this.selectedCell) {
+                    var currentCell = this.selectedCell;
+                    var currentIndex = g.indexOf(currentCell);
+                    if (currentCell) {
+                        console.log("mousedown");
+                        var figli = this.selectedCell.getEmbeddedCells({deep: true});
+                        if (figli) {
+                            var move = function (a, old_index, new_index) {
+                                if (new_index >= a.length) {
+                                    var k = new_index - a.length;
+                                    while ((k--) + 1) {
+                                        a.push(undefined);
+                                    }
+                                }
+                                a.splice(new_index, 0, a.splice(old_index, 1)[0]);
+                                return a; // for testing purposes
+                            };
+                            // funzione di debug
+                            var debug = function () {
+                                var x = "";
 
-                var currentCell = this.selectedCell;
-                var currentIndex = g.indexOf(currentCell);
-                var figli = currentCell.getEmbeddedCells({deep: true});
+                                for (var d = 0; d < g.length; d++) {
+                                    x += "|" + g[d].get("values").comment[0] + "|";
+                                }
+                                //console.log(x);
+                            };
 
-                var move = function (a, old_index, new_index) {
-                    if (new_index >= a.length) {
-                        var k = new_index - a.length;
-                        while ((k--) + 1) {
-                            a.push(undefined);
+                            //debug();
+
+                            move(g, currentIndex, g.length - 1);
+
+                            for (var i = 0; i < figli.length; i++) {
+                                //console.log("SPOSTO", g[currentIndex].get("values").comment[0]);
+
+                                move(g, currentIndex, g.length - 1);
+                                //debug();
+                            }
                         }
                     }
-                    a.splice(new_index, 0, a.splice(old_index, 1)[0]);
-                    return a; // for testing purposes
-                };
-                // funzione di debug
-                var debug = function () {
-                    var x = "";
-
-                    for (var d = 0; d < g.length; d++) {
-                        x += "|" + g[d].get("values").comment[0] + "|";
-                    }
-                    //console.log(x);
-                };
-
-                //debug();
-
-                move(g, currentIndex, g.length - 1);
-
-                for (var i = 0; i < figli.length; i++) {
-                    //console.log("SPOSTO", g[currentIndex].get("values").comment[0]);
-
-                    move(g, currentIndex, g.length - 1);
                     //debug();
                 }
-                //debug();
             }
         },
 
@@ -218,7 +234,7 @@ define([
          */
         pointerUpFunction: function (cellView, evt, x, y) {
 
-            ProjectModel.adjustVertices(ProjectModel.graph,cellView);
+            ProjectModel.adjustVertices(ProjectModel.graph, cellView);
             //panAndZoom.disablePan();
             if (cellView.model.get("type").startsWith("activity")) {
                 var parentCell = null;
@@ -251,8 +267,9 @@ define([
 
                 // cella corrente
                 var curr = this.selectedCell;
-                
+
                 if (curr) {
+                    console.log("mouse up");
 
                     var figli = curr.getEmbeddedCells({deep: true});
 
@@ -523,7 +540,7 @@ define([
                 // Set grid size on the JointJS paper object (joint.dia.Paper instance)
                 paper.options.gridSize = gridsize;
                 // Draw a grid into the HTML 5 canvas and convert it to a data URI image
-                var canvas = $('<canvas/>', { width: size, height: size });
+                var canvas = $('<canvas/>', {width: size, height: size});
                 canvas[0].width = size;
                 canvas[0].height = size;
                 var context = canvas[0].getContext('2d');
@@ -565,13 +582,13 @@ define([
             //spostiamo a mano
 
             //$('#svg-pan-zoom-controls').attr("transform",'translate(' + ( $('#paper').width() - 70 ) + ' ' + ( $(window).height() - 140 ) + ') scale(0.75)');
-            $('#svg-pan-zoom-controls').attr("transform",'translate(5 5) scale(0.75)');
+            $('#svg-pan-zoom-controls').attr("transform", 'translate(5 5) scale(0.75)');
 
             //this.panAndZoom.enableControlIcons();
 
             $('#classtree').jstree({
-                'core':{
-                    'data':[]
+                'core': {
+                    'data': []
                 }
             });
 
@@ -581,7 +598,7 @@ define([
                 console.log(ProjectModel.options.cellToBeAdded);
                 if (ProjectModel.options.cellToBeAdded && ProjectModel.options.cellToBeAdded.isElement()) {
                     console.log("blank add");
-                    ProjectModel.options.cellToBeAdded.position(x,y);
+                    ProjectModel.options.cellToBeAdded.position(x, y);
                     ProjectModel.addCellToGraph();
                 }
 
@@ -589,7 +606,7 @@ define([
             });
 
             this.paper.on('blank:pointerup', function (event, x, y) {
-                console.log("pointeup",x,y);
+                console.log("pointeup", x, y);
 
                 pAndZ.disablePan();
                 $('.joint-paper').css('cursor', '-webkit-grab');
@@ -598,18 +615,18 @@ define([
             this.paper.on('cell:pointerup', this.pointerUpFunction);
             this.paper.on('cell:pointermove', this.pointerMoveFunction);
 
-            this.paper.on('cell:pointerdown', _.partial(this.pointerDownFunction,this));
+            this.paper.on('cell:pointerdown', _.partial(this.pointerDownFunction, this));
 
             var m = this.model;
 
             this.renderActivity();
 
-            //$(document).on('keydown', $.proxy(this.deleteCell, this));
+            $(document).on('keydown', $.proxy(this.deleteCell, this));
 
             this.listenTo(this.paper, 'renderActivity', this.renderActivity);
             this.listenTo(this.model, 'renderActivity', function () {
-                this.pointerDownFunction (this.paper.findView(this.graph.get("cells").models[0]), {}, 0, 0);
-                this.pointerUpFunction ({}, {}, 0, 0);
+                this.pointerDownFunction(this.paper.findView(this.graph.get("cells").models[0]), {}, 0, 0);
+                this.pointerUpFunction({}, {}, 0, 0);
             });
             this.listenTo(this.model, 'addcell', function () {
                 this.renderActivity();
@@ -645,13 +662,13 @@ define([
          */
         updateTreeview: function () {
             ProjectModel.saveCurrentDiagram();
-            let new_data=[];
-            _.each(ProjectModel.options.graphs.classes.classesArray,function (e) {
-               if (e.get('type')!='class.HxComment') {
+            let new_data = [];
+            _.each(ProjectModel.options.graphs.classes.classesArray, function (e) {
+                if (e.get('type') != 'class.HxComment') {
                     new_data.push(e.getCellDesc());
-               }
+                }
             });
-            $('#classtree').jstree(true).settings.core.data= new_data;
+            $('#classtree').jstree(true).settings.core.data = new_data;
             $('#classtree').jstree('refresh');
         },
 

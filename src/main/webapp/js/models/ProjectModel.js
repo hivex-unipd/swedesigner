@@ -52,6 +52,7 @@ define([
                 }
             }
             this.graph.removeCells([cell]);
+            console.log((this.graph));
 
             this.trigger('addcell');
         },

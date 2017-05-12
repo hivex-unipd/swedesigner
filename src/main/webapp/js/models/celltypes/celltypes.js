@@ -147,8 +147,7 @@ define([
 
         render: function () {
             joint.dia.ElementView.prototype.render.apply(this, arguments);
-
-            this.renderTools();
+            //this.renderTools();
             this.update();
             return this;
         },
@@ -1285,7 +1284,7 @@ define([
         render: function () {
             joint.dia.ElementView.prototype.render.apply(this, arguments);
 
-            this.renderTools();
+            //this.renderTools();
             this.update();
             return this;
         },
