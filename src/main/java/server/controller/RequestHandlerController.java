@@ -98,7 +98,7 @@ public class RequestHandlerController {
 		byte[] ba = null;
 
 		try {
-			ba = Files.readAllBytes(Paths.get(folderPath + "/projectzip.zip"));
+			ba = Files.readAllBytes(Paths.get(folderPath + "/project.zip"));
 		} catch (IOException e) {
 			errors.add(e.getMessage());
 		}
