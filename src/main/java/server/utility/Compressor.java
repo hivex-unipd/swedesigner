@@ -14,7 +14,7 @@ import java.util.zip.ZipOutputStream;
 public class Compressor {
 	public void zip(String dirPath) throws IOException {
 		byte[] buffer = new byte[1024];
-		File zip = new File(dirPath + "/projectzip.zip");
+		File zip = new File(dirPath + "/project.zip");
 
 		FileOutputStream fos = new FileOutputStream(zip);
 		ZipOutputStream zos = new ZipOutputStream(fos);
@@ -23,7 +23,7 @@ public class Compressor {
 		File[] files = folder.listFiles();
 		for (File file : files) {
 			if (file.isFile()) {
-				if (!(file.getName().equals("projectzip.zip"))) {
+				if (!(file.getName().equals("project.zip"))) {
 					ZipEntry ze= new ZipEntry(file.getName());
 					zos.putNextEntry(ze);
 					FileInputStream in = new FileInputStream(file);

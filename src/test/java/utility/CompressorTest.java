@@ -26,8 +26,8 @@ public class CompressorTest {
 	@Test
 	public void compressorCanZip() throws IOException {
 		comp.zip("src/main/resources/sort");
-		File zip = new File("src/main/resources/sort/projectzip.zip");
+		File zip = new File("src/main/resources/sort/project.zip");
 		assertTrue(zip.exists());
-		Files.delete(Paths.get("src/main/resources/sort/projectzip.zip"));
+		Files.delete(Paths.get("src/main/resources/sort/project.zip"));
 	}
 }

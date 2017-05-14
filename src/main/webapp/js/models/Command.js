@@ -112,7 +112,7 @@ define([
                     // and point the link element towards it
                     let url = window.URL.createObjectURL(blob);
                     a.href = url;
-                    a.download = 'projectzip.zip';
+                    a.download = 'project.zip';
                     // programatically click the link to trigger the download
                     a.click();
                     window.URL.revokeObjectURL(url);

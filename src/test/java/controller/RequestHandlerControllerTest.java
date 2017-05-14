@@ -58,7 +58,7 @@ public class RequestHandlerControllerTest {
 		HttpEntity<String> request = new HttpEntity<String>(new String(Files.readAllBytes(Paths.get("src/main/resources/project.json"))));
 		ResponseEntity<?> result = rhc.handleGenerationRequest(request);
 		// TODO? non abbiamo la cartella Uploads...
-//		File zip = new File("src/main/resources/sort/projectzip.zip");
+//		File zip = new File("src/main/resources/sort/project.zip");
 //		assertTrue(zip.exists());
 	}
 
