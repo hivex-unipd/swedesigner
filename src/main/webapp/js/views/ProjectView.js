@@ -630,8 +630,9 @@ define([
 
             this.listenTo(this.paper, 'renderActivity', this.renderActivity);
             this.listenTo(this.model, 'renderActivity', function () {
-                this.pointerDownFunction(this.paper.findView(this.graph.get("cells").models[0]), {}, 0, 0);
-                this.pointerUpFunction({}, {}, 0, 0);
+                //this.pointerDownFunction(this.paper.findView(this.graph.get("cells").models[0]), {}, 0, 0);
+                //this.pointerUpFunction({}, {}, 0, 0);
+                this.renderActivity();
             });
             this.listenTo(this.model, 'addcell', function () {
                 this.renderActivity();
