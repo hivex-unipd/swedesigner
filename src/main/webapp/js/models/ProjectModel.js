@@ -120,7 +120,7 @@ define([
             this.options.graphs = JSON.parse(diag);
             this.options.currentindex = "class";
             this.graph.resetCells(this.options.graphs.classes.classesArray.concat(this.options.graphs.classes.relationshipsArray));
-            //this.trigger("renderActivity");
+            this.trigger("renderActivity");
         },
 
         newProject:function () {
